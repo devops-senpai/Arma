@@ -423,11 +423,11 @@
         private var engineView: NSView? {
             subviews.first { $0 !== devToolsView }
         }
-        /// The viewport last written to the log, and the write waiting for the
-        /// size to settle, so a resize animation logs where it ended rather
-        /// than every frame on the way.
-        private var loggedViewport = CGSize.zero
-        private var viewportLog: DispatchWorkItem?
+        /// The viewport the page last settled on, and the work waiting for the
+        /// size to settle, so a resize logs and redraws where it ended rather
+        /// than on every frame on the way.
+        private var settledViewport = CGSize.zero
+        private var viewportSettle: DispatchWorkItem?
         override func layout() {
             super.layout()
             layoutEngineView()
@@ -436,7 +436,7 @@
             layoutEngineView()
         }
         func layoutEngineView() {
-            logViewportWhenSettled()
+            settleViewportWhenStill()
             guard !bounds.isEmpty, let view = engineView else { return }
             guard let devToolsView, let layout = page?.layoutInspector(in: bounds.size),
                 let frontendFrame = layout.inspector.map({ frame(of: $0) }),
@@ -460,21 +460,34 @@
             view.setFrameSize(pageFrame.size)
         }
 
-        /// Writes the page's viewport to the log a quarter second after it last
-        /// changed: its size, whether the engine's view is there and hidden,
-        /// and whether the view is in a window.
-        private func logViewportWhenSettled() {
-            viewportLog?.cancel()
+        /// A quarter second after the page's viewport last changed, writes it to
+        /// the log (its size, whether the engine's view is there and hidden, and
+        /// whether the view is in a window) and has the page draw at that size.
+        private func settleViewportWhenStill() {
+            viewportSettle?.cancel()
             let work = DispatchWorkItem { [weak self] in
-                guard let self, let page, bounds.size != loggedViewport else { return }
-                loggedViewport = bounds.size
+                guard let self, let page, bounds.size != settledViewport else { return }
+                settledViewport = bounds.size
                 let view = engineView
                 DiagnosticLog.splits.notice(
                     "Chromium page \(page.pageID) viewport \(Int(bounds.width))x\(Int(bounds.height)), engine view: "
                         + "\(view == nil ? "none" : view!.isHidden ? "hidden" : "shown"), window: \(window != nil)")
+                redrawAtSettledSize()
             }
-            viewportLog = work
+            viewportSettle = work
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: work)
+        }
+
+        /// Chromium can keep showing a frame drawn partway through a quick run
+        /// of resizes, such as a Split View bar being dragged, with its
+        /// background in the band the page no longer covers until it reloads.
+        /// Stepping the page's view a point short and back hands the engine two
+        /// sizes it cannot skip, so it asks the page for a frame at this one.
+        private func redrawAtSettledSize() {
+            guard let view = engineView, !view.isHidden, view.frame.height > 1 else { return }
+            let size = view.frame.size
+            view.setFrameSize(NSSize(width: size.width, height: size.height - 1))
+            view.setFrameSize(size)
         }
 
         /// An area the binding measured from the card's top left, as AppKit
