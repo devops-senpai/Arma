@@ -56,15 +56,22 @@ the same commit.
 
 ## Keeping up with upstream
 
-Arma is a fork of pauljoda/Crest. It merges upstream's `main`
-regularly and never rebases its own `main`.
+Arma is a fork of pauljoda/Crest. Its `main` is upstream's `main` plus one
+commit per fork change, with no merge commits: each fix to Crest's code is
+its own commit, and each feature Arma adds is one commit with every later
+change to it folded in. `Documentation/ForkRunbook.md` has the steps and
+`Taskfile.yml` the commands (`task --list`).
 
-- Sync with `Scripts/sync-upstream.sh`. It fetches upstream, merges without
-  committing, takes upstream's copy of `Config/Version.xcconfig`, merges
-  `Documentation/ReleaseNotes.json` three ways with
-  `Scripts/merge-release-notes.py`, takes upstream's copy of every generated
-  file and regenerates them, runs the lint, the script tests and the version
-  check, then commits. Anything else that conflicts it leaves for a person.
+- Sync with `task sync` (`Scripts/fork/sync.sh`). It folds `fixup!`
+  commits, merges upstream on a temporary branch with
+  `Scripts/sync-upstream.sh` (which takes upstream's copy of
+  `Config/Version.xcconfig`, merges `Documentation/ReleaseNotes.json` three
+  ways, regenerates generated files and runs the lint, script tests and
+  version check), replays each fork commit onto upstream's `main`, and
+  checks the result matches the merge. Anything that conflicts in the merge
+  it leaves for a person.
+- A change to an existing fork feature is committed with
+  `task fixup -- '<that commit's subject>'`, so it folds into the feature.
 - Fork work never edits `Config/Version.xcconfig` or
   `Documentation/ReleaseNotes.json`. Those two files change only as upstream
   wrote them, through a merge; a fork change adds its note as
@@ -74,14 +81,18 @@ regularly and never rebases its own `main`.
   "What Arma adds" list in the same commit, under its kind.
 - Resolve a code conflict by reading both sides' commits. When upstream fixed
   what a fork commit fixed, keep upstream's version and drop the fork's.
-- No engine input ever differs from upstream: the patches, overlay, host
-  header, source lock, host inputs and control-plane build scripts under
-  `CrestEngines/Chromium` and `Scripts/control-plane`, and
-  `CrestContracts/include/crest_engine_contract.h`. Prose there may change;
-  the inputs may not. keeping them identical keeps the engine key equal
-  to upstream's, and `Scripts/sync-upstream-engine.sh` mirrors upstream's
-  prebuilt engine for that key into this fork's releases. Run it after a sync
-  whenever `Scripts/control-plane/chromium_engine.py tag` changed.
+- Arma builds its own Chromium engine. Its engine inputs differ from
+  upstream's: the patches, overlay, host header, source lock, host inputs
+  and control-plane build scripts under `CrestEngines/Chromium` and
+  `Scripts/control-plane`, and `CrestContracts/include/crest_engine_contract.h`
+  (which carries Arma's third engine kind, Servo). Upstream's prebuilt engine
+  therefore no longer matches; `Scripts/sync-upstream-engine.sh` is retired
+  for this fork. After any change to those inputs, or a sync that changes
+  `Scripts/control-plane/chromium_engine.py tag`, build with
+  `Scripts/control-plane/chromium-fork.py --workspace ~/Dev/CrestChromium build`
+  on the build Mac and publish with `publish-chromium-engine.py` to this
+  repository. Resolve conflicts in those inputs by keeping upstream's change
+  and re-applying Arma's on top.
 
 ## Generated localization catalog
 
