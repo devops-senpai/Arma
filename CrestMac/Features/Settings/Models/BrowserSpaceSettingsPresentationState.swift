@@ -58,6 +58,9 @@ final class BrowserSpaceSettingsPresentationState {
 
     func requestedSpaceID(in browser: BrowserStore) -> UUID? {
         guard let requestedAssignment else { return nil }
+        // The Space's identity is unique; a profile that reads differently
+        // still names the same Space.
         return browser.spaceModel(matching: requestedAssignment)?.id
+            ?? browser.spaceModel(requestedAssignment.spaceID)?.id
     }
 }
