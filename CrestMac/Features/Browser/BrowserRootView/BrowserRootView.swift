@@ -76,6 +76,11 @@ struct BrowserRootView: View {
         .modifier(BrowserExtensionSidePanelRegistration(host: model.extensionSidePanel, pages: model.pages))
         .modifier(BrowserPopupWindowPresentation(pages: model.pages))
         .modifier(BrowserRootWindowTitle(model: model))
+        // A Space nobody chose a theme for starts in the default one.
+        .task(id: model.browser.spaceModels.map(\.id)) {
+            guard !model.browser.isPrivateBrowsing else { return }
+            BrowserThemeLibrary.shared.adoptUnthemedSpaces(in: model.browser)
+        }
     }
 }
 
