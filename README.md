@@ -220,6 +220,7 @@ change; the commit of the same name has the detail.
 
 - The patch version is derived from history and each release note is its own file, so branches stop conflicting on every merge.
 - `Scripts/sync-upstream.sh` merges upstream Crest in one step and leaves only real code conflicts to a person.
+- `Taskfile.yml` and `Documentation/ForkRunbook.md`: `task sync` keeps history as upstream plus one commit per change, and `task release` and `task notarize` build, sign and notarize a release with secrets from sops.
 - `Scripts/sync-upstream-engine.sh` mirrors upstream's prebuilt Chromium engine for the current engine key, so the fork never builds Chromium.
 - `ROUTING.md` and a `CONTEXT.md` in every folder that groups work tell a contributor or an agent what to read for each kind of change.
 - `Documentation/Renaming.md` lists every place a product name lives.
