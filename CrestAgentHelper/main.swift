@@ -1,20 +1,20 @@
 import Darwin
 import Foundation
 
-// crest-browser, the helper that reaches the Crest it ships inside:
+// arma, the helper that reaches the Crest it ships inside:
 //
-//   crest-browser mcp
-//   crest-browser theme --space <name> [options]
+//   arma mcp
+//   arma theme --space <name> [options]
+//   arma <section> <action> [options]
 //
 // `mcp` speaks the Model Context Protocol over its standard streams for an
 // agent, and needs Crest running with agents turned on. `theme` dresses one
-// Space from the terminal, and needs only Crest running.
-
-let usage = "usage: crest-browser mcp\n       crest-browser theme --space <name> [options]\n"
+// Space from the terminal, and the other sections (`TerminalCommandLine`)
+// manage Spaces, tabs and windows; they need only Crest running.
 let arguments = Array(CommandLine.arguments.dropFirst())
 
 /// The `lane` socket of the Crest this helper ships inside, at
-/// Crest.app/Contents/Helpers/crest-browser, unless a review run names one.
+/// Arma.app/Contents/Helpers/arma, unless a review run names one.
 @MainActor func socketPath(lane: AgentSocketLocation.Lane) -> String? {
     if let index = arguments.firstIndex(of: "--socket"), arguments.indices.contains(index + 1) {
         return arguments[index + 1]
@@ -36,7 +36,9 @@ case "mcp":
         await endpoint.receive(line)
     }
     exit(0)
-case "theme":
+// The first form of arma theme, which dressed one Space from options, reads
+// as it did; arma theme <action> is the theme section.
+case "theme" where arguments.dropFirst().first.map { $0.hasPrefix("--") && $0 != "--help" } == true:
     let command: ThemeCommandLine
     do {
         command = try ThemeCommandLine(arguments: Array(arguments.dropFirst()))
@@ -46,6 +48,5 @@ case "theme":
     }
     exit(await command.run(over: CommandAppLink(path: socketPath(lane: .commands))))
 default:
-    FileHandle.standardError.write(Data(usage.utf8))
-    exit(64)
+    exit(await TerminalCommandLine.run(arguments, over: CommandAppLink(path: socketPath(lane: .commands))))
 }
