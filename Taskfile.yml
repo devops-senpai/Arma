@@ -1,0 +1,119 @@
+# Arma's everyday commands. Run `task --list` to see them; the order of work
+# is in Documentation/ForkRunbook.md.
+version: "3"
+
+vars:
+  # Task never overrides a variable the environment already sets, PATH among
+  # them, so the commands that need .NET put it on the PATH themselves.
+  DOTNET: export PATH="$HOME/.dotnet:$PATH" DOTNET_ROOT="$HOME/.dotnet";
+  DD: "{{.HOME}}/code/ArmaBrowser-dd"
+  IOS_DD: "{{.HOME}}/code/ArmaBrowser-ios-dd"
+  CHROMIUM: "{{.HOME}}/Dev/CrestChromium"
+  SDK:
+    sh: echo "/Library/Developer/CommandLineTools/SDKs/MacOSX$(python3 -c 'import json; print(json.load(open("CrestEngines/Chromium/source.lock.json"))["performanceInputs"]["macSDKVersion"])').sdk"
+  LSREGISTER: /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
+  REPO:
+    sh: git remote get-url origin | sed -E 's#.*[:/]([^/]+/[^/]+)$#\1#; s#\.git$##'
+
+tasks:
+  sync:
+    desc: Bring in upstream Crest's new commits, one commit per fork change, nothing pushed
+    cmds: ['{{.DOTNET}} Scripts/fork/sync.sh']
+
+  sync:replay:
+    desc: Finish a sync after resolving its merge by hand
+    cmds: ['{{.DOTNET}} Scripts/fork/sync.sh --replay']
+
+  fixup:
+    desc: "Commit staged changes into an existing fork commit: task fixup -- '<its subject>'"
+    cmds: ['git commit -m "fixup! {{index .CLI_ARGS_LIST 0}}"']
+
+  fold:
+    desc: Fold fixup commits into the commits they name
+    cmds: ['GIT_SEQUENCE_EDITOR=true git rebase -q -i --autosquash "$(git merge-base HEAD upstream/main)"']
+
+  generate:
+    desc: Regenerate the contract sources and the Xcode project
+    cmds:
+      - '{{.DOTNET}} Scripts/control-plane/generate-contracts.sh'
+      - xcodegen generate --quiet
+
+  check:
+    desc: Formatter, lint, core tests and the version check
+    cmds:
+      - Scripts/check-swift-format.sh
+      - '{{.DOTNET}} Scripts/control-plane/lint-dotnet.sh'
+      - '{{.DOTNET}} dotnet test CrestCore/tests/CrestCore.Tests 2>&1 | grep -E "Passed!|Failed!|error"'
+      - Scripts/check-version.sh --fix-commit
+
+  build:
+    desc: Debug build of the Mac app, unregistered so it never answers links
+    cmds:
+      - xcodebuild build -scheme Crest -configuration Debug CODE_SIGNING_ALLOWED=NO -derivedDataPath {{.DD}} 2>&1 | grep -E "error:|\*\* BUILD"
+      - '{{.LSREGISTER}} -u {{.DD}}/Build/Products/Debug/Arma.app 2>/dev/null || true'
+
+  build:ios:
+    desc: Debug build of the iOS app for the simulator
+    cmds:
+      - xcodebuild build -scheme CrestMobile -destination 'generic/platform=iOS Simulator' -derivedDataPath {{.IOS_DD}} 2>&1 | grep -E "error:|\*\* BUILD"
+
+  engine:key:
+    desc: The Chromium engine key this checkout needs, and whether it is published
+    cmds:
+      - 'key=$(python3 Scripts/control-plane/chromium_engine.py tag); gh release view "$key" -R {{.REPO}} >/dev/null 2>&1 && echo "$key published" || echo "$key NOT published"'
+
+  engine:build:
+    desc: Build the Chromium engine for this checkout (hours)
+    cmds:
+      - python3 Scripts/control-plane/chromium-fork.py --workspace {{.CHROMIUM}} build --sdk {{.SDK}} --ninja {{.CHROMIUM}}/tools/bin/ninja --jobs 10 --min-free-gib 40 --ccache
+
+  engine:publish:
+    desc: Publish the locally built engine under this checkout's key
+    cmds:
+      - python3 Scripts/control-plane/publish-chromium-engine.py --source "$(ls -td {{.CHROMIUM}}/sources/*/src | head -1)" --ninja {{.CHROMIUM}}/tools/bin/ninja --repository {{.REPO}}
+
+  engines:check:
+    desc: Whether newer Chromium, WebKit and Servo releases are out
+    cmds:
+      - task: chromium:check
+      - task: webkit:check
+      - task: servo:check
+
+  chromium:check:
+    desc: The newest Chrome release on the fork's channel, against the one the engine is built from
+    cmds:
+      - python3 Scripts/control-plane/chromium-fork.py --workspace {{.CHROMIUM}} check-upstream
+
+  chromium:update:
+    desc: "Move the Chromium engine to a Chrome release and rebuild it (hours): task chromium:update -- <version>"
+    requires:
+      vars: [CLI_ARGS]
+    cmds:
+      - python3 Scripts/control-plane/chromium-fork.py --workspace {{.CHROMIUM}} update --version {{.CLI_ARGS}} --sdk {{.SDK}} --ninja {{.CHROMIUM}}/tools/bin/ninja --jobs 10 --min-free-gib 40 --ccache
+      - task: engine:key
+
+  webkit:check:
+    desc: WebKit ships with macOS; show this Mac's version and any waiting macOS or Xcode update
+    cmds:
+      - 'echo "macOS $(sw_vers -productVersion), WebKit $(defaults read /System/Library/Frameworks/WebKit.framework/Resources/Info CFBundleVersion), SDK $(xcrun --sdk macosx --show-sdk-version)"'
+      - softwareupdate --list 2>&1 | grep -E "Label:|No new software" || true
+
+  servo:check:
+    desc: The newest servo release on crates.io, against the pinned one
+    cmds: [Scripts/fork/update-servo.sh --check]
+
+  servo:update:
+    desc: "Move Servo to the newest release (or task servo:update -- <version>) and rebuild it"
+    cmds: ['Scripts/fork/update-servo.sh {{.CLI_ARGS}}']
+
+  release:
+    desc: Build a Developer ID signed Arma.app from this commit
+    cmds: ['{{.DOTNET}} Scripts/fork/release.sh']
+
+  notarize:
+    desc: "Notarize the release and make its installer: task notarize [-- <version>]"
+    cmds: ['Scripts/fork/notarize.sh {{.CLI_ARGS}}']
+
+  version:
+    desc: The version this commit builds as
+    cmds: [python3 Scripts/derive-version.py version]
