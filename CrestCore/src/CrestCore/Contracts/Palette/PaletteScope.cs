@@ -21,7 +21,17 @@ public sealed class PaletteScope {
     public static readonly PaletteScope Themes = new(name: "themes", keyword: "@themes", title: "Themes", symbol: "paintpalette",
         source: PaletteSource.Themes);
 
-    public static IReadOnlyList<PaletteScope> All { get; } = [Tabs, Saved, History, Actions, Spaces, Themes];
+    public static readonly PaletteScope Extensions = new(name: "extensions", keyword: "@extensions", title: "Extensions",
+        symbol: "puzzlepiece.extension", source: PaletteSource.Extensions);
+    public static readonly PaletteScope Engine = new(name: "engine", keyword: "@engine", title: "Engine",
+        symbol: "arrow.triangle.swap", source: PaletteSource.Engine);
+    public static readonly PaletteScope Developer = new(name: "developer", keyword: "@developer", title: "Developer",
+        symbol: "hammer", source: PaletteSource.Developer);
+    public static readonly PaletteScope CommandLine = new(name: "cli", keyword: "@cli", title: "Command Line",
+        symbol: "terminal", source: PaletteSource.CommandLine);
+
+    public static IReadOnlyList<PaletteScope> All { get; } =
+        [Tabs, Saved, History, Actions, Spaces, Themes, Extensions, Engine, Developer, CommandLine];
 
     #endregion
 

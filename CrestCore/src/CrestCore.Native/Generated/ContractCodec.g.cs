@@ -14,7 +14,7 @@ namespace CrestCore.Native;
 public static class ContractCodec {
     /// <summary>SHA-256 of the canonical contract schema.</summary>
     public static ReadOnlySpan<byte> Fingerprint => [
-        0x41, 0xe2, 0x16, 0xca, 0x7a, 0xca, 0x27, 0x39, 0xe4, 0x99, 0x34, 0x08, 0x71, 0xb6, 0x0a, 0x08, 0x6d, 0x45, 0x87, 0xf2, 0xd7, 0x28, 0xd5, 0xd5, 0x9f, 0xd8, 0x23, 0x0a, 0x52, 0x04, 0xf4, 0x8d
+        0x11, 0x32, 0x8f, 0x00, 0x30, 0xcd, 0x62, 0x6f, 0xa1, 0x2f, 0x57, 0x17, 0x60, 0xd0, 0xcb, 0x37, 0x93, 0x4d, 0x29, 0xc6, 0x9b, 0x48, 0xda, 0x37, 0xd4, 0x8e, 0x04, 0x35, 0xca, 0x0d, 0x55, 0xad
     ];
 
     /// <summary>SHA-256 of the engine contract alone, which an engine binding registers with.</summary>
@@ -13082,6 +13082,26 @@ public static class ContractCodec {
         }
     }
 
+    public static PaletteChoice ReadPaletteChoice(WireReader reader) {
+        ArgumentNullException.ThrowIfNull(reader);
+        return new PaletteChoice(
+            reader.ReadGuid(),
+            ReadPaletteScope(reader),
+            reader.ReadString(),
+            reader.ReadString(),
+            reader.ReadString());
+    }
+
+    public static void WritePaletteChoice(WireWriter writer, PaletteChoice value) {
+        ArgumentNullException.ThrowIfNull(writer);
+        ArgumentNullException.ThrowIfNull(value);
+        writer.WriteGuid(value.Id);
+        WritePaletteScope(writer, value.Scope);
+        writer.WriteString(value.Name);
+        writer.WriteString(value.Detail);
+        writer.WriteString(value.Symbol);
+    }
+
     public static PaletteCommand ReadPaletteCommand(WireReader reader) {
         ArgumentNullException.ThrowIfNull(reader);
         return new PaletteCommand(
@@ -13370,6 +13390,7 @@ public static class ContractCodec {
             reader.ReadBool(),
             reader.ReadPresence() ? (string?)reader.ReadString() : null,
             reader.ReadList(() => ReadPaletteTheme(reader)),
+            reader.ReadList(() => ReadPaletteChoice(reader)),
             reader.ReadPresence() ? (Guid?)reader.ReadGuid() : null);
     }
 
@@ -13412,6 +13433,10 @@ public static class ContractCodec {
         writer.WriteCount(value.Themes.Count);
         foreach (var itemThemes in value.Themes) {
             WritePaletteTheme(writer, itemThemes);
+        }
+        writer.WriteCount(value.Choices.Count);
+        foreach (var itemChoices in value.Choices) {
+            WritePaletteChoice(writer, itemChoices);
         }
         if (value.SpaceId is { } presentSpaceId) {
             writer.WritePresence(true);
