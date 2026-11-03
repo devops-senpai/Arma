@@ -29,6 +29,7 @@ change; the commit of the same name has the detail.
 - **Background images.** A Space's Themes page sets a picture behind the sidebar and window, held to its top-left or bottom-left corner, with sliders for how strongly it shows, how much of the Space's colors lie over it, and how blurred it is.
 - **Tiled Split View.** Drop a tab on the top or bottom edge of a page to stack it there, on the outer edge of the split to give it the full height or width, or on the middle of a page to swap the two; make quadrants from any of these. The split's menu has ready-made arrangements for two, three and four pages, a tab's menu can pick its card up to move with the pointer (⇧⌘-drag does the same), and the bars between pages drag either way; each window keeps the sizes.
 - **Servo engine.** Pages can run on Servo, the independent engine written in Rust, as a third engine beside Chromium and WebKit: pick it as the default engine, set it for a website, or move a page with Open Page in Servo. Install Firefox add-ons whose page scripts and styles Servo can run from Settings › Engines.
+- **Palette tool scopes.** Type `@extensions` to open Chromium's or Servo's extensions, `@engine` to move the page, or always open its site, in another engine, `@developer` for the page's developer tools, and `@cli` to install the `arma` command in `~/.local/bin` or `~/bin`, or copy the line to run yourself.
 - **Light by default.** New installs start in Light mode, and unloaded tabs aren't dimmed unless you turn that on.
 
 ### Performance
