@@ -495,7 +495,8 @@ final class BrowserCommandPaletteModel {
             windowID: browser.windowID, text: text, commands: offeredCommands(for: text),
             settingsPages: commands?.settingsPages ?? [], remote: remote, provider: activeProvider?.seed,
             scope: activeScope, allowsCompletion: completionEditing.canPropose(for: text),
-            pasteboard: text.isEmpty || text == openedWith ? pasteboard : nil, spaceID: destination?.paletteSpaceID)
+            pasteboard: text.isEmpty || text == openedWith ? pasteboard : nil, themes: commands?.themes() ?? [],
+            spaceID: destination?.paletteSpaceID)
     }
 
     /// The commands the core may rank for `text`. A palette without resting
@@ -536,7 +537,7 @@ final class BrowserCommandPaletteModel {
                             windowID: question.windowID, text: question.text, commands: question.commands,
                             settingsPages: question.settingsPages, remote: fetched, provider: question.provider,
                             scope: question.scope, allowsCompletion: question.allowsCompletion,
-                            pasteboard: question.pasteboard, spaceID: question.spaceID),
+                            pasteboard: question.pasteboard, themes: question.themes, spaceID: question.spaceID),
                         from: core),
                     asked == sequence
                 else { return }
