@@ -74,6 +74,7 @@ change; the commit of the same name has the detail.
 - On iPad, a closed window lets go of its pages, so its memory comes back and a restored window opens its tabs.
 - Choosing a Space in Settings opens its Appearance page instead of whichever page the last Space showed.
 - Choosing a Space in Settings always opens its page, even when Settings cannot switch the window to that Space.
+- On macOS 26, a Space in Settings › Spaces opens on the first click instead of its drag handling taking most clicks.
 - Dragging the bar between Split View pages no longer leaves a white band under Chromium pages until they reload.
 
 ### Repository and tooling
