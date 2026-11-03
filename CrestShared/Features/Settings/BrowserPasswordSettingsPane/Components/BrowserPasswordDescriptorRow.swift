@@ -130,7 +130,7 @@ struct BrowserPasswordDescriptorRow: View {
         if descriptor.isSynchronizable {
             Image(systemName: "icloud")
                 .foregroundStyle(.secondary)
-                .help("Synchronized through Crest’s iCloud Keychain item")
+                .help("Synchronized through Arma’s iCloud Keychain item")
                 .accessibilityLabel("iCloud synchronization on")
         }
 
@@ -138,7 +138,7 @@ struct BrowserPasswordDescriptorRow: View {
             Image(systemName: "exclamationmark.shield.fill")
                 .foregroundStyle(CrestColor.warning)
                 .help(
-                    "Imported from an insecure HTTP site. Crest keeps it available for manual access but does not autofill it on insecure connections."
+                    "Imported from an insecure HTTP site. Arma keeps it available for manual access but does not autofill it on insecure connections."
                 )
                 .accessibilityLabel("Manual access only for insecure HTTP site")
         }
