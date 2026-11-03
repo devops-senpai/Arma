@@ -67,12 +67,19 @@ struct BrowserSettingsView: View {
         }
         .onChange(of: spaceSettingsPresentation.revision, initial: true) {
             _, revision in
-            if let tabAssignment,
-                spaceSettingsPresentation.requestedAssignment
-                    != BrowserSpaceRuntimeAssignment(
-                        spaceID: tabAssignment.spaceID, profileID: tabAssignment.profileID)
-            {
-                return
+            // A request belongs to the Settings tab of the Space it names. The
+            // Space alone decides, since its identity is unique: a profile that
+            // reads differently, as after an import, must not drop the request
+            // and leave the tab on its first page.
+            if let tabAssignment {
+                guard let requested = spaceSettingsPresentation.requestedAssignment,
+                    requested.spaceID == tabAssignment.spaceID
+                else { return }
+                if requested.profileID != tabAssignment.profileID {
+                    DiagnosticLog.windows.notice(
+                        "Settings tab \(tabAssignment.tabID) in Space \(tabAssignment.spaceID) takes a request made "
+                            + "on profile \(requested.profileID) from its own profile \(tabAssignment.profileID)")
+                }
             }
             tabState.applyExternalRoute(
                 spaceSettingsPresentation.request,
@@ -136,9 +143,25 @@ struct BrowserSettingsView: View {
                 .select(id, matching: tabAssignment)
         else {
             // A locked Space asks to be unlocked in the window first.
-            if spaceAccess.isLocked(space) { browser.selectSpace(id) }
+            if spaceAccess.isLocked(space) {
+                browser.selectSpace(id)
+                return
+            }
+            // Settings could not follow the Space into the window, so the
+            // Space's page shows here instead of the choice doing nothing.
+            let source = browser.spaceModel(tabAssignment.spaceID)
+            DiagnosticLog.windows.notice(
+                "Settings could not follow Space \(id) into the window, which shows \(browser.selectedSpaceID); "
+                    + "its tab \(tabAssignment.tabID) is in \(tabAssignment.spaceID) on profile "
+                    + "\(tabAssignment.profileID), that Space's profile is "
+                    + "\(source.map { "\($0.profileID)" } ?? "gone"), and its shown tab is Settings: "
+                    + "\(source?.shownTab(tabAssignment.tabID)?.nativeTabContent == .settings)")
+            tabState.showSpace(id, tab: tab, intent: intent)
             return
         }
+        DiagnosticLog.windows.notice(
+            "Settings follows Space \(selected.spaceID) on profile \(selected.profileID) into tab \(selected.tabID), "
+                + "on its \(tab.name) page")
         spaceSettingsPresentation.present(
             BrowserSettingsSpaceRequest(tab: tab, intent: intent),
             assignment: BrowserSpaceRuntimeAssignment(spaceID: selected.spaceID, profileID: selected.profileID),
