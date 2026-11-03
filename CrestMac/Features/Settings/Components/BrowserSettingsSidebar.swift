@@ -265,7 +265,7 @@ struct BrowserSettingsSidebar: View {
             navigation.selection.row
         } set: { item in
             item?.select(on: tabState) { id in
-                openSpace(id, tab: navigation.matchingSpaceTab(locale: locale, in: state))
+                openSpace(id, tab: navigation.matchingSpaceTab(locale: locale, in: state) ?? .appearance)
             }
         }
     }

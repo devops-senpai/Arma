@@ -71,6 +71,7 @@ change; the commit of the same name has the detail.
 - On iPad, a page's alerts, sign-in prompts and export sheets appear in the window that shows the page.
 - On iPad, a site's location request no longer waits forever when Settings opens beside the app.
 - On iPad, a closed window lets go of its pages, so its memory comes back and a restored window opens its tabs.
+- Choosing a Space in Settings opens its Appearance page instead of whichever page the last Space showed.
 
 ### Repository and tooling
 

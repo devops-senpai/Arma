@@ -14,7 +14,7 @@ struct BrowserPlatformSpaceSettingsPane: View {
         Color.clear
             .onAppear {
                 guard let id = requestedSpaceID ?? browser.shownSpace?.id else { return }
-                openSpace?(id)
+                openSpace?(id, tab: .appearance)
             }
     }
 }

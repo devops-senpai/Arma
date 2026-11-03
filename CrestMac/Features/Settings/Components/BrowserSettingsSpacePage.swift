@@ -23,7 +23,7 @@ struct BrowserSettingsSpacePage: View {
             if !browser.isPrivateBrowsing {
                 BrowserSpaceGroupCrestRow(
                     browser: browser, space: space, draggedSpaceID: $tabState.draggedSpaceID,
-                    select: { openSpace($0) }, addSubSpace: addSubSpace,
+                    select: { openSpace($0, tab: .appearance) }, addSubSpace: addSubSpace,
                     requestGroupChange: { pendingGroupChange = $0 }, requestDeletion: { pendingDeletion = $0 }
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
