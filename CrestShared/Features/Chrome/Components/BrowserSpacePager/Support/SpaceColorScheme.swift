@@ -1,6 +1,7 @@
 import SwiftUI
 
-/// Draws content in the scheme a Space's sidebar reads in over the window.
+/// Draws content in the scheme a Space's sidebar reads in over the window,
+/// and in the one text color the Space chose, when it chose one.
 ///
 /// The scheme follows the device's dark dimming, which a person drags. Working
 /// it out here, rather than in the view that wraps the sidebar, keeps a drag to
@@ -14,6 +15,10 @@ struct SpaceColorScheme: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
 
     func body(content: Content) -> some View {
-        content.environment(\.colorScheme, branding?.shown.colorScheme(over: colorScheme) ?? .dark)
+        content
+            .modifier(
+                SpaceTextColor(color: branding?.sidebarTextColor, secondary: branding?.sidebarSecondaryTextColor)
+            )
+            .environment(\.colorScheme, branding?.shown.colorScheme(over: colorScheme) ?? .dark)
     }
 }

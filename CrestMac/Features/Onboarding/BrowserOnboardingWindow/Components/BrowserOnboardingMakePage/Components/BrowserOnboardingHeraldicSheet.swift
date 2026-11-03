@@ -1,7 +1,10 @@
 import SwiftUI
 
-/// What a first run changes on a heraldic Space: the template it starts
-/// from, its emblem, its colors and its sidebar.
+/// What a first run changes on a heraldic Space: its crest, started from a
+/// house's, its colors, then each of the Forge's crest steps as a strip of
+/// choices: shape, field, band, emblem, border and finish. The steps' finer
+/// measures wait in Settings. The sidebar belongs to the theme the
+/// Space wears, which Settings › Themes edits.
 struct BrowserOnboardingHeraldicSheet: View {
     @Binding var branding: SpaceBranding
     @Binding var symbol: String
@@ -19,16 +22,27 @@ struct BrowserOnboardingHeraldicSheet: View {
     private var isIcon: Bool { branding.iconStyle == .simpleSymbol }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 30) {
-            startFrom
-            emblem
-            colors
-            sidebar
-            Spacer(minLength: 0)
-            Text("Shape, field, band, border and finish: Settings › Spaces.")
-                .font(CrestTypography.sans(12, weight: .medium))
-                .foregroundStyle(CrestBrandTheme.textDisplay.opacity(0.5))
+        ScrollView {
+            VStack(alignment: .leading, spacing: 26) {
+                startFrom
+                if !isIcon {
+                    colors
+                    crestRow("Shape", \.backplate, CrestBackplate.offered)
+                    crestRow("Field", \.fieldDivision, CrestFieldDivision.all)
+                    crestRow("Band", \.ordinary, CrestOrdinary.all)
+                }
+                emblem
+                if !isIcon {
+                    crestRow("Border", \.trim, CrestTrim.all)
+                    crestRow("Finish", \.finish, CrestFinish.all)
+                }
+                Text("Sizes, widths, shadows and more: Settings › Spaces.")
+                    .font(CrestTypography.sans(12, weight: .medium))
+                    .foregroundStyle(CrestBrandTheme.textDisplay.opacity(0.5))
+            }
+            .frame(maxWidth: .infinity, alignment: .topLeading)
         }
+        .scrollIndicators(.hidden)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 
@@ -37,11 +51,12 @@ struct BrowserOnboardingHeraldicSheet: View {
     private var startFrom: some View {
         BrowserOnboardingMakeSection("Start from") {
             BrowserOnboardingMakeStrip {
-                ForEach(SpaceHouse.all, id: \.self) { house in
-                    BrowserOnboardingMakeTile(title: house.title, isSelected: house.isWorn(by: branding)) {
-                        branding = house.applying(to: branding)
+                ForEach(SpaceHouse.offered, id: \.self) { house in
+                    let worn = branding.wearingCrest(of: house)
+                    BrowserOnboardingMakeTile(title: house.title, isSelected: worn.crest == branding.crest) {
+                        branding = worn
                     } artwork: {
-                        crest(house.applying(to: branding))
+                        crest(worn)
                     }
                 }
             }
@@ -120,6 +135,28 @@ struct BrowserOnboardingHeraldicSheet: View {
         return figures
     }
 
+    /// One of the Forge's crest steps as a strip: each choice drawn on the
+    /// crest as it stands, and chosen with a click.
+    private func crestRow<Option: Hashable & BrowserSpaceHeraldicTerm>(
+        _ title: LocalizedStringKey, _ path: WritableKeyPath<SpaceCrest, Option>, _ options: [Option]
+    ) -> some View {
+        BrowserOnboardingMakeSection(title) {
+            BrowserOnboardingMakeStrip {
+                ForEach(options, id: \.self) { option in
+                    BrowserOnboardingMakeTile(title: option.title, isSelected: branding.crest[keyPath: path] == option)
+                    {
+                        context.branding.editorUpdate {
+                            $0.crest[keyPath: path] = option
+                            $0.hasCustomAppearance = true
+                        }
+                    } artwork: {
+                        crest(context.preview { $0.crest[keyPath: path] = option })
+                    }
+                }
+            }
+        }
+    }
+
     private var iconChoices: some View {
         HStack(spacing: 12) {
             BrowserSystemSymbolPicker(
@@ -158,43 +195,6 @@ struct BrowserOnboardingHeraldicSheet: View {
                         branding = branding.normalized()
                     }
                 }
-                Divider()
-                    .frame(height: BrowserOnboardingMakeMetrics.swatchSize)
-                    .padding(.horizontal, 10)
-                BrowserOnboardingSidebarSwatches(branding: $branding)
-            }
-        }
-    }
-
-    private var sidebar: some View {
-        BrowserOnboardingMakeSection("Sidebar") {
-            BrowserOnboardingMakeStrip {
-                ForEach(SpaceBannerPattern.all, id: \.self) { pattern in
-                    BrowserOnboardingMakeTile(
-                        title: pattern.title,
-                        isSelected: branding.themeMode == .banner && branding.bannerPattern == pattern
-                    ) {
-                        context.branding.editorUpdate {
-                            $0.themeMode = .banner
-                            $0.bannerPattern = pattern
-                            $0.hasCustomAppearance = true
-                        }
-                    } artwork: {
-                        field(
-                            context.preview {
-                                $0.themeMode = .banner
-                                $0.bannerPattern = pattern
-                            })
-                    }
-                }
-                BrowserOnboardingMakeTile(title: "Gradient", isSelected: branding.themeMode == .gradient) {
-                    context.branding.editorUpdate {
-                        $0.themeMode = .gradient
-                        $0.hasCustomAppearance = true
-                    }
-                } artwork: {
-                    field(context.preview { $0.themeMode = .gradient })
-                }
             }
         }
     }
@@ -206,26 +206,5 @@ struct BrowserOnboardingHeraldicSheet: View {
             branding: look, size: BrowserOnboardingMakeMetrics.tileArtworkSize, rasterizesLayers: false
         )
         .equatable()
-    }
-
-    private func field(_ look: SpaceBranding) -> some View {
-        BrowserSpaceBannerBackground(branding: look)
-            .clipShape(.rect(cornerRadius: 7, style: .continuous))
-    }
-}
-
-/// The three colors a sidebar wears, each opening the tinctures.
-struct BrowserOnboardingSidebarSwatches: View {
-    @Binding var branding: SpaceBranding
-
-    var body: some View {
-        ForEach(BrowserSpaceBrandColorRole.all) { role in
-            BrowserOnboardingMakeSwatch(title: role.title, caption: role.caption, color: branding.forgeColor(of: role))
-            {
-                color in
-                branding.setForgeColor(color, of: role)
-                branding = branding.normalized()
-            }
-        }
     }
 }

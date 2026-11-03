@@ -1,22 +1,15 @@
 import SwiftUI
 
-/// The stage every step of setup plays on: the look's own sidebar field,
-/// darkened, under the Crest mark, the progress rail and the step's page.
-/// The stage is always dark, whatever the system appearance, so the page
-/// reads over any field.
+/// The stage every step of setup plays on: Arma's Macchiato backdrop under
+/// the Arma mark, the progress rail and the step's page. The stage is always
+/// dark, whatever the system appearance.
 struct BrowserOnboardingStage<Content: View>: View {
     let step: SetupStep
-    /// The look the backdrop wears.
-    let branding: SpaceBranding
     @ViewBuilder let content: Content
 
     var body: some View {
         ZStack {
-            // The welcome drifts slowly from one template's field to the
-            // next; a field the person's choice changes follows quickly.
-            BrowserOnboardingBackdrop(
-                branding: branding,
-                fade: step == .welcome ? CrestMotion.onboardingBackdrop : CrestMotion.onboardingBackdropChange)
+            BrowserOnboardingArmaBackdrop()
             VStack(spacing: 0) {
                 BrowserOnboardingStageHeader(step: step)
                 content
@@ -27,7 +20,7 @@ struct BrowserOnboardingStage<Content: View>: View {
     }
 }
 
-/// The Crest mark and the progress rail over the stage.
+/// The Arma mark and the progress rail over the stage.
 private struct BrowserOnboardingStageHeader: View {
     let step: SetupStep
 

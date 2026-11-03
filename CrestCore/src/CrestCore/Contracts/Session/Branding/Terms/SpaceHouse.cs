@@ -72,7 +72,36 @@ public sealed class SpaceHouse {
                 Tincture.VigilAsh],
             trimWeight: 0.9, depth: CrestDepth.None)));
 
-    public static IReadOnlyList<SpaceHouse> All { get; } = [Winter, Lion, Storm, Dragon, Meadow, Iron, River, Sun, Vigil];
+    /// Arma's own arms: a white bird on a navy guidon with a pale in the dark
+    /// grey of the Catppuccin Macchiato theme it starts with, wreathed in gold
+    /// laurel.
+    public static readonly SpaceHouse Arma = new("arma", "Arma", "Arma", HouseLook(
+        [Tincture.ArmaNavy, Tincture.ArmaRed, Tincture.ArmaGold], SpaceThemeMode.Banner, SpaceBannerPattern.Solid,
+        Arms(CrestBackplate.Flag, CrestSymbol.Sparrow, CrestTrim.Laurel, edgeWidth: 0.2,
+            [Tincture.ArmaNavy, Tincture.ArmaNavy, Tincture.ArmaGrey, Tincture.ArmaWhite, Tincture.ArmaGold, Tincture.ArmaNavy],
+            chargeScale: 1.15) with { Ordinary = CrestOrdinary.Pale }));
+
+    /// Every house, in the order the core first knew them; the gallery offers
+    /// Arma's first.
+    public static IReadOnlyList<SpaceHouse> All { get; } = [Winter, Lion, Storm, Dragon, Meadow, Iron, River, Sun, Vigil, Arma];
+
+    /// The crest a new Space wears: Arma's arms, the guidon, pale and bird in
+    /// laurel, in Catppuccin Macchiato's dark grey, mauve, lavender and
+    /// white, as the crest's own colors so the theme never changes them.
+    public static SpaceCrest NewSpaceCrest { get; } = Arms(CrestBackplate.Flag, CrestSymbol.Sparrow, CrestTrim.Laurel,
+        edgeWidth: 0.2,
+        [Tincture.ArmaGrey, Tincture.ArmaGrey, Tincture.MacchiatoMauve, Tincture.MacchiatoText, Tincture.MacchiatoLavender,
+            Tincture.MacchiatoBase],
+        chargeScale: 1.15) with { Ordinary = CrestOrdinary.Pale };
+
+    /// The look a new Space wears for `accent`: Arma's own house for the
+    /// first accent and every other accent's house colors, each under the
+    /// new Space's crest.
+    public static SpaceBranding NewSpaceLook(SpaceAccent accent) {
+        ArgumentNullException.ThrowIfNull(accent);
+        var house = accent == SpaceAccent.All[0] ? Arma.Look : accent.House;
+        return house with { Crest = NewSpaceCrest };
+    }
 
     public string Name { get; }
 
@@ -113,7 +142,9 @@ public sealed class SpaceHouse {
         double gradientAngle = 0) =>
         new(new([.. colors.Select(tincture => tincture.Color)]), pattern, BannerStrength: 1, ReadabilityFade: 0.45,
             KeepsControlsReadable: true, mode, gradientAngle, ShowsTexture: false, SpaceIconStyle.LayeredCrest, SymbolColor: null,
-            arms, CrestVocabulary.Studio.Version, FolderColorIntensity: 0, SpaceTextColorMode.Automatic, HasCustomAppearance: false);
+            arms, CrestVocabulary.Studio.Version, FolderColorIntensity: 0, SpaceTextColorMode.Automatic, HasCustomAppearance: false,
+            FolderColor: null, FolderBackColor: null, CommandPalette: null,
+            SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null);
 
     /// A house's arms: its figure on its field, each part in a tincture of its
     /// own, `colors` holding the field, second field, band, emblem, border and
