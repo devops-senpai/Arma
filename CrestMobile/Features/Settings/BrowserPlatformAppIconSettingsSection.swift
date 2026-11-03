@@ -12,8 +12,8 @@ struct BrowserPlatformAppIconSettingsSection: View {
             settings: [resettable]
         ) {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 78), spacing: 12)], spacing: 16) {
-                iconChoice(name: nil, title: "Crest")
-                ForEach(SpaceHouse.all, id: \.self) { house in
+                iconChoice(name: nil, title: "Arma")
+                ForEach(SpaceHouse.withAppIcons, id: \.self) { house in
                     iconChoice(name: house.appIconName, title: house.title)
                 }
             }
@@ -46,7 +46,7 @@ struct BrowserPlatformAppIconSettingsSection: View {
                 try await UIApplication.shared.setAlternateIconName(name)
                 selectedName = UIApplication.shared.alternateIconName
             } catch {
-                errorMessage = String(localized: "Crest could not update its icon. Please try again.")
+                errorMessage = String(localized: "Arma could not update its icon. Please try again.")
             }
         }
     }

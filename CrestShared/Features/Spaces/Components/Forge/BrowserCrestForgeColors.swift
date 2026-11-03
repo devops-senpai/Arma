@@ -132,16 +132,51 @@ extension SpaceBranding {
             symbolColor = color
             return
         }
-        if !hasLayeredCrestPalette {
-            let worn = BrowserCrestForgeLayer.all.map { layer -> BrandColor in
-                let colors = crest.layerColors(spaceColors: self.colors)
-                let index = crest[keyPath: layer.index]
-                return colors.indices.contains(index) ? colors[index] : colors[0]
-            }
-            crest.palette = ColorPalette(colors: worn)
-            for layer in BrowserCrestForgeLayer.all { crest[keyPath: layer.index] = layer.slot }
-        }
+        ownCrestPalette()
         crest.palette?[layer.slot] = color
+    }
+
+    /// Gives the crest and the icon colors of their own, the ones they wear
+    /// now, so a theme's colors never change them: the crest a palette entry
+    /// for each layer, and the icon its color rather than the accent.
+    mutating func keepIdentityColors() {
+        if symbolColor == nil { symbolColor = resolvedSymbolColor }
+        ownCrestPalette()
+    }
+
+    /// This look wearing `house`'s crest, its shape, emblem and trim, in
+    /// Catppuccin Macchiato's colors, with the sidebar left as it is.
+    func wearingCrest(of house: SpaceHouse) -> SpaceBranding {
+        var dressed = house.applying(to: self)
+        dressed.wearMacchiatoCrestColors()
+        var updated = self
+        updated.iconStyle = .layeredCrest
+        updated.crest = dressed.crest
+        return updated.normalized()
+    }
+
+    /// This look wearing a new crest shuffled from the Forge's parts, with
+    /// the sidebar left as it is.
+    func shuffledCrest() -> SpaceBranding {
+        var shuffled = BrowserCrestForge.shuffled(self)
+        shuffled.keepIdentityColors()
+        var updated = self
+        updated.crest = shuffled.crest
+        updated.hasCustomAppearance = true
+        return updated.normalized()
+    }
+
+    /// The crest's own palette, with an entry for each layer copied from what
+    /// each layer wears, the first time it needs one.
+    private mutating func ownCrestPalette() {
+        guard !hasLayeredCrestPalette else { return }
+        let colors = crest.layerColors(spaceColors: self.colors)
+        let worn = BrowserCrestForgeLayer.all.map { layer -> BrandColor in
+            let index = crest[keyPath: layer.index]
+            return colors.indices.contains(index) ? colors[index] : colors[0]
+        }
+        crest.palette = ColorPalette(colors: worn)
+        for layer in BrowserCrestForgeLayer.all { crest[keyPath: layer.index] = layer.slot }
     }
 
     // MARK: - Sidebar colors
@@ -167,7 +202,7 @@ struct BrowserCrestForgePalette: View {
     let color: BrandColor
     let select: (BrandColor) -> Void
 
-    private let houses = SpaceHouse.all
+    private let houses = SpaceHouse.offered
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -186,11 +221,10 @@ struct BrowserCrestForgePalette: View {
                     .accessibilityLabel(Text(house.title))
                 }
             }
-            ColorPicker(
-                "Custom",
-                selection: Binding(get: { color.color }, set: { select(BrandColor(color: $0)) }),
-                supportsOpacity: false
-            )
+            // Arma's own wheel, always shown in this popover, rather than the
+            // system color panel: the popover closes when the panel takes
+            // focus, and a color picked there would go nowhere.
+            BrowserColorWheelPicker(color: Binding(get: { color }, set: { select($0) }), title: "Custom Color")
         }
         .padding(14)
         .fixedSize()

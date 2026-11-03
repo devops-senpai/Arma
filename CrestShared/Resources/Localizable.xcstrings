@@ -4,6 +4,219 @@
     "" : {
 
     },
+    "Catppuccin's darkest flavor, with warm peach folders" : {
+
+    },
+    "Catppuccin's muted middle flavor, with teal folders" : {
+
+    },
+    "Arma Grey" : {
+
+    },
+    "Arma Navy" : {
+
+    },
+    "Arma Red" : {
+
+    },
+    "Arma Gold" : {
+
+    },
+    "Arma White" : {
+
+    },
+    "System text color" : {
+
+    },
+    "Tab text" : {
+
+    },
+    "System text" : {
+
+    },
+    "The color of the tabs' titles" : {
+
+    },
+    "New Tab, Clear and the sidebar's other quieter text" : {
+
+    },
+    "Mail" : {
+
+    },
+    "Docs" : {
+
+    },
+    "Music" : {
+
+    },
+    "Guidon" : {
+
+    },
+    "Crane" : {
+
+    },
+    "Sparrow" : {
+
+    },
+    "The theme of the Space this window shows" : {
+
+    },
+    "Theme of the shown Space" : {
+
+    },
+    "%@ uses this theme; choose another for it first." : {
+
+    },
+    "No Theme" : {
+
+    },
+    "The theme this Space wears; edit themes in Settings › Themes" : {
+
+    },
+    "Also used by %@" : {
+
+    },
+    "Saved themes for Spaces" : {
+
+    },
+    "themes saved theme new duplicate rename delete import export colors look dark light background image picture tab backing Catppuccin" : {
+
+    },
+    "crest studio name icon emblem colors theme banner background image picture tab backing sidebar pattern gradient accent" : {
+
+    },
+    "Behind Each Row" : {
+
+    },
+    "Behind the Sidebar" : {
+
+    },
+    "Tab Backing" : {
+
+    },
+    "Tab backing" : {
+
+    },
+    "Tab backing color" : {
+
+    },
+    "Duplicate" : {
+
+    },
+    "Delete Theme" : {
+
+    },
+    "New Theme" : {
+
+    },
+    "Duplicate Theme" : {
+
+    },
+    "Choose a theme, or make a new one." : {
+
+    },
+    "Give this theme a look of its own while windows are dark" : {
+
+    },
+    "%@ Copy" : {
+
+    },
+    "Dark look" : {
+
+    },
+    "The theme’s colors are on, but its background image could not be read." : {
+
+    },
+    "Fill Window" : {
+
+    },
+    "Original Size" : {
+
+    },
+    "Match Width" : {
+
+    },
+    "Match Height" : {
+
+    },
+    "Grow to fit" : {
+
+    },
+    "Repeat" : {
+
+    },
+    "Automation" : {
+
+    },
+    "Testing frameworks" : {
+
+    },
+    "Allow testing frameworks" : {
+
+    },
+    "Restart Arma" : {
+
+    },
+    "Listening on" : {
+
+    },
+    "Profile" : {
+
+    },
+    "Ephemeral" : {
+
+    },
+    "Tabs it can see" : {
+
+    },
+    "Only tabs it opens" : {
+
+    },
+    "Existing tabs too" : {
+
+    },
+    "Port" : {
+
+    },
+    "Playwright, Puppeteer, Selenium and other tools on this Mac can drive Arma’s Chromium tabs in the profile below, and read the sites signed in there. Only programs on this Mac can connect." : {
+
+    },
+    "Ephemeral starts empty, with no sign-ins, and is forgotten when automation stops or Arma quits." : {
+
+    },
+    "Its tools see only that profile’s Spaces, never your other profiles." : {
+
+    },
+    "Selenium, WebdriverIO and Katalon connect through ChromeDriver %@. WebKit pages can’t be driven by these tools." : {
+
+    },
+    "matching Arma's Chromium" : {
+
+    },
+    "Connects to the running browser." : {
+
+    },
+    "Connects over the Chrome DevTools Protocol; Chromium only." : {
+
+    },
+    "Attaches ChromeDriver to the running browser." : {
+
+    },
+    "Attaches its Chrome driver to the running browser." : {
+
+    },
+    "Runs tests in an Arma tab through TestCafe's remote browser." : {
+
+    },
+    "Command-line page control" : {
+
+    },
+    "Lets arma page in your terminal read, capture and act inside your tabs’ pages, as you would." : {
+
+    },
+    "Save “%@” as a New Theme" : {
+
+    },
     "%@ has no content scripts Servo can run." : {
 
     },
@@ -46,16 +259,49 @@
     "Apply to “%@”" : {
 
     },
-    "Choose a theme, or save this Space’s look as one with +." : {
+    "Background Image" : {
+
+    },
+    "Blur" : {
+
+    },
+    "Bottom Left" : {
+
+    },
+    "Brightness" : {
+
+    },
+    "Change Image…" : {
+
+    },
+    "Choose a theme, or save this Space’s look as a new one." : {
+
+    },
+    "Choose Image…" : {
+
+    },
+    "Color Wheel" : {
 
     },
     "Colors" : {
+
+    },
+    "Edit Appearance…" : {
 
     },
     "Export Theme" : {
 
     },
     "Export Theme…" : {
+
+    },
+    "Folder Appearance" : {
+
+    },
+    "Hex Color" : {
+
+    },
+    "Image" : {
 
     },
     "Import Theme" : {
@@ -79,6 +325,12 @@
     "Outline color" : {
 
     },
+    "Pick from Screen" : {
+
+    },
+    "Remove Image" : {
+
+    },
     "Remove Theme" : {
 
     },
@@ -88,7 +340,13 @@
     "Save “%@” as a Theme" : {
 
     },
+    "Space colors" : {
+
+    },
     "That file is not an Arma theme." : {
+
+    },
+    "That file is not an image Arma can show." : {
 
     },
     "That theme is no longer saved." : {
@@ -121,6 +379,9 @@
     "themes saved theme import export colors look catppuccin" : {
 
     },
+    "Top Left" : {
+
+    },
     "Type @tabs, @saved, @history, @actions, @spaces or @themes, then a space or Tab, to show only that kind." : {
 
     },
@@ -128,6 +389,9 @@
 
     },
     "Update from “%@”" : {
+
+    },
+    "Use Space Folder Colors" : {
 
     },
     "·" : {
@@ -962,6 +1226,29 @@
     },
     "%lld percent and %lld percent" : {
 
+    },
+    "%lld passwords couldn’t be saved." : {
+      "comment" : "Follows the setup completion summary when an import couldn’t save some passwords.",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 password couldn’t be saved."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld passwords couldn’t be saved."
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "%lld points" : {
       "localizations" : {
@@ -3071,9 +3358,6 @@
     "Building your review…" : {
 
     },
-    "Built on ungoogled-chromium, with Google integrations removed. Smooth browsing and extensions." : {
-
-    },
     "Cache" : {
 
     },
@@ -3475,6 +3759,9 @@
       "comment" : "The name of a browser engine. Keep the product name as it is."
     },
     "Chromium WebKit hybrid default browser engine websites rules protected video DRM compatibility" : {
+
+    },
+    "Chromium without Google’s data collection. Smooth browsing and extensions." : {
 
     },
     "Claude Code" : {
@@ -3951,6 +4238,12 @@
       }
     },
     "Command-click" : {
+
+    },
+    "Command-click opens a new tab, or Option-click when Command opens Peek." : {
+
+    },
+    "Command-click opens a new tab, or Option-click when Command opens Peek. Hold Option to drag the link itself." : {
 
     },
     "Comments" : {
@@ -4765,6 +5058,18 @@
         }
       }
     },
+    "Arma couldn’t finish the import or restore the original Keychain inventory. Review this Space before trying again." : {
+
+    },
+    "Arma couldn’t import these passwords. This Space’s passwords are unchanged." : {
+
+    },
+    "Arma couldn’t read that password file." : {
+
+    },
+    "Arma couldn’t read this Space’s passwords. Nothing was imported." : {
+
+    },
     "Crest preview" : {
       "extractionState" : "manual"
     },
@@ -4823,6 +5128,9 @@
     "Arma software update" : {
 
     },
+    "Arma quit unexpectedly while reopening your pages." : {
+
+    },
     "Crest Studio" : {
       "localizations" : {
         "ar" : {
@@ -4873,9 +5181,6 @@
           }
         }
       }
-    },
-    "example.com" : {
-
     },
     "Crimson" : {
 
@@ -5376,6 +5681,9 @@
     "Dim unloaded tabs" : {
 
     },
+    "Dim the page behind Peek" : {
+
+    },
     "Direwolf" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5433,6 +5741,9 @@
     "Division" : {
 
     },
+    "Do you want to try to reopen them?" : {
+
+    },
     "Dock Sidebar" : {
 
     },
@@ -5440,6 +5751,9 @@
 
     },
     "Don’t ask again until it disconnects" : {
+
+    },
+    "Don’t Reopen" : {
 
     },
     "Don't Share" : {
@@ -10429,6 +10743,9 @@
     "Profiles, bookmarks, open tabs, and passwords" : {
       "comment" : "What importing from another browser brings. Keep product names as they are."
     },
+    "Protected video, with WebKit fallback" : {
+
+    },
     "Pull and Merge" : {
 
     },
@@ -12408,6 +12725,12 @@
         }
       }
     },
+    "Shift (⇧)" : {
+
+    },
+    "Shift-click" : {
+
+    },
     "shift" : {
       "localizations" : {
         "ar" : {
@@ -13963,12 +14286,6 @@
         }
       }
     },
-    "The other key opens a new tab. Hold Option to drag the link itself." : {
-
-    },
-    "The other key opens the link in a new tab." : {
-
-    },
     "The page could not be exported." : {
 
     },
@@ -14463,6 +14780,9 @@
       }
     },
     "This site’s certificate is not trusted. Information you send could be read by others." : {
+
+    },
+    "This Space’s saved passwords changed during review. No passwords were imported; choose the file again to refresh conflicts." : {
 
     },
     "This Tab" : {
@@ -15569,9 +15889,6 @@
     "WebKit Chromium experimental preview testable developer stable runtime flags features" : {
 
     },
-    "WebKit fallback for protected video" : {
-
-    },
     "Webpages" : {
 
     },
@@ -15701,6 +16018,12 @@
           }
         }
       }
+    },
+    "With %lld Sub-Spaces" : {
+
+    },
+    "With a Sub-Space" : {
+
     },
     "Wolf Grey" : {
 
