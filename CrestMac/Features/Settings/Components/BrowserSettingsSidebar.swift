@@ -11,6 +11,9 @@ struct BrowserSettingsSidebar: View {
     @State private var pendingGroupChange: BrowserSpaceGroupChange?
     @State private var hoveredItem: BrowserSettingsSidebarItem?
     @State private var dropTargetID: UUID?
+    /// The row last chosen and when, so one click that both the list and the
+    /// row's own tap report opens it once.
+    @State private var lastChoice: (item: BrowserSettingsSidebarItem, at: Date)?
     @Bindable var tabState: BrowserSettingsTabState
     let browser: BrowserStore
     let spaceAccess: BrowserSpaceAccessController
@@ -199,6 +202,10 @@ struct BrowserSettingsSidebar: View {
             .space(space.id), hovered: $hoveredItem, selection: selection,
             isDropTarget: dropTargetID == browser.primary(of: space).id
         )
+        // A row that can be dragged onto another Space hands its mouse-down
+        // to the drag, and on macOS 26 the list then rarely selects it, so
+        // the row takes its own click. Its buttons keep theirs.
+        .onTapGesture { choose(.space(space.id)) }
         .moveDisabled(!tabState.isArrangingSpaces)
         .contextMenu { spaceMenu(space).crestMenuActionLabelStyle() }
         .modifier(
@@ -264,9 +271,17 @@ struct BrowserSettingsSidebar: View {
         Binding {
             navigation.selection.row
         } set: { item in
-            item?.select(on: tabState) { id in
-                openSpace(id, tab: navigation.matchingSpaceTab(locale: locale, in: state))
-            }
+            choose(item)
+        }
+    }
+
+    /// Opens what row `item` stands for, once per click.
+    private func choose(_ item: BrowserSettingsSidebarItem?) {
+        guard let item else { return }
+        if let lastChoice, lastChoice.item == item, Date().timeIntervalSince(lastChoice.at) < 0.5 { return }
+        lastChoice = (item, Date())
+        item.select(on: tabState) { id in
+            openSpace(id, tab: navigation.matchingSpaceTab(locale: locale, in: state))
         }
     }
 }
