@@ -1,8 +1,25 @@
-<?xml version="1.0" standalone="yes"?><!-- sparkle-sign-warning:
+<?xml version="1.0" standalone="yes"?>
+<!-- sparkle-sign-warning:
 IMPORTANT: This file was signed by Sparkle. Any modifications to this file requires re-signing this file with generate_appcast or sign_update! The signed signature will be embedded at the end of this file.
---><rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+-->
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <title>BetterCrest</title>
+        <item>
+            <title>0.8.224</title>
+            <pubDate>Tue, 03 Nov 2026 20:23:54 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>800224</sparkle:version>
+            <sparkle:shortVersionString>0.8.224</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma 0.8.224 preview.
+
+- When Check for Updates finds an update, the sidebar opens so you can see it.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.224/Arma-0.8.224.dmg" length="191883420" type="application/octet-stream" sparkle:edSignature="CQQNhAv+fekDR7Tkwl9zEB6q5Qy7huoL3w2gH3wmVxRgY6s3XAei3056Y3unkwVTyPTtQkV/2EdubYHJZXEQDg=="/>
+        </item>
         <item>
             <title>0.8.223</title>
             <pubDate>Tue, 03 Nov 2026 19:56:46 -0500</pubDate>
@@ -20,10 +37,11 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
 - Notices, status colours and controls are shared across Arma.
 - Brings in the latest Crest changes.
 ]]></description>
-            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.223/Arma-0.8.223.dmg" length="191896884" type="application/octet-stream" sparkle:edSignature="/6UIkyENCgk13O88d01eH0k6DlcCUEC5fbAIADF99uSsIuGIkjcrc7kkjMlaYvSjzWZYQWugqTLHOqW2dm2dDw=="></enclosure>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.223/Arma-0.8.223.dmg" length="191896884" type="application/octet-stream" sparkle:edSignature="/6UIkyENCgk13O88d01eH0k6DlcCUEC5fbAIADF99uSsIuGIkjcrc7kkjMlaYvSjzWZYQWugqTLHOqW2dm2dDw=="/>
         </item>
     </channel>
-</rss><!-- sparkle-signatures:
-edSignature: IHeP4+Fnsu7infkeJqaykQ0cQHbCC0BGqnrA2f6MbQR/4+rO4wziN9TH5+bHF3GefgvNlORI6CXqG5mLpH+SBw==
-length: 1732
+</rss>
+<!-- sparkle-signatures:
+edSignature: jV16KVoGRsxXcnQmIz9I8XW00g+oqKR5pikQgFU31b0OcytdtWf2w33m6Os1gJj3r0cctiBRXE2znjhDhp05Ag==
+length: 2718
 -->
