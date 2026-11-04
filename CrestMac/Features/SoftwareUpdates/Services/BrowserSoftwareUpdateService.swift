@@ -31,6 +31,10 @@ final class BrowserSoftwareUpdateService {
     @ObservationIgnored private let userDriver: BrowserSoftwareUpdateUserDriver
     @ObservationIgnored private let updater: SPUUpdater
     @ObservationIgnored private let refreshCoordinator: BrowserSoftwareUpdateRefreshCoordinator
+    /// What to do when the check the person asked for finds an update, such
+    /// as showing the sidebar its card appears in; nil once it has run or
+    /// the check ends without one.
+    @ObservationIgnored private var updateFoundForPerson: (() -> Void)?
 
     var automaticallyChecksForUpdates: Bool {
         updater.automaticallyChecksForUpdates
@@ -85,11 +89,14 @@ final class BrowserSoftwareUpdateService {
         )
         self.updater = updater
         self.refreshCoordinator = refreshCoordinator
-        userDriver.updateCycleDidFinish = { [weak refreshCoordinator] in
+        userDriver.updateCycleDidFinish = { [weak self, weak refreshCoordinator] in
             refreshCoordinator?.updateCycleDidFinish()
+            self?.updateFoundForPerson = nil
         }
-        userDriver.updateWasFound = { [weak refreshCoordinator] in
+        userDriver.updateWasFound = { [weak self, weak refreshCoordinator] in
             refreshCoordinator?.updateWasFound()
+            self?.updateFoundForPerson?()
+            self?.updateFoundForPerson = nil
         }
 
         guard isEnabled else { return }
@@ -99,7 +106,9 @@ final class BrowserSoftwareUpdateService {
     // MARK: - Actions - Checking
 
     /// A check the person asked for, which also brings back a card they hid.
-    func checkForUpdates() {
+    /// `whenFound` runs if it finds an update, so the person can be shown
+    /// the card it appears in.
+    func checkForUpdates(whenFound: (() -> Void)? = nil) {
         guard isEnabled else {
             model.presentError(
                 message: "Update checks are disabled in this isolated Crest session.",
@@ -108,6 +117,7 @@ final class BrowserSoftwareUpdateService {
             return
         }
         model.reveal()
+        updateFoundForPerson = whenFound
         refreshCoordinator.checkForUpdates()
     }
 

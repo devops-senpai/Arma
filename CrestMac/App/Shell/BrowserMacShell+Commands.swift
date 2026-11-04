@@ -140,8 +140,12 @@ extension BrowserMacShell {
         NSApp.orderFrontStandardAboutPanel(options: options)
     }
 
+    /// Checks for an update. The offer appears in the sidebar, so when the
+    /// check finds one the browser window the person uses shows its sidebar.
     func checkForUpdates() {
-        application?.softwareUpdates.checkForUpdates()
+        application?.softwareUpdates.checkForUpdates { [weak self] in
+            self?.windows?.contextBringingBrowserWindowForward()?.chrome.showSidebar()
+        }
     }
 
     /// Opens Settings in the browser window the person is using, opening one
