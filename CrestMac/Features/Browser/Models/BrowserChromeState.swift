@@ -9,6 +9,8 @@ final class BrowserChromeState {
     let utilityPresentation: BrowserUtilityPresentationState
     /// The notice this window shows at its top.
     let notices = BrowserNotices()
+    /// What the command palette's @passwords scope knows in this window.
+    let palettePasswords = BrowserPalettePasswords()
     var columnVisibility: NavigationSplitViewVisibility {
         get { observed(\.columnVisibilityStorage, as: \.columnVisibility) }
         set { publish(newValue, into: \.columnVisibilityStorage, as: \.columnVisibility) }
@@ -152,6 +154,7 @@ final class BrowserChromeState {
 
     func dismissCommandPalette() {
         commandPaletteMode = nil
+        palettePasswords.reset()
     }
 
     // MARK: - Actions - Notices

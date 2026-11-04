@@ -14,6 +14,11 @@ struct BrowserCredentialSavePrompt: View {
     let metrics: BrowserCredentialPromptMetrics
 
     @State private var model = BrowserCredentialSavePromptModel()
+    /// Whether the pointer rests on the prompt, which holds it open.
+    @State private var isPointerResting = false
+    /// Whether the pointer has rested on the prompt, after which it closes a
+    /// moment after the pointer leaves rather than after its full time.
+    @State private var wasRestedOn = false
 
     var body: some View {
         BrowserCredentialPromptSurface(
@@ -30,12 +35,85 @@ struct BrowserCredentialSavePrompt: View {
                 namesSystemPasswordsDestination: namesSystemPasswordsDestination,
                 metrics: metrics,
                 dismiss: port.dismiss,
+                neverSave: neverSaveAction,
                 perform: perform
             )
+        }
+        .overlay(alignment: .topLeading) { closeButton }
+        .onHover { hovering in
+            isPointerResting = hovering
+            if hovering { wasRestedOn = true }
         }
         .task(id: candidate.id) {
             await prepare()
         }
+        .task(id: countdown) {
+            await closeWhenTimeIsUp()
+        }
+    }
+
+    // MARK: - Closing
+
+    /// What restarts the prompt's countdown: another candidate, the pointer
+    /// arriving or leaving, or the prompt starting or stopping asking.
+    private struct Countdown: Hashable {
+        let candidateID: UUID
+        let isPointerResting: Bool
+        let closes: Bool
+    }
+
+    private var countdown: Countdown {
+        Countdown(candidateID: candidate.id, isPointerResting: isPointerResting, closes: model.closesOnItsOwn)
+    }
+
+    /// Never for This Website, offered only while the prompt asks.
+    private var neverSaveAction: (() -> Void)? {
+        guard model.closesOnItsOwn else { return nil }
+        return { neverSaveSite() }
+    }
+
+    /// The ✕ at the prompt's corner, which puts it away as Not Now does.
+    private var closeButton: some View {
+        Button(action: port.dismiss) {
+            Image(systemName: "xmark")
+                .font(.system(size: BrowserCredentialPromptMetrics.closeGlyphSize, weight: .bold))
+        }
+        .buttonStyle(
+            CrestChromeButtonStyle(
+                controlSize: CGSize(
+                    width: BrowserCredentialPromptMetrics.closeButtonSize,
+                    height: BrowserCredentialPromptMetrics.closeButtonSize),
+                cornerRadius: BrowserCredentialPromptMetrics.closeButtonSize / 2, showsRestingFill: true)
+        )
+        .offset(
+            x: -BrowserCredentialPromptMetrics.closeButtonInset, y: -BrowserCredentialPromptMetrics.closeButtonInset
+        )
+        .disabled(model.isBusy)
+        .accessibilityLabel(Text("Close"))
+        .accessibilityIdentifier("crest-password-save-close")
+    }
+
+    /// Puts the prompt away once its time is up, as long as it is only
+    /// asking: the Space's time from when it starts asking, and once the
+    /// pointer has rested on it, a moment after the pointer leaves. Never
+    /// while the pointer rests on it, a save is under way or something failed.
+    private func closeWhenTimeIsUp() async {
+        guard model.closesOnItsOwn, !isPointerResting else { return }
+        let wait: Duration =
+            wasRestedOn ? BrowserNotices.graceAfterHover : .seconds(preferences.savePromptSeconds)
+        try? await Task.sleep(for: wait)
+        guard !Task.isCancelled, model.closesOnItsOwn, !isPointerResting,
+            port.presentedCandidateID() == candidate.id
+        else { return }
+        port.dismiss()
+    }
+
+    /// Stops this Space offering to save on the page's site and everything
+    /// under it, as a site added in Settings starts, then puts the prompt
+    /// away. Saved passwords still fill there.
+    private func neverSaveSite() {
+        try? browser.neverSaveSite(candidate.topLevelOrigin.host, includesSubdomains: true, in: port.spaceID)
+        port.dismiss()
     }
 
     private var space: BrowserSpaceIdentity? {

@@ -26,6 +26,9 @@ protocol BrowserPageEngineAdapter: EngineHostedPage {
     /// Evaluates a credential fill in the document that asked for it, for an
     /// engine whose bridges are not installed through `contentScripting`.
     var credentialEvaluator: BrowserCredentialSession.Evaluate? { get }
+    /// Evaluates a credential bridge call in the page's main document, for an
+    /// engine whose bridges are not installed through `contentScripting`.
+    var credentialMainFrameEvaluator: BrowserCredentialSession.MainFrameEvaluate? { get }
     /// The page's main document as whole-page translation rewrites it, or
     /// nil for an engine that does not translate whole pages.
     var translationDocument: BrowserTranslationDocument? { get }

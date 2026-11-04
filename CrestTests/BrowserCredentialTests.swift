@@ -68,7 +68,9 @@ final class BrowserCredentialTests: XCTestCase {
         var seed = SessionState.Seed.preview
         let space = try XCTUnwrap(seed.spaces.first)
         seed.spaces[0].settings.credentialPreferences = CredentialPreferences(
-            isEnabled: false, syncsCrestPasswordsWithICloud: true, alsoOffersSaveToSystemPasswords: false)
+            isEnabled: false, syncsCrestPasswordsWithICloud: true, alsoOffersSaveToSystemPasswords: false,
+            savePromptSeconds: CredentialPreferences.defaultSavePromptSeconds, neverSavedSites: [],
+            authentication: .eachTime)
         let vault = InMemoryCredentialVault()
         let store = BrowserStore(
             seed: seed,

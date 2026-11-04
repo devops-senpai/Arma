@@ -31,6 +31,9 @@ struct BrowserCredentialObservation<FillTarget> {
 final class BrowserCredentialPageState<FillTarget> {
     let spaceID: UUID
     @ObservationIgnored private let core: CrestCore
+    /// The sites the page's Space never offers to save passwords on, read
+    /// fresh for each decision so an edit in Settings applies at once.
+    @ObservationIgnored private let neverSavedSites: @MainActor () -> [NeverSavedSite]
 
     private(set) var fillRequest: BrowserCredentialFillRequest?
     private(set) var saveCandidate: BrowserCredentialSaveCandidate?
@@ -47,9 +50,10 @@ final class BrowserCredentialPageState<FillTarget> {
     @ObservationIgnored private var pendingSaveCandidate: BrowserCredentialSaveCandidate?
     @ObservationIgnored private var candidateExpirationTask: Task<Void, Never>?
 
-    init(spaceID: UUID, core: CrestCore) {
+    init(spaceID: UUID, core: CrestCore, neverSavedSites: @escaping @MainActor () -> [NeverSavedSite] = { [] }) {
         self.spaceID = spaceID
         self.core = core
+        self.neverSavedSites = neverSavedSites
     }
 
     /// Applies one validated form message. The portable core decides what
@@ -240,7 +244,8 @@ final class BrowserCredentialPageState<FillTarget> {
             pending: pendingCandidate.map {
                 CredentialPendingCandidate(origin: $0.origin, submittedAt: $0.submittedAt.timeIntervalSince1970)
             },
-            now: now.timeIntervalSince1970)
+            now: now.timeIntervalSince1970,
+            neverSavedSites: neverSavedSites())
         guard let decision = try? core.query(capture), decision.candidateLifetime > 0, decision.usernameHintLifetime > 0
         else { return nil }
         return decision

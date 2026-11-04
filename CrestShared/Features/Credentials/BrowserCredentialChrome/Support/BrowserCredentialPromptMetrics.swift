@@ -315,4 +315,10 @@ struct BrowserCredentialPromptMetrics: Equatable, Sendable {
     static let shadowOpacity = CrestOpacity.controlShadow
     static let shadowRadius: CGFloat = 14
     static let shadowOffset: CGFloat = 6
+
+    /// The ✕ that closes the save prompt, set on the panel's top-left corner
+    /// as a notification's is.
+    static let closeButtonSize: CGFloat = 18
+    static let closeGlyphSize: CGFloat = 8
+    static let closeButtonInset: CGFloat = 6
 }

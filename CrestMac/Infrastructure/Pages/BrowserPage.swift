@@ -272,6 +272,7 @@ final class BrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
         spaceName: String,
         allowsCredentialAccess: Bool = true,
         isCredentialAccessEnabled: Bool = true,
+        neverSavedSites: @escaping @MainActor () -> [NeverSavedSite] = { [] },
         defaultPageZoom: CGFloat = BrowserDefaultPageZoomStore.defaultLevel,
         loadHTTPAuthenticationCredential:
             @escaping BrowserHTTPAuthenticationSession.LoadCredential = { _ in nil },
@@ -333,7 +334,8 @@ final class BrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
             core: downloadCenter.core,
             supportsAccess: allowsCredentialAccess,
             isEnabled: isCredentialAccessEnabled,
-            httpAuthentication: httpAuthenticationSession
+            httpAuthentication: httpAuthenticationSession,
+            neverSavedSites: neverSavedSites
         )
         navigationDecider = BrowserNavigationDecider()
         // A popup whose destination belongs to another application is routed
@@ -836,6 +838,21 @@ final class BrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
     }
 
     /// Fills go back through the channel the credential bridge came in on.
+    /// Fills `credential` into the first login form of the page, as a person
+    /// chose it from outside the page, such as the command palette. Answers
+    /// whether a form took it; never while the page keeps passwords off.
+    func fillFirstLoginForm(_ credential: BrowserCredential) async -> Bool {
+        guard isCredentialAccessEnabled, let evaluate = credentialMainFrameEvaluator else { return false }
+        return (try? await credentialSession.fillFirstLogin(credential, evaluate: evaluate)) ?? false
+    }
+
+    private var credentialMainFrameEvaluator: BrowserCredentialSession.MainFrameEvaluate? {
+        guard let scripting = pageEngine.contentScripting else { return engineAdapter.credentialMainFrameEvaluator }
+        return { body, arguments in
+            try await scripting.callAsyncJavaScriptInMainFrame(body, arguments: arguments)
+        }
+    }
+
     private var credentialEvaluator: BrowserCredentialSession.Evaluate? {
         guard let scripting = pageEngine.contentScripting else { return engineAdapter.credentialEvaluator }
         return { body, arguments, frame in

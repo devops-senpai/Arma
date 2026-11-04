@@ -16,7 +16,9 @@ final class BrowserPagePoolTests: XCTestCase {
         let space = try XCTUnwrap(browser.shownSpace)
         browser.updateCredentialPreferences(
             CredentialPreferences(
-                isEnabled: false, syncsCrestPasswordsWithICloud: false, alsoOffersSaveToSystemPasswords: false),
+                isEnabled: false, syncsCrestPasswordsWithICloud: false, alsoOffersSaveToSystemPasswords: false,
+                savePromptSeconds: CredentialPreferences.defaultSavePromptSeconds, neverSavedSites: [],
+                authentication: .eachTime),
             in: space.id)
         pool.reconcileCredentialAccess()
 

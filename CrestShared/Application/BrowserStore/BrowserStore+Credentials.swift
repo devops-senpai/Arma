@@ -190,6 +190,28 @@ extension BrowserStore {
                 workspaceID: profileSettingsBrowser.family.workspaceID, spaceID: spaceID, preferences: preferences))
     }
 
+    /// Stops Space `spaceID`, and its group, offering to save passwords on
+    /// the website `site` names, such as `example.com` or `*.example.com`, in
+    /// place of `replacing` when a person edits an entry. Throws the rule that
+    /// refused it, such as `InvalidNeverSavedSite`.
+    func neverSaveSite(
+        _ site: String, includesSubdomains: Bool, replacing: NeverSavedSite? = nil, in spaceID: UUID
+    ) throws(Rejection) {
+        let owner = profileSettingsBrowser
+        try owner.family.commit(
+            NeverSaveSite(
+                workspaceID: owner.family.workspaceID, spaceID: spaceID, site: site,
+                includesSubdomains: includesSubdomains, replacing: replacing),
+            from: owner)
+    }
+
+    /// Lets Space `spaceID`, and its group, offer to save passwords on `site`
+    /// again.
+    func forgetNeverSavedSite(_ site: NeverSavedSite, in spaceID: UUID) {
+        sendSpaceSettings(
+            ForgetNeverSavedSite(workspaceID: profileSettingsBrowser.family.workspaceID, spaceID: spaceID, site: site))
+    }
+
     func setCrestPasswordSynchronization(
         _ isSynchronizable: Bool,
         in spaceID: UUID
@@ -215,9 +237,8 @@ extension BrowserStore {
         guard let current = spaceModel(matching: assignment)?.settings.credentialPreferences else {
             throw CredentialVaultError.missingSpace
         }
-        let preferences = CredentialPreferences(
-            isEnabled: current.isEnabled, syncsCrestPasswordsWithICloud: isSynchronizable,
-            alsoOffersSaveToSystemPasswords: current.alsoOffersSaveToSystemPasswords)
+        var preferences = current
+        preferences.syncsCrestPasswordsWithICloud = isSynchronizable
         // The native credential operation completed for this profile. Persist
         // its corresponding policy through the same session authority.
         let sent = SetCredentialPreferences(workspaceID: family.workspaceID, spaceID: spaceID, preferences: preferences)
