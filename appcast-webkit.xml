@@ -6,6 +6,22 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.225</title>
+            <pubDate>Tue, 03 Nov 2026 21:38:39 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>800225</sparkle:version>
+            <sparkle:shortVersionString>0.8.225</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma 0.8.225 preview.
+
+- Check for Updates rolls a hidden sidebar out to show its answer, and tucks it away when you click elsewhere.
+- Type @update in the command palette to check for a new version.
+- New Spaces start with Arma's gold and red crest.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.225/Arma-0.8.225.dmg" length="191833413" type="application/octet-stream" sparkle:edSignature="g/a7hFE7jlqS9Bb4pV0qL+Pl3EMPY6h9K8p42WwKWUa390LcnHnoTgXjUlof75pl6sR1EVwWBixzYv0F8CTcDg=="/>
+        </item>
+        <item>
             <title>0.8.224</title>
             <pubDate>Tue, 03 Nov 2026 20:23:53 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -40,6 +56,6 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: R4xprrMttweLj4iNkBWIGPIXjINAEgds+OxuFKaYqKKZQEKibd0VHtJS5TCa0Fmavm28Jpc4tWJ3husdZN7AAA==
-length: 2600
+edSignature: O+56fcQfHfSfqzSaWrnV627aWMWaubru4mpTWVaIb77TYimVvRS9EGjKtnm6dPq2tO+z4xxtxKAu+C4PS6Q3Bg==
+length: 3684
 -->
