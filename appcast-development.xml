@@ -6,6 +6,27 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.226</title>
+            <pubDate>Wed, 04 Nov 2026 01:33:30 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>800226</sparkle:version>
+            <sparkle:shortVersionString>0.8.226</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma 0.8.226 preview.
+
+- Drag the top of a page to move the window, as in Arc, wherever nothing there takes a click; text you can select and links still work.
+- The Opened in Background Tab notice stays longer, waits while your pointer is on it, and offers Show Tab. Notices with a button take your click instead of the page under them.
+- The Save password? prompt has a close button, closes after a few seconds you can set, and offers Never for This Website. Each Space’s Passwords settings list the websites it never offers to save on, with Include subdomains per site.
+- Type @passwords in the command palette to find a saved login and copy its username, password or website, fill it into the page, or open the site.
+- Choose whether showing or copying a saved password asks you to authenticate each time, every 15 minutes, or not at all.
+- Check for Updates rolls out a hidden sidebar to show its answer, and @update checks from the command palette.
+- New Spaces start with Arma's gold and red crest.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.226/Arma-0.8.226.dmg" length="191895045" type="application/octet-stream" sparkle:edSignature="SBQrlf7+c1iGBxOQNI8rNBLiD+PRu0iHDb6Y9xgBeZSJ77/XVCks0evKvSbjqPHoppAJ0A4lOqR3JkX7/8TLCw=="/>
+        </item>
+        <item>
             <title>0.8.225</title>
             <pubDate>Tue, 03 Nov 2026 21:38:41 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -59,6 +80,6 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: p3EdKs4rdU8Lhe+HSsSvYjpUgarNS9JOSVqJswlrgyDOFo+xCganBB7MrrFFrmrfpPK9VR8onTHM5j1NPYO+Dw==
-length: 3861
+edSignature: 3r4jYRivKSzUxaR9EXaKaWpv6A2OJ1ueAX1xchzHmtoYRykdhiq5e3wYfqq7miU4JyRnPC2M2Twp/h0OMiogDQ==
+length: 5760
 -->
