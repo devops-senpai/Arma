@@ -6,6 +6,21 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.227</title>
+            <pubDate>Wed, 04 Nov 2026 01:44:18 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>800227</sparkle:version>
+            <sparkle:shortVersionString>0.8.227</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma 0.8.227 preview.
+
+- Adding several sites in a row under Never Save Passwords On now opens each new row empty, instead of repeating the site you just added.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.227/Arma-0.8.227.dmg" length="191896013" type="application/octet-stream" sparkle:edSignature="EJ4rAUFIQGAX6ZZvM6Gc2+831WQXYtQMf81Sli1DOVyxuIlsizHFhA9bBlAp6RE3sT23DzO+zegTXrOfUniFBw=="/>
+        </item>
+        <item>
             <title>0.8.226</title>
             <pubDate>Wed, 04 Nov 2026 01:33:31 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -80,6 +95,6 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: SX66Mtlp4kKGAh0EJrVWtVAIzy51ytnHRXw3TZ4CljiyOEvoh+CMvkzF47ARK6IjJoWC2cXRH6R6L3HyHDgdBQ==
-length: 5760
+edSignature: ESJpNShrF6BliHqRvEck3t89HPFfrCgyo3WCarT2CG+KuXYLbBr9cxFoot/T2NBrfpq9WKFOzxoV8lgDzS+FBw==
+length: 6813
 -->
