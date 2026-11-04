@@ -36,11 +36,13 @@ public sealed class SpaceTemplate {
 
     /// A Space that offers to save passwords and sync Crest's with iCloud.
     private static readonly CredentialPreferences SavesPasswords = new(IsEnabled: true, SyncsCrestPasswordsWithICloud: true,
-        AlsoOffersSaveToSystemPasswords: false);
+        AlsoOffersSaveToSystemPasswords: false, CredentialPreferences.DefaultSavePromptSeconds, NeverSavedSites: [],
+        CredentialAuthentication.EachTime);
 
     /// A Space that never offers to save or sync passwords.
     private static readonly CredentialPreferences NoPasswords = new(IsEnabled: false, SyncsCrestPasswordsWithICloud: false,
-        AlsoOffersSaveToSystemPasswords: false);
+        AlsoOffersSaveToSystemPasswords: false, CredentialPreferences.DefaultSavePromptSeconds, NeverSavedSites: [],
+        CredentialAuthentication.EachTime);
 
     public static readonly SpaceTemplate Ordinary = new(isPrivate: false, name: number => $"Space {number}",
         symbol: "square.grid.2x2.fill", accent: number => SpaceAccent.All[(number - 1) % SpaceAccent.All.Count],

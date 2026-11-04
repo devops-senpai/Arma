@@ -348,6 +348,19 @@ enum BrowserCredentialContentBridge {
               passwordInput.focus();
               return true;
             },
+            // A saved login a person chose outside the page, such as from the
+            // command palette: the document's first visible field for a
+            // current password, and the username field beside it.
+            fillFirstLogin(username, password) {
+              const passwordInput = Array.from(document.querySelectorAll("input[type=password]")).find(
+                (input) => input.isConnected && input.getClientRects().length > 0 && passwordKind(input) === "current");
+              if (!passwordInput) return false;
+              const usernameInput = usernameInputIn(rootFor(passwordInput), passwordInput);
+              if (usernameInput) setInputValue(usernameInput, username);
+              setInputValue(passwordInput, password);
+              passwordInput.focus();
+              return true;
+            },
             fillGenerated(formID, password) {
               const root = rootsByID.get(formID)?.deref();
               if (!root || !root.isConnected) {

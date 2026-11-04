@@ -201,6 +201,9 @@ struct BrowserPasswordSettingsPane: View {
                             credentialPreferences(in: space)
                         }
 
+                        BrowserCredentialAuthenticationRow(browser: browser, space: space)
+                        BrowserSavePromptSecondsRow(browser: browser, space: space)
+
                         if layout.showsManageAction {
                             Button("Manage Saved Passwords…") {
                                 manage?()
@@ -230,6 +233,9 @@ struct BrowserPasswordSettingsPane: View {
                         CrestFormFootnote("iCloud Keychain and Passwords choices apply to this device only.")
                     }
                 }
+
+                BrowserNeverSavedSitesSection(browser: browser, space: space)
+                    .disabled(!space.settings.credentialPreferences.isEnabled)
 
                 if layout.showsSavedPasswords {
                     Section {

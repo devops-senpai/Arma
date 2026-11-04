@@ -15,7 +15,8 @@ internal static partial class StoredSessionCodec {
         new(DataRetention.Forever, DataRetention.Forever, DataRetention.Forever));
 
     /// What a Space that stored no credential preferences offers.
-    internal static CredentialPreferences DefaultCredentialPreferences { get; } = new(true, true, false);
+    internal static CredentialPreferences DefaultCredentialPreferences { get; } =
+        new(true, true, false, CredentialPreferences.DefaultSavePromptSeconds, [], CredentialAuthentication.EachTime);
 
     #endregion
 
@@ -97,18 +98,45 @@ internal static partial class StoredSessionCodec {
 
     #region Actions - Credential preferences
 
+    /// A Space's credential preferences. A Space an older release stored keeps
+    /// the default prompt time and no never-saved sites; a site that no longer
+    /// reads as one is left out.
     internal static CredentialPreferences DecodeCredentialPreferences(JsonNode? node) {
         var value = Object(node);
-        return new(Flag(value[Key.IsEnabled]) ?? DefaultCredentialPreferences.IsEnabled,
+        return new CredentialPreferences(Flag(value[Key.IsEnabled]) ?? DefaultCredentialPreferences.IsEnabled,
             Flag(value[Key.SyncsCrestPasswordsWithICloud]) ?? DefaultCredentialPreferences.SyncsCrestPasswordsWithICloud,
-            Flag(value[Key.AlsoOffersSaveToSystemPasswords]) ?? DefaultCredentialPreferences.AlsoOffersSaveToSystemPasswords);
+            Flag(value[Key.AlsoOffersSaveToSystemPasswords]) ?? DefaultCredentialPreferences.AlsoOffersSaveToSystemPasswords,
+            Integer(value[Key.SavePromptSeconds]) ?? DefaultCredentialPreferences.SavePromptSeconds,
+            [.. Items(value[Key.NeverSavedSites]).OfType<JsonObject>().Select(DecodeNeverSavedSite).OfType<NeverSavedSite>()],
+            CredentialAuthentication.Named(TolerantText(value[Key.Authentication])) ?? DefaultCredentialPreferences.Authentication)
+            .Kept();
     }
 
-    internal static JsonObject Encode(CredentialPreferences preferences) => new() {
-        [Key.IsEnabled] = preferences.IsEnabled,
-        [Key.SyncsCrestPasswordsWithICloud] = preferences.SyncsCrestPasswordsWithICloud,
-        [Key.AlsoOffersSaveToSystemPasswords] = preferences.AlsoOffersSaveToSystemPasswords
-    };
+    /// A Space's credential preferences, writing the prompt's time, how often
+    /// it asks to authenticate and the never-saved sites only when they differ
+    /// from their defaults, so a
+    /// Space that kept them is stored exactly as an older release stored it.
+    internal static JsonObject Encode(CredentialPreferences preferences) {
+        var value = new JsonObject {
+            [Key.IsEnabled] = preferences.IsEnabled,
+            [Key.SyncsCrestPasswordsWithICloud] = preferences.SyncsCrestPasswordsWithICloud,
+            [Key.AlsoOffersSaveToSystemPasswords] = preferences.AlsoOffersSaveToSystemPasswords
+        };
+        if (preferences.SavePromptSeconds != DefaultCredentialPreferences.SavePromptSeconds)
+            value[Key.SavePromptSeconds] = preferences.SavePromptSeconds;
+        if (preferences.Authentication != DefaultCredentialPreferences.Authentication)
+            value[Key.Authentication] = preferences.Authentication.Name;
+        if (preferences.NeverSavedSites.Count > 0)
+            value[Key.NeverSavedSites] = new JsonArray([.. preferences.NeverSavedSites.Select(site => (JsonNode)new JsonObject {
+                [Key.Host] = site.Host,
+                [Key.IncludesSubdomains] = site.IncludesSubdomains
+            })]);
+        return value;
+    }
+
+    private static NeverSavedSite? DecodeNeverSavedSite(JsonObject value) =>
+        TolerantText(value[Key.Host]) is { } host
+            ? NeverSavedSite.Reading(host, TolerantFlag(value[Key.IncludesSubdomains]) ?? false) : null;
 
     #endregion
 
