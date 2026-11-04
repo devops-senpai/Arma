@@ -18,11 +18,6 @@ struct BrowserNotice: Equatable, Hashable {
         systemImage: "checkmark.circle.fill"
     )
 
-    static let openedInBackgroundTab = BrowserNotice(
-        message: String(localized: "Opened in Background Tab"),
-        systemImage: "plus.square.on.square"
-    )
-
     // MARK: - Variables
 
     let message: String
@@ -41,6 +36,16 @@ struct BrowserNotice: Equatable, Hashable {
     }
 
     // MARK: - Actions - Notices
+
+    /// A tab opened behind the page the person is using, with a Show Tab
+    /// action that runs `show`. Offering the action also keeps the notice up
+    /// long enough to take it.
+    static func openedInBackgroundTab(show: @escaping @MainActor () -> Void) -> BrowserNotice {
+        BrowserNotice(
+            message: String(localized: "Opened in Background Tab"),
+            systemImage: "plus.square.on.square",
+            action: BrowserNoticeAction(title: String(localized: "Show Tab"), perform: show))
+    }
 
     /// The page's zoom, as `label` names it.
     static func pageZoom(_ label: String) -> BrowserNotice {
