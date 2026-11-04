@@ -1,7 +1,3 @@
-# BetterCrest software updates
+# Arma software updates
 
-This branch is written by the release workflow. Its signed stable, nightly,
-development and experimental appcasts point only to notarized assets in this
-repository's GitHub Releases; the `-webkit` twins serve WebKit-only builds.
-
-The feeds are empty until BetterCrest publishes its first release.
+Signed Sparkle feeds written by Scripts/fork/publish.sh. Each entry points to a notarized installer in this repository's GitHub Releases.
