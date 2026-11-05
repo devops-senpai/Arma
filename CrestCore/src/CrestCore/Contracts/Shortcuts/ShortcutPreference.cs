@@ -12,7 +12,7 @@ namespace CrestCore.Contracts;
 public sealed class ShortcutPreference {
     #region Variables
 
-    public static readonly ShortcutPreference PreferCrest = new(name: "preferCrest", title: "Prefer Crest", symbol: "macwindow",
+    public static readonly ShortcutPreference PreferCrest = new(name: "preferCrest", title: "Prefer Arma", symbol: "macwindow",
         runsBeforePage: true, takesSecondPress: false);
     public static readonly ShortcutPreference UseBoth = new(name: "useBoth", title: "Use Both", symbol: "2.circle",
         runsBeforePage: false, takesSecondPress: true);
