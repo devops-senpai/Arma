@@ -144,6 +144,9 @@ private struct BrowserRootChromeObserver: ViewModifier {
             .onChange(of: model.chrome.isFloatingSidebarPresented) {
                 model.floatingSidebarPresentationChanged()
             }
+            .onChange(of: model.chrome.holdsFloatingSidebar) {
+                model.floatingSidebarHoldChanged(reduceMotion: reduceMotion)
+            }
             .onChange(of: model.lockedSpaceIDs, initial: true) { _, spaceIDs in
                 model.relockProtectedSpaces(spaceIDs)
             }
