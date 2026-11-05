@@ -6,6 +6,21 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.241</title>
+            <pubDate>Wed, 04 Nov 2026 23:43:57 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>800241</sparkle:version>
+            <sparkle:shortVersionString>0.8.241</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### Split View
+- Resizing Split View pages no longer leaves a white band under Chromium pages. The band grew each time the bar between pages was dragged or the split was laid out again, and stayed until the page reloaded.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.241/Arma-0.8.241.dmg" length="192442150" type="application/octet-stream" sparkle:edSignature="IIj/GSN5EDxhn++Qp0wMtRAF6uhY97mrdlGJHFLL2N969MmeEbMrlNFu78+DZXv4yvaSHDVNEA7huNGMBlW8BA=="/>
+        </item>
+        <item>
             <title>0.8.240</title>
             <pubDate>Wed, 04 Nov 2026 22:20:10 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -121,6 +136,6 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: IpWJVx/aATp35qTzAuyfYlOFQ6In4rfQD3d+laxG5SChSbLHskqSx4m0T+JoQScbSrJ/xje7PiW5aVwJ7XhzBA==
-length: 8940
+edSignature: Itudw6gaKV7kUo74R2OwirCII704Ah0k9cekwaRNglOqx/rmqaA+bA6/svCiLV6IlbunPd3IsWZiTIvMEnzzDg==
+length: 10010
 -->
