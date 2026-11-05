@@ -328,6 +328,40 @@ final class BrowserMacWindows {
             })
     }
 
+    // MARK: - Actions - Window on a tab
+
+    /// Whether window `sourceWindowID` opens its tabs and links in a new
+    /// browser window: a normal window does, since a new one shows the same
+    /// Spaces and tabs. A temporary or private window's tabs are its own.
+    func opensWindows(from sourceWindowID: UUID) -> Bool {
+        application.windowCoordinator.existingModel(for: sourceWindowID).map {
+            !$0.isTemporary && !$0.browser.isPrivateBrowsing
+        } ?? false
+    }
+
+    /// Opens a browser window as New Window does from window
+    /// `sourceWindowID`, showing tab `tabID` of Space `spaceID`.
+    @discardableResult
+    func openWindow(showing tabID: UUID, in spaceID: UUID, from sourceWindowID: UUID) -> Bool {
+        openWindow(over: spaceID, from: sourceWindowID)?.browser.activateSessionTab(tabID, in: spaceID) ?? false
+    }
+
+    /// Opens a browser window as New Window does from window
+    /// `sourceWindowID`, showing `url` in a new tab of Space `spaceID`.
+    @discardableResult
+    func openWindow(opening url: URL, in spaceID: UUID, from sourceWindowID: UUID) -> Bool {
+        openWindow(over: spaceID, from: sourceWindowID)?.browser.openNewTab(url: url, in: spaceID) != nil
+    }
+
+    private func openWindow(over spaceID: UUID, from sourceWindowID: UUID) -> BrowserMacWindowModel? {
+        guard opensWindows(from: sourceWindowID) else { return nil }
+        let request = BrowserMacWindowRequest.normal(sourceWindowID: sourceWindowID)
+        open(request, activation: .key)
+        guard let window = application.windowCoordinator.existingModel(for: request.id) else { return nil }
+        window.browser.selectSpace(spaceID)
+        return window
+    }
+
     // MARK: - Actions - Private window
 
     func openPrivateWindow() {

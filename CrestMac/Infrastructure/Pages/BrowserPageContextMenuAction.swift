@@ -15,6 +15,7 @@ struct BrowserPageContextMenuAction {
         case split
         case space(UUID)
         case quickWindow
+        case window
     }
 
     /// Runs the row on the page, answering whether it did. A page without a
@@ -79,6 +80,17 @@ struct BrowserPageContextMenuAction {
             symbolName: "macwindow.badge.plus", linkURL: linkURL, selectionText: nil
         ) { page, _, _ in
             page.openInQuickWindow(linkURL)
+        }
+    }
+
+    /// Opens `linkURL` in a new tab of the page's Space, in a new browser
+    /// window.
+    static func window(_ linkURL: URL) -> BrowserPageContextMenuAction {
+        BrowserPageContextMenuAction(
+            kind: .window, title: String(localized: "Open Link in New Window"), symbolName: "macwindow.badge.plus",
+            linkURL: linkURL, selectionText: nil
+        ) { page, _, _ in
+            page.openInNewWindow(linkURL)
         }
     }
 
@@ -178,7 +190,17 @@ struct BrowserPageContextMenu {
     // MARK: - Actions - Menu
 
     /// Puts the rows ahead of what `menu` holds, with a separator between.
-    func insert(into menu: NSMenu) {
+    /// The row that opens a link in a new window goes under `linkRow`, the
+    /// engine's own row that opens the link in a new tab, where the menu has
+    /// one.
+    func insert(into menu: NSMenu, linkRow: NSMenuItem? = nil) {
+        var actions = actions
+        if let index = linkRow.flatMap(menu.items.firstIndex(of:)),
+            let window = actions.first(where: { $0.kind == .window })
+        {
+            menu.insertItem(item(for: window), at: index + 1)
+            actions.removeAll { $0.kind == .window }
+        }
         guard !actions.isEmpty else { return }
         var items: [NSMenuItem] = []
         let spaceActions = actions.filter(\.isSpaceDestination)
@@ -232,6 +254,7 @@ extension BrowserPage: BrowserPageContextMenuHost {
             for space in linkDestinationHost.otherSpaces(from: source) {
                 actions.append(.space(space, opening: linkURL))
             }
+            if opensLinksInNewWindow { actions.append(.window(linkURL)) }
             actions.append(.peek(linkURL))
             if splitLinkHost.canOpenLink(context.tabID, context.assignment) {
                 actions.append(.split(linkURL))

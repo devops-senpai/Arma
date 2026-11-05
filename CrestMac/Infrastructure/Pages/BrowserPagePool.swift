@@ -104,6 +104,9 @@ final class BrowserPagePool:
     /// The window's presentation installs it. Without one, such a page has
     /// nowhere to show and goes.
     @ObservationIgnored var popupWindowPresenter: ((BrowserQuickWindowRequest) -> Void)?
+    /// Opens a link in a new tab of a Space, in a new browser window, where
+    /// this pool's window opens them. The window's presentation installs it.
+    @ObservationIgnored var linkWindowPresenter: ((URL, UUID) -> Bool)?
     /// Whether a Peek is open for the person rather than staged while they
     /// still drag its link; the window's transient browsing answers.
     @ObservationIgnored var isPeekOpen: (BrowserPeekRequest) -> Bool = { _ in false }
