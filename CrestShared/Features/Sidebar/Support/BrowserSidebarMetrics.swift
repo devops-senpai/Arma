@@ -48,6 +48,18 @@ enum BrowserSidebarMetrics {
         return max(0, containerPadding - CGFloat(separation) / 2)
     }
 
+    /// How far a folder's tab backing reaches past its header, above and
+    /// below: the header is a tab row's height less the folder's padding, and
+    /// its plate is a whole tab row, centered, so half that padding, less the
+    /// separation the header keeps itself.
+    @MainActor
+    static func folderPlateReach(tabScale: Double) -> CGFloat {
+        let padding = containerPadding + containerBottomPadding(tabScale: tabScale) + containerSpacing * 2
+        let separation = BrowserSidebarDensity(tabScale).rowSeparation(
+            hasBorders: BrowserDeviceAppearanceStore.shared.tabs.borders == .all)
+        return max(0, (padding - CGFloat(separation)) / 2)
+    }
+
     // MARK: - Actions - Corners
 
     /// The corner radius of a layer drawn inside `depth` containers, from the

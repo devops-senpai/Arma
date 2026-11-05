@@ -1122,7 +1122,8 @@ struct AppPreferences: Equatable, Sendable {
                 PaletteSourceChoice(source: PaletteSource.settingsPages, isEnabled: true, limit: nil),
                 PaletteSourceChoice(source: PaletteSource.scopes, isEnabled: true, limit: nil),
                 PaletteSourceChoice(source: PaletteSource.calculator, isEnabled: true, limit: nil),
-                PaletteSourceChoice(source: PaletteSource.pasteAndGo, isEnabled: false, limit: nil)
+                PaletteSourceChoice(source: PaletteSource.pasteAndGo, isEnabled: false, limit: nil),
+                PaletteSourceChoice(source: PaletteSource.themes, isEnabled: true, limit: nil)
             ],
             showsTopHit: true,
             prefersOpenTabs: true,
@@ -3022,6 +3023,20 @@ struct FolderAlreadyExists: Equatable, Sendable {
     let folderID: UUID
 }
 
+struct FolderColorOverride: Equatable, Sendable {
+    var path: String
+    var color: BrandColor?
+    var backColor: BrandColor?
+    var outlineColor: BrandColor?
+}
+
+struct FolderColorOverrides: Equatable, Sendable {
+    static let maximumCount: Int = 200
+    static let maximumPathLength: Int = 512
+
+    var overrides: [FolderColorOverride]
+}
+
 struct FolderCycle: Equatable, Sendable {
     let folderID: UUID
 }
@@ -4776,7 +4791,8 @@ struct PalettePreferences: Equatable, Sendable {
             PaletteSourceChoice(source: PaletteSource.settingsPages, isEnabled: true, limit: nil),
             PaletteSourceChoice(source: PaletteSource.scopes, isEnabled: true, limit: nil),
             PaletteSourceChoice(source: PaletteSource.calculator, isEnabled: true, limit: nil),
-            PaletteSourceChoice(source: PaletteSource.pasteAndGo, isEnabled: false, limit: nil)
+            PaletteSourceChoice(source: PaletteSource.pasteAndGo, isEnabled: false, limit: nil),
+            PaletteSourceChoice(source: PaletteSource.themes, isEnabled: true, limit: nil)
         ],
         showsTopHit: true,
         prefersOpenTabs: true,
@@ -4872,7 +4888,14 @@ struct PaletteSuggestions: Query, Equatable, Sendable {
     let scope: PaletteScope?
     let allowsCompletion: Bool
     let pasteboard: String?
+    let themes: [PaletteTheme]
     let spaceID: UUID?
+}
+
+struct PaletteTheme: Equatable, Sendable, Identifiable {
+    var id: UUID
+    var name: String
+    var detail: String
 }
 
 struct PasskeyAccess: Query, Equatable, Sendable {
@@ -5868,7 +5891,7 @@ struct SetFolderColor: Intent, SessionIntent, Equatable, Sendable {
     let workspaceID: UUID
     let spaceID: UUID
     let folderID: UUID
-    let color: BrandColor
+    let color: BrandColor?
 }
 
 struct SetFolderSymbol: Intent, SessionIntent, Equatable, Sendable {
@@ -5931,6 +5954,12 @@ struct SetSpaceBranding: Intent, SessionIntent, Equatable, Sendable {
     let workspaceID: UUID
     let spaceID: UUID
     let branding: SpaceBranding
+}
+
+struct SetSpaceDarkBranding: Intent, SessionIntent, Equatable, Sendable {
+    let workspaceID: UUID
+    let spaceID: UUID
+    let branding: SpaceBranding?
 }
 
 struct SetSpaceIdentity: Intent, SessionIntent, Equatable, Sendable {
@@ -6391,7 +6420,14 @@ struct SpaceBranding: Equatable, Sendable {
         renderingVersion: 2,
         folderColorIntensity: 0,
         textColorMode: SpaceTextColorMode.automatic,
-        hasCustomAppearance: nil
+        hasCustomAppearance: nil,
+        folderColor: nil,
+        folderBackColor: nil,
+        commandPalette: nil,
+        sidebarTextColor: nil,
+        folderOutlineColor: nil,
+        folderOverrides: nil,
+        sidebarSecondaryTextColor: nil
     )
 
     var colors: ColorPalette
@@ -6409,6 +6445,13 @@ struct SpaceBranding: Equatable, Sendable {
     var folderColorIntensity: Double
     var textColorMode: SpaceTextColorMode
     var hasCustomAppearance: Bool?
+    var folderColor: BrandColor?
+    var folderBackColor: BrandColor?
+    var commandPalette: SpacePaletteLook?
+    var sidebarTextColor: BrandColor?
+    var folderOutlineColor: BrandColor?
+    var folderOverrides: FolderColorOverrides?
+    var sidebarSecondaryTextColor: BrandColor?
 }
 
 struct SpaceCrest: Equatable, Sendable {
@@ -6534,6 +6577,25 @@ struct SpaceMembership: Equatable, Sendable {
     var modifiedAt: Date
 }
 
+struct SpacePaletteLook: Equatable, Sendable {
+    static let neutral = SpacePaletteLook(
+        light: SpacePaletteSurface(tint: nil, opacity: 0, textColor: nil),
+        dark: SpacePaletteSurface(tint: nil, opacity: 0, textColor: nil)
+    )
+
+    var light: SpacePaletteSurface
+    var dark: SpacePaletteSurface
+}
+
+struct SpacePaletteSurface: Equatable, Sendable {
+    static let defaultOpacity: Double = 0.6
+    static let neutral = SpacePaletteSurface(tint: nil, opacity: 0, textColor: nil)
+
+    var tint: BrandColor?
+    var opacity: Double
+    var textColor: BrandColor?
+}
+
 struct SpaceProfileChanged: Equatable, Sendable {
     let spaceID: UUID
 
@@ -6569,7 +6631,9 @@ struct SpaceSettings: Equatable, Sendable {
     let separatesPinnedTabs: Bool
     let separatesPinnedTabsModifiedAt: Date?
     let protectionModifiedAt: Date?
+    let darkBranding: SpaceBranding?
     let look: SpaceBranding
+    let darkLook: SpaceBranding
     let requiresAuthentication: Bool
 
     /// The fields of a `SpaceSettings` alone, as a platform builds one to send. The
@@ -6589,6 +6653,7 @@ struct SpaceSettings: Equatable, Sendable {
         var separatesPinnedTabs: Bool
         var separatesPinnedTabsModifiedAt: Date?
         var protectionModifiedAt: Date?
+        var darkBranding: SpaceBranding?
     }
 
     /// The record's fields alone, as a platform sends it back.
@@ -6607,7 +6672,8 @@ struct SpaceSettings: Equatable, Sendable {
             accessPolicyModifiedAt: accessPolicyModifiedAt,
             separatesPinnedTabs: separatesPinnedTabs,
             separatesPinnedTabsModifiedAt: separatesPinnedTabsModifiedAt,
-            protectionModifiedAt: protectionModifiedAt
+            protectionModifiedAt: protectionModifiedAt,
+            darkBranding: darkBranding
         )
     }
 }
@@ -10223,6 +10289,7 @@ struct CrestBackplate: Hashable, Sendable {
         case oval
         case banner
         case badge
+        case flag
     }
 
     let tag: Int
@@ -10341,6 +10408,14 @@ struct CrestBackplate: Hashable, Sendable {
         drawnSince: CrestVocabulary.studio,
         hasTeeth: false
     )
+    static let flag = CrestBackplate(
+        tag: 12,
+        kind: .flag,
+        name: "flag",
+        title: LocalizedStringResource("Guidon"),
+        drawnSince: CrestVocabulary.studio,
+        hasTeeth: false
+    )
 
     static let all: [CrestBackplate] = [
         none,
@@ -10354,7 +10429,8 @@ struct CrestBackplate: Hashable, Sendable {
         roundedSquare,
         oval,
         banner,
-        badge
+        badge,
+        flag
     ]
 
     static func named(_ name: String?) -> CrestBackplate? {
@@ -11930,6 +12006,24 @@ struct CrestSymbol: Hashable, Sendable {
         assetName: nil,
         isOffered: true
     )
+    static let sparrow = CrestSymbol(
+        tag: 64,
+        name: "sparrow",
+        title: LocalizedStringResource("Sparrow"),
+        drawnSince: CrestVocabulary.studio,
+        systemImage: "bird.fill",
+        assetName: "CrestCharge-sparrow",
+        isOffered: true
+    )
+    static let crane = CrestSymbol(
+        tag: 65,
+        name: "crane",
+        title: LocalizedStringResource("Crane"),
+        drawnSince: CrestVocabulary.studio,
+        systemImage: "bird.fill",
+        assetName: "CrestCharge-crane",
+        isOffered: true
+    )
 
     static let all: [CrestSymbol] = [
         dragon,
@@ -11995,7 +12089,9 @@ struct CrestSymbol: Hashable, Sendable {
         sailboat,
         crown,
         horn,
-        crossedBanners
+        crossedBanners,
+        sparrow,
+        crane
     ]
 
     static func named(_ name: String?) -> CrestSymbol? {
@@ -15380,6 +15476,12 @@ struct PaletteActivation: Hashable, Sendable {
         closesPalette: false,
         opensWhereKeysChoose: false
     )
+    static let appliesTheme = PaletteActivation(
+        tag: 9,
+        name: "appliesTheme",
+        closesPalette: true,
+        opensWhereKeysChoose: false
+    )
 
     static let all: [PaletteActivation] = [
         switchesToTab,
@@ -15390,7 +15492,8 @@ struct PaletteActivation: Hashable, Sendable {
         showsSpace,
         reopensArchivedTab,
         copiesAnswer,
-        entersScope
+        entersScope,
+        appliesTheme
     ]
 
     static func named(_ name: String?) -> PaletteActivation? {
@@ -15731,6 +15834,16 @@ struct PaletteRowKind: Hashable, Sendable {
         activation: PaletteActivation.entersScope,
         forgetsFromHistory: false
     )
+    static let theme = PaletteRowKind(
+        tag: 15,
+        name: "theme",
+        symbol: "paintpalette",
+        action: LocalizedStringResource("Apply Theme"),
+        label: LocalizedStringResource("Theme"),
+        isPrimary: false,
+        activation: PaletteActivation.appliesTheme,
+        forgetsFromHistory: false
+    )
 
     static let all: [PaletteRowKind] = [
         openAddress,
@@ -15747,7 +15860,8 @@ struct PaletteRowKind: Hashable, Sendable {
         settingsPage,
         calculation,
         pasteAndGo,
-        scope
+        scope,
+        theme
     ]
 
     static func named(_ name: String?) -> PaletteRowKind? {
@@ -15853,8 +15967,16 @@ struct PaletteScope: Hashable, Sendable {
         symbol: "square.stack",
         source: PaletteSource.spaces
     )
+    static let themes = PaletteScope(
+        tag: 5,
+        name: "themes",
+        keyword: "@themes",
+        title: LocalizedStringResource("Themes"),
+        symbol: "paintpalette",
+        source: PaletteSource.themes
+    )
 
-    static let all: [PaletteScope] = [tabs, saved, history, actions, spaces]
+    static let all: [PaletteScope] = [tabs, saved, history, actions, spaces, themes]
 
     static func named(_ name: String?) -> PaletteScope? {
         all.first { $0.name == name }
@@ -15981,6 +16103,14 @@ struct PaletteSection: Hashable, Sendable {
         restingLimit: 0,
         scopedLimit: 0
     )
+    static let themes = PaletteSection(
+        tag: 11,
+        name: "themes",
+        title: LocalizedStringResource("Themes"),
+        limit: 3,
+        restingLimit: 0,
+        scopedLimit: 30
+    )
 
     static let all: [PaletteSection] = [
         intent,
@@ -15993,7 +16123,8 @@ struct PaletteSection: Hashable, Sendable {
         topHit,
         spaces,
         archived,
-        results
+        results,
+        themes
     ]
 
     static func named(_ name: String?) -> PaletteSection? {
@@ -16165,7 +16296,7 @@ struct PaletteSource: Hashable, Sendable {
         tag: 9,
         name: "scopes",
         title: LocalizedStringResource("@ Filters"),
-        detail: LocalizedStringResource("Type @tabs, @saved, @history, @actions or @spaces, then a space or Tab, to show only that kind."),
+        detail: LocalizedStringResource("Type @tabs, @saved, @history, @actions, @spaces or @themes, then a space or Tab, to show only that kind."),
         section: PaletteSection.intent,
         isSection: false,
         isEnabledByDefault: true,
@@ -16194,6 +16325,17 @@ struct PaletteSource: Hashable, Sendable {
         restingSection: nil,
         defaultLimit: 2
     )
+    static let themes = PaletteSource(
+        tag: 12,
+        name: "themes",
+        title: LocalizedStringResource("Themes"),
+        detail: nil,
+        section: PaletteSection.themes,
+        isSection: true,
+        isEnabledByDefault: true,
+        restingSection: nil,
+        defaultLimit: 3
+    )
 
     static let all: [PaletteSource] = [
         recentTabs,
@@ -16207,7 +16349,8 @@ struct PaletteSource: Hashable, Sendable {
         settingsPages,
         scopes,
         calculator,
-        pasteAndGo
+        pasteAndGo,
+        themes
     ]
 
     static func named(_ name: String?) -> PaletteSource? {
@@ -18253,6 +18396,9 @@ struct ShortcutCommand: Hashable, Sendable {
         case clearSiteCookies
         case clearSiteCache
         case toggleSelectedTabSaved
+        case saveSpaceTheme
+        case importTheme
+        case exportTheme
     }
 
     let tag: Int
@@ -20323,6 +20469,60 @@ struct ShortcutCommand: Hashable, Sendable {
         isReservedFromPages: false,
         defaultPreference: ShortcutPreference.useBoth
     )
+    static let saveSpaceTheme = ShortcutCommand(
+        tag: 75,
+        kind: .saveSpaceTheme,
+        name: "saveSpaceTheme",
+        section: ShortcutSection.spaces,
+        title: LocalizedStringResource("Save Look as Theme"),
+        searchTerms: LocalizedStringResource("theme save colors look appearance"),
+        menuTitle: nil,
+        symbol: "paintpalette",
+        requiredCapability: nil,
+        selects: nil,
+        number: nil,
+        defaultShortcuts: [],
+        paletteRest: nil,
+        offersInPalette: true,
+        isReservedFromPages: false,
+        defaultPreference: ShortcutPreference.preferWebsite
+    )
+    static let importTheme = ShortcutCommand(
+        tag: 76,
+        kind: .importTheme,
+        name: "importTheme",
+        section: ShortcutSection.spaces,
+        title: LocalizedStringResource("Import Theme"),
+        searchTerms: LocalizedStringResource("theme load file colors look appearance"),
+        menuTitle: LocalizedStringResource("Import Theme…"),
+        symbol: "square.and.arrow.down",
+        requiredCapability: nil,
+        selects: nil,
+        number: nil,
+        defaultShortcuts: [],
+        paletteRest: nil,
+        offersInPalette: true,
+        isReservedFromPages: false,
+        defaultPreference: ShortcutPreference.preferWebsite
+    )
+    static let exportTheme = ShortcutCommand(
+        tag: 77,
+        kind: .exportTheme,
+        name: "exportTheme",
+        section: ShortcutSection.spaces,
+        title: LocalizedStringResource("Export Theme"),
+        searchTerms: LocalizedStringResource("theme save file share colors look appearance"),
+        menuTitle: LocalizedStringResource("Export Theme…"),
+        symbol: "square.and.arrow.up",
+        requiredCapability: nil,
+        selects: nil,
+        number: nil,
+        defaultShortcuts: [],
+        paletteRest: nil,
+        offersInPalette: true,
+        isReservedFromPages: false,
+        defaultPreference: ShortcutPreference.preferWebsite
+    )
 
     static let all: [ShortcutCommand] = [
         newWindow,
@@ -20399,7 +20599,10 @@ struct ShortcutCommand: Hashable, Sendable {
         mostRecentTabBackward,
         clearSiteCookies,
         clearSiteCache,
-        toggleSelectedTabSaved
+        toggleSelectedTabSaved,
+        saveSpaceTheme,
+        importTheme,
+        exportTheme
     ]
 
     static func named(_ name: String?) -> ShortcutCommand? {
@@ -20578,7 +20781,8 @@ struct ShortcutMenu: Hashable, Sendable {
                 ShortcutCommand.selectSpace7,
                 ShortcutCommand.selectSpace8,
                 ShortcutCommand.selectSpace9
-            ]
+            ],
+            [ShortcutCommand.saveSpaceTheme, ShortcutCommand.importTheme, ShortcutCommand.exportTheme]
         ]
     )
     static let page = ShortcutMenu(
@@ -21678,7 +21882,14 @@ struct SpaceAccent: Hashable, Sendable {
             renderingVersion: 5,
             folderColorIntensity: 0,
             textColorMode: SpaceTextColorMode.automatic,
-            hasCustomAppearance: false
+            hasCustomAppearance: false,
+            folderColor: nil,
+            folderBackColor: nil,
+            commandPalette: nil,
+            sidebarTextColor: nil,
+            folderOutlineColor: nil,
+            folderOverrides: nil,
+            sidebarSecondaryTextColor: nil
         ),
         swatch: BrandColor(red: 0.29, green: 0.25, blue: 0.58, alpha: 1)
     )
@@ -21751,7 +21962,14 @@ struct SpaceAccent: Hashable, Sendable {
             renderingVersion: 5,
             folderColorIntensity: 0,
             textColorMode: SpaceTextColorMode.automatic,
-            hasCustomAppearance: false
+            hasCustomAppearance: false,
+            folderColor: nil,
+            folderBackColor: nil,
+            commandPalette: nil,
+            sidebarTextColor: nil,
+            folderOutlineColor: nil,
+            folderOverrides: nil,
+            sidebarSecondaryTextColor: nil
         ),
         swatch: BrandColor(red: 0.85, green: 0.27, blue: 0.2, alpha: 1)
     )
@@ -21824,7 +22042,14 @@ struct SpaceAccent: Hashable, Sendable {
             renderingVersion: 5,
             folderColorIntensity: 0,
             textColorMode: SpaceTextColorMode.automatic,
-            hasCustomAppearance: false
+            hasCustomAppearance: false,
+            folderColor: nil,
+            folderBackColor: nil,
+            commandPalette: nil,
+            sidebarTextColor: nil,
+            folderOutlineColor: nil,
+            folderOverrides: nil,
+            sidebarSecondaryTextColor: nil
         ),
         swatch: BrandColor(red: 0.12, green: 0.49, blue: 0.52, alpha: 1)
     )
@@ -21897,7 +22122,14 @@ struct SpaceAccent: Hashable, Sendable {
             renderingVersion: 5,
             folderColorIntensity: 0,
             textColorMode: SpaceTextColorMode.automatic,
-            hasCustomAppearance: false
+            hasCustomAppearance: false,
+            folderColor: nil,
+            folderBackColor: nil,
+            commandPalette: nil,
+            sidebarTextColor: nil,
+            folderOutlineColor: nil,
+            folderOverrides: nil,
+            sidebarSecondaryTextColor: nil
         ),
         swatch: BrandColor(red: 0.72, green: 0.25, blue: 0.42, alpha: 1)
     )
@@ -22140,7 +22372,14 @@ struct SpaceHouse: Hashable, Sendable {
             renderingVersion: 5,
             folderColorIntensity: 0,
             textColorMode: SpaceTextColorMode.automatic,
-            hasCustomAppearance: false
+            hasCustomAppearance: false,
+            folderColor: nil,
+            folderBackColor: nil,
+            commandPalette: nil,
+            sidebarTextColor: nil,
+            folderOutlineColor: nil,
+            folderOverrides: nil,
+            sidebarSecondaryTextColor: nil
         ),
         appIconName: "CrestWinter"
     )
@@ -22208,7 +22447,14 @@ struct SpaceHouse: Hashable, Sendable {
             renderingVersion: 5,
             folderColorIntensity: 0,
             textColorMode: SpaceTextColorMode.automatic,
-            hasCustomAppearance: false
+            hasCustomAppearance: false,
+            folderColor: nil,
+            folderBackColor: nil,
+            commandPalette: nil,
+            sidebarTextColor: nil,
+            folderOutlineColor: nil,
+            folderOverrides: nil,
+            sidebarSecondaryTextColor: nil
         ),
         appIconName: "CrestLion"
     )
@@ -22276,7 +22522,14 @@ struct SpaceHouse: Hashable, Sendable {
             renderingVersion: 5,
             folderColorIntensity: 0,
             textColorMode: SpaceTextColorMode.automatic,
-            hasCustomAppearance: false
+            hasCustomAppearance: false,
+            folderColor: nil,
+            folderBackColor: nil,
+            commandPalette: nil,
+            sidebarTextColor: nil,
+            folderOutlineColor: nil,
+            folderOverrides: nil,
+            sidebarSecondaryTextColor: nil
         ),
         appIconName: "CrestStorm"
     )
@@ -22344,7 +22597,14 @@ struct SpaceHouse: Hashable, Sendable {
             renderingVersion: 5,
             folderColorIntensity: 0,
             textColorMode: SpaceTextColorMode.automatic,
-            hasCustomAppearance: false
+            hasCustomAppearance: false,
+            folderColor: nil,
+            folderBackColor: nil,
+            commandPalette: nil,
+            sidebarTextColor: nil,
+            folderOutlineColor: nil,
+            folderOverrides: nil,
+            sidebarSecondaryTextColor: nil
         ),
         appIconName: "CrestDragon"
     )
@@ -22412,7 +22672,14 @@ struct SpaceHouse: Hashable, Sendable {
             renderingVersion: 5,
             folderColorIntensity: 0,
             textColorMode: SpaceTextColorMode.automatic,
-            hasCustomAppearance: false
+            hasCustomAppearance: false,
+            folderColor: nil,
+            folderBackColor: nil,
+            commandPalette: nil,
+            sidebarTextColor: nil,
+            folderOutlineColor: nil,
+            folderOverrides: nil,
+            sidebarSecondaryTextColor: nil
         ),
         appIconName: "CrestMeadow"
     )
@@ -22480,7 +22747,14 @@ struct SpaceHouse: Hashable, Sendable {
             renderingVersion: 5,
             folderColorIntensity: 0,
             textColorMode: SpaceTextColorMode.automatic,
-            hasCustomAppearance: false
+            hasCustomAppearance: false,
+            folderColor: nil,
+            folderBackColor: nil,
+            commandPalette: nil,
+            sidebarTextColor: nil,
+            folderOutlineColor: nil,
+            folderOverrides: nil,
+            sidebarSecondaryTextColor: nil
         ),
         appIconName: "CrestIron"
     )
@@ -22548,7 +22822,14 @@ struct SpaceHouse: Hashable, Sendable {
             renderingVersion: 5,
             folderColorIntensity: 0,
             textColorMode: SpaceTextColorMode.automatic,
-            hasCustomAppearance: false
+            hasCustomAppearance: false,
+            folderColor: nil,
+            folderBackColor: nil,
+            commandPalette: nil,
+            sidebarTextColor: nil,
+            folderOutlineColor: nil,
+            folderOverrides: nil,
+            sidebarSecondaryTextColor: nil
         ),
         appIconName: "CrestRiver"
     )
@@ -22616,7 +22897,14 @@ struct SpaceHouse: Hashable, Sendable {
             renderingVersion: 5,
             folderColorIntensity: 0,
             textColorMode: SpaceTextColorMode.automatic,
-            hasCustomAppearance: false
+            hasCustomAppearance: false,
+            folderColor: nil,
+            folderBackColor: nil,
+            commandPalette: nil,
+            sidebarTextColor: nil,
+            folderOutlineColor: nil,
+            folderOverrides: nil,
+            sidebarSecondaryTextColor: nil
         ),
         appIconName: "CrestSun"
     )
@@ -22684,12 +22972,94 @@ struct SpaceHouse: Hashable, Sendable {
             renderingVersion: 5,
             folderColorIntensity: 0,
             textColorMode: SpaceTextColorMode.automatic,
-            hasCustomAppearance: false
+            hasCustomAppearance: false,
+            folderColor: nil,
+            folderBackColor: nil,
+            commandPalette: nil,
+            sidebarTextColor: nil,
+            folderOutlineColor: nil,
+            folderOverrides: nil,
+            sidebarSecondaryTextColor: nil
         ),
         appIconName: "CrestVigil"
     )
+    static let arma = SpaceHouse(
+        tag: 9,
+        name: "arma",
+        title: LocalizedStringResource("Arma"),
+        look: SpaceBranding(
+            colors: ColorPalette(
+                colors: [
+                    BrandColor(red: 0.192, green: 0.196, blue: 0.267, alpha: 1),
+                    BrandColor(red: 0.843, green: 0.216, blue: 0.263, alpha: 1),
+                    BrandColor(red: 0.725, green: 0.608, blue: 0.376, alpha: 1)
+                ]
+            ),
+            bannerPattern: SpaceBannerPattern.solid,
+            bannerStrength: 1,
+            readabilityFade: 0.45,
+            keepsControlsReadable: true,
+            themeMode: SpaceThemeMode.banner,
+            gradientAngle: 0,
+            showsTexture: false,
+            iconStyle: SpaceIconStyle.layeredCrest,
+            symbolColor: nil,
+            crest: SpaceCrest(
+                backplate: CrestBackplate.flag,
+                fieldDivision: CrestFieldDivision.plain,
+                ordinary: CrestOrdinary.pale,
+                trim: CrestTrim.laurel,
+                symbol: CrestSymbol.sparrow,
+                chargeLayout: CrestChargeLayout.single,
+                backplateColorIndex: 0,
+                secondaryFieldColorIndex: 1,
+                ordinaryColorIndex: 2,
+                trimColorIndex: 4,
+                symbolColorIndex: 3,
+                startingPresetID: nil,
+                edgeColorIndex: 5,
+                palette: ColorPalette(
+                    colors: [
+                        BrandColor(red: 0.192, green: 0.196, blue: 0.267, alpha: 1),
+                        BrandColor(red: 0.192, green: 0.196, blue: 0.267, alpha: 1),
+                        BrandColor(red: 0.286, green: 0.302, blue: 0.392, alpha: 1),
+                        BrandColor(red: 0.97, green: 0.97, blue: 0.96, alpha: 1),
+                        BrandColor(red: 0.725, green: 0.608, blue: 0.376, alpha: 1),
+                        BrandColor(red: 0.192, green: 0.196, blue: 0.267, alpha: 1)
+                    ]
+                ),
+                charge: nil,
+                plateScale: 1,
+                edgeWidth: 0.2,
+                divisionCount: 4,
+                finish: CrestFinish.flat,
+                ordinaryWidth: 1,
+                trimWeight: 0.75,
+                trimDetail: 12,
+                chargeScale: 1.15,
+                chargeOffset: 0,
+                chargeWeight: CrestChargeWeight.bold,
+                sheenAngle: 45,
+                sealTeeth: 12,
+                showsOutline: false,
+                depth: CrestDepth.soft
+            ),
+            renderingVersion: 5,
+            folderColorIntensity: 0,
+            textColorMode: SpaceTextColorMode.automatic,
+            hasCustomAppearance: false,
+            folderColor: nil,
+            folderBackColor: nil,
+            commandPalette: nil,
+            sidebarTextColor: nil,
+            folderOutlineColor: nil,
+            folderOverrides: nil,
+            sidebarSecondaryTextColor: nil
+        ),
+        appIconName: "Arma"
+    )
 
-    static let all: [SpaceHouse] = [winter, lion, storm, dragon, meadow, iron, river, sun, vigil]
+    static let all: [SpaceHouse] = [winter, lion, storm, dragon, meadow, iron, river, sun, vigil, arma]
 
     static func named(_ name: String?) -> SpaceHouse? {
         all.first { $0.name == name }
@@ -22838,7 +23208,14 @@ struct SpaceScheme: Hashable, Sendable {
             renderingVersion: 2,
             folderColorIntensity: 0,
             textColorMode: SpaceTextColorMode.system,
-            hasCustomAppearance: false
+            hasCustomAppearance: false,
+            folderColor: nil,
+            folderBackColor: nil,
+            commandPalette: nil,
+            sidebarTextColor: nil,
+            folderOutlineColor: nil,
+            folderOverrides: nil,
+            sidebarSecondaryTextColor: nil
         )
     )
 
@@ -24351,6 +24728,60 @@ struct Tincture: Hashable, Sendable {
         title: LocalizedStringResource("Gray"),
         color: BrandColor(red: 0.588, green: 0.588, blue: 0.588, alpha: 1)
     )
+    static let armaNavy = Tincture(
+        tag: 57,
+        name: "armaNavy",
+        title: LocalizedStringResource("Arma Navy"),
+        color: BrandColor(red: 0.192, green: 0.196, blue: 0.267, alpha: 1)
+    )
+    static let armaRed = Tincture(
+        tag: 58,
+        name: "armaRed",
+        title: LocalizedStringResource("Arma Red"),
+        color: BrandColor(red: 0.843, green: 0.216, blue: 0.263, alpha: 1)
+    )
+    static let armaGold = Tincture(
+        tag: 59,
+        name: "armaGold",
+        title: LocalizedStringResource("Arma Gold"),
+        color: BrandColor(red: 0.725, green: 0.608, blue: 0.376, alpha: 1)
+    )
+    static let armaWhite = Tincture(
+        tag: 60,
+        name: "armaWhite",
+        title: LocalizedStringResource("Arma White"),
+        color: BrandColor(red: 0.97, green: 0.97, blue: 0.96, alpha: 1)
+    )
+    static let armaGrey = Tincture(
+        tag: 61,
+        name: "armaGrey",
+        title: LocalizedStringResource("Arma Grey"),
+        color: BrandColor(red: 0.286, green: 0.302, blue: 0.392, alpha: 1)
+    )
+    static let macchiatoBase = Tincture(
+        tag: 62,
+        name: "macchiatoBase",
+        title: LocalizedStringResource("Macchiato Base"),
+        color: BrandColor(red: 0.141, green: 0.153, blue: 0.227, alpha: 1)
+    )
+    static let macchiatoMauve = Tincture(
+        tag: 63,
+        name: "macchiatoMauve",
+        title: LocalizedStringResource("Macchiato Mauve"),
+        color: BrandColor(red: 0.776, green: 0.627, blue: 0.965, alpha: 1)
+    )
+    static let macchiatoLavender = Tincture(
+        tag: 64,
+        name: "macchiatoLavender",
+        title: LocalizedStringResource("Macchiato Lavender"),
+        color: BrandColor(red: 0.718, green: 0.741, blue: 0.973, alpha: 1)
+    )
+    static let macchiatoText = Tincture(
+        tag: 65,
+        name: "macchiatoText",
+        title: LocalizedStringResource("Macchiato Text"),
+        color: BrandColor(red: 0.792, green: 0.827, blue: 0.961, alpha: 1)
+    )
 
     static let all: [Tincture] = [
         ink,
@@ -24409,7 +24840,16 @@ struct Tincture: Hashable, Sendable {
         sunOr,
         vigilBone,
         neutralSmoke,
-        neutralGray
+        neutralGray,
+        armaNavy,
+        armaRed,
+        armaGold,
+        armaWhite,
+        armaGrey,
+        macchiatoBase,
+        macchiatoMauve,
+        macchiatoLavender,
+        macchiatoText
     ]
 
     static func named(_ name: String?) -> Tincture? {
@@ -24968,9 +25408,17 @@ final class SpaceSettingsModel: ObservedModel {
         access(keyPath: \.protectionModifiedAt)
         return protectionModifiedAtStorage
     }
+    var darkBranding: SpaceBranding? {
+        access(keyPath: \.darkBranding)
+        return darkBrandingStorage
+    }
     var look: SpaceBranding {
         access(keyPath: \.look)
         return lookStorage
+    }
+    var darkLook: SpaceBranding {
+        access(keyPath: \.darkLook)
+        return darkLookStorage
     }
     var requiresAuthentication: Bool {
         access(keyPath: \.requiresAuthentication)
@@ -24991,7 +25439,9 @@ final class SpaceSettingsModel: ObservedModel {
     @ObservationIgnored private var separatesPinnedTabsStorage: Bool
     @ObservationIgnored private var separatesPinnedTabsModifiedAtStorage: Date?
     @ObservationIgnored private var protectionModifiedAtStorage: Date?
+    @ObservationIgnored private var darkBrandingStorage: SpaceBranding?
     @ObservationIgnored private var lookStorage: SpaceBranding
+    @ObservationIgnored private var darkLookStorage: SpaceBranding
     @ObservationIgnored private var requiresAuthenticationStorage: Bool
 
     var value: SpaceSettings {
@@ -25010,7 +25460,9 @@ final class SpaceSettingsModel: ObservedModel {
             separatesPinnedTabs: separatesPinnedTabs,
             separatesPinnedTabsModifiedAt: separatesPinnedTabsModifiedAt,
             protectionModifiedAt: protectionModifiedAt,
+            darkBranding: darkBranding,
             look: look,
+            darkLook: darkLook,
             requiresAuthentication: requiresAuthentication
         )
     }
@@ -25030,7 +25482,9 @@ final class SpaceSettingsModel: ObservedModel {
         separatesPinnedTabsStorage = value.separatesPinnedTabs
         separatesPinnedTabsModifiedAtStorage = value.separatesPinnedTabsModifiedAt
         protectionModifiedAtStorage = value.protectionModifiedAt
+        darkBrandingStorage = value.darkBranding
         lookStorage = value.look
+        darkLookStorage = value.darkLook
         requiresAuthenticationStorage = value.requiresAuthentication
     }
 
@@ -25091,9 +25545,17 @@ final class SpaceSettingsModel: ObservedModel {
             protectionModifiedAtStorage = value.protectionModifiedAt
             withMutation(keyPath: \.protectionModifiedAt) {}
         }
+        if darkBrandingStorage != value.darkBranding {
+            darkBrandingStorage = value.darkBranding
+            withMutation(keyPath: \.darkBranding) {}
+        }
         if lookStorage != value.look {
             lookStorage = value.look
             withMutation(keyPath: \.look) {}
+        }
+        if darkLookStorage != value.darkLook {
+            darkLookStorage = value.darkLook
+            withMutation(keyPath: \.darkLook) {}
         }
         if requiresAuthenticationStorage != value.requiresAuthentication {
             requiresAuthenticationStorage = value.requiresAuthentication
