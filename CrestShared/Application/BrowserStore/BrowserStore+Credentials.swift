@@ -53,7 +53,8 @@ extension BrowserStore {
         guard let space = spaceModel(spaceID) else {
             throw CredentialVaultError.missingSpace
         }
-        guard space.settings.credentialPreferences.isEnabled else { return [] }
+        // A private window's vault holds only what other Spaces chose to suggest there.
+        guard space.settings.credentialPreferences.isEnabled || isPrivateBrowsing else { return [] }
         guard let origin = CredentialOrigin(url: url) else {
             throw CredentialVaultError.invalidOrigin
         }
@@ -151,11 +152,15 @@ extension BrowserStore {
 // MARK: - Generated passwords and system Passwords
 
 extension BrowserStore {
-    /// How to compose a generated password. The password itself is drawn
-    /// natively, so it never enters the core.
-    func strongPasswordRecipe() throws -> StrongPasswordRecipe {
+    /// How to compose a generated password as `generation` describes, or as
+    /// Space `spaceID` generates them. The password itself is drawn natively,
+    /// so it never enters the core.
+    func strongPasswordRecipe(
+        _ generation: PasswordGeneration? = nil, in spaceID: UUID? = nil
+    ) throws -> StrongPasswordRecipe {
         do {
-            return try core.query(StrongPassword(length: nil))
+            let chosen = generation ?? spaceID.flatMap { spaceModel($0)?.settings.credentialPreferences.generation }
+            return try core.query(StrongPassword(generation: chosen))
         } catch {
             throw BrowserStrongPasswordGenerationError.unavailable
         }
@@ -190,6 +195,28 @@ extension BrowserStore {
                 workspaceID: profileSettingsBrowser.family.workspaceID, spaceID: spaceID, preferences: preferences))
     }
 
+    /// Stops Space `spaceID`, and its group, offering to save passwords on
+    /// the website `site` names, such as `example.com` or `*.example.com`, in
+    /// place of `replacing` when a person edits an entry. Throws the rule that
+    /// refused it, such as `InvalidNeverSavedSite`.
+    func neverSaveSite(
+        _ site: String, includesSubdomains: Bool, replacing: NeverSavedSite? = nil, in spaceID: UUID
+    ) throws(Rejection) {
+        let owner = profileSettingsBrowser
+        try owner.family.commit(
+            NeverSaveSite(
+                workspaceID: owner.family.workspaceID, spaceID: spaceID, site: site,
+                includesSubdomains: includesSubdomains, replacing: replacing),
+            from: owner)
+    }
+
+    /// Lets Space `spaceID`, and its group, offer to save passwords on `site`
+    /// again.
+    func forgetNeverSavedSite(_ site: NeverSavedSite, in spaceID: UUID) {
+        sendSpaceSettings(
+            ForgetNeverSavedSite(workspaceID: profileSettingsBrowser.family.workspaceID, spaceID: spaceID, site: site))
+    }
+
     func setCrestPasswordSynchronization(
         _ isSynchronizable: Bool,
         in spaceID: UUID
@@ -215,9 +242,8 @@ extension BrowserStore {
         guard let current = spaceModel(matching: assignment)?.settings.credentialPreferences else {
             throw CredentialVaultError.missingSpace
         }
-        let preferences = CredentialPreferences(
-            isEnabled: current.isEnabled, syncsCrestPasswordsWithICloud: isSynchronizable,
-            alsoOffersSaveToSystemPasswords: current.alsoOffersSaveToSystemPasswords)
+        var preferences = current
+        preferences.syncsCrestPasswordsWithICloud = isSynchronizable
         // The native credential operation completed for this profile. Persist
         // its corresponding policy through the same session authority.
         let sent = SetCredentialPreferences(workspaceID: family.workspaceID, spaceID: spaceID, preferences: preferences)
@@ -344,6 +370,9 @@ extension BrowserStore {
         displayName: String? = nil,
         replacing existing: CredentialDescriptor? = nil,
         isSynchronizable: Bool? = nil,
+        email: String? = nil,
+        category: String? = nil,
+        includesSubdomains: Bool? = nil,
         now: Date = Date()
     ) async throws -> CredentialDescriptor {
         guard let space = spaceModel(spaceID) else {
@@ -369,11 +398,16 @@ extension BrowserStore {
         let vaultID = try credentialVaultID(of: spaceID, keeping: existing)
         let descriptor: CredentialDescriptor
         if var existing {
-            guard existing.origin == origin else {
+            // A password saved on the site above, reaching this page, is updated where it is.
+            guard existing.origin == origin || existing.includesSubdomains && reaches(existing.origin, origin) else {
                 throw CredentialVaultError.invalidOrigin
             }
             existing.username = username
             existing.displayName = displayName?.nilIfEmpty ?? existing.displayName
+            existing.email = email.map { $0.nilIfEmpty } ?? existing.email
+            existing.category = category.map { Self.credentialCategory($0) } ?? existing.category
+            existing.includesSubdomains = try subdomainReach(
+                includesSubdomains ?? existing.includesSubdomains, from: existing.origin)
             existing.updatedAt = now
             existing.isSynchronizable = resolvedSynchronization
             descriptor = existing
@@ -383,6 +417,9 @@ extension BrowserStore {
                 origin: origin,
                 username: username,
                 displayName: displayName?.nilIfEmpty,
+                email: email?.nilIfEmpty,
+                category: category.flatMap { Self.credentialCategory($0) },
+                includesSubdomains: try subdomainReach(includesSubdomains ?? false, from: origin),
                 createdAt: now,
                 isSynchronizable: resolvedSynchronization
             )
@@ -528,6 +565,9 @@ extension BrowserStore {
             for: url,
             in: spaceID,
             replacing: existing,
+            email: candidate.email,
+            category: candidate.category ?? "",
+            includesSubdomains: candidate.includesSubdomains,
             now: now
         )
     }
@@ -555,5 +595,82 @@ extension BrowserStore {
         case .stale: throw CredentialVaultError.staleSaveCandidate
         case nil: throw CredentialVaultError.saveDecisionUnavailable
         }
+    }
+}
+
+// MARK: - Accounts
+
+extension BrowserStore {
+    /// The vaults whose passwords a private window suggests: those of every
+    /// Space that keeps passwords and chose to be suggested in private
+    /// windows, with the rest of its group.
+    func spacesSuggestingPasswordsInPrivateWindows() -> [UUID] {
+        guard !isPrivateBrowsing else { return [] }
+        var vaults: [UUID] = []
+        for space in spaceModels {
+            let preferences = space.settings.credentialPreferences
+            guard preferences.isEnabled, preferences.suggestsInPrivateWindows else { continue }
+            for vault in credentialSpaceIDs(of: space.id) where !vaults.contains(vault) { vaults.append(vault) }
+        }
+        return vaults
+    }
+
+    /// The notes kept with the saved password `descriptor` names, as secret as
+    /// the password.
+    func credentialNotes(for descriptor: CredentialDescriptor) async throws -> String? {
+        try await credentialVault.notes(for: descriptor.id, in: descriptor.spaceID)
+    }
+
+    /// Keeps `notes` with the saved password `descriptor` names, synced with
+    /// iCloud as the password is. Nil or empty notes remove them; notes over
+    /// `credentialNotesByteLimit` bytes are refused.
+    func setCredentialNotes(_ notes: String?, for descriptor: CredentialDescriptor) async throws {
+        guard !isPrivateBrowsing else { throw CredentialVaultError.unavailableInPrivateBrowsing }
+        try await credentialVault.setNotes(
+            notes?.nilIfEmpty, for: descriptor.id, isSynchronizable: descriptor.isSynchronizable,
+            in: descriptor.spaceID)
+    }
+
+    /// Makes each of the saved passwords `descriptors` name reach, or stop
+    /// reaching, the hosts under its origin, as a site's Include subdomains
+    /// says. Throws the core's refusal for a public suffix.
+    func setSubdomainReach(_ includes: Bool, for descriptors: [CredentialDescriptor]) async throws {
+        guard !isPrivateBrowsing else { throw CredentialVaultError.unavailableInPrivateBrowsing }
+        for descriptor in descriptors where descriptor.includesSubdomains != includes {
+            guard var credential = try await credentialVault.credential(id: descriptor.id, in: descriptor.spaceID)
+            else { continue }
+            credential.descriptor.includesSubdomains = try subdomainReach(includes, from: descriptor.origin)
+            credential.descriptor.updatedAt = .now
+            try await credentialVault.save(credential, in: descriptor.spaceID)
+        }
+    }
+
+    /// The longest category name a saved password keeps.
+    static let credentialCategoryLength = 64
+
+    /// `name` as a saved password keeps it for its category: trimmed and no
+    /// longer than `credentialCategoryLength`, or nil when nothing is left.
+    static func credentialCategory(_ name: String) -> String? {
+        String(name.trimmingCharacters(in: .whitespacesAndNewlines).prefix(credentialCategoryLength)).nilIfEmpty
+    }
+
+    /// Whether a password saved for `saved`, reaching its subdomains, fills a
+    /// page at `page`, as the core answers.
+    private func reaches(_ saved: CredentialOrigin, _ page: CredentialOrigin) -> Bool {
+        (try? core.fills(page, from: [saved], reaching: [0]))?.first ?? false
+    }
+
+    /// Whether a password saved for `origin` may also fill the hosts under it,
+    /// as the core answers; never for a public suffix such as `github.io`.
+    func allowsSubdomainReach(from origin: CredentialOrigin) -> Bool {
+        (try? core.query(CredentialSubdomainReach(origin: origin)))?.isAllowed ?? false
+    }
+
+    /// `includes`, once the core agrees a password saved for `origin` may
+    /// reach the hosts under it. Throws the core's refusal, such as
+    /// `SubdomainsOfPublicSuffix`.
+    private func subdomainReach(_ includes: Bool, from origin: CredentialOrigin) throws -> Bool {
+        guard includes else { return false }
+        return try core.query(CredentialSubdomainReach(origin: origin)).isAllowed
     }
 }

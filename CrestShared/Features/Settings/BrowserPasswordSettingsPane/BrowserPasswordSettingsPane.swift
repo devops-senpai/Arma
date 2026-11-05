@@ -21,6 +21,8 @@ struct BrowserPasswordSettingsPane: View {
     var manage: (() -> Void)?
     /// The one Space whose passwords the pane shows, or nil to pick one.
     let fixedSpaceID: UUID?
+    /// A site to start a new saved password for, which the pane takes and clears.
+    @Binding var newPasswordSite: String?
 
     @State private var credentials: BrowserCredentialSpaceStore
     @State private var pickedSpaceID: UUID?
@@ -30,6 +32,7 @@ struct BrowserPasswordSettingsPane: View {
     }
     @State private var credentialPendingDeletion: CredentialDescriptor?
     @State private var credentialDetailRequest: BrowserCredentialDetailRequest?
+    @State private var passwordEditorRequest: BrowserSavedPasswordEditorRequest?
     @State private var confirmsPlaintextExport = false
     @State private var isExporting = false
     @State private var isChoosingImportFile = false
@@ -44,7 +47,8 @@ struct BrowserPasswordSettingsPane: View {
         layout: BrowserPasswordSettingsLayout,
         searchText: Binding<String> = .constant(""),
         manage: (() -> Void)? = nil,
-        fixedSpaceID: UUID? = nil
+        fixedSpaceID: UUID? = nil,
+        newPasswordSite: Binding<String?> = .constant(nil)
     ) {
         self.browser = browser
         self.spaceAccess = spaceAccess
@@ -52,6 +56,7 @@ struct BrowserPasswordSettingsPane: View {
         _searchText = searchText
         self.manage = manage
         self.fixedSpaceID = fixedSpaceID
+        _newPasswordSite = newPasswordSite
         _credentials = State(
             initialValue: BrowserCredentialSpaceStore(browser: browser)
         )
@@ -136,6 +141,24 @@ struct BrowserPasswordSettingsPane: View {
             )
             .id(request.id)
         }
+        .onChange(of: newPasswordSite, initial: true) { _, site in
+            guard let site else { return }
+            newPasswordSite = nil
+            passwordEditorRequest = BrowserSavedPasswordEditorRequest(account: nil, website: site)
+        }
+        .sheet(item: $passwordEditorRequest) { request in
+            if let space {
+                BrowserSavedPasswordEditor(
+                    browser: browser,
+                    space: space,
+                    account: request.account,
+                    website: request.website,
+                    categories: passwordCategories
+                ) {
+                    Task { await credentials.load(in: selectedSpaceID, accessController: spaceAccess) }
+                }
+            }
+        }
         .sheet(item: $credentials.importReview) { review in
             BrowserCredentialImportReviewView(
                 initialReviewID: review.id,
@@ -201,6 +224,17 @@ struct BrowserPasswordSettingsPane: View {
                             credentialPreferences(in: space)
                         }
 
+                        BrowserCredentialAuthenticationRow(browser: browser, space: space)
+                        BrowserSavePromptSecondsRow(browser: browser, space: space)
+                        Toggle(
+                            "Suggest passwords in private windows",
+                            isOn: browser.credentialPreferenceBinding(\.suggestsInPrivateWindows, in: space)
+                        )
+                        .accessibilityIdentifier("space-credential-private-windows")
+                        #if os(macOS)
+                            BrowserPasswordCommandLineRows(browser: browser, space: space)
+                        #endif
+
                         if layout.showsManageAction {
                             Button("Manage Saved Passwords…") {
                                 manage?()
@@ -254,6 +288,9 @@ struct BrowserPasswordSettingsPane: View {
                     }
                 }
 
+                BrowserNeverSavedSitesSection(browser: browser, space: space)
+                    .disabled(!space.settings.credentialPreferences.isEnabled)
+
                 if let errorMessage = credentials.errorMessage {
                     Section {
                         Label(errorMessage, systemImage: "exclamationmark.triangle.fill")
@@ -276,11 +313,13 @@ struct BrowserPasswordSettingsPane: View {
         if layout.supportsCredentialFileImport, let space {
             ViewThatFits {
                 HStack {
+                    addButton(space: space)
                     importButton(space: space)
                     Spacer()
                     selectionButton
                 }
                 VStack(alignment: .leading) {
+                    addButton(space: space)
                     importButton(space: space)
                     selectionButton
                 }
@@ -303,6 +342,24 @@ struct BrowserPasswordSettingsPane: View {
                 }
             }
         }
+    }
+
+    private func addButton(space: SpaceModel) -> some View {
+        Button("Add Password…") {
+            passwordEditorRequest = BrowserSavedPasswordEditorRequest(account: nil)
+        }
+        .disabled(!space.settings.credentialPreferences.isEnabled)
+        .accessibilityIdentifier("add-space-password")
+    }
+
+    /// The categories the Space's saved passwords are filed under, in order.
+    private var passwordCategories: [String] {
+        var names: [String] = []
+        for name in credentials.descriptors.compactMap(\.category)
+        where !names.contains(where: { $0.caseInsensitiveCompare(name) == .orderedSame }) {
+            names.append(name)
+        }
+        return names.sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending }
     }
 
     private func importButton(space: SpaceModel) -> some View {
@@ -382,6 +439,7 @@ struct BrowserPasswordSettingsPane: View {
                         else { return }
                         credentialDetailRequest = request
                     },
+                    edit: { passwordEditorRequest = BrowserSavedPasswordEditorRequest(account: descriptor) },
                     requestDeletion: { credentialPendingDeletion = descriptor },
                     toggleSelection: {
                         if !selectedCredentialIDs.insert(descriptor.id).inserted {

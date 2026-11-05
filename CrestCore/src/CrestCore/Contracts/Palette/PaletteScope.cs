@@ -31,9 +31,11 @@ public sealed class PaletteScope {
         symbol: "terminal", source: PaletteSource.CommandLine);
     public static readonly PaletteScope Update = new(name: "update", keyword: "@update", title: "Software Update",
         symbol: "arrow.down.circle", source: PaletteSource.Update);
+    public static readonly PaletteScope Passwords = new(name: "passwords", keyword: "@passwords", title: "Passwords",
+        symbol: "key", source: PaletteSource.Passwords);
 
     public static IReadOnlyList<PaletteScope> All { get; } =
-        [Tabs, Saved, History, Actions, Spaces, Themes, Extensions, Engine, Developer, CommandLine, Update];
+        [Tabs, Saved, History, Actions, Spaces, Themes, Extensions, Engine, Developer, CommandLine, Update, Passwords];
 
     #endregion
 
