@@ -310,15 +310,34 @@ final class BrowserCommandPaletteModel {
         narrowed()
     }
 
-    /// Leaves the search provider or scope, keeping what was typed.
+    /// Leaves the search provider or scope, keeping what was typed. Inside a
+    /// choice a tool scope stepped into, such as a saved login, it steps back
+    /// to the scope's own choices first.
     @discardableResult
     func leaveScope() -> Bool {
         guard !isUnscoped else { return false }
+        if let activeScope, commands?.stepBack(in: activeScope) == true {
+            narrowed()
+            return true
+        }
         activeProvider = nil
         activeScope = nil
         requestAnswer()
         replaceText?(query)
         return true
+    }
+
+    /// Shows the choices a choice just stepped into, from an empty field.
+    func steppedIntoChoice() {
+        narrowed()
+    }
+
+    /// Asks again for what a tool scope offers, once something it waited on
+    /// arrives, such as a Space's saved logins read in the background, as
+    /// `Notification.Name.browserPaletteChoicesChanged` says.
+    func choicesChanged() {
+        guard activeScope != nil else { return }
+        requestAnswer()
     }
 
     /// Enters what the text named in the palette's notation, keeping what
@@ -640,4 +659,11 @@ actor BrowserSearchSuggestionClient {
         }
         return BrowserSearchSuggestionResponseParser.suggestions(from: data)
     }
+}
+
+extension Notification.Name {
+    /// What a tool scope offers changed after the palette asked, such as a
+    /// Space's saved logins arriving from the Keychain, so an open palette
+    /// asks again.
+    static let browserPaletteChoicesChanged = Notification.Name("BrowserPaletteChoicesChanged")
 }

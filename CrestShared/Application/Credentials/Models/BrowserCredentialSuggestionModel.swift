@@ -23,6 +23,16 @@ final class BrowserCredentialSuggestionModel {
         phase == .failed
     }
 
+    /// Whether the prompt has anything to show: saved passwords for the site,
+    /// or why they could not be read. While the vault is asked, and when it
+    /// holds nothing for the site, the prompt stays out of the way.
+    var hasSomethingToShow: Bool {
+        switch phase {
+        case .suggestions, .failed: true
+        case .idle, .loading, .empty: false
+        }
+    }
+
     func load(
         _ request: BrowserCredentialFillRequest,
         in spaceID: UUID,

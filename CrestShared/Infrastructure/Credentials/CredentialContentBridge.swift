@@ -160,8 +160,35 @@ enum BrowserCredentialContentBridge {
           const spansIndependentCredentialScopes = (root, inputs) =>
             new Set(inputs.map((input) => credentialScopeFor(root, input))).size > 1;
 
-          const passwordKind = (input) =>
-            input.autocomplete.toLowerCase().includes("new-password") ? "new" : "current";
+          // A field asks for a new password when it says so, when its form
+          // has more than one password field, or when the field, its form's
+          // buttons or the page's address read as signing up rather than in.
+          const signUpWords = /sign[\s_-]?up|register|registration|create[\s_-]?(an[\s_-]?)?account|new[\s_-]?account|join|get[\s_-]?started|new[\s_-]?password|confirm|repeat|retype/i;
+          const signInWords = /sign[\s_-]?in|log[\s_-]?in|current[\s_-]?password|old[\s_-]?password/i;
+          const readsAsSignUp = (input) => {
+            const scope = input.closest("form, [role='form']");
+            const own = [input.name, input.id, input.placeholder, input.getAttribute("aria-label")].join(" ");
+            if (signUpWords.test(own)) return true;
+            if (signInWords.test(own)) return false;
+            const buttons = scope
+              ? Array.from(scope.querySelectorAll("button, input[type='submit'], [role='button']"))
+                  .map((button) => button.textContent || button.value || "").join(" ")
+              : "";
+            if (signUpWords.test(buttons)) return true;
+            if (signInWords.test(buttons)) return false;
+            return signUpWords.test(location.pathname);
+          };
+          const passwordKind = (input) => {
+            const autocomplete = input.autocomplete.toLowerCase();
+            if (autocomplete.includes("new-password")) return "new";
+            if (autocomplete.includes("current-password")) return "current";
+            const scope = input.closest("form, [role='form']") || document;
+            const fields = Array.from(scope.querySelectorAll("input[type='password']")).filter(isVisible);
+            // Three fields change a password: the first asks for the current one.
+            if (fields.length >= 3) return fields[0] === input ? "current" : "new";
+            if (fields.length === 2) return "new";
+            return readsAsSignUp(input) ? "new" : "current";
+          };
 
           const passwordSelection = (root, preferredInput = null) => {
             const inputs = passwordInputsIn(root);
@@ -308,12 +335,55 @@ enum BrowserCredentialContentBridge {
           // Raising the prompt, and starting to follow the field it points at.
           // The listener and the testing hook go through here together so the
           // hook cannot drift away from the path a real focus takes.
-          const reportFocus = (input) => {
+          // The account field of a sign-in: the username field beside a
+          // password asking for the current one, or, on a page that asks for
+          // the account first, a lone field named for a username or email.
+          const accountWords = /user|email|e-mail|login|identifier|account/i;
+          const isAccountInput = (input) => input instanceof HTMLInputElement
+            && ["text", "email", "tel", ""].includes(input.type) && isVisible(input)
+            && (/username|email/.test(input.autocomplete.toLowerCase())
+              || input.type === "email"
+              || accountWords.test([input.name, input.id, input.placeholder, input.getAttribute("aria-label")].join(" ")));
+          const accountInputFromEvent = (event) => {
+            const input = event.target instanceof HTMLInputElement ? event.target : null;
+            if (!input || input.type === "password") return null;
+            const root = rootFor(input);
+            const passwords = passwordInputsIn(credentialScopeFor(root, input));
+            if (passwords.length) {
+              const selection = passwordSelection(root);
+              return selection && selection.kind === "current" && usernameInputIn(root, selection.input) === input
+                ? input : null;
+            }
+            return isAccountInput(input) ? input : null;
+          };
+
+          // A username-first page has no password yet: the prompt offers the
+          // accounts to fill the username alone.
+          const reportAccountFocus = (input) => {
+            const root = rootFor(input);
+            if (passwordInputsIn(credentialScopeFor(root, input)).length) {
+              return reportFocus(passwordSelection(root).input, input);
+            }
+            const rect = rectOf(input);
+            trackedField = rect ? { input: new WeakRef(input), formID: idFor(root) } : null;
+            trackedFieldRect = rect;
+            post({
+              event: "focus",
+              trusted: true,
+              formID: idFor(root),
+              username: input.value?.trim() || undefined,
+              passwordKind: "current",
+              fieldRect: rect || undefined
+            });
+            return true;
+          };
+
+          const reportFocus = (input, anchor = input) => {
             const root = rootFor(input);
             const fields = snapshot(root, input);
             if (!fields) return false;
-            const rect = rectOf(input);
-            trackedField = rect ? { input: new WeakRef(input), formID: fields.formID } : null;
+            const rect = rectOf(anchor);
+            trackedField = rect ? { input: new WeakRef(anchor), formID: fields.formID } : null;
             trackedFieldRect = rect;
             post({
               event: "focus",
@@ -340,9 +410,34 @@ enum BrowserCredentialContentBridge {
                 rootsByID.delete(formID);
                 return false;
               }
-              const passwordInput = passwordInputsIn(root).find((input) => passwordKind(input) === "current");
-              if (!passwordInput) return false;
+              const candidates = passwordInputsIn(root);
+              // A lone field fills even when it reads as signing up.
+              const passwordInput = candidates.find((input) => passwordKind(input) === "current")
+                || (candidates.length === 1 ? candidates[0] : null);
+              if (!passwordInput) {
+                // A page that asks for the account first takes the username alone.
+                const accountInput = inputsIn(root).find(isAccountInput);
+                if (!accountInput) return false;
+                setInputValue(accountInput, username);
+                accountInput.focus();
+                return true;
+              }
               const usernameInput = usernameInputIn(root, passwordInput);
+              if (usernameInput) setInputValue(usernameInput, username);
+              setInputValue(passwordInput, password);
+              passwordInput.focus();
+              return true;
+            },
+            // A saved login a person chose outside the page, such as from the
+            // command palette: the document's first visible field for a
+            // current password, and the username field beside it.
+            fillFirstLogin(username, password) {
+              const shown = Array.from(document.querySelectorAll("input[type=password]")).filter(
+                (input) => input.isConnected && input.getClientRects().length > 0);
+              const passwordInput = shown.find((input) => passwordKind(input) === "current")
+                || (shown.length === 1 ? shown[0] : null);
+              if (!passwordInput) return false;
+              const usernameInput = usernameInputIn(rootFor(passwordInput), passwordInput);
               if (usernameInput) setInputValue(usernameInput, username);
               setInputValue(passwordInput, password);
               passwordInput.focus();
@@ -366,21 +461,46 @@ enum BrowserCredentialContentBridge {
           });
 
           document.addEventListener("focusin", (event) => {
+            if (!event.isTrusted) return;
+            // A field already holding more than a few characters is being
+            // typed in, not waiting for a suggestion.
+            if (event.target instanceof HTMLInputElement && (event.target.value || "").length > 3) {
+              leaveTrackedField();
+              return;
+            }
             const input = passwordInputFromEvent(event);
-            if (!event.isTrusted || !input) return;
-            reportFocus(input);
+            if (input) {
+              reportFocus(input);
+              return;
+            }
+            const account = accountInputFromEvent(event);
+            if (account) reportAccountFocus(account);
           }, true);
 
-          // The prompt is anchored under the focused field, so it stops
-          // following once the page moves focus somewhere else. Focus leaving
-          // the document altogether is the person reaching for the prompt
-          // itself, which is exactly when it must keep following.
+          // The prompt belongs to the field it points at: it closes once the
+          // person moves to something else on the page or has typed more than
+          // a few characters. Focus leaving the document altogether is the
+          // person reaching for the prompt itself, which keeps it open.
+          const leaveTrackedField = () => {
+            if (!trackedField) return;
+            const formID = trackedField.formID;
+            trackedField = null;
+            trackedFieldRect = null;
+            post({ event: "fieldLeft", formID });
+          };
           document.addEventListener("focusout", (event) => {
             if (!trackedField || trackedField.input.deref() !== event.target) return;
-            if (event.relatedTarget instanceof Element) {
-              trackedField = null;
-              trackedFieldRect = null;
-            }
+            if (event.relatedTarget instanceof Element) leaveTrackedField();
+          }, true);
+          document.addEventListener("pointerdown", (event) => {
+            if (!event.isTrusted || !trackedField) return;
+            const field = trackedField.input.deref();
+            const target = elementFromEvent(event);
+            if (!field || !target || (target !== field && !field.contains(target))) leaveTrackedField();
+          }, true);
+          document.addEventListener("input", (event) => {
+            if (!event.isTrusted || !trackedField || trackedField.input.deref() !== event.target) return;
+            if ((event.target.value || "").length > 3) leaveTrackedField();
           }, true);
 
           addEventListener("scroll", reportFieldGeometry, { capture: true, passive: true });
