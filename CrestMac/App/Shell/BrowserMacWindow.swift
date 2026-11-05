@@ -12,6 +12,11 @@ final class BrowserMacWindow: NSWindow {
     /// What the window's content does with a mouse's Back and Forward buttons
     /// and with swipes, while content that knows its pages is shown.
     weak var pointerNavigation: (any BrowserMacWindowPointerNavigation)?
+    /// The window's notice layer, which says where a notice that offers an
+    /// action stands.
+    weak var noticeTarget: BrowserNoticeWindowTargetView?
+    /// Takes presses on a notice that offers an action, before any view.
+    private let noticePress = BrowserMacWindowNoticePress()
     /// Moves the window from a press near its top over a spot where the page
     /// has nothing to click.
     var pageDrag = BrowserMacWindowPageDrag()
@@ -59,6 +64,7 @@ final class BrowserMacWindow: NSWindow {
     // MARK: - Actions - Events
 
     override func sendEvent(_ event: NSEvent) {
+        if noticePress.take(event, in: self) { return }
         if pageDrag.take(event, in: self) { return }
         super.sendEvent(event)
     }
