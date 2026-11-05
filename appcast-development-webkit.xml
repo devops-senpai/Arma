@@ -6,6 +6,38 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.240</title>
+            <pubDate>Wed, 04 Nov 2026 22:20:22 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>800240</sparkle:version>
+            <sparkle:shortVersionString>0.8.240</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### Passwords
+- The Save password? prompt holds the email, username, password, category, notes and Include subdomains, and stays up 10 seconds unless you change it; resting the pointer on it starts the time over.
+- The password bubble also opens under a username or email field, closes when you click away or keep typing, and offers the generator's options on sign-up pages.
+- ✕ on the bubble offers to pause Arma Passwords on the tab, until resumed or for a minute up to a day; resume early from the site menu or `@passwords`.
+- A page's site menu has Manage Passwords, with how many the site has saved.
+- `arma passwords` reads and changes a Space's saved passwords from the terminal after a Touch ID or Mac password unlock that lasts an hour at most.
+- Changing Ask to authenticate asks you to authenticate first; new installs start at Don't Ask.
+
+### Themes
+- Arc Blush ships beside Arc Sky, and Catppuccin Macchiato and JellyFish have new colors.
+- ⌘Z and ⇧⌘Z undo and redo edits on the Themes page.
+- Folders on a picture theme line up with their tabs, with even spacing above and below an open folder.
+- The icon picker stays readable on every theme.
+
+### Browsing
+- Sites stay signed in when Arma quits and reopens, and Arma opens the tab you were on unless you choose otherwise.
+- When a website keeps a shortcut such as ⌘S, pressing it again runs Arma's command; choose Prefer Arma, Use Both or Prefer Website for each shortcut in Settings › Shortcuts.
+- The window drags from rows on pages such as GitHub's commit list that take focus but not clicks.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.240/Arma-0.8.240.dmg" length="192418157" type="application/octet-stream" sparkle:edSignature="c6IzYixL6hFdcDWE8ljvz5cYF5SCz1+vG1ZYEPKvUksE+TJm/DZORqkP5hKtP66459JjIU2d+eoPjXMOmL/iBw=="/>
+        </item>
+        <item>
             <title>0.8.227</title>
             <pubDate>Wed, 04 Nov 2026 01:44:18 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -95,6 +127,6 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: ESJpNShrF6BliHqRvEck3t89HPFfrCgyo3WCarT2CG+KuXYLbBr9cxFoot/T2NBrfpq9WKFOzxoV8lgDzS+FBw==
-length: 6813
+edSignature: sSsSxjgAVyI3kc5V2vm1kMd7uqqDZEdyXFnmIeBN0lie2CkOe6oMpj9oRxtUE3zGl62CjNKuU0yNfgHWxPnJAQ==
+length: 9294
 -->
