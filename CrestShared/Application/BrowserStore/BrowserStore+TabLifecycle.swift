@@ -78,7 +78,7 @@ extension BrowserStore {
     @discardableResult
     func openBackgroundTab(url: URL, in spaceID: UUID) -> UUID? {
         guard let tabID = openNewTab(url: url, in: spaceID, selecting: false) else { return nil }
-        interactionObserver?.browserDidOpenBackgroundTab()
+        interactionObserver?.browserDidOpenBackgroundTab { [weak self] in self?.showTab(tabID, in: spaceID) }
         return tabID
     }
 
