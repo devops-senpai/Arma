@@ -19,7 +19,7 @@ final class BrowserTabAppearance {
     var borders: Borders = .selected { didSet { changed() } }
     var outlinesSelectedTabs = false { didSet { changed() } }
     var usesWebsitePinColor = true { didSet { changed() } }
-    var dimsUnloadedTabs = true { didSet { changed() } }
+    var dimsUnloadedTabs = false { didSet { changed() } }
     var pinFill: Double = 0 { didSet { changed() } }
     var pinGlow: Double = 0 { didSet { changed() } }
     var hoverFill: Double = 0 { didSet { changed() } }
@@ -66,7 +66,7 @@ extension BrowserTabAppearance: @MainActor Codable {
         borders = (try? values.decode(Borders.self, forKey: .borders)) ?? .selected
         outlinesSelectedTabs = (try? values.decode(Bool.self, forKey: .outlinesSelectedTabs)) ?? false
         usesWebsitePinColor = (try? values.decode(Bool.self, forKey: .usesWebsitePinColor)) ?? true
-        dimsUnloadedTabs = (try? values.decode(Bool.self, forKey: .dimsUnloadedTabs)) ?? true
+        dimsUnloadedTabs = (try? values.decode(Bool.self, forKey: .dimsUnloadedTabs)) ?? false
         pinFill = Self.intensity((try? values.decode(Double.self, forKey: .pinFill)) ?? 0)
         pinGlow = Self.intensity((try? values.decode(Double.self, forKey: .pinGlow)) ?? 0)
         hoverFill = Self.intensity((try? values.decode(Double.self, forKey: .hoverFill)) ?? 0)
