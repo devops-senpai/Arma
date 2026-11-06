@@ -369,6 +369,60 @@ final class BrowserMacWindows {
         return coordinator.existingModel(for: request.id)?.browser.openNewTab(url: url) != nil
     }
 
+    // MARK: - Actions - Returning to the main window
+
+    /// Moves every tab of the temporary window `id` back into the Space it
+    /// borrowed, in the normal window it was opened from, or else another
+    /// normal window, opening one when none is open, and closes the temporary
+    /// window once it has let all of them go. Each tab moves as a tab dragged
+    /// from one window onto another does, keeping its page, and goes back to
+    /// the section and folder it left; the tab the window showed moves last,
+    /// so the normal window shows it.
+    func returnTabsToMainWindow(from id: UUID) {
+        let coordinator = application.windowCoordinator
+        guard let source = coordinator.existingModel(for: id), source.isTemporary else { return }
+        if let destination = coordinator.normalWindow(preferring: source.request.sourceWindowID) {
+            returnTabs(of: source, to: destination)
+            return
+        }
+        // A normal window opened now takes the tabs once its native window is
+        // attached, as a torn-off window takes its tab.
+        let request = BrowserMacWindowRequest.normal(sourceWindowID: nil)
+        open(request, activation: .key)
+        Task { @MainActor [weak self, weak source] in
+            for _ in 0..<40 {
+                guard let self, let source,
+                    let destination = self.application.windowCoordinator.existingModel(for: request.id)
+                else { return }
+                if destination.window != nil {
+                    self.returnTabs(of: source, to: destination)
+                    return
+                }
+                try? await Task.sleep(for: .milliseconds(50))
+            }
+        }
+    }
+
+    private func returnTabs(of source: BrowserMacWindowModel, to destination: BrowserMacWindowModel) {
+        let coordinator = application.windowCoordinator
+        guard let space = source.browser.shownSpace else { return }
+        let shownID = source.browser.selectedTabID(in: space.id)
+        let tabIDs = space.tabs.models.map(\.id)
+        // The shown tab goes last: each arrival is shown in the normal window.
+        for tabID in tabIDs.filter({ $0 != shownID }) + tabIDs.filter({ $0 == shownID }) {
+            coordinator.returnTab(
+                BrowserTabDragItem(tabID: tabID, spaceID: space.id, profileID: space.profileID),
+                from: source.id, to: destination.id)
+        }
+        guard source.browser.shownSpace?.tabs.models.isEmpty != false else {
+            BrowserNoticeCenter.shared.post(
+                .failure(String(localized: "Some tabs could not return to the main window.")))
+            return
+        }
+        destination.window?.makeKeyAndOrderFront(nil)
+        source.window?.close()
+    }
+
     // MARK: - Actions - Private window
 
     func openPrivateWindow() {

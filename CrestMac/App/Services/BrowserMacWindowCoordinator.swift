@@ -11,6 +11,15 @@ final class BrowserMacWindowCoordinator {
         let item: BrowserTabDragItem
     }
 
+    /// Where a tab stood in its Space when it left a normal window for a
+    /// temporary one: its section, its folder, and the tab that followed it
+    /// there.
+    private struct TabOrigin {
+        let placement: TabPlacement
+        let folderID: UUID?
+        let followingTabID: UUID?
+    }
+
     let browser: BrowserStore
     private let pages: BrowserPagePool
     let spaceAccess: BrowserSpaceAccessController
@@ -25,6 +34,9 @@ final class BrowserMacWindowCoordinator {
     @ObservationIgnored private var retiredTemporaryWindows: Set<UUID> = []
     @ObservationIgnored private var pendingTransfers: [UUID: PendingTransfer] = [:]
     @ObservationIgnored private var transferExpirations: [UUID: Task<Void, Never>] = [:]
+    /// Where each tab now in a temporary window stood before it left a
+    /// normal one, so Return to Main Window can put it back there.
+    @ObservationIgnored private var tabOrigins: [UUID: TabOrigin] = [:]
 
     init(
         browser: BrowserStore, pages: BrowserPagePool, spaceAccess: BrowserSpaceAccessController,
@@ -38,6 +50,16 @@ final class BrowserMacWindowCoordinator {
     }
 
     func existingModel(for id: UUID) -> BrowserMacWindowModel? { windows[id] }
+
+    /// The normal window a temporary window's tabs return to: `preferredID`'s
+    /// when that window is open and normal, else the normal window nearest
+    /// the front, if any is open.
+    func normalWindow(preferring preferredID: UUID?) -> BrowserMacWindowModel? {
+        if let preferred = preferredID.flatMap({ windows[$0] }), !preferred.isTemporary { return preferred }
+        let normal = windows.values.filter { !$0.isTemporary }
+        let front = NSApp.orderedWindows.lazy.compactMap { window in normal.first { $0.window === window } }.first
+        return front ?? normal.first
+    }
 
     /// The page pool of each open window.
     var openWindowPages: [BrowserPagePool] { windows.values.map(\.pages) }
@@ -133,6 +155,8 @@ final class BrowserMacWindowCoordinator {
             cancelPendingTransfer(to: destination)
         }
         if model.isTemporary {
+            // Its tabs go with it, and so does where they came from.
+            for tab in model.browser.shownSpace?.tabs.models ?? [] { tabOrigins[tab.id] = nil }
             model.pages.closeWindowWorkspace()
             model.windowState.removePersistedState()
             model.browser.family.temporarySettingsBrowser?.close()
@@ -218,6 +242,28 @@ final class BrowserMacWindowCoordinator {
         return transfer(item, from: source, to: destination)
     }
 
+    /// Moves the tab from temporary window `sourceID` back to normal window
+    /// `destinationID`, and puts it where it stood before it left: in its
+    /// section and folder, ahead of the tab that followed it while that tab
+    /// is still there. A tab whose folder is gone, or that came from the open
+    /// tabs, stays an open tab.
+    @discardableResult
+    func returnTab(_ item: BrowserTabDragItem, from sourceID: UUID, to destinationID: UUID) -> Bool {
+        let origin = tabOrigins[item.tabID]
+        guard move(item, from: sourceID, to: destinationID) else { return false }
+        guard let origin, let destination = windows[destinationID],
+            let space = destination.browser.spaceModel(matching: item.spaceAssignment),
+            origin.placement != .current || origin.folderID != nil,
+            origin.folderID.map({ space.folders.model($0) != nil }) ?? true
+        else { return true }
+        let following = origin.followingTabID.flatMap { space.shownTab($0) }.flatMap { tab in
+            tab.placement == origin.placement && tab.folderID == origin.folderID ? tab.id : nil
+        }
+        _ = destination.browser.moveSessionTab(
+            item.tabID, in: space.id, to: origin.placement, folderID: origin.folderID, before: following)
+        return true
+    }
+
     func windowID(at screenPoint: CGPoint, excluding sourceID: UUID) -> UUID? {
         guard
             let window = NSApp.orderedWindows.first(where: {
@@ -249,6 +295,17 @@ final class BrowserMacWindowCoordinator {
         return (try? model.browser.core.query(question))?.allowed == true
     }
 
+    /// Where the tab stands in its Space in the window this coordinator's
+    /// workspace shows, before it leaves.
+    private func origin(of item: BrowserTabDragItem) -> TabOrigin? {
+        guard let space = browser.spaceModel(matching: item.spaceAssignment), let tab = space.shownTab(item.tabID)
+        else { return nil }
+        let section = space.tabs.models.filter { $0.placement == tab.placement && $0.folderID == tab.folderID }
+        let index = section.firstIndex { $0.id == tab.id }
+        let following = index.flatMap { section.indices.contains($0 + 1) ? section[$0 + 1].id : nil }
+        return TabOrigin(placement: tab.placement, folderID: tab.folderID, followingTabID: following)
+    }
+
     /// Moves the tab and its live page to `destination`'s window.
     private func transfer(
         _ item: BrowserTabDragItem, from source: BrowserMacWindowModel, to destination: BrowserMacWindowModel
@@ -267,10 +324,14 @@ final class BrowserMacWindowCoordinator {
             destination.pages.canTransferTabRuntime(
                 from: source.pages, matching: item.runtimeAssignment, in: targetSpace)
         else { return false }
+        let origin = source.isTemporary ? nil : origin(of: item)
         guard
             source.browser.transferTab(
                 item.tabID, matching: item.spaceAssignment, to: destination.browser, in: item.spaceAssignment)
         else { return false }
+        // A tab remembers where it stood only while it is in a temporary
+        // window; in a normal one it stands where the person put it.
+        tabOrigins[item.tabID] = destination.isTemporary ? origin ?? tabOrigins[item.tabID] : nil
         // Both moves have been validated above. There is no actor suspension
         // between committing the workspace graphs and relocating the runtime.
         let movedTab =
