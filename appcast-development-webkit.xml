@@ -6,6 +6,38 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.249</title>
+            <pubDate>Thu, 05 Nov 2026 21:47:17 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>800249</sparkle:version>
+            <sparkle:shortVersionString>0.8.249</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### Windows
+- Open in New Window on a tab moves it into a window of its own, as dragging it out of the window does. Open Link in New Window on a page opens the link in one.
+- A window that holds only its own tabs shows Return to Main Window at the top of its sidebar. One click moves all of its tabs back into the Space's main window, each to the folder or section it left, and closes the window.
+- Dragging the window from the top of a page, or from the strip beside the window buttons, is macOS's own window drag again, so pushing the window against a screen edge tiles it.
+
+### Settings
+- A Space in Settings opens on the first click, shows as selected right away, and opens on its Appearance page.
+- Drag any Space in the Settings list onto another to make it a Sub-Space, or between Spaces to reorder. The Rearrange button is gone.
+- The arrow keys move through the Settings list from Space to Space.
+
+### From Crest
+- A phone or security key is offered when a Chromium passkey isn't on this Mac.
+- Chromium extension icons show their blocked-request count.
+- Edit shortcuts such as Copy and Paste work in Chromium extension popups and side panels.
+- Arma's own picker asks when a Chromium page shares its own tab.
+- Windows that Chromium pages open and fill in themselves are shown.
+- Distant sidebar folders draw as placeholders of their height.
+- Shift with a number key is recorded as the number in shortcuts.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.249/Arma-0.8.249.dmg" length="192537045" type="application/octet-stream" sparkle:edSignature="nloU+z8yBjZDhf0sL8ON9rkpA7VBKWIjVRaLX1nZQECZToPrfHGtpNH8aV7P3hzFJ91uTechNtRf752/WQz3BA=="/>
+        </item>
+        <item>
             <title>0.8.242</title>
             <pubDate>Thu, 05 Nov 2026 07:35:52 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -160,6 +192,6 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: M1RGMheRLfPoBQbGl4o70a+vKyWi45aBx64FsDvxhd6Rb+0G2gLcHoIwGY/7BUzUUWwmn3usyH7zbjjmBjgpDw==
-length: 11603
+edSignature: QqAvgJi4yC43j1EWKmqNCQXz1yh63j3wr5eAsLAiUf+UymjUEPrK3JxRO60HIPAtZS9HpwaFUufAjWfzd7nWAw==
+length: 13929
 -->
