@@ -6,6 +6,23 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.250</title>
+            <pubDate>Thu, 05 Nov 2026 22:15:25 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>800250</sparkle:version>
+            <sparkle:shortVersionString>0.8.250</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### Windows
+- Open in New Window keeps the tab in the main window, unloaded, and opens a copy in the new window, so closing that window by mistake loses nothing.
+- Return to Main Window puts the copy back in the tab's place, keeping the page you moved on to.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.250/Arma-0.8.250.dmg" length="192553925" type="application/octet-stream" sparkle:edSignature="sBljGdvEtfR+wOS7nC7SAr/356nJhex53WHzTyff21IAcLpBlKRBbqdOktua0juZmN7TLYxoYEzXUjj1m1KeDg=="/>
+        </item>
+        <item>
             <title>0.8.249</title>
             <pubDate>Thu, 05 Nov 2026 21:47:17 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -192,6 +209,6 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: QqAvgJi4yC43j1EWKmqNCQXz1yh63j3wr5eAsLAiUf+UymjUEPrK3JxRO60HIPAtZS9HpwaFUufAjWfzd7nWAw==
-length: 13929
+edSignature: xXPmkhpziVHA3HSq+zErlLhpHHfK/h434Wn/LJVSFjmf8YMcOlE0bKEdMNXpj84Lsgn+HOFn2axE9Hba3kS/Aw==
+length: 15095
 -->
