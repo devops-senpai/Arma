@@ -17,7 +17,7 @@ staged or synced by it.
 | --- | --- |
 | `CredentialFile.cs` | A password file as the core reads it: format, rows kept and rows left out |
 | `CredentialFileColumn.cs` | The column headers each browser and password manager uses |
-| `Queries/` | Capture, fill, save, save check and match, most recent credential, strong password recipe, password-file and browser-password import previews, export, passkey access, system Passwords offer and write-through |
+| `Queries/` | Capture, fill, subdomain reach, save, save check and match, most recent credential, strong password recipe, password-file and browser-password import previews, export, passkey access, system Passwords offer and write-through |
 
 ## Depends on
 

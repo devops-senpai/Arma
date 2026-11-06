@@ -15,7 +15,8 @@ internal sealed class ChoiceFinder : PaletteFinder {
             if (choice.Scope.Source != source) continue;
             int? score = query.IsEmpty ? 0 : query.Score(choice.Name, choice.Detail) ?? query.Abbreviates(choice.Name);
             if (score is not { } matched) continue;
-            var row = PaletteRow.Of(PaletteRowKind.Choice, choice.Name, choice.Detail, symbol: choice.Symbol, subject: choice.Id);
+            var kind = choice.StepsInto ? PaletteRowKind.ChoiceStep : PaletteRowKind.Choice;
+            var row = PaletteRow.Of(kind, choice.Name, choice.Detail, symbol: choice.Symbol, subject: choice.Id);
             yield return Scored(context, source, row, context.Matched(query, row, matched), place: null, fallback: null);
         }
     }

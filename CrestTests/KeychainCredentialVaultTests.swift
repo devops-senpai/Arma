@@ -205,13 +205,20 @@ final class KeychainCredentialVaultTests: XCTestCase {
         )
     }
 
+    /// Encodes as the vault's codec does, keys in one order.
+    private static let encoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .sortedKeys
+        return encoder
+    }()
+
     private func keychainItem(
         descriptor: CredentialDescriptor,
         password: String
     ) throws -> CredentialKeychainItem {
         CredentialKeychainItem(
             account: descriptor.id.uuidString.lowercased(),
-            metadata: try JSONEncoder().encode(descriptor),
+            metadata: try Self.encoder.encode(descriptor),
             secret: Data(password.utf8),
             isSynchronizable: descriptor.isSynchronizable
         )

@@ -24,7 +24,17 @@ protocol CredentialVault: Sendable {
     func deleteAll(in spaceID: UUID) async throws
     /// Removes the items `unreadableCredentialCount(in:)` counts.
     func deleteUnreadableCredentials(in spaceID: UUID) async throws
+    /// The notes kept with password `id`, as secret as the password, or nil.
+    func notes(for id: UUID, in spaceID: UUID) async throws -> String?
+    /// Keeps `notes` with password `id`, synced with iCloud as the password
+    /// is; nil or empty notes remove them.
+    func setNotes(_ notes: String?, for id: UUID, isSynchronizable: Bool, in spaceID: UUID) async throws
 }
+
+// MARK: - Notes
+
+/// The most a password's notes may hold, in UTF-8 bytes.
+let credentialNotesByteLimit = 2_048
 
 extension CredentialVault {
     // MARK: - Actions - Moving
@@ -38,6 +48,10 @@ extension CredentialVault {
         for descriptor in try await descriptors(in: source) where !copied.contains(descriptor.id) {
             guard let credential = try await credential(id: descriptor.id, in: source) else { continue }
             try await save(credential.moved(to: destination), in: destination)
+            if let notes = try await notes(for: descriptor.id, in: source) {
+                try await setNotes(
+                    notes, for: descriptor.id, isSynchronizable: descriptor.isSynchronizable, in: destination)
+            }
         }
     }
 }

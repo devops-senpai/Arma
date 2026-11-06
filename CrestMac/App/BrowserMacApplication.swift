@@ -135,7 +135,7 @@ final class BrowserMacApplication {
         BrowserAppPreferenceStore.shared.bind(
             to: browser, legacy: LegacyAppPreferences.read(for: launchEnvironment))
         BrowserAppPreferenceStore.shared.reconcileWebKitSpellChecking()
-        let privateBrowser = BrowserStore.privateBrowsing(core: core)
+        let privateBrowser = BrowserStore.privateBrowsing(core: core, passwordsFrom: browser)
         let passkeyAccess = BrowserPasskeyAccessController(core: core)
         let cloudSync =
             usesIsolatedLaunch
