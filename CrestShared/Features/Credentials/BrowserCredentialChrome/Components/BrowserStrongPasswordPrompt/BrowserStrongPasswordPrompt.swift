@@ -14,6 +14,8 @@ struct BrowserStrongPasswordPrompt: View {
     let metrics: BrowserCredentialPromptMetrics
 
     @State private var model = BrowserStrongPasswordOperationModel()
+    /// The generator's options for this password, from the Space's own.
+    @State private var generation: PasswordGeneration?
 
     var body: some View {
         BrowserCredentialPromptSurface(
@@ -28,10 +30,17 @@ struct BrowserStrongPasswordPrompt: View {
                 siteIconData: port.siteIconData,
                 model: model,
                 metrics: metrics,
-                dismiss: port.dismiss,
+                dismiss: port.close ?? port.dismiss,
+                generation: Binding(
+                    get: { generation ?? spaceGeneration },
+                    set: { generation = $0 }),
                 generateAndFill: generateAndFill
             )
         }
+    }
+
+    private var spaceGeneration: PasswordGeneration {
+        browser.spaceModel(port.spaceID)?.settings.credentialPreferences.generation ?? .standard
     }
 
     private var space: BrowserSpaceIdentity? {
@@ -45,7 +54,10 @@ struct BrowserStrongPasswordPrompt: View {
     private func generateAndFill() {
         Task { @MainActor in
             await model.generateSaveAndFill(
-                generate: { try BrowserStrongPasswordGenerator.generate(from: browser.strongPasswordRecipe()) },
+                generate: {
+                    try BrowserStrongPasswordGenerator.generate(
+                        from: browser.strongPasswordRecipe(generation ?? spaceGeneration))
+                },
                 save: { password in
                     let candidate = BrowserCredentialSaveCandidate(
                         id: UUID(),
