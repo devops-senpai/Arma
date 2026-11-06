@@ -6,6 +6,34 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.254</title>
+            <pubDate>Fri, 06 Nov 2026 14:00:38 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>800254</sparkle:version>
+            <sparkle:shortVersionString>0.8.254</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### From Crest
+- Offer Touch ID to Chromium sites that check for it first.
+- Install private Chrome Web Store extensions on Chromium.
+- Chromium pages keep taking clicks after a drag.
+- Discord stays signed in on Chromium pages.
+- Every popover is drawn on one flyout surface, and the color grid is filled.
+- Clicking a Space in Settings opens its page even when the pointer moves a little during the click.
+- The feature tour fits every screen.
+
+### Settings
+- Clicking a Space in Settings now uses Crest's own fix; the Settings sidebar is Crest's again, with the Rearrange button for reordering Spaces.
+
+### Command line
+- The README shows `arma passwords`: unlock a Space's passwords with Touch ID, then list or copy them from the terminal.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.254/Arma-0.8.254.dmg" length="192696045" type="application/octet-stream" sparkle:edSignature="8o/mn0cwxYYvq+izfrnRTrumaVhMviuaGarqSnBCal11M7+Aj+fsCvrv4Twa9rJyNy1Uuw+BXz4M5OWl7EhkBA=="/>
+        </item>
+        <item>
             <title>0.8.251</title>
             <pubDate>Fri, 06 Nov 2026 12:40:35 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -225,6 +253,6 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: MmQF70JzKbQI+9aBOQWZklYucrXiPOTMuKRpWmFd0zPV/arvPtC7I+8gScTUBDBstB0efFdfAafMZJpbZBORCA==
-length: 16197
+edSignature: Dm7/B5ekzZ+8g1d7dba42/takj/alkzgKbXEEILYe8c+iPZ/QDw8taI7xrdOk0ild8ohH2CQrZD6jHNZ4yY2DA==
+length: 17848
 -->
