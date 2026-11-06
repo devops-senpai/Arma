@@ -57,7 +57,7 @@ final class BrowserDesktopWebView: WKWebView {
         BrowserPageContextMenu(
             actions: menuHost.contextMenuActions(linkURL: context.linkURL, selectionText: context.selectionText),
             host: menuHost, view: self
-        ).insert(into: menu)
+        ).insert(into: menu, linkRow: menu.webKitLinkDestinationItem)
         if context.isEditable, let paste = menu.webKitPasteItem {
             let item = NSMenuItem(
                 title: String(localized: "Paste and Match Style"), action: #selector(pasteAsPlainTextFromMenu(_:)),
