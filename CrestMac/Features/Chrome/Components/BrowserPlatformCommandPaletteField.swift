@@ -268,11 +268,11 @@ struct BrowserPlatformCommandPaletteField: NSViewRepresentable {
                 model.pressReturn()
                 return true
             case #selector(NSResponder.moveDown(_:)):
-                if presentation.listsUpward { model.moveSelection(by: -1) } else { model.pressDown() }
+                if presentation.listsUpward { model.pressUp() } else { model.pressDown() }
                 refreshSuffix()
                 return true
             case #selector(NSResponder.moveUp(_:)):
-                if presentation.listsUpward { model.pressDown() } else { model.moveSelection(by: -1) }
+                if presentation.listsUpward { model.pressDown() } else { model.pressUp() }
                 refreshSuffix()
                 return true
             case #selector(NSResponder.moveToEndOfParagraph(_:)):
