@@ -2,7 +2,7 @@ import AppKit
 import os
 
 /// Runs the commands a person gives Crest from their own terminal through the
-/// `crest-browser` helper, such as `crest-browser theme`. They reach Crest
+/// `arma` helper, such as `arma theme`. They reach Crest
 /// over a Unix domain socket of their own that exists while Crest runs and
 /// admits only this Crest's helper running as this user, so a person's own
 /// command never needs agents turned on or an agent's approval. Each
@@ -13,11 +13,15 @@ final class BrowserMacCommands {
 
     static let maximumConnections = 8
 
-    private static let logger = Logger(subsystem: "com.pauldavis.crest", category: "Commands")
+    private static let otherBuild = "This helper is from another build. Run the one inside the Arma that is open."
+
+    private static let logger = Logger(subsystem: "com.senpaimedia.arma", category: "Commands")
 
     // MARK: - Variables
 
     unowned let application: BrowserMacApplication
+    /// Runs `arma <section> <action>`.
+    private let terminal: BrowserMacTerminal
     /// Where the helper connects, or nil when this launch offers no socket.
     let path: String?
     /// What a helper must be to be heard: this Crest's own.
@@ -29,8 +33,9 @@ final class BrowserMacCommands {
 
     // MARK: - Initializers
 
-    init(application: BrowserMacApplication) {
+    init(application: BrowserMacApplication, windows: BrowserMacWindows) {
         self.application = application
+        terminal = BrowserMacTerminal(application: application, windows: windows)
         helper = BrowserAgentHelperRequirement(bundle: .main)
         path =
             helper == nil
@@ -85,15 +90,32 @@ final class BrowserMacCommands {
             connection.close()
             return
         }
+        if case .terminal(let version, let command) = request {
+            Task { @MainActor in
+                let response: CommandLinkResponse
+                if version != CommandLinkRequest.version {
+                    response = .refused(message: Self.otherBuild)
+                } else {
+                    do throws(BrowserMacTerminal.Refusal) {
+                        response = .output(try await terminal.run(command))
+                    } catch {
+                        response = .refused(message: error.message)
+                    }
+                }
+                if let answer = try? JSONEncoder().encode(response) { connection.send(answer) }
+                connection.close()
+            }
+            return
+        }
         let response: CommandLinkResponse
         switch request {
         case .theme(let version, let space, let changes, let resets, let removeDark, let export):
             response =
                 version == CommandLinkRequest.version
                 ? theme(space, changes: changes, resets: resets, removeDark: removeDark, export: export)
-                : .refused(
-                    message:
-                        "This crest-browser is from another build of Crest. Run the one inside the Crest that is open.")
+                : .refused(message: Self.otherBuild)
+        case .terminal:
+            return
         }
         if let answer = try? JSONEncoder().encode(response) { connection.send(answer) }
         connection.close()
@@ -113,7 +135,7 @@ final class BrowserMacCommands {
             return .refused(message: "There is no Space named '\(name)'. The Spaces are \(names).")
         }
         guard !application.spaceAccess.isLocked(space) else {
-            return .refused(message: "Unlock the '\(space.settings.name)' Space in Crest first.")
+            return .refused(message: "Unlock the '\(space.settings.name)' Space in Arma first.")
         }
         let current = space.settings.look
         let currentDark = space.settings.darkBranding
@@ -127,7 +149,8 @@ final class BrowserMacCommands {
         if removeDark { dark = nil }
         if let changes {
             do {
-                (look, dark) = try look.dressed(in: changes, dark: dark)
+                look = try look.dressed(in: changes)
+                if let darkSections = changes.dark { dark = try (dark ?? look).dressed(in: darkSections) }
             } catch {
                 return .refused(message: error.message)
             }
@@ -138,8 +161,6 @@ final class BrowserMacCommands {
         if dark != currentDark {
             browser.updateSpaceDarkBranding(dark?.normalized(), in: space.id)
         }
-        // A dressed Space counts as edited, as one edited in Settings does.
-        BrowserThemeLibrary.shared.spaceEdited(space.id, in: browser)
         if export {
             let settings = browser.spaceModel(space.id)?.settings
             return .theme(CrestTheme(look: settings?.look ?? look, dark: settings?.darkBranding ?? dark))
@@ -147,7 +168,15 @@ final class BrowserMacCommands {
         var did: [String] = []
         if !resets.isEmpty { did.append("reset \(resets.map(\.rawValue).joined(separator: ", "))") }
         if removeDark { did.append("unpaired the dark look") }
-        if let changes { did.append("applied \(changes.sectionTitles.joined(separator: ", "))") }
+        if let changes {
+            var sections: [String] = []
+            if changes.background != nil { sections.append("background") }
+            if changes.icon != nil { sections.append("icon") }
+            if changes.folders != nil { sections.append("folders") }
+            if changes.commandPalette != nil { sections.append("command palette") }
+            if changes.dark != nil { sections.append("dark look") }
+            did.append("applied \(sections.joined(separator: ", "))")
+        }
         return .applied(summary: "\(space.settings.name): \(did.joined(separator: "; ")).")
     }
 
