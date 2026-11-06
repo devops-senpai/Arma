@@ -22,7 +22,7 @@ into touch layouts, while the core and the page store own the state.
 | `MobileBrowserRootView/Components/MobileTabSwipeStage/` | The tab swipe stage, slots and placeholders |
 | `MobileBrowserRootView/Components/MobileSplitBubbleBar/` | The bubble bar for split pages |
 | `MobileBrowserRootView/Support/` | `MobileBrowserRootLayout`, `PagePresentation+MobileBrowserPage` |
-| `Components/` | `BrowserPlatformFindBarStyle` and `BrowserPlatformObservedTapModifier`, pairs of same-name Mac files |
+| `Components/` | `BrowserPlatformFindBarStyle`, `BrowserPlatformObservedTapModifier` and `BrowserPlatformNoticeWindowBridge`, pairs of same-name Mac files |
 
 ## Depends on
 
