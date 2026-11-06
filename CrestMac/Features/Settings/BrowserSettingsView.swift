@@ -172,7 +172,6 @@ struct BrowserSettingsView: View {
 
     /// Adds a Space and opens its Appearance page with its name ready to type.
     private func addSpace() {
-        tabState.isArrangingSpaces = false
         do throws(Rejection) {
             try browser.addSpace()
         } catch {
@@ -185,7 +184,6 @@ struct BrowserSettingsView: View {
     /// Adds a Sub-Space after `spaceID`, in its group, and opens it as a new
     /// Space opens.
     private func addSubSpace(after spaceID: UUID) {
-        tabState.isArrangingSpaces = false
         do throws(Rejection) {
             try browser.addSubSpace(after: spaceID)
         } catch {

@@ -77,7 +77,7 @@ change; the commit of the same name has the detail.
 - On iPad, a site's location request no longer waits forever when Settings opens beside the app.
 - On iPad, a closed window lets go of its pages, so its memory comes back and a restored window opens its tabs.
 - Choosing a Space in Settings always opens its page, even when Settings cannot switch the window to that Space.
-- On macOS 26, a Space in Settings › Spaces opens on the first click instead of its drag handling taking most clicks.
+- A Space in Settings opens on the first click on every macOS version, shows as selected right away, and opens on its Appearance page. Any Space in the list drags onto another to become its Sub-Space, or between Spaces to reorder, with no Rearrange mode, and the arrow keys move through the list from Space to Space.
 - Dragging the bar between Split View pages no longer leaves a white band under Chromium pages until they reload.
 
 ### Repository and tooling

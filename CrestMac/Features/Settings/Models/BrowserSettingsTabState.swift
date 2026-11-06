@@ -9,8 +9,6 @@ final class BrowserSettingsTabState {
     var spaceTab = BrowserSpaceSettingsTab.appearance
     /// The Crest Studio step shown on a Space's Appearance page.
     var forgeStep = BrowserCrestStudioStep.shape
-    /// Whether the sidebar's Spaces can be dragged into a new order.
-    var isArrangingSpaces = false
     /// The Space whose name is waiting to be put into editing.
     var renameSpaceID: UUID?
     /// The site a Space's Passwords page was opened for, waiting for the page

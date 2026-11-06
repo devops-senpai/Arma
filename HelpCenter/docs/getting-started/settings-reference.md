@@ -69,7 +69,7 @@ On Mac, Privacy covers the whole device. **System permissions** shows whether ma
 
 ## Spaces
 
-On Mac, every Space has its own page. Select the Space in the Settings sidebar; the window switches to that Space, and Settings follows. The page header shows the Space's crest and name. Hover over the name and click the pencil to rename it, or open the **…** menu for more actions.
+On Mac, every Space has its own page. Select the Space in the Settings sidebar; the window switches to that Space, and Settings follows, on the Space's Appearance page. The page header shows the Space's crest and name. Hover over the name and click the pencil to rename it, or open the **…** menu for more actions.
 
 Each Space's page has these tabs:
 
@@ -81,7 +81,7 @@ Each Space's page has these tabs:
 
 ### Add, arrange, and remove Spaces
 
-Click **+** next to the Spaces heading to add a Space. Its Appearance page opens with the name ready to type. Click the pencil next to it to rearrange: drag Spaces by their handles, then click the checkmark when done.
+Click **+** next to the Spaces heading to add a Space. Its Appearance page opens with the name ready to type. Drag a Space up or down the list to rearrange.
 
 Right-click a Space, or use the **…** menu on its page, for **Rename**, **Edit Crest…**, **Move Up**, **Move Down**, **New Sub-Space**, **Make Sub-Space of**, **Lock Space**, and **Delete**. Arma needs at least one Space.
 

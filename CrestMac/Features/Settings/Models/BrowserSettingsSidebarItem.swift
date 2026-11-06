@@ -32,8 +32,6 @@ enum BrowserSettingsSidebarItem: Hashable {
         case .destination:
             tabState.navigation.selection = self
         case .space(let id):
-            // Arranging drags rows; a press that starts a drag isn't a choice.
-            guard !tabState.isArrangingSpaces else { return }
             openSpace(id)
         }
     }

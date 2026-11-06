@@ -24,9 +24,9 @@ macOS, with Mac-only panes added beside them rather than forked.
 | `BrowserPlatformLinkRouteEditor/` | The Mac half of the shared link route editor (same-name pair) |
 | `BrowserSystemPrivacySettingsPane.swift`, `BrowserSystemPermissionSettingsSection.swift` | What macOS lets Crest reach, and each Space's privacy |
 | `BrowserPlatform*.swift` (top level) | Mac halves of shared sections: app icon, look-and-feel reset, palette drag, search engine presentation |
-| `Components/` | Pane container, column layout, settings sidebar and pages, Space editor and Space page, build header, developer toolbar, Picture in Picture and software update sections |
+| `Components/` | Pane container, column layout, settings sidebar, its rows (`BrowserSettingsSidebarRow`, plain buttons that draw their own selection) and pages, Space editor and Space page, build header, developer toolbar, Picture in Picture and software update sections |
 | `Forge/` | The Forge's step bar as a native segmented control |
-| `Models/` | Settings navigation and tab state, destination and Space requests, system permissions and their controller |
+| `Models/` | Settings navigation and tab state, destination and Space requests, a Space dragged over the sidebar and where it lands (`BrowserSettingsSpaceDrag`, `BrowserSettingsSpacePlacement`), system permissions and their controller |
 | `Models/BrowserSettingsPasswordsRequest.swift` | Opens a Space's Passwords page for one site from its site controls: the site's saved passwords, or a new one for it |
 | `Models/BrowserSpaceSettingsTab.swift` | A Space's pages: Appearance, Browsing, Privacy, Passwords, Extensions (Settings › Themes lives in `CrestMac/Features/Themes/`) |
 | `Support/` | `BrowserPlatformSettingsDestinationCatalog` and sidebar tints |
