@@ -1,0 +1,77 @@
+{
+  "background" : {
+    "angle" : 45,
+    "colors" : [
+      "#f9e6ea",
+      "#fda1ad",
+      "#f2c9d3"
+    ],
+    "intensity" : 0.8,
+    "pattern" : "solid",
+    "readabilityFade" : 0,
+    "sidebarSecondaryText" : "default",
+    "sidebarText" : "#39000b",
+    "style" : "banner",
+    "textColor" : "dark",
+    "texture" : true
+  },
+  "commandPalette" : {
+    "dark" : {
+      "opacity" : 0.94,
+      "text" : "#39000b",
+      "tint" : "#fefcfd"
+    },
+    "light" : {
+      "opacity" : 0.94,
+      "text" : "#39000b",
+      "tint" : "#fefcfd"
+    }
+  },
+  "dark" : {
+    "background" : {
+      "colors" : [
+        "#39000b",
+        "#fda1ad",
+        "#cf3960"
+      ],
+      "intensity" : 0.8,
+      "pattern" : "solid",
+      "readabilityFade" : 0,
+      "sidebarText" : "#f5d6de",
+      "style" : "banner",
+      "textColor" : "light",
+      "texture" : true
+    },
+    "commandPalette" : {
+      "dark" : {
+        "opacity" : 0.94,
+        "text" : "#f5d6de",
+        "tint" : "#1c0006"
+      },
+      "light" : {
+        "opacity" : 0.94,
+        "text" : "#f5d6de",
+        "tint" : "#1c0006"
+      }
+    },
+    "folders" : {
+      "backColor" : "#cf3960",
+      "color" : "#5a1a28",
+      "intensity" : 0.3,
+      "outlineColor" : "#fda1ad"
+    },
+    "icon" : {
+      "color" : "#ffebed"
+    }
+  },
+  "folders" : {
+    "backColor" : "#fda1ad",
+    "color" : "#fff0f2",
+    "intensity" : 0.3,
+    "outlineColor" : "#c22a45"
+  },
+  "icon" : {
+    "color" : "#9e1c36"
+  },
+  "name" : "Arc Blush"
+}
