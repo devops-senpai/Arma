@@ -1105,7 +1105,7 @@ struct AppConfiguration: Equatable, Sendable {
 
 struct AppPreferences: Equatable, Sendable {
     static let `default` = AppPreferences(
-        startup: StartupBehavior.showStartPage,
+        startup: StartupBehavior.lastActiveTab,
         offersTranslation: true,
         automaticallyTranslates: false,
         translationRules: [],
