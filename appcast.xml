@@ -6,6 +6,27 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.255</title>
+            <pubDate>Fri, 06 Nov 2026 17:32:13 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>800255</sparkle:version>
+            <sparkle:shortVersionString>0.8.255</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### Windows
+- Return to Main Window works when no main window is open: it opens one, which takes the window's tabs as soon as it appears, the way a torn-off window takes its tab.
+
+### Settings
+- Choosing a Space in Settings is handled by Crest's own code alone; Arma's earlier workaround for Spaces imported from Arc is gone, since Crest's fix covers the cause.
+
+### For contributors
+- `AGENTS.md` now says how to fix things the way upstream Crest does: name the exact cause, make the smallest native change at that spot, and check Crest's recent commits before a larger change.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.255/Arma-0.8.255.dmg" length="192711301" type="application/octet-stream" sparkle:edSignature="6qqLVz6gYTb4rqD7fpV/eJ7/ZfeMcNwjIFmguaRee5g894cFmEAlYUwWyfA+t7Q+3GQJL9g0fJYIT2P1G5wgAQ=="/>
+        </item>
+        <item>
             <title>0.8.254</title>
             <pubDate>Fri, 06 Nov 2026 14:00:25 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -241,6 +262,6 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: GrhoIT4k77tl+rAYhT9MbVZ3A1K6hcw+yohIseMusu2uUbXPnyvpJKHBqhs0Hiz96Z9qwjERlxN3iYCgQLC8AA==
-length: 17140
+edSignature: EOHhQUXS4Y64vQX/pEnLf0KNwx29Fp3wHaQJVbQmjaQGIoVA4MFEBePp5D4hz0WeHMkaQShBFQXGQjJWaoN3BA==
+length: 18567
 -->
