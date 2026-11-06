@@ -6,6 +6,22 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.251</title>
+            <pubDate>Fri, 06 Nov 2026 12:40:35 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>800251</sparkle:version>
+            <sparkle:shortVersionString>0.8.251</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### Fixed
+- In a Quick Window's address editor, clicking or dragging in the address places the cursor or selects part of it, so you can trim a URL, instead of the whole address staying selected.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.251/Arma-0.8.251.dmg" length="192573986" type="application/octet-stream" sparkle:edSignature="SmSOChRdQtihRY1X0fvvliJfmN9ez742iJFNXDGUK/U++IUEGvj1QjwcqtoGlvZPqzu68eBMs1+OJgkupimRBQ=="/>
+        </item>
+        <item>
             <title>0.8.250</title>
             <pubDate>Thu, 05 Nov 2026 22:15:25 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -209,6 +225,6 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: xXPmkhpziVHA3HSq+zErlLhpHHfK/h434Wn/LJVSFjmf8YMcOlE0bKEdMNXpj84Lsgn+HOFn2axE9Hba3kS/Aw==
-length: 15095
+edSignature: MmQF70JzKbQI+9aBOQWZklYucrXiPOTMuKRpWmFd0zPV/arvPtC7I+8gScTUBDBstB0efFdfAafMZJpbZBORCA==
+length: 16197
 -->
