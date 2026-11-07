@@ -9,6 +9,12 @@ struct BrowserNoticeView: View {
     /// How far the capsule keeps from each side of that area, where a narrow
     /// window would otherwise let long words run to its edges.
     var sideInset: CGFloat = 0
+    /// What pressing the notice's action does; nil takes the action alone.
+    /// A layer passes one that also puts the notice away.
+    var performAction: (@MainActor () -> Void)? = nil
+    /// Hears where the capsule stands in the `BrowserNoticeLayer.space`
+    /// coordinate space, so a platform can take presses on it itself.
+    var capsuleFrameChanged: ((CGRect) -> Void)? = nil
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
@@ -20,7 +26,7 @@ struct BrowserNoticeView: View {
                 .multilineTextAlignment(.center)
                 .accessibilityLabel(notice.accessibilityLabel ?? notice.message)
             if let action = notice.action {
-                Button(action.title, action: action.perform)
+                Button(action.title) { (performAction ?? action.perform)() }
                     .buttonStyle(.borderless)
                     .accessibilityIdentifier("notice-action")
             }
@@ -41,6 +47,11 @@ struct BrowserNoticeView: View {
             radius: BrowserRootMetrics.noticeShadowRadius,
             y: BrowserRootMetrics.noticeShadowYOffset
         )
+        .onGeometryChange(for: CGRect.self) { proxy in
+            proxy.frame(in: .named(BrowserNoticeLayer.space))
+        } action: { frame in
+            capsuleFrameChanged?(frame)
+        }
         .padding(.horizontal, sideInset)
         .frame(
             maxWidth: .infinity,
