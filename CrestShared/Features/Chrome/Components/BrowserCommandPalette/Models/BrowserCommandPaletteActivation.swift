@@ -61,9 +61,18 @@ struct BrowserCommandPaletteActivation {
         return commands.runChoice(id, in: scope)
     }
 
+    /// Runs a choice that leads to more, and shows those in the palette.
+    static let stepsIntoChoice = BrowserCommandPaletteActivation(.stepsIntoChoice) { row, palette in
+        guard let id = row.subjectID, let scope = palette.activeScope, let commands = palette.commands,
+            commands.runChoice(id, in: scope)
+        else { return false }
+        palette.steppedIntoChoice()
+        return true
+    }
+
     static let all = [
         switchesToTab, opensAddress, searches, runsCommand, opensSettingsPage, showsSpace, reopensArchivedTab,
-        copiesAnswer, entersScope, appliesTheme, runsChoice,
+        copiesAnswer, entersScope, appliesTheme, runsChoice, stepsIntoChoice,
     ]
 
     // MARK: - Variables

@@ -13,6 +13,9 @@ final class BrowserSettingsTabState {
     var isArrangingSpaces = false
     /// The Space whose name is waiting to be put into editing.
     var renameSpaceID: UUID?
+    /// The site a Space's Passwords page was opened for, waiting for the page
+    /// to search for it or start a password for it.
+    var passwordsRoute: BrowserSettingsPasswordsRoute?
     /// The Space a person is dragging in Settings, from a group's crest row
     /// or a sidebar row, which the rows it passes over may take.
     var draggedSpaceID: UUID?

@@ -50,7 +50,10 @@ struct BrowserCommandActions: BrowserNumberedSelectionPerformer {
             copy: copy,
             themes: { BrowserThemeLibrary.shared.paletteThemes },
             applyTheme: applySavedTheme,
-            choices: { paletteChoices(in: $0, openSettings: openSettings) }
+            choices: { paletteChoices(in: $0, openSettings: openSettings) },
+            stepBack: { [chrome] scope in
+                scope.name == PaletteScope.passwords.name && chrome.palettePasswords.stepBack()
+            }
         )
     }
 
