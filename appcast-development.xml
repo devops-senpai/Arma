@@ -6,6 +6,35 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.256</title>
+            <pubDate>Fri, 06 Nov 2026 22:47:49 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>800256</sparkle:version>
+            <sparkle:shortVersionString>0.8.256</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### From Crest 0.8.193
+- New windows open at the sidebar width you last chose.
+- Clear Unpinned Tabs and Shift-Command-K clear only the shown Space's open tabs. Pinned and saved tabs stay, and so do other Spaces' tabs.
+- The inline address completion and the provider chip stop flickering while you type.
+- A finished download shows "Downloaded <file>" in the notice capsule.
+- An optional Copy URL button beside Site Controls in the address field, off by default, in Settings › Appearance › Address field.
+- Arma is listed in Finder's Open With menu for PDFs.
+- Arma stays responsive with many Spaces and extensions: session saves are coalesced, an extension refresh covers only the profile that changed, and offscreen Space pages are not rebuilt.
+- With Show sidebar on hover in full screen turned on, a full-screen page stays full screen when you swipe to another Space.
+
+### Themes
+- A theme can give folders a highlight color and opacity of their own, the tint their rows take while a folder is open, hovered or chosen, in Settings › Themes › Folders and with `arma theme`.
+- Folders have one tint control: Highlight color and Highlight opacity replace the Intensity slider. Looks and themes from before keep the tint they had.
+- Arma ships three more themes: Textured, Heraldic and Modern, so they can be edited and put on any Space.
+- The Catppuccin themes' folders take their colors from each flavor's palette.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.256/Arma-0.8.256.dmg" length="192804614" type="application/octet-stream" sparkle:edSignature="xMJHo/nQK7zuNjL4fst7QkWFbsjdrtKufAHoA26fYrPmJ+g8fttJyPZysbv3z6Lr3dI7qFAF5/cRa5/fkOqdAw=="/>
+        </item>
+        <item>
             <title>0.8.255</title>
             <pubDate>Fri, 06 Nov 2026 17:32:24 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -275,6 +304,6 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: LD6Nrzg13TXHgdoZcAVbqNFTIpMsHDxpzCg7+N8LQ0E6Ne4igpYdf4JTyqQPkskJmJ5lSUkYXRKdaTPRC7w/BQ==
-length: 19334
+edSignature: TeuNP4bZ1P3karc+1NWkCVCqbM3waqICyTnGS8fKaKkhpl9lVkdD37ysG4Vz9bzcIwx/sPDAUGNo/n+Ykr7CCQ==
+length: 21668
 -->
