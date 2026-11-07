@@ -38,7 +38,8 @@ struct BrowserCommandActions: BrowserNumberedSelectionPerformer {
         shortcuts: BrowserShortcutStore?,
         openSettings: @escaping (String) -> Void = { _ in }
     ) -> BrowserCommandPaletteCommandRegistry {
-        BrowserCommandPaletteCommandRegistry(
+        BrowserCommandLineInstall.shared.readSearchPath()
+        return BrowserCommandPaletteCommandRegistry(
             commands: Self.paletteCommands.filter(isListedInPalette),
             settingsPages: BrowserSettingsDestination.palettePages,
             shortcut: { shortcuts?.shortcut(for: $0) },
@@ -48,7 +49,8 @@ struct BrowserCommandActions: BrowserNumberedSelectionPerformer {
             reopenArchivedTab: reopenArchivedTab,
             copy: copy,
             themes: { BrowserThemeLibrary.shared.paletteThemes },
-            applyTheme: applySavedTheme
+            applyTheme: applySavedTheme,
+            choices: { paletteChoices(in: $0, openSettings: openSettings) }
         )
     }
 
