@@ -172,9 +172,9 @@
         private func embed(_ view: NSView) {
             guard view.superview !== surface else { return }
             view.removeFromSuperview()
-            view.frame = surface.bounds
-            view.autoresizingMask = [.width, .height]
+            view.autoresizingMask = []
             surface.addSubview(view)
+            surface.layoutEngineView()
         }
 
         /// What takes focus back from a page the engine focused: a text
@@ -443,21 +443,31 @@
                 let pageFrame = layout.page.map({ frame(of: $0) })
             else {
                 view.isHidden = false
-                view.frame = bounds
-                // A navigation can replace Chromium's renderer after this container
-                // was laid out. Propagate the viewport even when its size is unchanged.
-                view.setFrameSize(bounds.size)
+                place(view, in: bounds)
                 return
             }
-            devToolsView.frame = frontendFrame
-            devToolsView.setFrameSize(frontendFrame.size)
+            place(devToolsView, in: frontendFrame)
             // An empty page rectangle is the frontend asking to cover the page —
             // its own device-toolbar and drawer layouts do this — so the page is
             // hidden rather than squeezed to nothing.
             view.isHidden = pageFrame.isEmpty
             guard !pageFrame.isEmpty else { return }
-            view.frame = pageFrame
-            view.setFrameSize(pageFrame.size)
+            place(view, in: pageFrame)
+        }
+
+        /// Puts one of the engine's views at the top left of `frame`, its size
+        /// cut to whole points. Chromium sizes the layer that shows a page by
+        /// adding up its view's size changes, and Core Animation rounds each
+        /// one to whole points. Sizes with fractions, which a split's cards
+        /// have at rest and on every step of a resize, would leave that layer
+        /// taller than its view by a little more each time: the page slides up
+        /// and its background shows in a band below it until the page reloads.
+        private func place(_ view: NSView, in frame: CGRect) {
+            let size = CGSize(width: frame.width.rounded(.down), height: frame.height.rounded(.down))
+            view.frame = CGRect(x: frame.minX, y: frame.maxY - size.height, width: size.width, height: size.height)
+            // A navigation can replace Chromium's renderer after this container
+            // was laid out. Propagate the viewport even when its size is unchanged.
+            view.setFrameSize(size)
         }
 
         /// Writes the page's viewport to the log a quarter second after it last
