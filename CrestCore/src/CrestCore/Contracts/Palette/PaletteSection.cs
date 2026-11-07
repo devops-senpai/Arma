@@ -36,11 +36,13 @@ public sealed class PaletteSection {
         scopedLimit: 30);
     public static readonly PaletteSection Update = new(name: "update", title: "Software Update", limit: 0, restingLimit: 0,
         scopedLimit: 30);
+    public static readonly PaletteSection Passwords = new(name: "passwords", title: "Passwords", limit: 0, restingLimit: 0,
+        scopedLimit: 50);
 
     /// Every section, in the order sections were added.
     public static IReadOnlyList<PaletteSection> All { get; } =
         [Intent, SearchSuggestions, RecentTabs, Tabs, Actions, Saved, History, TopHit, Spaces, Archived, Results, Themes,
-            Extensions, Engine, Developer, CommandLine, Update];
+            Extensions, Engine, Developer, CommandLine, Update, Passwords];
 
     #endregion
 

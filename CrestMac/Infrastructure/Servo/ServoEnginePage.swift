@@ -48,6 +48,7 @@ final class ServoEnginePage: BrowserPageEngineAdapter, BrowserPageEngine {
     var faviconSession: BrowserFaviconSession? { nil }
     var isContentBlockingActive: Bool { false }
     var credentialEvaluator: BrowserCredentialSession.Evaluate? { nil }
+    var credentialMainFrameEvaluator: BrowserCredentialSession.MainFrameEvaluate? { nil }
     var translationDocument: BrowserTranslationDocument? { nil }
 
     // MARK: - Initializers
