@@ -1,0 +1,41 @@
+{
+ "background": {
+  "angle": 86.86431145808439,
+  "colors": [
+   "#1e2833",
+   "#3e4e5e",
+   "#86adc4"
+  ],
+  "intensity": 1,
+  "pattern": "diagonal",
+  "readabilityFade": 0.34,
+  "sidebarSecondaryText": "default",
+  "sidebarText": "default",
+  "style": "gradient",
+  "textColor": "automatic",
+  "texture": false
+ },
+ "commandPalette": {
+  "dark": {
+   "opacity": 0,
+   "text": "default",
+   "tint": "default"
+  },
+  "light": {
+   "opacity": 0,
+   "text": "default",
+   "tint": "default"
+  }
+ },
+ "folders": {
+  "backColor": "default",
+  "color": "default",
+  "highlightColor": "#adc1da",
+  "highlightOpacity": 0.3007254464285714,
+  "outlineColor": "default"
+ },
+ "icon": {
+  "color": "default"
+ },
+ "name": "Modern"
+}

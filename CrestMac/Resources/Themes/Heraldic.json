@@ -1,0 +1,41 @@
+{
+ "background": {
+  "angle": 0,
+  "colors": [
+   "#3c0e1a",
+   "#722030",
+   "#c9a254"
+  ],
+  "intensity": 1,
+  "pattern": "chevron",
+  "readabilityFade": 0.45,
+  "sidebarSecondaryText": "default",
+  "sidebarText": "default",
+  "style": "banner",
+  "textColor": "automatic",
+  "texture": false
+ },
+ "commandPalette": {
+  "dark": {
+   "opacity": 0,
+   "text": "default",
+   "tint": "default"
+  },
+  "light": {
+   "opacity": 0,
+   "text": "default",
+   "tint": "default"
+  }
+ },
+ "folders": {
+  "backColor": "default",
+  "color": "default",
+  "highlightColor": "default",
+  "highlightOpacity": 0.12,
+  "outlineColor": "default"
+ },
+ "icon": {
+  "color": "default"
+ },
+ "name": "Heraldic"
+}
