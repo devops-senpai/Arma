@@ -60,16 +60,7 @@ extension TerminalThemeCommand {
             library.remove(entry.id)
             return TerminalOutput(text: "Deleted \(entry.name).")
         case .edit(let name, let spaceName, let look, let dark, let unpairDark):
-            let entry: BrowserThemeLibrary.Entry
-            if let name {
-                entry = try Self.entry(name, in: library)
-            } else {
-                let space = try terminal.space(spaceName)
-                guard let id = library.themeID(of: space.id), let worn = library.entry(id) else {
-                    throw .init("\(space.settings.name) uses no saved theme yet. Open its Appearance page once.")
-                }
-                entry = worn
-            }
+            let entry = try Self.entry(name, orWornBy: spaceName, in: library, terminal)
             var theme = entry.theme
             if unpairDark { theme.dark = nil }
             if var look {
@@ -86,6 +77,20 @@ extension TerminalThemeCommand {
             let wearers = library.spaces(wearing: entry.id, in: browser).map(\.settings.name)
             let reach = wearers.isEmpty ? "" : " Used by \(wearers.formatted(.list(type: .and)))."
             return TerminalOutput(text: "Changed \(entry.name).\(reach)")
+        case .reset(let sections, let name, let spaceName, let dark):
+            let entry = try Self.entry(name, orWornBy: spaceName, in: library, terminal)
+            var theme = entry.theme
+            let plain = CrestTheme(look: .neutral).sections
+            for section in sections {
+                if dark {
+                    theme.dark = theme.dark?.resetting(section, to: plain)
+                } else {
+                    theme.sections = theme.sections.resetting(section, to: plain)
+                }
+            }
+            library.edit(entry.id, in: browser) { $0 = theme }
+            let named = sections.map(\.rawValue).formatted(.list(type: .and))
+            return TerminalOutput(text: "Reset \(entry.name)'s \(named)\(dark ? " in its dark look" : "").")
         case .use(let name, let spaceName):
             let entry = try Self.entry(name, in: library)
             let space = try terminal.unlocked(try terminal.space(spaceName))
@@ -127,6 +132,20 @@ extension TerminalThemeCommand {
         if byID.count == 1 { return byID[0] }
         let names = library.entries.map(\.name).formatted(.list(type: .and))
         throw .init("There is no theme named '\(name)'. The themes are \(names).")
+    }
+
+    /// The saved theme `name` names, or the one the Space `spaceName` names,
+    /// or the shown Space, wears.
+    @MainActor
+    private static func entry(
+        _ name: String?, orWornBy spaceName: String?, in library: BrowserThemeLibrary, _ terminal: BrowserMacTerminal
+    ) throws(BrowserMacTerminal.Refusal) -> BrowserThemeLibrary.Entry {
+        if let name { return try entry(name, in: library) }
+        let space = try terminal.space(spaceName)
+        guard let id = library.themeID(of: space.id), let worn = library.entry(id) else {
+            throw .init("\(space.settings.name) uses no saved theme yet. Open its Appearance page once.")
+        }
+        return worn
     }
 
     /// Refuses a theme whose words or colors no look can wear.

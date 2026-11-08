@@ -55,7 +55,7 @@ $A crest set --space Work --shape banner --emblem crane --field-color "#1d2a44" 
 $A crest show --space Work                      # its parts, colors, and every name each part takes
 ```
 
-`arma theme` makes, edits and picks themes; `arma crest` shapes a Space's own crest or icon, whose colors no theme changes. The first form, `arma theme --space <name> [options]`, still changes a Space's look and so the theme it uses.
+`arma theme` makes, edits, resets and picks themes; `arma crest` shapes a Space's own crest or icon, whose colors no theme changes. To change one Space's look, edit the theme it uses with `arma theme edit --space <name>`, or give it another with `arma theme use`.
 
 A theme file is JSON with a section for each part of the look, and a theme can name only the parts it changes:
 
@@ -69,7 +69,7 @@ A theme file is JSON with a section for each part of the look, and a theme can n
 }
 ```
 
-Colors are `#RRGGBB` or `#RRGGBBAA`; the word `default` lets a chosen color go. A `"dark"` object with the same sections gives the Space its look for dark windows, and `--dark-from-file` applies a second theme file as that look. Run `arma theme help` and `arma crest help` to see every option.
+Colors are `#RRGGBB` or `#RRGGBBAA`; the word `default` lets a chosen color go. A `"dark"` object with the same sections gives the Space its look for dark windows, and `arma theme edit --dark --from-file` applies a second theme file as that look. Run `arma theme help` and `arma crest help` to see every option.
 
 ## Customize the browser around your Spaces
 

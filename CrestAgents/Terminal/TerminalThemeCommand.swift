@@ -20,6 +20,9 @@ enum TerminalThemeCommand: Codable, Sendable {
     /// `look`'s choices in its light look, or its dark look with `dark`, and
     /// its dark look taken away with `unpairDark`.
     case edit(theme: String?, space: String?, look: CrestTheme?, dark: Bool, unpairDark: Bool)
+    /// Puts `sections` of a theme, or of the one `space` wears, back to the
+    /// plain look, in its dark look with `dark`, for every Space wearing it.
+    case reset(sections: [CrestThemeSection], theme: String?, space: String?, dark: Bool)
     /// Has a Space, or the shown one, wear a theme.
     case use(theme: String, space: String?)
 }

@@ -4,13 +4,12 @@ import Foundation
 // arma, the helper that reaches the Crest it ships inside:
 //
 //   arma mcp
-//   arma theme --space <name> [options]
 //   arma <section> <action> [options]
 //
 // `mcp` speaks the Model Context Protocol over its standard streams for an
-// agent, and needs Crest running with agents turned on. `theme` dresses one
-// Space from the terminal, and the other sections (`TerminalCommandLine`)
-// manage Spaces, tabs and windows; they need only Crest running.
+// agent, and needs Crest running with agents turned on. The sections
+// (`TerminalCommandLine`) manage Spaces, tabs, windows, themes and the rest
+// of the running Crest; they need only Crest running.
 let arguments = Array(CommandLine.arguments.dropFirst())
 
 /// The `lane` socket of the Crest this helper ships inside, at
@@ -36,17 +35,6 @@ case "mcp":
         await endpoint.receive(line)
     }
     exit(0)
-// The first form of arma theme, which dressed one Space from options, reads
-// as it did; arma theme <action> is the theme section.
-case "theme" where arguments.dropFirst().first.map { $0.hasPrefix("--") && $0 != "--help" } == true:
-    let command: ThemeCommandLine
-    do {
-        command = try ThemeCommandLine(arguments: Array(arguments.dropFirst()))
-    } catch let problem as ThemeCommandLine.Problem {
-        FileHandle.standardError.write(Data((problem.message + "\n\n" + ThemeCommandLine.usage).utf8))
-        exit(64)
-    }
-    exit(await command.run(over: CommandAppLink(path: socketPath(lane: .commands))))
 default:
     exit(await TerminalCommandLine.run(arguments, over: CommandAppLink(path: socketPath(lane: .commands))))
 }

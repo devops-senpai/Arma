@@ -19,7 +19,7 @@ Arma is closed and served by the app when it runs.
 | `AgentLink.swift` | What the helper and the app say over the socket, one JSON object per line |
 | `AgentJSON.swift` | JSON values for arguments, results and schemas |
 | `AgentSocketLocation.swift` | The per-bundle-identifier Unix sockets in the person's Arma data, one lane for agents and one for commands; an isolated launch's carry its isolation name |
-| `CommandLink.swift` | What `arma theme`, the terminal sections and the app say over the commands socket |
+| `CommandLink.swift` | What the terminal sections and the app say over the commands socket |
 | `Terminal/TerminalCommand.swift` | `TerminalCommand`, one case per section, and the `TerminalOutput` a command answers as text and JSON |
 | `Terminal/Terminal*Command.swift` | One section's typed actions each: `space`, `tab`, `window`, `folder`, `split`, menu `command`, `page`, `extension`, `history`, `archive`, `download`, `settings`, `site`, `automation`, `theme` (the saved theme library) and `crest` (a Space's own crest or icon) |
 | `CrestTheme.swift` | A Space theme as a file: its sections, colors and dark look |

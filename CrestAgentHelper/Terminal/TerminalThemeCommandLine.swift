@@ -20,6 +20,9 @@ enum TerminalThemeCommandLine: TerminalSection {
           edit [<theme>] [--space <space>] [--dark] [--unpair-dark] [--from-file <path>]
                [look options]           change a theme, or the one a Space uses, and every
                                         Space using it; --dark edits its dark look
+          reset <section>... [<theme>] [--space <space>] [--dark]
+                                        put background, icon, folders, command-palette or
+                                        all back to the plain look
           use <theme> [--space <space>] have a Space, or the shown one, use a theme
 
         Look options:
@@ -90,6 +93,29 @@ enum TerminalThemeCommandLine: TerminalSection {
                 .edit(
                     theme: theme, space: space, look: look, dark: arguments.has("dark"),
                     unpairDark: arguments.has("unpair-dark")))
+        case "reset":
+            var sections: [CrestThemeSection] = []
+            var theme: String?
+            while let word = arguments.takeIfPresent() {
+                if word == "all" {
+                    sections = CrestThemeSection.allCases
+                } else if let section = CrestThemeSection(rawValue: word) {
+                    sections.append(section)
+                } else if theme == nil {
+                    theme = word
+                } else {
+                    throw TerminalArguments.Problem(message: "Unexpected '\(word)'.")
+                }
+            }
+            guard !sections.isEmpty else {
+                throw TerminalArguments.Problem(
+                    message: "Name a section: background, icon, folders, command-palette or all.")
+            }
+            guard theme != nil || arguments.option("space") != nil else {
+                throw TerminalArguments.Problem(message: "Name the theme, or a Space with --space.")
+            }
+            return .theme(
+                .reset(sections: sections, theme: theme, space: arguments.option("space"), dark: arguments.has("dark")))
         case "use", "pick":
             return .theme(.use(theme: try arguments.take("the theme"), space: arguments.option("space")))
         default:

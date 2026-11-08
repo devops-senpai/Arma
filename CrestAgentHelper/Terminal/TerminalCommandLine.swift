@@ -97,11 +97,6 @@ enum TerminalCommandLine {
             case .refused(let message):
                 write(message + "\n", toError: true)
                 return 1
-            case .applied(let summary):
-                write(summary + "\n", toError: false)
-                return 0
-            case .theme:
-                return 0
             }
         } catch let failure as CommandAppLink.Failure {
             write(failure.message + "\n", toError: true)
