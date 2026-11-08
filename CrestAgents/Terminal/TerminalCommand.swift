@@ -55,3 +55,17 @@ enum TerminalEngine: String, Codable, Sendable, CaseIterable {
     case webkit
     case servo
 }
+
+/// Where a row goes in the list it joins, as a person names it at the
+/// terminal with `--before`, `--after` or `--at`. A row is a tab, by
+/// `current` or its id, or a folder, by its path. Nothing named adds the row
+/// last.
+enum TerminalPlace: Codable, Sendable {
+    /// Before the row `row` names.
+    case before(row: String)
+    /// After the row `row` names.
+    case after(row: String)
+    /// At `position` in the list, counting its rows from 1; past the end,
+    /// last.
+    case at(position: Int)
+}

@@ -26,8 +26,8 @@ extension TerminalFolderCommand {
         switch self {
         case .list(let name):
             return try list(space: name, in: terminal)
-        case .create(let name, let spaceName, let parentPath, let open):
-            return try create(name, space: spaceName, inside: parentPath, open: open, in: terminal)
+        case .create(let name, let spaceName, let parentPath, let open, let place):
+            return try create(name, space: spaceName, inside: parentPath, open: open, place: place, in: terminal)
         case .rename(let path, let name, let spaceName):
             let space = try terminal.unlocked(try terminal.space(spaceName))
             let folder = try terminal.folder(path, in: space)
@@ -55,8 +55,11 @@ extension TerminalFolderCommand {
                 default: " Its \(tabs) tabs stay in the \(section) tabs."
                 }
             return TerminalOutput(text: "Deleted \(shown).\(kept) Any folders inside it move up one level.")
-        case .add(let references, let path, let spaceName):
-            return try add(references, to: path, space: spaceName, in: terminal)
+        case .move(let path, let spaceName, let parentPath, let top, let section, let place):
+            return try move(
+                path, space: spaceName, inside: parentPath, top: top, section: section, place: place, in: terminal)
+        case .add(let references, let path, let spaceName, let place):
+            return try add(references, to: path, space: spaceName, place: place, in: terminal)
         case .expand(let path, let spaceName, let expanded):
             let space = try terminal.unlocked(try terminal.space(spaceName))
             let folder = try terminal.folder(path, in: space)
@@ -123,7 +126,7 @@ extension TerminalFolderCommand {
 
     @MainActor
     private func create(
-        _ name: String, space spaceName: String?, inside parentPath: String?, open: Bool,
+        _ name: String, space spaceName: String?, inside parentPath: String?, open: Bool, place: TerminalPlace?,
         in terminal: BrowserMacTerminal
     ) throws(Refusal) -> TerminalOutput {
         let browser = terminal.browser
@@ -142,28 +145,76 @@ extension TerminalFolderCommand {
             location = open ? .current : .saved
         }
         let assignment = Self.assignment(of: space)
-        let made: UUID?
-        if location == .saved {
-            made = browser.addFolder(title: title, parentID: parent?.id, matching: assignment)
-        } else {
-            // A new folder starts saved; the open-tabs section takes it next.
-            made = browser.addFolder(title: title, matching: assignment)
-            if let made, !browser.moveFolder(made, matching: assignment, to: .current, into: parent?.id) {
-                browser.deleteFolder(made, matching: assignment)
-                throw Refusal("Arma could not make a folder there in the open tabs.")
-            }
-        }
-        guard let made, let folder = space.folders.model(made) else {
+        // A new folder starts last in the saved tabs, or in its saved parent;
+        // the open-tabs section, or the place named, takes it next.
+        let made = browser.addFolder(
+            title: title, parentID: location == .saved ? parent?.id : nil, matching: assignment)
+        guard let made else {
             throw Refusal("Arma could not make that folder; the Space may hold as many, or as deep, as it can.")
         }
+        if location == .current || place != nil {
+            let anchor = try terminal.anchor(
+                place, in: location.tabPlacement, folderID: parent?.id, of: space, moving: [made])
+            guard
+                browser.moveFolder(
+                    made, matching: assignment, to: location, into: parent?.id, before: anchor.beforeFolderID,
+                    beforeTabID: anchor.beforeTabID)
+            else {
+                browser.deleteFolder(made, matching: assignment)
+                throw Refusal("Arma could not make a folder there.")
+            }
+        }
+        guard let folder = space.folders.model(made) else { throw Refusal("Arma could not make that folder.") }
         let path = terminal.folderPath(folder, in: space).joined(separator: "/")
         return TerminalOutput(
             text: "Made \(path) in \(space.settings.name)'s \(Self.section(of: folder)) tabs.", value: ["folder": made])
     }
 
     @MainActor
+    private func move(
+        _ path: String, space spaceName: String?, inside parentPath: String?, top: Bool,
+        section: TerminalFolderSection?, place: TerminalPlace?, in terminal: BrowserMacTerminal
+    ) throws(Refusal) -> TerminalOutput {
+        let space = try terminal.unlocked(try terminal.space(spaceName))
+        let folder = try terminal.folder(path, in: space)
+        let shown = terminal.folderPath(folder, in: space).joined(separator: "/")
+        var parent: FolderStateModel?
+        if let parentPath { parent = try terminal.folder(parentPath, in: space) }
+        if parent?.id == folder.id { throw Refusal("A folder cannot move into itself.") }
+        // The section: the parent's, the one named, or the folder's own; a
+        // parent and a top level in the other section are not both possible.
+        let location: TabPlacement
+        if let parent {
+            location = parent.location
+            if let section, section.placement != location {
+                throw Refusal(
+                    "\(parentPath ?? "That folder") is in the \(Self.section(of: parent)) tabs; "
+                        + "leave out --\(section.rawValue).")
+            }
+        } else {
+            location = section?.placement ?? folder.location
+        }
+        // The parent: the one named, none at the top level or in another
+        // section, or the folder's own.
+        let parentID = parent?.id ?? (top || location != folder.location ? nil : folder.parentID)
+        let anchor = try terminal.anchor(place, in: location, folderID: parentID, of: space, moving: [folder.id])
+        guard
+            terminal.browser.moveFolder(
+                folder.id, matching: Self.assignment(of: space), to: location == .saved ? .saved : .current,
+                into: parentID,
+                before: anchor.beforeFolderID, beforeTabID: anchor.beforeTabID)
+        else { throw Refusal("Arma could not move \(shown) there; a folder never moves into one it holds.") }
+        if let parentID, let destination = space.folders.model(parentID) {
+            let into = terminal.folderPath(destination, in: space).joined(separator: "/")
+            return TerminalOutput(text: "Moved \(shown) into \(into).")
+        }
+        return TerminalOutput(text: "Moved \(shown) to the top of the \(location == .saved ? "saved" : "open") tabs.")
+    }
+
+    @MainActor
     private func add(
-        _ references: [String], to path: String, space spaceName: String?, in terminal: BrowserMacTerminal
+        _ references: [String], to path: String, space spaceName: String?, place: TerminalPlace?,
+        in terminal: BrowserMacTerminal
     ) throws(Refusal) -> TerminalOutput {
         var found: [BrowserMacTerminal.FoundTab] = []
         for reference in references { found.append(try terminal.tab(reference)) }
@@ -173,11 +224,11 @@ extension TerminalFolderCommand {
                 "\(other.tab.displayTitle) is in \(other.space.settings.name). Move it with arma tab move first.")
         }
         let folder = try terminal.folder(path, in: space)
-        guard
-            terminal.browser.fileTabs(
-                found.map(\.tab.id), matching: Self.assignment(of: space), into: folder.id,
-                location: folder.location == .saved ? .saved : .current)
-        else { throw Refusal("Arma could not put those tabs in \(path).") }
+        let tabs = found.map(\.tab.id)
+        let anchor = try terminal.anchor(place, in: folder.location, folderID: folder.id, of: space, moving: Set(tabs))
+        guard terminal.file(tabs, in: space, placement: folder.location, folderID: folder.id, anchor: anchor) else {
+            throw Refusal("Arma could not put those tabs in \(path).")
+        }
         let shown = terminal.folderPath(folder, in: space).joined(separator: "/")
         let what = found.count == 1 ? found[0].tab.displayTitle : "\(found.count) tabs"
         return TerminalOutput(text: "Filed \(what) into \(shown).")
@@ -194,5 +245,12 @@ extension TerminalFolderCommand {
     @MainActor
     private static func assignment(of space: SpaceModel) -> BrowserSpaceRuntimeAssignment {
         BrowserSpaceRuntimeAssignment(spaceID: space.id, profileID: space.profileID)
+    }
+}
+
+extension TerminalFolderSection {
+    /// The section of the sidebar this names.
+    var placement: TabPlacement {
+        self == .saved ? .saved : .current
     }
 }

@@ -89,6 +89,22 @@ struct TerminalArguments {
         return value
     }
 
+    /// Where `--before`, `--after` or `--at` puts a row, or nil to add it
+    /// last.
+    func place() throws(Problem) -> TerminalPlace? {
+        var places: [TerminalPlace] = []
+        if let row = options["before"] { places.append(.before(row: row)) }
+        if let row = options["after"] { places.append(.after(row: row)) }
+        if let text = options["at"] {
+            guard let position = Int(text), position >= 1 else {
+                throw Problem(message: "--at counts the list's rows from 1, not '\(text)'.")
+            }
+            places.append(.at(position: position))
+        }
+        guard places.count <= 1 else { throw Problem(message: "Give one of --before, --after and --at.") }
+        return places.first
+    }
+
     /// `text` as a number, named `name` in a problem.
     static func number(_ text: String, for name: String) throws(Problem) -> Double {
         guard let value = Double(text) else { throw Problem(message: "\(name) is a number, not '\(text)'.") }

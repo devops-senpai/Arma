@@ -27,8 +27,10 @@ extension TerminalTabCommand {
         switch self {
         case .list(let space, let folder, let loadedOnly):
             return try list(space: space, folder: folder, loadedOnly: loadedOnly, in: terminal)
-        case .open(let url, let space, let engine, let background):
-            return try open(Self.address(url), space: space, engine: engine, background: background, in: terminal)
+        case .open(let url, let space, let engine, let background, let section, let folder, let place, let title):
+            return try open(
+                Self.address(url), space: space, engine: engine, background: background, section: section,
+                folder: folder, place: place, title: title, in: terminal)
         case .close(let reference):
             return try await close(try terminal.tab(reference), in: terminal)
         case .show(let reference):
@@ -70,14 +72,14 @@ extension TerminalTabCommand {
                 throw Refusal("Arma could not move that page to \(engine.rawValue).")
             }
             return TerminalOutput(text: "Moved \(found.tab.displayTitle) to \(engine.rawValue).")
-        case .move(let reference, let spaceName, let folderPath):
-            return try move(try terminal.tab(reference), to: spaceName, folder: folderPath, in: terminal)
-        case .pin(let reference):
-            return try place(try terminal.tab(reference), .pinned, "Pinned", in: terminal)
-        case .save(let reference):
-            return try place(try terminal.tab(reference), .saved, "Saved", in: terminal)
-        case .unpin(let reference):
-            return try place(try terminal.tab(reference), .current, "Made an open tab of", in: terminal)
+        case .move(let reference, let spaceName, let folderPath, let place):
+            return try move(try terminal.tab(reference), to: spaceName, folder: folderPath, place: place, in: terminal)
+        case .pin(let reference, let place):
+            return try self.place(try terminal.tab(reference), .pinned, place, "Pinned", in: terminal)
+        case .save(let reference, let place):
+            return try self.place(try terminal.tab(reference), .saved, place, "Saved", in: terminal)
+        case .unpin(let reference, let place):
+            return try self.place(try terminal.tab(reference), .current, place, "Made an open tab of", in: terminal)
         case .duplicate(let reference):
             let found = try terminal.tab(reference)
             guard let copy = browser.duplicateTab(found.tab.id, in: found.space.id) else {
@@ -156,11 +158,15 @@ extension TerminalTabCommand {
 
     @MainActor
     private func open(
-        _ url: URL, space name: String?, engine: TerminalEngine?, background: Bool, in terminal: BrowserMacTerminal
+        _ url: URL, space name: String?, engine: TerminalEngine?, background: Bool, section: TerminalTabSection?,
+        folder path: String?, place: TerminalPlace?, title: String?, in terminal: BrowserMacTerminal
     ) throws(Refusal) -> TerminalOutput {
         guard let name else {
             guard engine == nil else {
                 throw Refusal("--engine needs --space; a Quick Window opens in its Space's engine.")
+            }
+            guard section == nil, path == nil, place == nil, title == nil else {
+                throw Refusal("A place in the sidebar needs --space; a Quick Window's Space menu picks the Space.")
             }
             let space = try terminal.space(nil)
             let request = BrowserQuickWindowRequest(
@@ -175,10 +181,30 @@ extension TerminalTabCommand {
         let window = terminal.frontWindow(over: space)
         let shows = !background && window != nil
         let browser = window?.browser ?? terminal.browser
+        // Where the tab goes is settled before it opens, so a refusal leaves
+        // nothing behind; the core places it among the open tabs first, as a
+        // link would, and then where the words say.
+        var placement = TabPlacement.current
+        var folder: FolderStateModel?
+        if let path {
+            folder = try terminal.folder(path, in: space)
+            placement = folder?.location ?? .current
+        } else if let section {
+            placement = section == .pinned ? .pinned : .saved
+        }
+        let anchor = try terminal.anchor(place, in: placement, folderID: folder?.id, of: space)
         guard let tabID = browser.openNewTab(url: url, in: space.id, selecting: shows),
             let tab = space.tabs.model(tabID)
         else { throw Refusal("Arma could not open a tab in \(space.settings.name).") }
         var notes: [String] = []
+        if placement != .current || folder != nil || place != nil,
+            !terminal.file([tabID], in: space, placement: placement, folderID: folder?.id, anchor: anchor)
+        {
+            notes.append("It stayed among the open tabs; Arma could not put it where you asked.")
+        }
+        if let title, !browser.renameSessionTab(title, tabID: tabID, in: space.id) {
+            notes.append("It kept its page's title; Arma could not rename it.")
+        }
         if let engine {
             let page = try terminal.page(of: BrowserMacTerminal.FoundTab(space: space, tab: tab))
             let kind = Self.kind(of: engine)
@@ -225,39 +251,47 @@ extension TerminalTabCommand {
 
     @MainActor
     private func move(
-        _ found: BrowserMacTerminal.FoundTab, to spaceName: String?, folder path: String?,
+        _ found: BrowserMacTerminal.FoundTab, to spaceName: String?, folder path: String?, place: TerminalPlace?,
         in terminal: BrowserMacTerminal
     ) throws(Refusal) -> TerminalOutput {
         var destination = found.space
         if let spaceName { destination = try terminal.unlocked(try terminal.space(spaceName)) }
+        var folder: FolderStateModel?
+        if let path { folder = try terminal.folder(path, in: destination) }
         if destination.id != found.space.id {
             guard terminal.browser.moveTab(found.tab.id, from: found.space.id, into: destination.id) else {
                 throw Refusal("Arma could not move that tab to \(destination.settings.name).")
             }
         }
-        guard let path else {
+        guard folder != nil || place != nil else {
             return TerminalOutput(text: "Moved \(found.tab.displayTitle) to \(destination.settings.name).")
         }
-        let folder = try terminal.folder(path, in: destination)
-        let assignment = BrowserSpaceRuntimeAssignment(spaceID: destination.id, profileID: destination.profileID)
-        guard
-            terminal.browser.fileTabs(
-                [found.tab.id], matching: assignment, into: folder.id,
-                location: folder.location == .saved ? .saved : .current)
-        else { throw Refusal("Arma could not put that tab in \(path).") }
+        // The list the tab lands in: the folder named, or the one the tab is
+        // in now, which a move to another Space may have changed.
+        guard let tab = destination.tabs.model(found.tab.id) else {
+            throw Refusal("Arma lost track of that tab after moving it.")
+        }
+        let placement = folder?.location ?? tab.placement
+        let folderID = folder?.id ?? tab.folderID
+        let anchor = try terminal.anchor(place, in: placement, folderID: folderID, of: destination, moving: [tab.id])
+        guard terminal.file([tab.id], in: destination, placement: placement, folderID: folderID, anchor: anchor) else {
+            throw Refusal("Arma could not move that tab there.")
+        }
+        guard let folder else { return TerminalOutput(text: "Moved \(found.tab.displayTitle).") }
         let shown = terminal.folderPath(folder, in: destination).joined(separator: "/")
         return TerminalOutput(text: "Moved \(found.tab.displayTitle) into \(shown).")
     }
 
     @MainActor
     private func place(
-        _ found: BrowserMacTerminal.FoundTab, _ placement: TabPlacement, _ verb: String,
+        _ found: BrowserMacTerminal.FoundTab, _ placement: TabPlacement, _ place: TerminalPlace?, _ verb: String,
         in terminal: BrowserMacTerminal
     ) throws(Refusal) -> TerminalOutput {
-        guard found.tab.placement != placement || found.tab.folderID != nil else {
+        guard found.tab.placement != placement || found.tab.folderID != nil || place != nil else {
             return TerminalOutput(text: "\(found.tab.displayTitle) is already \(placement.name).")
         }
-        guard terminal.browser.moveSessionTab(found.tab.id, in: found.space.id, to: placement) else {
+        let anchor = try terminal.anchor(place, in: placement, folderID: nil, of: found.space, moving: [found.tab.id])
+        guard terminal.file([found.tab.id], in: found.space, placement: placement, folderID: nil, anchor: anchor) else {
             throw Refusal("Arma could not move that tab.")
         }
         return TerminalOutput(text: "\(verb) \(found.tab.displayTitle).")

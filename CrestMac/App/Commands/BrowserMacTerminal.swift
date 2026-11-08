@@ -24,6 +24,15 @@ final class BrowserMacTerminal {
         let tab: TabStateModel
     }
 
+    /// Where a row lands in a list of the sidebar: before the tab or the
+    /// folder named, as the core takes an anchor, or last with neither.
+    struct RowAnchor {
+        static let last = RowAnchor(beforeTabID: nil, beforeFolderID: nil)
+
+        let beforeTabID: UUID?
+        let beforeFolderID: UUID?
+    }
+
     // MARK: - Variables
 
     unowned let application: BrowserMacApplication
@@ -193,6 +202,84 @@ final class BrowserMacTerminal {
             throw Refusal("Arma could not give that tab a page.")
         }
         return page
+    }
+
+    // MARK: - Actions - Rows
+
+    /// Where `place` puts a row in one list of `space`'s sidebar: the top
+    /// level of `placement`'s section, or the inside of folder `folderID` in
+    /// it. The rows of `moving` are left out of the count, so a row names its
+    /// place among the others. A tab or a folder named must be in that list.
+    func anchor(
+        _ place: TerminalPlace?, in placement: TabPlacement, folderID: UUID?, of space: SpaceModel,
+        moving: Set<UUID> = []
+    ) throws(Refusal) -> RowAnchor {
+        guard let place else { return .last }
+        let list = folderID.map { space.sidebar.inside($0) } ?? space.sidebar.section(placement)
+        let rows = list.rows.filter { row in
+            !moving.contains(row.id) && !(row.kind.groupsTabs && row.members.allSatisfy(moving.contains))
+        }
+        let listName =
+            folderID.flatMap { space.folders.model($0) }.map { folderPath($0, in: space).joined(separator: "/") }
+            ?? "the \(placement == .current ? "open" : placement.name) tabs"
+        switch place {
+        case .at(let position):
+            guard position - 1 < rows.count else { return .last }
+            return anchor(of: rows[position - 1], in: space, moving: moving)
+        case .before(let reference):
+            return anchor(of: try row(reference, among: rows, in: space, listName: listName), in: space, moving: moving)
+        case .after(let reference):
+            let found = try row(reference, among: rows, in: space, listName: listName)
+            guard let index = rows.firstIndex(of: found), index + 1 < rows.count else { return .last }
+            return anchor(of: rows[index + 1], in: space, moving: moving)
+        }
+    }
+
+    /// The row `reference` names among `rows`: a tab, by `current` or its
+    /// id, or a folder, by its path.
+    private func row(
+        _ reference: String, among rows: [SidebarRow], in space: SpaceModel, listName: String
+    ) throws(Refusal) -> SidebarRow {
+        let wanted = reference.trimmingCharacters(in: .whitespaces)
+        let found: SidebarRow?
+        if wanted.lowercased() == "current" || wanted.allSatisfy({ $0.isHexDigit || $0 == "-" }) {
+            let tab = try tab(wanted)
+            found = rows.first { $0.id == tab.tab.id || $0.members.contains(tab.tab.id) }
+        } else {
+            let folder = try folder(wanted, in: space)
+            found = rows.first { $0.id == folder.id }
+        }
+        guard let found else { throw Refusal("'\(reference)' is not in \(listName).") }
+        return found
+    }
+
+    /// The anchor the core takes for landing before `row`: a folder row
+    /// anchors on itself and on its first tab, as a drop in the sidebar does,
+    /// and a tab or split row on its first tab that is not moving.
+    private func anchor(of row: SidebarRow, in space: SpaceModel, moving: Set<UUID>) -> RowAnchor {
+        if row.kind.opensList {
+            return RowAnchor(
+                beforeTabID: space.tabIDs(inFolder: row.id).first { !moving.contains($0) }, beforeFolderID: row.id)
+        }
+        return RowAnchor(beforeTabID: row.members.first { !moving.contains($0) }, beforeFolderID: nil)
+    }
+
+    /// Puts `tabs` of `space` in `placement`'s section, in folder `folderID`
+    /// there, where `anchor` says, as a drop in the sidebar would: the core
+    /// files them together in a section that holds folders, and moves them
+    /// one by one into the pinned tabs, which hold none.
+    func file(
+        _ tabs: [UUID], in space: SpaceModel, placement: TabPlacement, folderID: UUID?, anchor: RowAnchor
+    ) -> Bool {
+        guard placement.holdsFolders else {
+            return tabs.allSatisfy {
+                browser.moveSessionTab($0, in: space.id, to: placement, before: anchor.beforeTabID)
+            }
+        }
+        return browser.fileTabs(
+            tabs, matching: BrowserSpaceRuntimeAssignment(spaceID: space.id, profileID: space.profileID),
+            into: folderID, location: placement == .saved ? .saved : .current, before: anchor.beforeTabID,
+            beforeFolderID: anchor.beforeFolderID)
     }
 
     // MARK: - Actions - Windows
