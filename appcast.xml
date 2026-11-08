@@ -6,6 +6,23 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.257</title>
+            <pubDate>Sat, 07 Nov 2026 23:55:59 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>800257</sparkle:version>
+            <sparkle:shortVersionString>0.8.257</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### From Crest 0.8.195
+- Links on Facebook, and other links with brackets in their address, open in Peek instead of a blank page or an error page.
+- The sidebar's rows, Space header and Space pages slide with the card when you switch Space, and choosing a Space further than next door plays one slide instead of running past the Spaces between.
+- The sidebar floating over the page comes out once the pointer has rested on the window's edge for a moment, stays out while the pointer is past the window on its side, and has the docked sidebar's resize handle on its edge.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.257/Arma-0.8.257.dmg" length="192712779" type="application/octet-stream" sparkle:edSignature="afXKqrPZ95OR8grU4H2w6jZFUPzOsZ7SQV5D+DS3OSXj/EmXAH3C92wMtoAD4RxPYVDcA65UMCR9SQyCj04GBg=="/>
+        </item>
+        <item>
             <title>0.8.256</title>
             <pubDate>Fri, 06 Nov 2026 22:47:38 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -290,6 +307,6 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: Y0NRJuqiNDEwSEw7JMm76gLKNzlGJzBZlix6fV6t+/QZwZ22MewZ/NXHBy22XpXKsO4M0MNlzf/01NpJMUMfDw==
-length: 20842
+edSignature: KnI2a51EA6YAKVzQY+HsW6TahWqHkB/pdoPYoeUbtazsKr7rUJWpza4UrmamZwaLprU8TX/EKnwZgTq9C1V4BA==
+length: 22261
 -->
