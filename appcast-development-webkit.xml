@@ -6,6 +6,28 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.259</title>
+            <pubDate>Sun, 08 Nov 2026 12:31:56 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>800259</sparkle:version>
+            <sparkle:shortVersionString>0.8.259</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### Terminal
+- `arma tab open` places a new tab as it opens: `--pinned` or `--saved`, `--folder <path>`, and `--title` for a name of your own.
+- Tab and folder actions take a place in the list: `--before <row>`, `--after <row>` or `--at <n>`, where a row is a tab or a folder. `arma tab move`, `pin`, `save` and `unpin`, and `arma folder create` and `add` all take one.
+- `arma folder move` moves a folder, with everything in it, into another folder, to the top level, or between the saved and open tabs.
+- `arma theme` has one form. `arma theme edit --space <name>` changes the theme a Space uses, `arma theme use` gives it another, and `arma theme reset` puts a theme's background, icon, folders or command palette back to the plain look. The old `arma theme --space <name> [flags]` form is gone.
+
+### Fixed
+- A tab filed into an empty folder joins the folder where it is, instead of carrying the folder to the end of its section. This also covers dropping a tab into an empty folder in the sidebar.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.259/Arma-0.8.259.dmg" length="192721734" type="application/octet-stream" sparkle:edSignature="1dRUr29IMlG1kogiGr0nXvFsJqqjgcWN3sI4UpllGMGZKtCPbVYPuXe4yrATB3K7t0vq8ex6bc3/hYLqGDMCDA=="/>
+        </item>
+        <item>
             <title>0.8.257</title>
             <pubDate>Sat, 07 Nov 2026 23:56:11 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -322,6 +344,6 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: fvF5New6J4I+bfUS/721NdJm+oSqdttJSrOZrR91Z8zU/hhzpjyzu6Cq/iPnC4WeHRckARzuHYbFZ33qkC+uDg==
-length: 23146
+edSignature: fssonqXJb7zD3ca636TS8qRF4m2wmDjsN09YGzBdbDUZ692aPOMdKkkfTZXJyIYzMkqxtlCbrozlDizxjDyjCw==
+length: 25055
 -->
