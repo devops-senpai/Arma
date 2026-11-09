@@ -32,7 +32,7 @@ public sealed record OpenPage(Guid PageId, Guid WorkspaceId, Guid SpaceId, Guid?
         var tab = space.Tabs.FirstOrDefault(held => held.Id == TabId);
         var opener = pages.Opener(OpenerPageId, WorkspaceId, space);
         var history = TabId is { } kept && opener is null ? pages.KeptHistory(WorkspaceId, space, kept) : null;
-        var engine = (history?.History.Engine is { } shown ? pages.Engines.Registered(shown) : null) ?? pages.Opening(space, tab, opener)
+        var engine = (history?.History.Engine is { } shown ? pages.Engines.Serving(shown) : null) ?? pages.Opening(space, tab, opener)
             ?? throw new Rejected(new EngineNotRegistered());
         var page = new Page(PageId, engine, space.ProfileId, WorkspaceId, space.Id, TabId, WindowId, Transient,
             openedByPage: opener is not null);
