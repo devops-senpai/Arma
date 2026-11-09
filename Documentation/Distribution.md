@@ -16,7 +16,7 @@ thus it is still updated through Sparkle 2.
 
 Arma 0.8 opens the release line with `MARKETING_VERSION = 0.8.0` and stable
 tag `v0.8.0`. User-facing release copy calls it Arma 0.8. Mac requires Apple
-silicon and macOS 26.1 or later; iPhone and iPad remain WebKit apps with 26.1
+silicon and macOS 15.2 or later; iPhone and iPad remain WebKit apps with 26.1
 deployment targets. The packaged Mac app and Sparkle feed take the higher
 minimum macOS version required by the engine and the native UI framework.
 
