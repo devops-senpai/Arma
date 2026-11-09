@@ -89,7 +89,11 @@ extension BrowserPageOwner {
         else { return }
         hostAdoptedPage(
             opened, as: BrowserPageTab(tab, images: browser.core.state.favicons), in: space, shows: adopted.shows)
-        if !adopted.shows { browser.interactionObserver?.browserDidOpenBackgroundTab() }
+        if !adopted.shows {
+            browser.interactionObserver?.browserDidOpenBackgroundTab { [weak browser] in
+                browser?.showTab(adopted.tabID, in: adopted.spaceID)
+            }
+        }
     }
 }
 
