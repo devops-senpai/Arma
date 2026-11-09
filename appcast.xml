@@ -6,6 +6,24 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.277</title>
+            <pubDate>Mon, 09 Nov 2026 15:18:33 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>800277</sparkle:version>
+            <sparkle:shortVersionString>0.8.277</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### Fixed
+- `arma tab open --engine` opens the page in the engine you name, instead of leaving it in the default one.
+
+### New
+- The repository carries skills for coding agents under `skills/`: setting Arma up, everyday use, the `arma` command line, themes, agent browsing and power-user settings.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.277/Arma-0.8.277.dmg" length="194183260" type="application/octet-stream" sparkle:edSignature="SOy15eGrimpKxIorwvph9aai1gEa8mShiu8k0JHIEgz5vDRiUTfQcbkjy9r8sP2gf/PoEQCeNRAmrwszKnb5CQ=="/>
+        </item>
+        <item>
             <title>0.8.275</title>
             <pubDate>Mon, 09 Nov 2026 13:13:49 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -373,6 +391,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: tn5JdtaVO9O5O8ryTi4Jhm0GSWVM98vIlwf7nWfW0AiIsdO9sOMUp16Xzx/CpNEo/ePUO7am+aXnK92WGXcTDw==
-length: 27655
+edSignature: M9QXCj20Kga2zwF8Nav/V62SbiRxlsuMdB8qKcnzRrCxHwDbbHdPQHwSiI3ET4ycxUiSP8NaNgWF3BE/3Xh8Dw==
+length: 28801
 -->
