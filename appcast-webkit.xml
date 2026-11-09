@@ -6,6 +6,24 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.275</title>
+            <pubDate>Mon, 09 Nov 2026 13:13:59 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>800275</sparkle:version>
+            <sparkle:shortVersionString>0.8.275</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Arma for Mac now needs macOS 15.2 instead of macOS 26.1.
+
+### New
+- Arma for Mac runs on macOS 15.2 and later. This is the first build for macOS 15 and it has not been tried on a Mac running macOS 15 yet, so please report anything that looks or works wrong there.
+- On macOS 15, glass surfaces such as notices, the command palette and the element picker are drawn with a system material, and a page is translated when you ask rather than on its own.
+
+Nothing changes on macOS 26 and later.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.275/Arma-0.8.275.dmg" length="194178525" type="application/octet-stream" sparkle:edSignature="GGGpbXMa9WUc0uhpEfGVqRUML3KzYR2SRJQZp7cWAL1llwfe3brkjQyEy5sUVGft+Os/FLcEPeyw7NDOWzyfCw=="/>
+        </item>
+        <item>
             <title>0.8.274</title>
             <pubDate>Mon, 09 Nov 2026 00:34:32 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -355,6 +373,6 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: 01YQAQjQ1ODsst97ozozVHgFLkeeRzhkWfEX4qa8k8sdF1EU8srniE/X3/FWYZejlK6X9jyKeess1tQokon0Aw==
-length: 26318
+edSignature: Bf03VMo4B1v2cyI3gx+vYvL/Hp9Geu5+u5AOKNCwJkaKEOtpYGngBRE0+wfac149tFfoRXwbOM8qECXGXwnDDw==
+length: 27655
 -->
