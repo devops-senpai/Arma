@@ -19,9 +19,10 @@ extension MobileBrowserTransientOverlayModel {
             },
             BrowserPeekLinkMenuItem(title: String(localized: "Share…"), systemImage: "square.and.arrow.up") {
                 [weak self] in
-                guard let url = self?.linkURL else { return }
+                guard let self, let url = linkURL else { return }
                 MobileBrowserDialogPresenter.present(
-                    UIActivityViewController(activityItems: [url], applicationActivities: nil), fallback: {})
+                    UIActivityViewController(activityItems: [url], applicationActivities: nil),
+                    in: page?.webView.window, fallback: {})
             },
             BrowserPeekLinkMenuItem(
                 title: String(localized: "Download Linked File"), systemImage: "arrow.down.circle"
