@@ -119,6 +119,18 @@ struct CrestTheme: Codable, Equatable, Sendable {
             background == nil && icon == nil && folders == nil && commandPalette == nil
         }
 
+        /// These sections with `section` as `other` has it, the rest kept.
+        func resetting(_ section: CrestThemeSection, to other: Sections) -> Sections {
+            var reset = self
+            switch section {
+            case .background: reset.background = other.background
+            case .icon: reset.icon = other.icon
+            case .folders: reset.folders = other.folders
+            case .commandPalette: reset.commandPalette = other.commandPalette
+            }
+            return reset
+        }
+
         /// These sections with every field `other` names taking over.
         func merging(_ other: Sections) -> Sections {
             var merged = self
