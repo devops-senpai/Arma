@@ -15,7 +15,9 @@ internal static partial class StoredSessionCodec {
         new(DataRetention.Forever, DataRetention.Forever, DataRetention.Forever));
 
     /// What a Space that stored no credential preferences offers.
-    internal static CredentialPreferences DefaultCredentialPreferences { get; } = new(true, true, false);
+    internal static CredentialPreferences DefaultCredentialPreferences { get; } =
+        new(true, true, false, CredentialPreferences.DefaultSavePromptSeconds, [], CredentialAuthentication.Never,
+            SuggestsInPrivateWindows: false, PasswordGeneration.Default, AllowsCommandLine: false);
 
     #endregion
 
@@ -97,18 +99,82 @@ internal static partial class StoredSessionCodec {
 
     #region Actions - Credential preferences
 
+    /// A Space's credential preferences. A Space an older release stored keeps
+    /// the default prompt time, generation and no never-saved sites; a site
+    /// that no longer reads as one is left out. A test build kept never-saved
+    /// sites among `passwordSites`, marked `neverSaves`, and they read as
+    /// never-saved sites too.
     internal static CredentialPreferences DecodeCredentialPreferences(JsonNode? node) {
         var value = Object(node);
-        return new(Flag(value[Key.IsEnabled]) ?? DefaultCredentialPreferences.IsEnabled,
+        NeverSavedSite[] neverSaved = [.. Items(value[Key.NeverSavedSites]).OfType<JsonObject>()
+            .Concat(Items(value[Key.PasswordSites]).OfType<JsonObject>().Where(site => TolerantFlag(site[Key.NeverSaves]) == true))
+            .Select(DecodeNeverSavedSite).OfType<NeverSavedSite>()];
+        return new CredentialPreferences(Flag(value[Key.IsEnabled]) ?? DefaultCredentialPreferences.IsEnabled,
             Flag(value[Key.SyncsCrestPasswordsWithICloud]) ?? DefaultCredentialPreferences.SyncsCrestPasswordsWithICloud,
-            Flag(value[Key.AlsoOffersSaveToSystemPasswords]) ?? DefaultCredentialPreferences.AlsoOffersSaveToSystemPasswords);
+            Flag(value[Key.AlsoOffersSaveToSystemPasswords]) ?? DefaultCredentialPreferences.AlsoOffersSaveToSystemPasswords,
+            Integer(value[Key.SavePromptSeconds]) ?? DefaultCredentialPreferences.SavePromptSeconds,
+            neverSaved,
+            CredentialAuthentication.Named(TolerantText(value[Key.Authentication])) ?? DefaultCredentialPreferences.Authentication,
+            TolerantFlag(value[Key.SuggestsInPrivateWindows]) ?? DefaultCredentialPreferences.SuggestsInPrivateWindows,
+            DecodePasswordGeneration(value[Key.Generation]),
+            TolerantFlag(value[Key.AllowsCommandLine]) ?? DefaultCredentialPreferences.AllowsCommandLine)
+            .Kept();
     }
 
-    internal static JsonObject Encode(CredentialPreferences preferences) => new() {
-        [Key.IsEnabled] = preferences.IsEnabled,
-        [Key.SyncsCrestPasswordsWithICloud] = preferences.SyncsCrestPasswordsWithICloud,
-        [Key.AlsoOffersSaveToSystemPasswords] = preferences.AlsoOffersSaveToSystemPasswords
-    };
+    /// A Space's credential preferences, writing the prompt's time, how often
+    /// it asks to authenticate and the never-saved sites only when they differ
+    /// from their defaults, so a
+    /// Space that kept them is stored exactly as an older release stored it.
+    internal static JsonObject Encode(CredentialPreferences preferences) {
+        var value = new JsonObject {
+            [Key.IsEnabled] = preferences.IsEnabled,
+            [Key.SyncsCrestPasswordsWithICloud] = preferences.SyncsCrestPasswordsWithICloud,
+            [Key.AlsoOffersSaveToSystemPasswords] = preferences.AlsoOffersSaveToSystemPasswords
+        };
+        if (preferences.SavePromptSeconds != DefaultCredentialPreferences.SavePromptSeconds)
+            value[Key.SavePromptSeconds] = preferences.SavePromptSeconds;
+        if (preferences.Authentication != DefaultCredentialPreferences.Authentication)
+            value[Key.Authentication] = preferences.Authentication.Name;
+        if (preferences.SuggestsInPrivateWindows != DefaultCredentialPreferences.SuggestsInPrivateWindows)
+            value[Key.SuggestsInPrivateWindows] = preferences.SuggestsInPrivateWindows;
+        if (preferences.AllowsCommandLine != DefaultCredentialPreferences.AllowsCommandLine)
+            value[Key.AllowsCommandLine] = preferences.AllowsCommandLine;
+        if (preferences.Generation != DefaultCredentialPreferences.Generation)
+            value[Key.Generation] = new JsonObject {
+                [Key.Length] = preferences.Generation.Length,
+                [Key.Lowercase] = preferences.Generation.Lowercase,
+                [Key.Uppercase] = preferences.Generation.Uppercase,
+                [Key.Numbers] = preferences.Generation.Numbers,
+                [Key.Symbols] = preferences.Generation.Symbols
+            };
+        if (preferences.NeverSavedSites.Count > 0)
+            value[Key.NeverSavedSites] = new JsonArray([.. preferences.NeverSavedSites.Select(site => (JsonNode)new JsonObject {
+                [Key.Host] = site.Host,
+                [Key.IncludesSubdomains] = site.IncludesSubdomains
+            })]);
+        return value;
+    }
+
+    /// A stored site, or nil when it no longer reads as one, including one
+    /// that would reach the subdomains of what is now a public suffix.
+    private static NeverSavedSite? DecodeNeverSavedSite(JsonObject value) {
+        if (TolerantText(value[Key.Host]) is not { } host) return null;
+        try {
+            return NeverSavedSite.Reading(host, TolerantFlag(value[Key.IncludesSubdomains]) ?? false);
+        } catch (Rejected) {
+            return null;
+        }
+    }
+
+    /// A Space's password generation, or the default where it stored none; a
+    /// stored length out of range is brought within it.
+    private static PasswordGeneration DecodePasswordGeneration(JsonNode? node) {
+        var defaults = PasswordGeneration.Default;
+        if (node is not JsonObject value) return defaults;
+        return new PasswordGeneration(Integer(value[Key.Length]) ?? defaults.Length,
+            TolerantFlag(value[Key.Lowercase]) ?? defaults.Lowercase, TolerantFlag(value[Key.Uppercase]) ?? defaults.Uppercase,
+            TolerantFlag(value[Key.Numbers]) ?? defaults.Numbers, TolerantFlag(value[Key.Symbols]) ?? defaults.Symbols).Kept();
+    }
 
     #endregion
 

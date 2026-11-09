@@ -9,15 +9,15 @@ public sealed class CredentialCaptureEvent {
     #region Static Variables
 
     public static readonly CredentialCaptureEvent Username = new(name: "username", decide: RememberUsername);
-    public static readonly CredentialCaptureEvent Focus = new(name: "focus", decide: (facts, accepted, hint, _, now) => {
+    public static readonly CredentialCaptureEvent Focus = new(name: "focus", decide: (facts, accepted, _, hint, _, now) => {
         if (facts.PasswordKind is null) return CredentialCaptureDecision.For(CredentialCaptureAction.DismissFill);
         if (!accepted || !facts.HasFormId || !facts.HasFillTarget) return CredentialCaptureDecision.For(CredentialCaptureAction.Ignore);
         var source = UsernameSource(facts, hint, now);
         return CredentialCaptureDecision.For(CredentialCaptureAction.OfferFill, source, source == CredentialUsernameSource.None,
             facts.FrameOrigin != facts.TopLevelOrigin, facts.IsMainFrame);
     });
-    public static readonly CredentialCaptureEvent Submit = new(name: "submit", decide: (facts, accepted, hint, _, now) => {
-        if (!accepted) return CredentialCaptureDecision.For(CredentialCaptureAction.Ignore);
+    public static readonly CredentialCaptureEvent Submit = new(name: "submit", decide: (facts, accepted, offersSave, hint, _, now) => {
+        if (!accepted || !offersSave) return CredentialCaptureDecision.For(CredentialCaptureAction.Ignore);
         var source = UsernameSource(facts, hint, now);
         if (source == CredentialUsernameSource.None)
             return CredentialCaptureDecision.For(CredentialCaptureAction.Ignore, clearsUsernameHint: true);
@@ -25,7 +25,7 @@ public sealed class CredentialCaptureEvent {
         return CredentialCaptureDecision.For(CredentialCaptureAction.CaptureCandidate, source,
             isCrossOriginFrame: facts.FrameOrigin != facts.TopLevelOrigin);
     });
-    public static readonly CredentialCaptureEvent DocumentState = new(name: "documentState", decide: (facts, _, _, pending, now) => {
+    public static readonly CredentialCaptureEvent DocumentState = new(name: "documentState", decide: (facts, _, _, _, pending, now) => {
         if (pending is null || facts.HasVisiblePasswordField is not { } visible
             || !facts.IsMainFrame && facts.FrameOrigin != pending.Origin.Validated())
             return CredentialCaptureDecision.For(CredentialCaptureAction.Ignore);
@@ -46,9 +46,10 @@ public sealed class CredentialCaptureEvent {
     public string Name { get; }
 
     /// What the observation means, given its facts, whether its frame and
-    /// top-level page are secure, the page's remembered username, its pending
-    /// candidate and the time now.
-    private readonly Func<CredentialFormFacts, bool, CredentialUsernameHint?, CredentialPendingCandidate?, double,
+    /// top-level page are secure, whether the Space offers to save on that
+    /// page, the page's remembered username, its pending candidate and the
+    /// time now.
+    private readonly Func<CredentialFormFacts, bool, bool, CredentialUsernameHint?, CredentialPendingCandidate?, double,
         CredentialCaptureDecision> decide;
 
     #endregion
@@ -56,7 +57,8 @@ public sealed class CredentialCaptureEvent {
     #region Constructors
 
     private CredentialCaptureEvent(string name,
-        Func<CredentialFormFacts, bool, CredentialUsernameHint?, CredentialPendingCandidate?, double, CredentialCaptureDecision> decide) {
+        Func<CredentialFormFacts, bool, bool, CredentialUsernameHint?, CredentialPendingCandidate?, double, CredentialCaptureDecision>
+            decide) {
         Name = name;
         this.decide = decide;
     }
@@ -73,15 +75,18 @@ public sealed class CredentialCaptureEvent {
 
     /// What the observation `facts` of this event does to the page's credential
     /// state, given its remembered username `hint` and its `pending` candidate.
+    /// A page whose top-level site is among `neverSavedSites` is never offered
+    /// a save; its saved passwords still fill.
     public CredentialCaptureDecision Decide(CredentialFormFacts facts, CredentialUsernameHint? hint, CredentialPendingCandidate? pending,
-        double now) {
+        double now, IReadOnlyList<NeverSavedSite>? neverSavedSites = null) {
         ArgumentNullException.ThrowIfNull(facts);
         bool accepted = facts.FrameOrigin.IsSecureUnder(facts.TopLevelOrigin);
-        return decide(facts, accepted, hint, pending, now);
+        bool offersSave = neverSavedSites?.Any(site => site.Covers(facts.TopLevelOrigin.Host)) != true;
+        return decide(facts, accepted, offersSave, hint, pending, now);
     }
 
-    private static CredentialCaptureDecision RememberUsername(CredentialFormFacts facts, bool accepted, CredentialUsernameHint? hint,
-        CredentialPendingCandidate? pending, double now) =>
+    private static CredentialCaptureDecision RememberUsername(CredentialFormFacts facts, bool accepted, bool offersSave,
+        CredentialUsernameHint? hint, CredentialPendingCandidate? pending, double now) =>
         CredentialCaptureDecision.For(accepted && facts.HasUsername ? CredentialCaptureAction.RememberUsername : CredentialCaptureAction.Ignore);
 
     /// An explicit username wins; otherwise a remembered one that still applies.
