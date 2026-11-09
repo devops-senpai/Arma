@@ -72,6 +72,14 @@ struct SpaceSidebarBrowsingContent: View {
             )
         )
 
+        // A window on its own shows only its own tabs; this is the way back
+        // to the window that shows the rest.
+        if browser.isTemporaryWorkspace, let windows {
+            BrowserReturnToMainWindowRow(capabilities: capabilities) { [windowID = browser.windowID] in
+                windows.returnTabsToMainWindow(from: windowID)
+            }
+        }
+
         SpaceSidebarTabListScroll(browser: browser) {
             BrowserSidebarBackgroundInteractionView(
                 editSpace: editSpace,
