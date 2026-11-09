@@ -6,6 +6,34 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.274</title>
+            <pubDate>Mon, 09 Nov 2026 00:34:33 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>800274</sparkle:version>
+            <sparkle:shortVersionString>0.8.274</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Brings in upstream Crest's ad blocking.
+
+### New
+- Arma blocks ads and trackers on every page, in WebKit and Chromium tabs, with EasyList, EasyPrivacy, uBlock Origin's lists and a list for your language. The lists stay up to date on their own, and blocked ads leave no empty boxes.
+- Ad blocking has its own page in Settings and applies to every Space alike. Choose Off, Balanced or Strict, which also hides cookie notices and other annoyances. Turn single lists on or off, update them all at once, subscribe to more lists by address, and write your own rules in My Filters.
+- Block Element, in a page's actions, the Page menu or a right-click, hides something the lists miss. Show Blocked Elements brings it back.
+- Turn Off Blocking on a site from the page's actions when the site doesn't work with it. The site stays unblocked in every Space until you turn blocking on again.
+
+### Improved
+- On Chromium pages, sites can no longer see which blocking rules they match or bring back what Arma hides.
+
+### Fixed
+- Closing a tab while its Chromium page is full screen no longer makes Arma quit.
+- A full-screen Chromium page stays full screen when it moves to its next slide or video.
+- Settings stays smooth with hundreds of saved websites, passwords and site permissions.
+- Clicking the search field above saved passwords or website data lets you type in it.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.274/Arma-0.8.274.dmg" length="193919309" type="application/octet-stream" sparkle:edSignature="l7yu2bluMjwv7KfKU2kRJxfgqxF9uVMAXypyOfreqyb4+Gl4nOyNn37GTBMBzZFTeZQicg+p3Hj0y2squiqoDw=="/>
+        </item>
+        <item>
             <title>0.8.259</title>
             <pubDate>Sun, 08 Nov 2026 12:31:55 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -344,6 +372,6 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: y2rA1eUZtdWHaoGUU9+ucK3EEOEimPi0e0rfwgXXWuhE6oyOd+ZUN3gqKVhXZs68gZXOpm5+JzVH87CRRXKnCw==
-length: 25055
+edSignature: q8cpEwVyQjTReH2hctUABBnAnHLHdTXmck9sLY6U7r6gnr/ohqytMQwaKbx48+PfG9PV16hfrLqrHtN62oiEDQ==
+length: 27321
 -->
