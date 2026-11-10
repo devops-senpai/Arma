@@ -45,6 +45,16 @@ public sealed partial record SpaceBranding {
             GradientAngle = NormalizedAngle(branding.GradientAngle),
             FolderColorIntensity = Unit(branding.FolderColorIntensity),
             SymbolColor = branding.SymbolColor is { } symbol ? NormalizedColor(symbol) : null,
+            FolderColor = branding.FolderColor is { } folder ? NormalizedColor(folder) : null,
+            FolderBackColor = branding.FolderBackColor is { } folderBack ? NormalizedColor(folderBack) : null,
+            CommandPalette = branding.CommandPalette is { } paletteLook ? NormalizedPalette(paletteLook) : null,
+            SidebarTextColor = branding.SidebarTextColor is { } sidebarText ? NormalizedColor(sidebarText) : null,
+            FolderOutlineColor = branding.FolderOutlineColor is { } outline ? NormalizedColor(outline) : null,
+            FolderOverrides = NormalizedOverrides(branding.FolderOverrides),
+            SidebarSecondaryTextColor = branding.SidebarSecondaryTextColor is { } secondaryText
+                ? NormalizedColor(secondaryText) : null,
+            FolderHighlightColor = branding.FolderHighlightColor is { } highlight ? NormalizedColor(highlight) : null,
+            FolderHighlightOpacity = Unit(branding.FolderHighlightOpacity),
             Crest = crest with {
                 Palette = palette is null ? null : new(palette),
                 BackplateColorIndex = LayerIndex(crest.BackplateColorIndex, layers),
@@ -84,6 +94,17 @@ public sealed partial record SpaceBranding {
         return figure.Kind == CrestChargeKind.Heraldic && figure.Symbol == symbol ? null : figure;
     }
 
+    /// A palette look with each surface's tint a color and its opacity within 0
+    /// through 1. A look that tints neither appearance is no look at all.
+    private static SpacePaletteLook? NormalizedPalette(SpacePaletteLook look) {
+        var normalized = new SpacePaletteLook(NormalizedSurface(look.Light), NormalizedSurface(look.Dark));
+        return normalized.IsTinted ? normalized : null;
+    }
+
+    private static SpacePaletteSurface NormalizedSurface(SpacePaletteSurface surface) =>
+        new(surface.Tint is { } tint ? NormalizedColor(tint) : null, Unit(surface.Opacity),
+            surface.TextColor is { } text ? NormalizedColor(text) : null);
+
     /// A strength, fade, intensity or color component, kept within 0 through 1.
     /// A value that is not a number falls back to `fallback`.
     private static double Unit(double value, double fallback = 0) => double.IsFinite(value) ? Math.Clamp(value, 0, 1) : fallback;
@@ -102,6 +123,23 @@ public sealed partial record SpaceBranding {
 
     /// A layer index outside the addressable colors falls back to the first.
     private static int LayerIndex(int index, int colorCount) => index >= 0 && index < colorCount ? index : 0;
+
+    /// Overrides with a path and at least one color, the last for each path,
+    /// at most the most a look keeps; null when none remain.
+    private static FolderColorOverrides? NormalizedOverrides(FolderColorOverrides? overrides) {
+        if (overrides is null) return null;
+        var kept = new List<FolderColorOverride>();
+        foreach (var entry in overrides.Overrides) {
+            string path = entry.Path.Trim();
+            if (path.Length is 0 or > FolderColorOverrides.MaximumPathLength) continue;
+            if (entry.Color is null && entry.BackColor is null && entry.OutlineColor is null) continue;
+            kept.RemoveAll(existing => existing.Path == path);
+            kept.Add(new(path, entry.Color is { } color ? NormalizedColor(color) : null,
+                entry.BackColor is { } back ? NormalizedColor(back) : null,
+                entry.OutlineColor is { } outline ? NormalizedColor(outline) : null));
+        }
+        return kept.Count == 0 ? null : new([.. kept.Take(FolderColorOverrides.MaximumCount)]);
+    }
 
     private static BrandColor NormalizedColor(BrandColor color) =>
         new(Unit(color.Red), Unit(color.Green), Unit(color.Blue), Unit(color.Alpha, 1));
