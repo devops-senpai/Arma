@@ -13,6 +13,8 @@ extension CredentialDescriptor {
         username.localizedCaseInsensitiveContains(query)
             || origin.description.localizedCaseInsensitiveContains(query)
             || displayName?.localizedCaseInsensitiveContains(query) == true
+            || email?.localizedCaseInsensitiveContains(query) == true
+            || category?.localizedCaseInsensitiveContains(query) == true
             || scope.settingsLabel?.localizedCaseInsensitiveContains(query) == true
     }
 

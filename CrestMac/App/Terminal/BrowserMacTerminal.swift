@@ -45,6 +45,24 @@ final class BrowserMacTerminal {
     init(application: BrowserMacApplication, windows: BrowserMacWindows) {
         self.application = application
         self.windows = windows
+        endPasswordSessionsWhenTheMacSleepsOrLocks()
+    }
+
+    /// Every `arma passwords` session ends when the Mac sleeps, its screens
+    /// sleep, or it locks, so a key left in a shell opens nothing after.
+    private func endPasswordSessionsWhenTheMacSleepsOrLocks() {
+        let end: @Sendable (Notification) -> Void = { _ in
+            Task { @MainActor in BrowserCredentialTerminalSessions.shared.endAll() }
+        }
+        let workspace = NSWorkspace.shared.notificationCenter
+        for name in [
+            NSWorkspace.willSleepNotification, NSWorkspace.screensDidSleepNotification,
+            NSWorkspace.sessionDidResignActiveNotification,
+        ] {
+            workspace.addObserver(forName: name, object: nil, queue: .main, using: end)
+        }
+        DistributedNotificationCenter.default().addObserver(
+            forName: Notification.Name("com.apple.screenIsLocked"), object: nil, queue: .main, using: end)
     }
 
     // MARK: - Actions - Running
@@ -67,6 +85,7 @@ final class BrowserMacTerminal {
         case .site(let site): try await site.run(in: self)
         case .theme(let theme): try theme.run(in: self)
         case .crest(let crest): try crest.run(in: self)
+        case .passwords(let passwords): try await passwords.run(in: self)
         }
     }
 
