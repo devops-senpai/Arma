@@ -6,6 +6,32 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.8.283</title>
+            <pubDate>Tue, 10 Nov 2026 12:49:46 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>800283</sparkle:version>
+            <sparkle:shortVersionString>0.8.283</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Chromium 157, and themes that keep their dark look.
+
+### New
+- Settings › Themes has an Appearance preview that draws the windows light or dark while the page is open, so a dark look can be made and checked on a light Mac, and the other way round.
+
+### Improved
+- Chromium is updated to 157.0.8103.39 with upstream security and compatibility fixes.
+- Turning a theme's Dark look off keeps that look, so turning it back on brings your work back instead of starting over.
+- A theme file keeps its dark look while the look is off, so an exported theme carries both looks.
+- The Themes preview draws a look in the window appearance it is worn in, so Light and Dark show the difference.
+- `arma theme edit --unpair-dark` keeps the theme's dark look turned off, and `--dark` turns it back on.
+
+### Fixed
+- A Space keeps the same colors in light and dark windows; a light look no longer goes grey when the window is dark.
+- A page in Chromium that asks for protected video, such as a streaming service's player, now switches to WebKit to play it with FairPlay instead of failing in Chromium.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.283/Arma-0.8.283.dmg" length="195111333" type="application/octet-stream" sparkle:edSignature="moylhCIRNHNruv7NgQV3XGQDRt0lNU3Kewsg4GcaOEVyZYe9Z1c70bGeF0cOQfN0MSxa4nioUoua43ofq45vDw=="/>
+        </item>
+        <item>
             <title>0.8.277</title>
             <pubDate>Mon, 09 Nov 2026 15:18:43 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -391,6 +417,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: arWL8ioX/X6GN76otXnPVL+CXKqrIDCu77HbJGsmTOSTX1D9ZDzcbkRcxWZUDpKzhu1f8Ey/H90+o5p0Gs7cAQ==
-length: 28801
+edSignature: hDuJhSBCurW0pu8odEJxo2RSRq4jnYouMyNID02F/00IdMpvKEvw2Lli9Mx2yPTCrW6FVFWv7pPYc++sG/zEDw==
+length: 30735
 -->
