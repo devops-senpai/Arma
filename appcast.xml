@@ -6,6 +6,24 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.68</title>
+            <pubDate>Wed, 11 Nov 2026 13:52:11 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>900068</sparkle:version>
+            <sparkle:shortVersionString>0.9.68</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### Security
+- Chromium is updated to 157.0.8103.51, which fixes CVE-2026-125350, a security flaw being exploited in the wild, and eight other security flaws.
+
+### From Crest 0.9.1
+- A signed Arma build now proves it can load a page before it ships: packaging refuses engine helpers of an unknown kind or with the wrong entitlements, and runs the signed package's own helpers to require a page's JavaScript to run.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.68/Arma-0.9.68.dmg" length="195140762" type="application/octet-stream" sparkle:edSignature="ok3s1RSSLXC+YlVNVtpb8TW/NCyejWmsxBZ/ZLQAAv0dzJaPJVldM3/pnErUZ/S5dKHBoBPE42rSbaiAmiqLDg=="/>
+        </item>
+        <item>
             <title>0.9.66</title>
             <pubDate>Tue, 10 Nov 2026 23:43:55 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -432,6 +450,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: nV8ZQVxfE1z/ONRJJfUUQplyxksrfqK6ELWZWrc8vsXJRl6Gr61Vx2BjKReC7kncPmNWCV03BsboHHB7VBSrDQ==
-length: 31919
+edSignature: fGWB1ZQi+17SSgAd+LNb2H8wwEuSYhhmR/UJq1HfD1N+5slcezwf44SHHUlObtvEIGpFFkK7uE9cJR3jvAsPBQ==
+length: 33178
 -->
