@@ -1,0 +1,79 @@
+{
+ "background": {
+  "colors": [
+   "#eff1f5",
+   "#8839ef",
+   "#bcc0cc"
+  ],
+  "intensity": 1,
+  "pattern": "solid",
+  "readabilityFade": 0,
+  "sidebarSecondaryText": "#6c6f85",
+  "sidebarText": "#4c4f69",
+  "style": "banner",
+  "textColor": "dark",
+  "texture": false
+ },
+ "commandPalette": {
+  "dark": {
+   "opacity": 0.92,
+   "text": "#4c4f69",
+   "tint": "#eff1f5"
+  },
+  "light": {
+   "opacity": 0.92,
+   "text": "#4c4f69",
+   "tint": "#eff1f5"
+  }
+ },
+ "dark": {
+  "background": {
+   "colors": [
+    "#1e1e2e",
+    "#cba6f7",
+    "#45475a"
+   ],
+   "intensity": 1,
+   "pattern": "solid",
+   "readabilityFade": 0,
+   "sidebarSecondaryText": "#a6adc8",
+   "sidebarText": "#cdd6f4",
+   "style": "banner",
+   "textColor": "light",
+   "texture": false
+  },
+  "commandPalette": {
+   "dark": {
+    "opacity": 0.92,
+    "text": "#cdd6f4",
+    "tint": "#1e1e2e"
+   },
+   "light": {
+    "opacity": 0.92,
+    "text": "#cdd6f4",
+    "tint": "#1e1e2e"
+   }
+  },
+  "folders": {
+   "backColor": "#585b70",
+   "color": "#cba6f7",
+   "highlightColor": "#cba6f7",
+   "highlightOpacity": 0.34,
+   "outlineColor": "#6c7086"
+  },
+  "icon": {
+   "color": "#cba6f7"
+  }
+ },
+ "folders": {
+  "backColor": "#acb0be",
+  "color": "#1e66f5",
+  "highlightColor": "#1e66f5",
+  "highlightOpacity": 0.34,
+  "outlineColor": "#9ca0b0"
+ },
+ "icon": {
+  "color": "#8839ef"
+ },
+ "name": "Catppuccin Latte / Mocha"
+}
