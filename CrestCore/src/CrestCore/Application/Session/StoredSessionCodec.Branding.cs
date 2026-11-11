@@ -22,6 +22,7 @@ internal static partial class StoredSessionCodec {
         var fade = OptionalNumber(value[Key.ReadabilityFade]);
         var keepsReadable = Flag(value[Key.KeepsControlsReadable]);
         fade ??= keepsReadable ?? true ? SpaceBranding.LegacyReadabilityFade : 0;
+        var intensity = OptionalNumber(value[Key.FolderColorIntensity]) ?? 0;
         return new(Palette(value[Key.Colors]) ?? new([]),
             SpaceBannerPattern.Named(Text(value[Key.BannerPattern])) ?? SpaceBannerPattern.Solid,
             OptionalNumber(value[Key.BannerStrength]) ?? 1, fade.Value, keepsReadable ?? fade > 0,
@@ -31,10 +32,43 @@ internal static partial class StoredSessionCodec {
             value[Key.SymbolColor] is JsonObject symbolColor ? DecodeColor(symbolColor) : null,
             DecodeCrest(value[Key.Crest] as JsonObject ?? []),
             Integer(value[Key.RenderingVersion]) ?? FirstRenderingVersion,
-            OptionalNumber(value[Key.FolderColorIntensity]) ?? 0,
+            intensity,
             SpaceTextColorMode.Named(Text(value[Key.TextColorMode])) ?? SpaceTextColorMode.Automatic,
-            Flag(value[Key.HasCustomAppearance]));
+            Flag(value[Key.HasCustomAppearance]),
+            value[Key.FolderColor] is JsonObject folderColor ? DecodeColor(folderColor) : null,
+            value[Key.FolderBackColor] is JsonObject folderBackColor ? DecodeColor(folderBackColor) : null,
+            value[Key.CommandPalette] is JsonObject palette ? DecodePaletteLook(palette) : null,
+            value[Key.SidebarTextColor] is JsonObject sidebarText ? DecodeColor(sidebarText) : null,
+            value[Key.FolderOutlineColor] is JsonObject folderOutline ? DecodeColor(folderOutline) : null,
+            DecodeFolderOverrides(value[Key.FolderOverrides]),
+            value[Key.SidebarSecondaryTextColor] is JsonObject secondaryText ? DecodeColor(secondaryText) : null,
+            value[Key.FolderHighlightColor] is JsonObject highlight ? DecodeColor(highlight) : null,
+            // A record from before highlights keeps the tint its intensity gave.
+            OptionalNumber(value[Key.FolderHighlightOpacity]) ?? SpaceBranding.HighlightOpacity(intensity));
     }
+
+    /// A look's folder overrides, each an object with a path and its colors;
+    /// an entry without a path is left out, and none leaves null.
+    internal static FolderColorOverrides? DecodeFolderOverrides(JsonNode? node) {
+        if (node is not JsonArray entries) return null;
+        var overrides = entries.OfType<JsonObject>()
+            .Select(entry => (Path: Text(entry[Key.Path]), Entry: entry))
+            .Where(pair => pair.Path is { Length: > 0 })
+            .Select(pair => new FolderColorOverride(pair.Path!,
+                pair.Entry[Key.Color] is JsonObject color ? DecodeColor(color) : null,
+                pair.Entry[Key.BackColor] is JsonObject back ? DecodeColor(back) : null,
+                pair.Entry[Key.OutlineColor] is JsonObject outline ? DecodeColor(outline) : null))
+            .ToArray();
+        return overrides.Length == 0 ? null : new(overrides);
+    }
+
+    internal static JsonArray Encode(FolderColorOverrides overrides) => [.. overrides.Overrides.Select(entry => {
+        var value = new JsonObject { [Key.Path] = entry.Path };
+        if (entry.Color is { } color) value[Key.Color] = Encode(color);
+        if (entry.BackColor is { } back) value[Key.BackColor] = Encode(back);
+        if (entry.OutlineColor is { } outline) value[Key.OutlineColor] = Encode(outline);
+        return (JsonNode)value;
+    })];
 
     internal static JsonObject Encode(SpaceBranding branding) {
         var value = new JsonObject {
@@ -54,6 +88,39 @@ internal static partial class StoredSessionCodec {
         value[Key.FolderColorIntensity] = branding.FolderColorIntensity;
         value[Key.TextColorMode] = branding.TextColorMode.Name;
         if (branding.HasCustomAppearance is { } custom) value[Key.HasCustomAppearance] = custom;
+        if (branding.FolderColor is { } folderColor) value[Key.FolderColor] = Encode(folderColor);
+        if (branding.FolderBackColor is { } folderBackColor) value[Key.FolderBackColor] = Encode(folderBackColor);
+        if (branding.CommandPalette is { } palette) value[Key.CommandPalette] = Encode(palette);
+        if (branding.SidebarTextColor is { } sidebarText) value[Key.SidebarTextColor] = Encode(sidebarText);
+        if (branding.FolderOutlineColor is { } folderOutline) value[Key.FolderOutlineColor] = Encode(folderOutline);
+        if (branding.FolderOverrides is { } overrides) value[Key.FolderOverrides] = Encode(overrides);
+        if (branding.SidebarSecondaryTextColor is { } secondaryText) value[Key.SidebarSecondaryTextColor] = Encode(secondaryText);
+        if (branding.FolderHighlightColor is { } highlight) value[Key.FolderHighlightColor] = Encode(highlight);
+        // Written only when it differs from what the intensity gives, so a
+        // session from before highlights reads back as it was written.
+        if (branding.FolderHighlightOpacity != SpaceBranding.HighlightOpacity(branding.FolderColorIntensity))
+            value[Key.FolderHighlightOpacity] = branding.FolderHighlightOpacity;
+        return value;
+    }
+
+    /// The command palette's look over a Space. A surface that is missing or
+    /// not an object is the system material alone.
+    internal static SpacePaletteLook DecodePaletteLook(JsonObject value) =>
+        new(DecodePaletteSurface(value[Key.Light] as JsonObject), DecodePaletteSurface(value[Key.Dark] as JsonObject));
+
+    private static SpacePaletteSurface DecodePaletteSurface(JsonObject? value) => value is null
+        ? SpacePaletteSurface.Neutral
+        : new(value[Key.Tint] is JsonObject tint ? DecodeColor(tint) : null, OptionalNumber(value[Key.Opacity]) ?? 0,
+            value[Key.TextColor] is JsonObject text ? DecodeColor(text) : null);
+
+    internal static JsonObject Encode(SpacePaletteLook look) =>
+        new() { [Key.Light] = Encode(look.Light), [Key.Dark] = Encode(look.Dark) };
+
+    private static JsonObject Encode(SpacePaletteSurface surface) {
+        var value = new JsonObject();
+        if (surface.Tint is { } tint) value[Key.Tint] = Encode(tint);
+        value[Key.Opacity] = surface.Opacity;
+        if (surface.TextColor is { } text) value[Key.TextColor] = Encode(text);
         return value;
     }
 
