@@ -108,6 +108,9 @@ private struct BrowserRootSessionFollower: ViewModifier {
 
     func body(content: Content) -> some View {
         content
+            // Reconciling pages on every revision already gives each resident
+            // page its tab's context and its Space's password preference, so
+            // only content blocking follows the projection.
             .onChange(of: model.browser.sessionRevision, initial: true) {
                 model.browser.followSession()
                 runtimeSessionProjection = model.pages.runtimeProjection
@@ -117,12 +120,6 @@ private struct BrowserRootSessionFollower: ViewModifier {
             // reaches the pages without any change to the session.
             .onChange(of: model.browser.core.state.contentBlockingPolicy) {
                 runtimeSessionProjection = model.pages.runtimeProjection
-            }
-            .onChange(
-                of: runtimeSessionProjection.tabIconState,
-                initial: true
-            ) {
-                model.reconcileTabIcons()
             }
             .onChange(
                 of: runtimeSessionProjection.contentBlockingState,
@@ -135,12 +132,6 @@ private struct BrowserRootSessionFollower: ViewModifier {
             }
             .onChange(of: model.browser.core.state.blockingSites) {
                 model.reconcileContentBlocking()
-            }
-            .onChange(
-                of: runtimeSessionProjection.credentialAccessState,
-                initial: true
-            ) {
-                model.reconcileCredentialAccess()
             }
     }
 }
