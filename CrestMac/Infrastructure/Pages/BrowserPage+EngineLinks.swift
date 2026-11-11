@@ -22,6 +22,17 @@ extension BrowserPage {
                 tabID: context.tabID, spaceID: context.spaceID, profileID: context.assignment.profileID))
     }
 
+    /// Whether this page's window opens a link in a window of its own.
+    var opensLinksInNewWindow: Bool { windowRouting?.pool?.linkWindowPresenter != nil }
+
+    /// Opens `url` in a window of its own, which browses with this page's
+    /// Space and keeps the tab to itself.
+    @discardableResult
+    func openInNewWindow(_ url: URL) -> Bool {
+        guard ExternalWebLink.accepts(url), let present = windowRouting?.pool?.linkWindowPresenter else { return false }
+        return present(url, spaceID)
+    }
+
     /// Opens `url` in a Quick Window over this page's window, in the session
     /// of `space`, whose crest and color the Quick Window wears. Keep moves it
     /// into that Space as a tab.
