@@ -3,7 +3,7 @@
   <h1>Arma</h1>
   <p><strong>An open source browser for Mac, iPhone, and iPad.</strong></p>
   <p>Built with SwiftUI, running Chromium and WebKit on Mac, with separate Spaces for different parts of your life.</p>
-  <p><a href="https://github.com/devops-senpai/Arma/releases/latest"><strong>Download Arma for Mac</strong></a> · Apple silicon, macOS 26.1 or later</p>
+  <p><a href="https://github.com/devops-senpai/Arma/releases/latest"><strong>Download Arma for Mac</strong></a> · Apple silicon, macOS 15.2 or later</p>
   <p>
     <a href="https://github.com/devops-senpai/Arma/actions/workflows/ci.yml"><img alt="Build Arma" src="https://github.com/devops-senpai/Arma/actions/workflows/ci.yml/badge.svg"></a>
     <a href="LICENSE"><img alt="MPL-2.0 license" src="https://img.shields.io/badge/license-MPL--2.0-315f93"></a>
@@ -278,6 +278,7 @@ Everything below is in Arma and not in upstream Crest.
 - **Automation for testing frameworks.** Settings › Automation (or `arma automation`) lets Playwright, Puppeteer, Selenium, WebdriverIO, Katalon and TestCafe drive Arma's Chromium tabs over a local DevTools port, limited to one profile or an empty Ephemeral one, and to the tabs they open or existing tabs too, with copyable setup for each tool.
 - **Updates from this repository.** Check for Updates installs Arma's own signed, notarized releases from GitHub, and a hidden sidebar rolls out to show the answer until you click elsewhere.
 - **Arma's own Chromium.** Arma builds its own Chromium engine: its pages are `arma://` (such as `arma://extensions`), and the Chrome Web Store offers Add to Arma. Saved `crest://` addresses still open.
+- **Runs on macOS 15.** Arma for Mac needs macOS 15.2 or later, where upstream needs macOS 26.1. On macOS 15, glass surfaces are drawn with a system material, and a page is translated when you ask rather than on its own.
 - **Servo engine** (temporarily disabled in releases: it crashed the browser too often). Pages can run on Servo, the independent engine written in Rust, as a third engine beside Chromium and WebKit: pick it as the default engine, set it for a website, or move a page with Open Page in Servo. Install Firefox add-ons whose page scripts and styles Servo can run from Settings › Engines.
 
 ### Performance
@@ -386,7 +387,7 @@ Read the [Space isolation guide](HelpCenter/docs/spaces/spaces-and-isolation.md)
 
 Download the latest **Installer** disk image from
 [Releases](https://github.com/devops-senpai/Arma/releases/latest), open it, and drag
-Arma onto **Applications**. Arma for Mac needs Apple silicon and macOS 26.1 or
+Arma onto **Applications**. Arma for Mac needs Apple silicon and macOS 15.2 or
 later.
 
 Arma is signed with a Developer ID and notarized by Apple, so it opens
