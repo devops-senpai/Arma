@@ -34,13 +34,19 @@ public sealed class CredentialPolicyTests {
     }
 
     [Fact]
-    public void AUsernameHintAppliesOnlyToItsExactOriginsWithinItsLifetime() {
+    public void AUsernameHintAppliesToTheSameSiteWithinItsLifetime() {
         var hint = new CredentialUsernameHint(Login, Login, 1_000);
         Assert.True(hint.Applies(Login, Login, 1_001));
         Assert.True(hint.Applies(Login, Login, 1_000 + CredentialUsernameHint.Lifetime));
-        Assert.False(hint.Applies(Embedded, Login, 1_001));
-        Assert.False(hint.Applies(Login, Embedded, 1_001));
+        // A sign-in that asks for the password on another host of the same site.
+        Assert.True(hint.Applies(Embedded, Embedded, 1_001));
         Assert.False(hint.Applies(Login, Login, 1_001 + CredentialUsernameHint.Lifetime));
+        CredentialOrigin elsewhere = new("https", "example.org", 443), insecure = new("http", "accounts.example.com", 80);
+        Assert.False(hint.Applies(elsewhere, elsewhere, 1_001));
+        Assert.False(hint.Applies(insecure, Login, 1_001));
+        // Hosts under a public suffix belong to different people.
+        CredentialOrigin alice = new("https", "alice.github.io", 443), bob = new("https", "bob.github.io", 443);
+        Assert.False(new CredentialUsernameHint(alice, alice, 1_000).Applies(bob, bob, 1_001));
     }
 
     [Fact]
@@ -74,15 +80,19 @@ public sealed class CredentialPolicyTests {
     }
 
     [Fact]
-    public void GeneratedPasswordsUseFourUnambiguousGroupsWithinTheSupportedLengths() {
+    public void GeneratedPasswordsUseTheChosenUnambiguousGroupsWithinTheSupportedLengths() {
         var recipe = StrongPasswordRecipe.For(null);
-        Assert.Equal(StrongPasswordRecipe.DefaultLength, recipe.Length);
+        Assert.Equal(PasswordGeneration.DefaultLength, recipe.Length);
         Assert.Equal(4, recipe.Groups.Count);
         Assert.All(recipe.Groups, group => Assert.True(group.All(char.IsAscii) && !group.Any(char.IsWhiteSpace)));
         Assert.DoesNotContain(recipe.Groups, group => group.IndexOfAny(['l', 'I', 'O', '0', '1']) >= 0);
-        Assert.Equal(64, StrongPasswordRecipe.For(64).Length);
-        Assert.Equal(new InvalidPasswordLength(16, 64), Refusal(() => StrongPasswordRecipe.For(15)));
-        Assert.IsType<InvalidPasswordLength>(Refusal(() => StrongPasswordRecipe.For(65)));
+        Assert.Equal(64, StrongPasswordRecipe.For(PasswordGeneration.Default with { Length = 64 }).Length);
+        var lettersOnly = StrongPasswordRecipe.For(PasswordGeneration.Default with { Numbers = false, Symbols = false });
+        Assert.Equal([recipe.Groups[0], recipe.Groups[1]], lettersOnly.Groups);
+        // A generation that includes nothing still draws from lowercase letters.
+        Assert.Equal([recipe.Groups[0]], StrongPasswordRecipe.For(new PasswordGeneration(12, false, false, false, false)).Groups);
+        Assert.Equal(new InvalidPasswordLength(8, 64), Refusal(() => StrongPasswordRecipe.For(PasswordGeneration.Default with { Length = 7 })));
+        Assert.IsType<InvalidPasswordLength>(Refusal(() => StrongPasswordRecipe.For(PasswordGeneration.Default with { Length = 65 })));
     }
 
     [Fact]

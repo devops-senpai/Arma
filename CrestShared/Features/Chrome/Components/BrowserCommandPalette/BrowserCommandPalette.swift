@@ -77,6 +77,9 @@ struct BrowserCommandPalette: View {
             if !available { model.invalidateURLCompletion() }
         }
         .onDisappear { model.invalidateURLCompletion() }
+        .onReceive(NotificationCenter.default.publisher(for: .browserPaletteChoicesChanged)) { _ in
+            model.choicesChanged()
+        }
     }
 }
 

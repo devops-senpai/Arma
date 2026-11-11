@@ -14,8 +14,9 @@ actor KeychainCredentialVault: CredentialVault {
     private let servicePrefix: String
     private let codec = CredentialKeychainCodec()
     /// Whether passwords saved for each origin fill a page at the first, in
-    /// order, which the core answers in production.
-    private let fills: @Sendable (CredentialOrigin, [CredentialOrigin]) throws -> [Bool]
+    /// order, those at the indexes given last reaching the hosts under their
+    /// origin too, which the core answers in production.
+    private let fills: @Sendable (CredentialOrigin, [CredentialOrigin], [Int]) throws -> [Bool]
     /// Whether a write holds the vault, and the writes waiting their turn.
     private var isWriting = false
     private var waitingWrites: [CheckedContinuation<Void, Never>] = []
@@ -25,7 +26,7 @@ actor KeychainCredentialVault: CredentialVault {
     init(
         store: any CredentialKeychainStoring,
         servicePrefix: String = CredentialKeychainNamespace.productionPrefix,
-        fills: @escaping @Sendable (CredentialOrigin, [CredentialOrigin]) throws -> [Bool] = { page, saved in
+        fills: @escaping @Sendable (CredentialOrigin, [CredentialOrigin], [Int]) throws -> [Bool] = { page, saved, _ in
             saved.map { $0 == page }
         }
     ) {
@@ -191,6 +192,18 @@ actor KeychainCredentialVault: CredentialVault {
                 }
                 throw error
             }
+            // Notes follow the passwords they belong to; a note that fails to
+            // move moves with the next change.
+            let passwords = Set(originalItems.filter { reads($0, in: spaceID) }.map(\.account))
+            let noteService = noteService(for: spaceID)
+            for note in try await store.items(in: noteService)
+            where passwords.contains(note.account) && note.isSynchronizable != isSynchronizable {
+                try await store.upsert(
+                    CredentialKeychainItem(
+                        account: note.account, metadata: note.metadata, secret: note.secret,
+                        isSynchronizable: isSynchronizable),
+                    in: noteService)
+            }
         }
     }
 
@@ -200,13 +213,38 @@ actor KeychainCredentialVault: CredentialVault {
                 account: id.uuidString.lowercased(),
                 in: service(for: spaceID)
             )
+            try await store.delete(account: id.uuidString.lowercased(), in: noteService(for: spaceID))
         }
     }
 
     func deleteAll(in spaceID: UUID) async throws {
         try await writing {
             try await store.deleteAll(in: service(for: spaceID))
+            try await store.deleteAll(in: noteService(for: spaceID))
         }
+    }
+
+    // MARK: - Actions - Notes
+
+    func notes(for id: UUID, in spaceID: UUID) async throws -> String? {
+        guard let item = try await store.item(account: id.uuidString.lowercased(), in: noteService(for: spaceID)) else {
+            return nil
+        }
+        return String(data: item.secret, encoding: .utf8)
+    }
+
+    func setNotes(_ notes: String?, for id: UUID, isSynchronizable: Bool, in spaceID: UUID) async throws {
+        let account = id.uuidString.lowercased()
+        let service = noteService(for: spaceID)
+        guard let notes, !notes.isEmpty else {
+            try await writing { try await store.delete(account: account, in: service) }
+            return
+        }
+        let secret = Data(notes.utf8)
+        guard secret.count <= credentialNotesByteLimit else { throw CredentialVaultError.notesTooLong }
+        let item = CredentialKeychainItem(
+            account: account, metadata: Self.noteMetadata, secret: secret, isSynchronizable: isSynchronizable)
+        try await writing { try await store.upsert(item, in: service) }
     }
 
     func deleteUnreadableCredentials(in spaceID: UUID) async throws {
@@ -246,16 +284,18 @@ actor KeychainCredentialVault: CredentialVault {
     }
 
     /// The descriptors among `descriptors` whose passwords fill a page at
-    /// `origin`: those saved for it, and those whose origin the core reads as
-    /// it, such as an IP address an earlier import kept in another spelling.
+    /// `origin`: those saved for it, those whose origin the core reads as it,
+    /// such as an IP address an earlier import kept in another spelling, and
+    /// those that reach the hosts under their origin when `origin` is one.
     private func filling(
         _ origin: CredentialOrigin,
         from descriptors: [CredentialDescriptor]
     ) throws -> [CredentialDescriptor] {
         let others = descriptors.filter { $0.origin != origin }
+        let reaching = others.indices.filter { others[$0].includesSubdomains }
         let othersFill: [Bool]
         do {
-            othersFill = try fills(origin, others.map(\.origin))
+            othersFill = try fills(origin, others.map(\.origin), reaching)
         } catch Rejection.invalidCredentialOrigin {
             // No page has such an origin, but if one did, its own passwords still fill it.
             othersFill = []
@@ -275,6 +315,14 @@ actor KeychainCredentialVault: CredentialVault {
     private func service(for spaceID: UUID) -> String {
         CredentialKeychainNamespace.service(for: spaceID, prefix: servicePrefix)
     }
+
+    private func noteService(for spaceID: UUID) -> String {
+        CredentialKeychainNamespace.noteService(for: spaceID, prefix: servicePrefix)
+    }
+
+    /// What a note item keeps beside its text: nothing a reader needs, since
+    /// its account names its password.
+    private static let noteMetadata = Data("{}".utf8)
 
     private static func descriptorOrder(
         _ lhs: CredentialDescriptor,
