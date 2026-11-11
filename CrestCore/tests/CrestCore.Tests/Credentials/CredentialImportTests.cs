@@ -135,11 +135,11 @@ public sealed class CredentialImportTests {
         CredentialOrigin[] earlier = [new("https", "127.1", 443), new("https", "0x7f.0.0.1", 443), new("https", "127.0.0.2", 443),
             new("http", "127.1", 443), new("https", "127.1", 8443), new("https", "08.1.1.1", 443)];
         Assert.Equal([true, true, false, false, false, false],
-            Area.Query(new CredentialsFillingPage(new("https", "127.0.0.1", 443), earlier)).Fills);
+            Area.Query(new CredentialsFillingPage(new("https", "127.0.0.1", 443), earlier, [0, 1, 2])).Fills);
         Assert.Equal([true, true], Area.Query(new CredentialsFillingPage(new("https", "2001:db8::1", 443),
-            [new("https", "2001:db8:0:0:0:0:0:1", 443), new("https", "2001:DB8::1", 443)])).Fills);
+            [new("https", "2001:db8:0:0:0:0:0:1", 443), new("https", "2001:DB8::1", 443)], [])).Fills);
         Assert.Equal(new InvalidCredentialOrigin(),
-            Assert.Throws<Rejected>(() => Area.Query(new CredentialsFillingPage(new("https", "127.1", 443), earlier))).Rejection);
+            Assert.Throws<Rejected>(() => Area.Query(new CredentialsFillingPage(new("https", "127.1", 443), earlier, []))).Rejection);
     }
 
     [Fact]
