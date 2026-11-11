@@ -6,6 +6,22 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.66</title>
+            <pubDate>Tue, 10 Nov 2026 23:44:08 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>900066</sparkle:version>
+            <sparkle:shortVersionString>0.9.66</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### Arma 0.9
+- Arma moves to the 0.9 line with Crest 0.9, which brings together Sub-Spaces, built-in ad blocking on Mac, iPhone and iPad, a Chromium engine built from Chromium itself at 157, and the Quick Window, Peek and appearance work. Arma's 0.8 releases already carried all of it; this build changes the version line and nothing else.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.66/Arma-0.9.66.dmg" length="195111342" type="application/octet-stream" sparkle:edSignature="AIyba1uD0B3gCF73gL0ILULtLrsYdoJuanM7ImI3qAiErhwnJYVG3F2tYENsKpTiB6pwO2ajk7UDwjpgaXc7Aw=="/>
+        </item>
+        <item>
             <title>0.8.283</title>
             <pubDate>Tue, 10 Nov 2026 12:49:48 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -437,6 +453,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: w21NLMLPOu+MmPdfKT8ZmmKyBsWihgEMTY2w3PfofDBNhwdrJt2FSuZQpD6L0TvHoiJhHNf0jt654W3lpro4Bg==
-length: 31915
+edSignature: oHWMI4WawVPj4vYL70IVLnBJSF577tSMa6VZvTUSfI32xcDqiAjj1hgEmjE2+EwiEduE1mxrWDDxZACTs2qZDw==
+length: 33158
 -->
