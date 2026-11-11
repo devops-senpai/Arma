@@ -13,7 +13,7 @@
   },
   "chrome/browser/BUILD.gn": {
     "before": "d933e893d446407e1d7cd9ad925615e0f2f3930ce230b69d61ecd4b148cf41ba",
-    "after": "32b2602405bd3306d62cca2036e1d9b7bcd26c91a13d388205a06b90c10a2da5"
+    "after": "80a73300833cd540ac30e833267c6479d42c42bc9205e4f1bf634d5d6cd9e845"
   },
   "chrome/browser/ui/tabs/tab_features.cc": {
     "before": "58542c73a8503f90169134f22a188c8b1bd8dbd24dd5ef4d6afe275dd6a63196",
@@ -193,7 +193,7 @@
   },
   "chrome/app/chrome_main_delegate.cc": {
     "before": "96728003d989ce72cfabf6fb13a16170a236aa3602198029dae44d7dd99c42ed",
-    "after": "ec795abd888b36bd9a267f481a515ae2dd2aa8659077f0da14da2ba5bd2011f5"
+    "after": "30579188d9e7a2c5790007a4ddf5ff16a2d954d48a9272101adda8182fd6a685"
   },
   "chrome/browser/webauthn/chrome_authenticator_request_delegate.cc": {
     "before": "5e3d40d3abeb6ec142dfb19bec5c89e9d1e7581cca49da78336b03e12eaaad8b",
@@ -522,5 +522,37 @@
   "chrome/renderer/chrome_content_renderer_client.cc": {
     "before": "5344bebff76601d605ad3b3cc96a8a507742ada486580b945a20a9515c338be6",
     "after": "c9b5a53898b6df6a1b260702329d8e82af93bca206ca700dca6617e5f76cea5e"
+  },
+  "chrome/browser/devtools/chrome_devtools_manager_delegate.cc": {
+    "before": "a6cd21427f36eea7e31ea9490501a58593cda738d152b2b168b50dcbc38b70bf",
+    "after": "257e042edf01a39669c60df66e800779ee891675ce23aab4ec0df6a873c6ccbd"
+  },
+  "chrome/browser/devtools/chrome_devtools_manager_delegate.h": {
+    "before": "c7934fb5be32b4a2b6d3b97e773fce0df9d7af11c687ac4e2e8b696683599c45",
+    "after": "d8cb815420c19e7bd0bedc8d25f2b0a7597016d7ad2b6bc1e7dcf467899fdbf5"
+  },
+  "chrome/browser/devtools/devtools_browser_context_manager.cc": {
+    "before": "8c291eacfaddac309b38a1e797b62eaec6f422b846423b41af82301d7efcede5",
+    "after": "60160eecb9c8773b04fb50361d91b132abde2c3fa6cd7b8cf6e8facf05b34f97"
+  },
+  "chrome/browser/devtools/protocol/target_handler.cc": {
+    "before": "726f4f087517fdb1c647ff20dd755d118f1b1e126b1f2a49667f471cca5a9079",
+    "after": "e700ee3e05a6965d1eae81a16af26b980f21a4f1762ef0bc31506e447c732dfa"
+  },
+  "content/browser/devtools/devtools_http_handler.cc": {
+    "before": "c9b306d5c2aeac078d50c6ebbfb44727c301ae11e5309a87da6a596f7d105680",
+    "after": "19eb9d7c17638cccd3a03a232e2cfcebacbae3a404ed56507ef7d20ffe55f46d"
+  },
+  "content/browser/devtools/protocol/target_handler.cc": {
+    "before": "187479ca7423d3f193b285d671062749c1f4ccffbb70f80b40a0af2e119d4514",
+    "after": "61ec8bca1c2a85075fa4dbef3233897f720f97f5f9a1ae489f7502731fe72260"
+  },
+  "content/public/browser/devtools_manager_delegate.cc": {
+    "before": "e3f0528fcbf04a1f77c6fff208de214707037063cae5b82d08a82c3224d93b4a",
+    "after": "7382921a6209b28515cdd843838b3909aef5c4185f46998bd156df9612718e03"
+  },
+  "content/public/browser/devtools_manager_delegate.h": {
+    "before": "ec72689613e6d4ee971cfeeb5042e37cf8d39290d790a2a71a0cd56943112d8c",
+    "after": "4c2104f15605cc74ac0282cb53a59fe7a2f35db6ac02b1e7925a4c754d57fd7e"
   }
 }
