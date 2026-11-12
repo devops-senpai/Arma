@@ -10,9 +10,12 @@ struct SpaceControlColors: Equatable {
     var text: BrandColor?
     var secondaryText: BrandColor?
 
-    /// The appearance the controls read in: light over a light fill, dark over
-    /// a dark one, and the window's own without a fill that shows.
+    /// The appearance the controls read in, so their icons match the text:
+    /// dark under light text and light under dark text, else light over a
+    /// light fill and dark over a dark one, and the window's own without
+    /// either.
     func colorScheme(over window: ColorScheme) -> ColorScheme {
+        if let text { return text.luminance > 0.5 ? .dark : .light }
         guard let fill, fill.alpha * fillOpacity > 0.5 else { return window }
         return fill.luminance > 0.5 ? .light : .dark
     }

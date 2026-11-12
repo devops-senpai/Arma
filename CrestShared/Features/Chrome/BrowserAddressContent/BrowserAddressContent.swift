@@ -29,6 +29,7 @@ struct BrowserAddressContent: View {
     let submit: () -> Void
 
     @FocusState private var isFocused: Bool
+    @Environment(\.spaceControlColors) private var controlColors
     @State private var selection: TextSelection?
     /// How much farther the field reaches past the address's leading edge
     /// than past its trailing edge.
@@ -182,7 +183,11 @@ struct BrowserAddressContent: View {
             if let route = presentation.route {
                 Text(route)
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    // Text takes `.secondary` as its primary color dimmed, not
+                    // the second level a theme sets, so the theme's is named.
+                    .foregroundStyle(
+                        controlColors.secondaryText.map { AnyShapeStyle($0.color) } ?? AnyShapeStyle(.secondary)
+                    )
                     .lineLimit(1)
                     .truncationMode(.middle)
             }
