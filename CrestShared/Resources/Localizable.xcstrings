@@ -4,6 +4,132 @@
     "" : {
 
     },
+    "%@ has no content scripts Servo can run." : {
+
+    },
+    "%@ · Page scripts only" : {
+
+    },
+    "Choose a Firefox add-on (.xpi) or an unpacked extension’s folder." : {
+
+    },
+    "Firefox add-on page scripts" : {
+
+    },
+    "Independent Rust engine" : {
+
+    },
+    "Install Extension…" : {
+
+    },
+    "No extensions" : {
+
+    },
+    "Remove this extension" : {
+
+    },
+    "Servo extensions" : {
+
+    },
+    "Servo runs an extension’s page scripts and styles. Removing one takes effect when Arma restarts." : {
+
+    },
+    "Servo, the independent engine written in Rust. Experimental." : {
+
+    },
+    "The extension has no readable manifest." : {
+
+    },
+    "Apply Theme" : {
+
+    },
+    "Apply to “%@”" : {
+
+    },
+    "Choose a theme, or save this Space’s look as one with +." : {
+
+    },
+    "Colors" : {
+
+    },
+    "Export Theme" : {
+
+    },
+    "Export Theme…" : {
+
+    },
+    "Import Theme" : {
+
+    },
+    "Import Theme…" : {
+
+    },
+    "Light and dark looks" : {
+
+    },
+    "Looks" : {
+
+    },
+    "No Saved Themes" : {
+
+    },
+    "One look" : {
+
+    },
+    "Outline color" : {
+
+    },
+    "Remove Theme" : {
+
+    },
+    "Save Look as Theme" : {
+
+    },
+    "Save “%@” as a Theme" : {
+
+    },
+    "That file is not an Arma theme." : {
+
+    },
+    "That theme is no longer saved." : {
+
+    },
+    "Theme" : {
+
+    },
+    "Theme Imported" : {
+
+    },
+    "theme load file colors look appearance" : {
+
+    },
+    "theme save colors look appearance" : {
+
+    },
+    "theme save file share colors look appearance" : {
+
+    },
+    "Theme Saved" : {
+
+    },
+    "Theme “%@” Applied" : {
+
+    },
+    "Themes" : {
+
+    },
+    "themes saved theme import export colors look catppuccin" : {
+
+    },
+    "Type @tabs, @saved, @history, @actions, @spaces or @themes, then a space or Tab, to show only that kind." : {
+
+    },
+    "Untitled Theme" : {
+
+    },
+    "Update from “%@”" : {
+
+    },
     "·" : {
       "localizations" : {
         "ar" : {
@@ -2999,6 +3125,9 @@
     "Building your review…" : {
 
     },
+    "Built on ungoogled-chromium, with Google integrations removed. Smooth browsing and extensions." : {
+
+    },
     "Cache" : {
 
     },
@@ -3409,9 +3538,6 @@
       "comment" : "The name of a browser engine. Keep the product name as it is."
     },
     "Chromium WebKit hybrid default browser engine websites rules protected video DRM compatibility" : {
-
-    },
-    "Chromium without Google’s data collection. Smooth browsing and extensions." : {
 
     },
     "Claude Code" : {
@@ -10478,9 +10604,6 @@
     "Profiles, bookmarks, open tabs, and passwords" : {
       "comment" : "What importing from another browser brings. Keep product names as they are."
     },
-    "Protected video, with WebKit fallback" : {
-
-    },
     "Pull and Merge" : {
 
     },
@@ -15725,6 +15848,9 @@
     "WebKit Chromium experimental preview testable developer stable runtime flags features" : {
 
     },
+    "WebKit fallback for protected video" : {
+
+    },
     "Webpages" : {
 
     },
@@ -15857,12 +15983,6 @@
           }
         }
       }
-    },
-    "With %lld Sub-Spaces" : {
-
-    },
-    "With a Sub-Space" : {
-
     },
     "Wolf Grey" : {
 
