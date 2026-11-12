@@ -22,6 +22,10 @@ namespace CrestCore.Contracts;
 /// standard flyout surface and text. <see cref="PopoverSecondaryTextColor"/> is the color their
 /// quieter text reads in, or null to dim the text color. <see cref="PopoverAccentColor"/> colors their
 /// buttons and links, or null for Arma's accent, at <see cref="PopoverAccentOpacity"/>.
+/// <see cref="PopoverButtonColor"/> fills their plain buttons and <see cref="PopoverButtonOutlineColor"/>
+/// outlines them, each null for the system's button.
+/// <see cref="PopoverButtonColor"/> fills their plain buttons and <see cref="PopoverButtonOutlineColor"/>
+/// outlines them, each null for the system's button.
 /// </summary>
 public sealed partial record SpaceBranding(
     ColorPalette Colors,
@@ -52,7 +56,9 @@ public sealed partial record SpaceBranding(
     BrandColor? PopoverTextColor,
     BrandColor? PopoverSecondaryTextColor,
     BrandColor? PopoverAccentColor,
-    double PopoverAccentOpacity) {
+    double PopoverAccentOpacity,
+    BrandColor? PopoverButtonColor,
+    BrandColor? PopoverButtonOutlineColor) {
     #region Static Variables
 
     /// The rendering vocabulary every shipped build draws. A banner strength stored
@@ -77,7 +83,7 @@ public sealed partial record SpaceBranding(
         FolderColor: null, FolderBackColor: null, CommandPalette: null, SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
         FolderHighlightColor: null, FolderHighlightOpacity: DefaultHighlightOpacity,
         PopoverBackgroundColor: null, PopoverTextColor: null, PopoverSecondaryTextColor: null,
-        PopoverAccentColor: null, PopoverAccentOpacity: 1);
+        PopoverAccentColor: null, PopoverAccentOpacity: 1, PopoverButtonColor: null, PopoverButtonOutlineColor: null);
 
     #endregion
 
@@ -109,7 +115,7 @@ public sealed partial record SpaceBranding(
             HasCustomAppearance: null, FolderColor: null, FolderBackColor: null, CommandPalette: null, SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
             FolderHighlightColor: null, FolderHighlightOpacity: DefaultHighlightOpacity,
             PopoverBackgroundColor: null, PopoverTextColor: null, PopoverSecondaryTextColor: null,
-            PopoverAccentColor: null, PopoverAccentOpacity: 1);
+            PopoverAccentColor: null, PopoverAccentOpacity: 1, PopoverButtonColor: null, PopoverButtonOutlineColor: null);
     }
 
     /// The crest figure an SF Symbol name suggested before crests had their own.

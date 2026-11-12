@@ -61,6 +61,9 @@ public sealed partial record SpaceBranding {
                 ? NormalizedColor(popoverSecondary) : null,
             PopoverAccentColor = branding.PopoverAccentColor is { } popoverAccent ? NormalizedColor(popoverAccent) : null,
             PopoverAccentOpacity = Unit(branding.PopoverAccentOpacity),
+            PopoverButtonColor = branding.PopoverButtonColor is { } popoverButton ? NormalizedColor(popoverButton) : null,
+            PopoverButtonOutlineColor = branding.PopoverButtonOutlineColor is { } popoverButtonOutline
+                ? NormalizedColor(popoverButtonOutline) : null,
             Crest = crest with {
                 Palette = palette is null ? null : new(palette),
                 BackplateColorIndex = LayerIndex(crest.BackplateColorIndex, layers),

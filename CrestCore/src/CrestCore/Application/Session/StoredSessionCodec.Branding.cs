@@ -49,7 +49,9 @@ internal static partial class StoredSessionCodec {
             value[Key.PopoverTextColor] is JsonObject popoverText ? DecodeColor(popoverText) : null,
             value[Key.PopoverSecondaryTextColor] is JsonObject popoverSecondary ? DecodeColor(popoverSecondary) : null,
             value[Key.PopoverAccentColor] is JsonObject popoverAccent ? DecodeColor(popoverAccent) : null,
-            OptionalNumber(value[Key.PopoverAccentOpacity]) ?? 1);
+            OptionalNumber(value[Key.PopoverAccentOpacity]) ?? 1,
+            value[Key.PopoverButtonColor] is JsonObject popoverButton ? DecodeColor(popoverButton) : null,
+            value[Key.PopoverButtonOutlineColor] is JsonObject popoverButtonOutline ? DecodeColor(popoverButtonOutline) : null);
     }
 
     /// A look's folder overrides, each an object with a path and its colors;
@@ -110,6 +112,8 @@ internal static partial class StoredSessionCodec {
         if (branding.PopoverSecondaryTextColor is { } popoverSecondary) value[Key.PopoverSecondaryTextColor] = Encode(popoverSecondary);
         if (branding.PopoverAccentColor is { } popoverAccent) value[Key.PopoverAccentColor] = Encode(popoverAccent);
         if (branding.PopoverAccentOpacity != 1) value[Key.PopoverAccentOpacity] = branding.PopoverAccentOpacity;
+        if (branding.PopoverButtonColor is { } popoverButton) value[Key.PopoverButtonColor] = Encode(popoverButton);
+        if (branding.PopoverButtonOutlineColor is { } popoverButtonOutline) value[Key.PopoverButtonOutlineColor] = Encode(popoverButtonOutline);
         return value;
     }
 

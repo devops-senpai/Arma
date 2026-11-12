@@ -40,6 +40,7 @@ struct CrestFlyoutStyle: ViewModifier {
         let labels =
             content
             .modifier(Labels(colors: colors))
+            .modifier(Buttons(colors: colors))
             .tint(accent.opacity(colors.accentOpacity))
             .environment(\.colorScheme, colorScheme)
         if let inWindowShape {
@@ -81,6 +82,21 @@ private struct Labels: ViewModifier {
     }
 }
 
+/// A flyout's plain buttons on the theme's button fill and outline, once it
+/// chose either; buttons that pick a style of their own keep it.
+private struct Buttons: ViewModifier {
+    let colors: CrestFlyoutColors
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if colors.button != nil || colors.buttonOutline != nil {
+            content.buttonStyle(CrestFlyoutButtonStyle(colors: colors))
+        } else {
+            content
+        }
+    }
+}
+
 /// The colors a Space's theme gives the flyouts its window shows: a fill for
 /// the surface and one color for the labels, each nil for the standard one.
 struct CrestFlyoutColors: Equatable, Sendable {
@@ -99,6 +115,8 @@ struct CrestFlyoutColors: Equatable, Sendable {
     var secondaryText: BrandColor?
     var accent: BrandColor?
     var accentOpacity: Double = 1
+    var button: BrandColor?
+    var buttonOutline: BrandColor?
 
     /// The appearance the flyout reads in: light over a light fill, so the
     /// standard labels stay dark on it, and dark otherwise.

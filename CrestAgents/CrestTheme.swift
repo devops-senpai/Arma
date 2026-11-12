@@ -120,6 +120,10 @@ struct CrestTheme: Codable, Equatable, Sendable {
         var accent: String?
         /// How opaque that accent is, 0 through 1.
         var accentOpacity: Double?
+        /// The fill of their plain buttons, or `default` for the system's button.
+        var button: String?
+        /// The line around those buttons, or `default` for none.
+        var buttonOutline: String?
     }
 
     /// The five sections of one look, as the file's top level and its `dark`
@@ -197,6 +201,8 @@ struct CrestTheme: Codable, Equatable, Sendable {
                 if let value = popovers.secondaryText { section.secondaryText = value }
                 if let value = popovers.accent { section.accent = value }
                 if let value = popovers.accentOpacity { section.accentOpacity = value }
+                if let value = popovers.button { section.button = value }
+                if let value = popovers.buttonOutline { section.buttonOutline = value }
                 merged.popovers = section
             }
             return merged

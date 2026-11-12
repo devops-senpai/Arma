@@ -42,13 +42,16 @@ public sealed class FolderOutlineColorTests {
         var popoverAccent = new BrandColor(0.9, 0.4, 0.3);
         var dressed = SpaceBranding.Normalized(SpaceBranding.Neutral with { PopoverBackgroundColor = popoverBack, PopoverTextColor = popoverText });
         dressed = SpaceBranding.Normalized(dressed with { PopoverSecondaryTextColor = popoverSecondary, PopoverAccentColor = popoverAccent });
-        dressed = SpaceBranding.Normalized(dressed with { PopoverAccentOpacity = 0.8 });
+        dressed = SpaceBranding.Normalized(dressed with { PopoverAccentOpacity = 0.8, PopoverButtonColor = popoverSecondary });
+        dressed = SpaceBranding.Normalized(dressed with { PopoverButtonOutlineColor = popoverAccent });
         var dressedBack = StoredSessionCodec.DecodeBranding(StoredSessionCodec.Encode(dressed));
         Assert.Equal(popoverBack, dressedBack.PopoverBackgroundColor);
         Assert.Equal(popoverText, dressedBack.PopoverTextColor);
         Assert.Equal(popoverSecondary, dressedBack.PopoverSecondaryTextColor);
         Assert.Equal(popoverAccent, dressedBack.PopoverAccentColor);
         Assert.Equal(0.8, dressedBack.PopoverAccentOpacity, precision: 6);
+        Assert.Equal(popoverSecondary, dressedBack.PopoverButtonColor);
+        Assert.Equal(popoverAccent, dressedBack.PopoverButtonOutlineColor);
 
         var plain = StoredSessionCodec.Encode(SpaceBranding.Neutral);
         Assert.Null(StoredSessionCodec.DecodeBranding(plain).FolderOutlineColor);

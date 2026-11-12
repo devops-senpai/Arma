@@ -33,7 +33,7 @@ The **Folders** group in the **Sidebar** step (of the theme under **Settings →
 
 ## Tint the command palette
 
-The **Command Palette** group in the **Other** step (of the theme on Mac, of the Space’s Appearance page elsewhere) lays a color over the palette’s glass in this Space, with its own tint, opacity and text color for the light and the dark appearance. Opacity runs from the glass alone to the solid color. The **Popovers** group sets the background, text and secondary text colors of popovers in this Space, such as **Site Controls** and a folder’s appearance, and the color and opacity of their buttons and links; a light background switches the popover to dark text. Each group has a **Reset** that puts its choices back to the Space’s starting look, and each row keeps its own reset.
+The **Command Palette** group in the **Other** step (of the theme on Mac, of the Space’s Appearance page elsewhere) lays a color over the palette’s glass in this Space, with its own tint, opacity and text color for the light and the dark appearance. Opacity runs from the glass alone to the solid color. The **Popovers** group sets the background, text and secondary text colors of popovers in this Space, such as **Site Controls** and a folder’s appearance, the color and opacity of their buttons and links, and a fill and outline for their buttons; a light background switches the popover to dark text. Each group has a **Reset** that puts its choices back to the Space’s starting look, and each row keeps its own reset.
 
 ## A look for dark windows
 

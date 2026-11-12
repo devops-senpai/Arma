@@ -14,7 +14,7 @@ namespace CrestCore.Native;
 public static class ContractCodec {
     /// <summary>SHA-256 of the canonical contract schema.</summary>
     public static ReadOnlySpan<byte> Fingerprint => [
-        0x3b, 0x70, 0x9c, 0x5c, 0x82, 0x2c, 0x2a, 0x71, 0xf3, 0xdb, 0x91, 0xec, 0x80, 0x8c, 0x91, 0xfd, 0xd3, 0xf0, 0xa4, 0x96, 0x40, 0x69, 0x7e, 0xe2, 0x8d, 0x54, 0x83, 0x82, 0xa3, 0x3e, 0x6d, 0xb7
+        0xf8, 0x0d, 0x39, 0x11, 0xdf, 0xff, 0xbb, 0xc1, 0x92, 0x3f, 0x3c, 0x7b, 0x70, 0x07, 0xf0, 0xa3, 0x35, 0x58, 0xf5, 0x31, 0x27, 0xab, 0xe1, 0x96, 0x4a, 0x64, 0x72, 0xe5, 0x04, 0xee, 0xe6, 0xb6
     ];
 
     /// <summary>SHA-256 of the engine contract alone, which an engine binding registers with.</summary>
@@ -18833,7 +18833,9 @@ public static class ContractCodec {
             reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
             reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
             reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
-            reader.ReadDouble());
+            reader.ReadDouble(),
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null);
     }
 
     public static void WriteSpaceBranding(WireWriter writer, SpaceBranding value) {
@@ -18938,6 +18940,18 @@ public static class ContractCodec {
             writer.WritePresence(false);
         }
         writer.WriteDouble(value.PopoverAccentOpacity);
+        if (value.PopoverButtonColor is { } presentPopoverButtonColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentPopoverButtonColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.PopoverButtonOutlineColor is { } presentPopoverButtonOutlineColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentPopoverButtonOutlineColor);
+        } else {
+            writer.WritePresence(false);
+        }
     }
 
     public static SpaceCrest ReadSpaceCrest(WireReader reader) {

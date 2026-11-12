@@ -71,7 +71,9 @@ extension CrestTheme.Sections {
                 text: look.popoverTextColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord,
                 secondaryText: look.popoverSecondaryTextColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord,
                 accent: look.popoverAccentColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord,
-                accentOpacity: look.popoverAccentOpacity))
+                accentOpacity: look.popoverAccentOpacity,
+                button: look.popoverButtonColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord,
+                buttonOutline: look.popoverButtonOutlineColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord))
     }
 
     private static func surface(_ surface: SpacePaletteSurface?) -> CrestTheme.CommandPalette.Surface {
@@ -159,6 +161,8 @@ extension SpaceBranding {
             if let text = popovers.secondaryText { look.popoverSecondaryTextColor = try CrestTheme.color(text) }
             if let text = popovers.accent { look.popoverAccentColor = try CrestTheme.color(text) }
             if let opacity = popovers.accentOpacity { look.popoverAccentOpacity = opacity }
+            if let text = popovers.button { look.popoverButtonColor = try CrestTheme.color(text) }
+            if let text = popovers.buttonOutline { look.popoverButtonOutlineColor = try CrestTheme.color(text) }
         }
         if look != self { look.hasCustomAppearance = true }
         return look

@@ -328,6 +328,12 @@ struct BrowserCrestForge: View {
                 fallback: CrestFlyoutColors.standardAccent)
             BrowserCrestStudioSlider(
                 title: "Accent opacity", value: context.setting(\.popoverAccentOpacity, default: 1))
+            BrowserCrestStudioColorPickerRow(
+                title: "Button color", value: context.setting(\.popoverButtonColor, default: nil),
+                fallback: branding.popoverBackgroundColor ?? CrestFlyoutColors.standardBackground)
+            BrowserCrestStudioColorPickerRow(
+                title: "Button outline color", value: context.setting(\.popoverButtonOutlineColor, default: nil),
+                fallback: branding.popoverAccentColor ?? CrestFlyoutColors.standardAccent)
         } header: {
             Text("Popovers")
         }

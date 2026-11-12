@@ -26,6 +26,7 @@ struct SpaceColorScheme: ViewModifier {
                 CrestFlyoutColors(
                     background: branding?.popoverBackgroundColor, text: branding?.popoverTextColor,
                     secondaryText: branding?.popoverSecondaryTextColor, accent: branding?.popoverAccentColor,
-                    accentOpacity: branding?.popoverAccentOpacity ?? 1))
+                    accentOpacity: branding?.popoverAccentOpacity ?? 1, button: branding?.popoverButtonColor,
+                    buttonOutline: branding?.popoverButtonOutlineColor))
     }
 }

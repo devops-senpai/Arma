@@ -7,7 +7,7 @@ import Foundation
 enum CoreCodec {
     /// SHA-256 of the canonical contract schema. The core refuses any other.
     static let fingerprint: [UInt8] = [
-        0x3b, 0x70, 0x9c, 0x5c, 0x82, 0x2c, 0x2a, 0x71, 0xf3, 0xdb, 0x91, 0xec, 0x80, 0x8c, 0x91, 0xfd, 0xd3, 0xf0, 0xa4, 0x96, 0x40, 0x69, 0x7e, 0xe2, 0x8d, 0x54, 0x83, 0x82, 0xa3, 0x3e, 0x6d, 0xb7
+        0xf8, 0x0d, 0x39, 0x11, 0xdf, 0xff, 0xbb, 0xc1, 0x92, 0x3f, 0x3c, 0x7b, 0x70, 0x07, 0xf0, 0xa3, 0x35, 0x58, 0xf5, 0x31, 0x27, 0xab, 0xe1, 0x96, 0x4a, 0x64, 0x72, 0xe5, 0x04, 0xee, 0xe6, 0xb6
     ]
     /// SHA-256 of the engine contract alone, which an engine binding registers with.
     static let engineFingerprint: [UInt8] = [
@@ -23858,7 +23858,21 @@ extension SpaceBranding {
             popoverAccentColor = nil
         }
         let popoverAccentOpacity = try reader.readDouble()
-        self.init(colors: colors, bannerPattern: bannerPattern, bannerStrength: bannerStrength, readabilityFade: readabilityFade, keepsControlsReadable: keepsControlsReadable, themeMode: themeMode, gradientAngle: gradientAngle, showsTexture: showsTexture, iconStyle: iconStyle, symbolColor: symbolColor, crest: crest, renderingVersion: renderingVersion, folderColorIntensity: folderColorIntensity, textColorMode: textColorMode, hasCustomAppearance: hasCustomAppearance, folderColor: folderColor, folderBackColor: folderBackColor, commandPalette: commandPalette, sidebarTextColor: sidebarTextColor, folderOutlineColor: folderOutlineColor, folderOverrides: folderOverrides, sidebarSecondaryTextColor: sidebarSecondaryTextColor, folderHighlightColor: folderHighlightColor, folderHighlightOpacity: folderHighlightOpacity, popoverBackgroundColor: popoverBackgroundColor, popoverTextColor: popoverTextColor, popoverSecondaryTextColor: popoverSecondaryTextColor, popoverAccentColor: popoverAccentColor, popoverAccentOpacity: popoverAccentOpacity)
+        let popoverButtonColor: BrandColor?
+        if try reader.readPresence() {
+            let popoverButtonColorValue = try BrandColor(from: &reader)
+            popoverButtonColor = popoverButtonColorValue
+        } else {
+            popoverButtonColor = nil
+        }
+        let popoverButtonOutlineColor: BrandColor?
+        if try reader.readPresence() {
+            let popoverButtonOutlineColorValue = try BrandColor(from: &reader)
+            popoverButtonOutlineColor = popoverButtonOutlineColorValue
+        } else {
+            popoverButtonOutlineColor = nil
+        }
+        self.init(colors: colors, bannerPattern: bannerPattern, bannerStrength: bannerStrength, readabilityFade: readabilityFade, keepsControlsReadable: keepsControlsReadable, themeMode: themeMode, gradientAngle: gradientAngle, showsTexture: showsTexture, iconStyle: iconStyle, symbolColor: symbolColor, crest: crest, renderingVersion: renderingVersion, folderColorIntensity: folderColorIntensity, textColorMode: textColorMode, hasCustomAppearance: hasCustomAppearance, folderColor: folderColor, folderBackColor: folderBackColor, commandPalette: commandPalette, sidebarTextColor: sidebarTextColor, folderOutlineColor: folderOutlineColor, folderOverrides: folderOverrides, sidebarSecondaryTextColor: sidebarSecondaryTextColor, folderHighlightColor: folderHighlightColor, folderHighlightOpacity: folderHighlightOpacity, popoverBackgroundColor: popoverBackgroundColor, popoverTextColor: popoverTextColor, popoverSecondaryTextColor: popoverSecondaryTextColor, popoverAccentColor: popoverAccentColor, popoverAccentOpacity: popoverAccentOpacity, popoverButtonColor: popoverButtonColor, popoverButtonOutlineColor: popoverButtonOutlineColor)
     }
 
     func encode(into writer: inout WireWriter) {
@@ -23961,6 +23975,18 @@ extension SpaceBranding {
             writer.writePresence(false)
         }
         writer.writeDouble(popoverAccentOpacity)
+        if let present0 = popoverButtonColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = popoverButtonOutlineColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
     }
 }
 

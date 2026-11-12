@@ -29,7 +29,7 @@ public sealed class SpaceTemplate {
         FolderBackColor: null, CommandPalette: null, SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
         FolderHighlightColor: null, FolderHighlightOpacity: SpaceBranding.DefaultHighlightOpacity,
         PopoverBackgroundColor: null, PopoverTextColor: null, PopoverSecondaryTextColor: null,
-        PopoverAccentColor: null, PopoverAccentOpacity: 1);
+        PopoverAccentColor: null, PopoverAccentOpacity: 1, PopoverButtonColor: null, PopoverButtonOutlineColor: null);
 
     /// What an ordinary Space searches and keeps: the device's default search
     /// and suggestions, which it follows.
