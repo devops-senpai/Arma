@@ -6,6 +6,25 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.74</title>
+            <pubDate>Wed, 11 Nov 2026 23:26:26 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>900074</sparkle:version>
+            <sparkle:shortVersionString>0.9.74</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### From Crest 0.9.7
+- An extension that opens its own popup, as a password manager does from a locked sign-in field, shows it over the page on Chromium.
+- Peek keeps working for links on pages that update their own address as you browse them.
+- A link that launches Arma opens in front of the windows it reopens.
+- Importing from Arc no longer fails for Spaces that share a profile, and the import finishes even when Arc's passwords can't be read.
+- The Private Browsing Space no longer offers a lock it can't keep.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.74/Arma-0.9.74.dmg" length="195235077" type="application/octet-stream" sparkle:edSignature="qGGt0/obiC7vusVLuKlPibd9CLc/w0rRf+FuyfdUZXBC5Zkq1JpBWoqbgso9mrMwsRcsXJwrhsvnMLGFOUIdBQ=="/>
+        </item>
+        <item>
             <title>0.9.68</title>
             <pubDate>Wed, 11 Nov 2026 13:52:11 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -450,6 +469,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: fGWB1ZQi+17SSgAd+LNb2H8wwEuSYhhmR/UJq1HfD1N+5slcezwf44SHHUlObtvEIGpFFkK7uE9cJR3jvAsPBQ==
-length: 33178
+edSignature: cgCOOaJdByj15yhl2QO7GuSWTKtSSBcNYpT5r15clF9b0HhaI+M6tLruZuv4TApCV7q1Rfh09EILQej/qm6vDg==
+length: 34539
 -->
