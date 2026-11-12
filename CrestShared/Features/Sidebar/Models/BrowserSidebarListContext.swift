@@ -30,6 +30,9 @@ struct BrowserSidebarListContext {
     /// How a saved or pinned tab gets back to the page it was saved from, where
     /// the host offers it.
     var restoreSavedLocation: ((UUID) -> Void)? = nil
+    /// Moves a tab into a window of its own, where the host's window lets
+    /// its tabs go.
+    var openInNewWindow: ((UUID) -> Void)? = nil
 
     /// The Space as the actions name it. A Space keeps its profile while it is
     /// on screen; a new profile is a new page.
