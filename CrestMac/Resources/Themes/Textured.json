@@ -43,6 +43,12 @@
    "tint": "#4c4f69"
   }
  },
+ "controls": {
+  "fill": "#3a3352",
+  "fillOpacity": 0.9,
+  "secondaryText": "#cbc3e3",
+  "text": "#ffffff"
+ },
  "dark": {
   "background": {
    "angle": 79.97563552520852,
@@ -71,6 +77,12 @@
     "text": "#4c4f69",
     "tint": "#eff1f5"
    }
+  },
+  "controls": {
+   "fill": "#3a3352",
+   "fillOpacity": 0.9,
+   "secondaryText": "#cbc3e3",
+   "text": "#ffffff"
   },
   "folders": {
    "backColor": "#8b8268",

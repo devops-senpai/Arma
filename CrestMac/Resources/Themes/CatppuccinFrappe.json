@@ -27,6 +27,12 @@
    "tint": "#303446"
   }
  },
+ "controls": {
+  "fill": "#414559",
+  "fillOpacity": 0.9,
+  "secondaryText": "#b5bfe2",
+  "text": "#c6d0f5"
+ },
  "folders": {
   "backColor": "#626880",
   "color": "#81c8be",
