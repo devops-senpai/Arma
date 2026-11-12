@@ -4,6 +4,147 @@
     "" : {
 
     },
+    "Catppuccin's darkest flavor, with warm peach folders" : {
+
+    },
+    "Catppuccin's muted middle flavor, with teal folders" : {
+
+    },
+    "Arma Grey" : {
+
+    },
+    "Arma Navy" : {
+
+    },
+    "Arma Red" : {
+
+    },
+    "Arma Gold" : {
+
+    },
+    "Arma White" : {
+
+    },
+    "System text color" : {
+
+    },
+    "Tab text" : {
+
+    },
+    "System text" : {
+
+    },
+    "The color of the tabs' titles" : {
+
+    },
+    "New Tab, Clear and the sidebar's other quieter text" : {
+
+    },
+    "Mail" : {
+
+    },
+    "Docs" : {
+
+    },
+    "Music" : {
+
+    },
+    "Guidon" : {
+
+    },
+    "Crane" : {
+
+    },
+    "Sparrow" : {
+
+    },
+    "The theme of the Space this window shows" : {
+
+    },
+    "Theme of the shown Space" : {
+
+    },
+    "%@ uses this theme; choose another for it first." : {
+
+    },
+    "No Theme" : {
+
+    },
+    "The theme this Space wears; edit themes in Settings › Themes" : {
+
+    },
+    "Also used by %@" : {
+
+    },
+    "Saved themes for Spaces" : {
+
+    },
+    "themes saved theme new duplicate rename delete import export colors look dark light background image picture tab backing Catppuccin" : {
+
+    },
+    "crest studio name icon emblem colors theme banner background image picture tab backing sidebar pattern gradient accent" : {
+
+    },
+    "Behind Each Row" : {
+
+    },
+    "Behind the Sidebar" : {
+
+    },
+    "Tab Backing" : {
+
+    },
+    "Tab backing" : {
+
+    },
+    "Tab backing color" : {
+
+    },
+    "Duplicate" : {
+
+    },
+    "Delete Theme" : {
+
+    },
+    "New Theme" : {
+
+    },
+    "Duplicate Theme" : {
+
+    },
+    "Choose a theme, or make a new one." : {
+
+    },
+    "Give this theme a look of its own while windows are dark" : {
+
+    },
+    "%@ Copy" : {
+
+    },
+    "Dark look" : {
+
+    },
+    "The theme’s colors are on, but its background image could not be read." : {
+
+    },
+    "Fill Window" : {
+
+    },
+    "Original Size" : {
+
+    },
+    "Match Width" : {
+
+    },
+    "Match Height" : {
+
+    },
+    "Grow to fit" : {
+
+    },
+    "Repeat" : {
+
+    },
     "Automation" : {
 
     },
@@ -1088,6 +1229,29 @@
     },
     "%lld percent and %lld percent" : {
 
+    },
+    "%lld passwords couldn’t be saved." : {
+      "comment" : "Follows the setup completion summary when an import couldn’t save some passwords.",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 password couldn’t be saved."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld passwords couldn’t be saved."
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "%lld points" : {
       "localizations" : {
@@ -4142,6 +4306,12 @@
     "Command-click" : {
 
     },
+    "Command-click opens a new tab, or Option-click when Command opens Peek." : {
+
+    },
+    "Command-click opens a new tab, or Option-click when Command opens Peek. Hold Option to drag the link itself." : {
+
+    },
     "Comments" : {
 
     },
@@ -4970,6 +5140,18 @@
         }
       }
     },
+    "Arma couldn’t finish the import or restore the original Keychain inventory. Review this Space before trying again." : {
+
+    },
+    "Arma couldn’t import these passwords. This Space’s passwords are unchanged." : {
+
+    },
+    "Arma couldn’t read that password file." : {
+
+    },
+    "Arma couldn’t read this Space’s passwords. Nothing was imported." : {
+
+    },
     "Crest preview" : {
       "extractionState" : "manual"
     },
@@ -5028,6 +5210,9 @@
     "Arma software update" : {
 
     },
+    "Arma quit unexpectedly while reopening your pages." : {
+
+    },
     "Crest Studio" : {
       "localizations" : {
         "ar" : {
@@ -5078,9 +5263,6 @@
           }
         }
       }
-    },
-    "example.com" : {
-
     },
     "Crimson" : {
 
@@ -5584,6 +5766,9 @@
     "Dim unloaded tabs" : {
 
     },
+    "Dim the page behind Peek" : {
+
+    },
     "Direwolf" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5641,6 +5826,9 @@
     "Division" : {
 
     },
+    "Do you want to try to reopen them?" : {
+
+    },
     "Dock Sidebar" : {
 
     },
@@ -5648,6 +5836,9 @@
 
     },
     "Don’t ask again until it disconnects" : {
+
+    },
+    "Don’t Reopen" : {
 
     },
     "Don't Share" : {
@@ -12742,6 +12933,12 @@
         }
       }
     },
+    "Shift (⇧)" : {
+
+    },
+    "Shift-click" : {
+
+    },
     "shift" : {
       "localizations" : {
         "ar" : {
@@ -14312,12 +14509,6 @@
         }
       }
     },
-    "The other key opens a new tab. Hold Option to drag the link itself." : {
-
-    },
-    "The other key opens the link in a new tab." : {
-
-    },
     "The page could not be exported." : {
 
     },
@@ -14815,6 +15006,9 @@
       }
     },
     "This site’s certificate is not trusted. Information you send could be read by others." : {
+
+    },
+    "This Space’s saved passwords changed during review. No passwords were imported; choose the file again to refresh conflicts." : {
 
     },
     "This Tab" : {
