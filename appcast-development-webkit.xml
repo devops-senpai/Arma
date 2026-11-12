@@ -6,6 +6,22 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.78</title>
+            <pubDate>Thu, 12 Nov 2026 13:39:01 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>900078</sparkle:version>
+            <sparkle:shortVersionString>0.9.78</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### Improved
+- The themes Arma comes with now color their popovers to match, in both light and dark looks.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.78/Arma-0.9.78.dmg" length="194803882" type="application/octet-stream" sparkle:edSignature="YRjGAJBzh4HjNMQVnlPEzD67gG92Gp9vkfo1W5oltGEyjI1/n5PArRe4sShovmWbJtz42z9qhrYw36ve/PHWAw=="/>
+        </item>
+        <item>
             <title>0.9.77</title>
             <pubDate>Thu, 12 Nov 2026 13:07:18 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -509,6 +525,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: 0nxDP7Rl/5+Ni7JDTB0GSjIu3FdrAJr0XN6keohofJ9OiXel+EwLv8s/ny5//VccalehaplVLTc/HCtAxCJsBw==
-length: 37162
+edSignature: bSfab/JPF4uXtkCZywkUApB8eaYKF4YFC0aPBEPPWRfRjRvx88SYcrc7h2kY9nuPWtcxv89DdxsILL7RhHAIBg==
+length: 38172
 -->
