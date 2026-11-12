@@ -6,6 +6,22 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.77</title>
+            <pubDate>Thu, 12 Nov 2026 13:07:05 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>900077</sparkle:version>
+            <sparkle:shortVersionString>0.9.77</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### New
+- Themes can color popovers such as Site Controls and Folder Appearance: background, text, secondary text, accent and its opacity, and button fill and outline. Find them in Settings › Themes › Other › Popovers, in a theme file's `popovers` section, or with `arma theme edit --popover-…`.
+- Popover buttons stay readable when they are unavailable.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.77/Arma-0.9.77.dmg" length="194803327" type="application/octet-stream" sparkle:edSignature="XhM0rHzmvjVuES321G+F/+ijrhCz6qzZr/Z7/pPNTRbvyh9oUgqSl8uze2YIC+wMHP56ybPR+09dJF5eXTokDQ=="/>
+        </item>
+        <item>
             <title>0.9.74</title>
             <pubDate>Wed, 11 Nov 2026 23:26:26 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -469,6 +485,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: cgCOOaJdByj15yhl2QO7GuSWTKtSSBcNYpT5r15clF9b0HhaI+M6tLruZuv4TApCV7q1Rfh09EILQej/qm6vDg==
-length: 34539
+edSignature: DUdIbUk35QWa19ndiYiPL589R6OWerzgWgdcN6Ytnup83MiJSp+8IOZgtiaTmgnOOIr5jpRkwHTskj6I8v+hAg==
+length: 35746
 -->
