@@ -37,5 +37,14 @@
  "icon": {
   "color": "#c6a0f6"
  },
- "name": "Catppuccin Macchiato"
+ "name": "Catppuccin Macchiato",
+ "popovers": {
+  "accent": "#b7bdf8",
+  "accentOpacity": 1,
+  "background": "#24273a",
+  "button": "#363a4f",
+  "buttonOutline": "#6e738d",
+  "secondaryText": "#a5adcb",
+  "text": "#cad3f5"
+ }
 }

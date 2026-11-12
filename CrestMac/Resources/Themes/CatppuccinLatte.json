@@ -37,5 +37,14 @@
  "icon": {
   "color": "#8839ef"
  },
- "name": "Catppuccin Latte"
+ "name": "Catppuccin Latte",
+ "popovers": {
+  "accent": "#8839ef",
+  "accentOpacity": 1,
+  "background": "#eff1f5",
+  "button": "#e6e9ef",
+  "buttonOutline": "#7287fd",
+  "secondaryText": "#5c5f77",
+  "text": "#4c4f69"
+ }
 }

@@ -37,5 +37,14 @@
  "icon": {
   "color": "#ca9ee6"
  },
- "name": "Catppuccin Frapp\u00e9"
+ "name": "Catppuccin Frappé",
+ "popovers": {
+  "accent": "#81c8be",
+  "accentOpacity": 1,
+  "background": "#303446",
+  "button": "#414559",
+  "buttonOutline": "#838ba7",
+  "secondaryText": "#a5adce",
+  "text": "#c6d0f5"
+ }
 }

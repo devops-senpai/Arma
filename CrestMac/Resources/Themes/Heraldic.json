@@ -37,5 +37,14 @@
  "icon": {
   "color": "default"
  },
- "name": "Heraldic"
+ "name": "Heraldic",
+ "popovers": {
+  "accent": "#e0bd6c",
+  "accentOpacity": 1,
+  "background": "#2e0b14",
+  "button": "#4a1522",
+  "buttonOutline": "#c9a254",
+  "secondaryText": "#c9b48a",
+  "text": "#f4e9d8"
+ }
 }

@@ -37,5 +37,14 @@
  "icon": {
   "color": "default"
  },
- "name": "Modern"
+ "name": "Modern",
+ "popovers": {
+  "accent": "#adc1da",
+  "accentOpacity": 1,
+  "background": "#1e2833",
+  "button": "#2c3a48",
+  "buttonOutline": "#4f6375",
+  "secondaryText": "#9fb3c4",
+  "text": "#e6edf3"
+ }
 }

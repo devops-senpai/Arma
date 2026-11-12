@@ -80,6 +80,15 @@
   },
   "icon": {
    "color": "#cba6f7"
+  },
+  "popovers": {
+   "accent": "#ffb3ea",
+   "accentOpacity": 1,
+   "background": "#13203a",
+   "button": "#22345a",
+   "buttonOutline": "#9b3fd6",
+   "secondaryText": "#b9c7e6",
+   "text": "#f7fcf1"
   }
  },
  "folders": {
@@ -92,5 +101,14 @@
  "icon": {
   "color": "#cba6f7"
  },
- "name": "JellyFish"
+ "name": "JellyFish",
+ "popovers": {
+  "accent": "#ffb3ea",
+  "accentOpacity": 1,
+  "background": "#13203a",
+  "button": "#22345a",
+  "buttonOutline": "#9b3fd6",
+  "secondaryText": "#b9c7e6",
+  "text": "#f7fcf1"
+ }
 }

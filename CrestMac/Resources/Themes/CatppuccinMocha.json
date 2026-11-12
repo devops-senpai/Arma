@@ -37,5 +37,14 @@
  "icon": {
   "color": "#cba6f7"
  },
- "name": "Catppuccin Mocha"
+ "name": "Catppuccin Mocha",
+ "popovers": {
+  "accent": "#fab387",
+  "accentOpacity": 1,
+  "background": "#1e1e2e",
+  "button": "#313244",
+  "buttonOutline": "#7f849c",
+  "secondaryText": "#a6adc8",
+  "text": "#cdd6f4"
+ }
 }

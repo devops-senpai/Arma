@@ -63,6 +63,15 @@
   },
   "icon": {
    "color": "#dcf3fc"
+  },
+  "popovers": {
+   "accent": "#84cff0",
+   "accentOpacity": 1,
+   "background": "#0b2733",
+   "button": "#12394a",
+   "buttonOutline": "#2a8ba7",
+   "secondaryText": "#9bbcc8",
+   "text": "#d1e6ec"
   }
  },
  "folders": {
@@ -75,5 +84,14 @@
  "icon": {
   "color": "#1f5f80"
  },
- "name": "Arc Sky"
+ "name": "Arc Sky",
+ "popovers": {
+  "accent": "#0b5d7a",
+  "accentOpacity": 1,
+  "background": "#e9f2f6",
+  "button": "#cdd5d9",
+  "buttonOutline": "#c1d1f6",
+  "secondaryText": "#000000",
+  "text": "#000000"
+ }
 }

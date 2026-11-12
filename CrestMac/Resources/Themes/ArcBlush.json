@@ -63,6 +63,15 @@
   },
   "icon": {
    "color": "#ffebed"
+  },
+  "popovers": {
+   "accent": "#fda1ad",
+   "accentOpacity": 1,
+   "background": "#2a0910",
+   "button": "#4a1420",
+   "buttonOutline": "#cf3960",
+   "secondaryText": "#d49aa8",
+   "text": "#f5d6de"
   }
  },
  "folders": {
@@ -75,5 +84,14 @@
  "icon": {
   "color": "#9e1c36"
  },
- "name": "Arc Blush"
+ "name": "Arc Blush",
+ "popovers": {
+  "accent": "#b0213c",
+  "accentOpacity": 1,
+  "background": "#fdf1f3",
+  "button": "#f8d7de",
+  "buttonOutline": "#fda1ad",
+  "secondaryText": "#7a3a48",
+  "text": "#39000b"
+ }
 }

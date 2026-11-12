@@ -81,6 +81,15 @@
   },
   "icon": {
    "color": "#969696"
+  },
+  "popovers": {
+   "accent": "#fdf370",
+   "accentOpacity": 1,
+   "background": "#4e466a",
+   "button": "#3a3352",
+   "buttonOutline": "#8839ef",
+   "secondaryText": "#cbc3e3",
+   "text": "#ffffff"
   }
  },
  "folders": {
@@ -93,5 +102,14 @@
  "icon": {
   "color": "#969696"
  },
- "name": "Textured"
+ "name": "Textured",
+ "popovers": {
+  "accent": "#fdf370",
+  "accentOpacity": 1,
+  "background": "#4e466a",
+  "button": "#3a3352",
+  "buttonOutline": "#8839ef",
+  "secondaryText": "#cbc3e3",
+  "text": "#ffffff"
+ }
 }

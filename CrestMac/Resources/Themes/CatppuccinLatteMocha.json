@@ -63,6 +63,15 @@
   },
   "icon": {
    "color": "#cba6f7"
+  },
+  "popovers": {
+   "accent": "#cba6f7",
+   "accentOpacity": 1,
+   "background": "#1e1e2e",
+   "button": "#313244",
+   "buttonOutline": "#7f849c",
+   "secondaryText": "#a6adc8",
+   "text": "#cdd6f4"
   }
  },
  "folders": {
@@ -75,5 +84,14 @@
  "icon": {
   "color": "#8839ef"
  },
- "name": "Catppuccin Latte / Mocha"
+ "name": "Catppuccin Latte / Mocha",
+ "popovers": {
+  "accent": "#8839ef",
+  "accentOpacity": 1,
+  "background": "#eff1f5",
+  "button": "#e6e9ef",
+  "buttonOutline": "#7287fd",
+  "secondaryText": "#5c5f77",
+  "text": "#4c4f69"
+ }
 }
