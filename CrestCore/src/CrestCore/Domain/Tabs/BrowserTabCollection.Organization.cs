@@ -107,6 +107,10 @@ public sealed partial class BrowserTabCollection {
         int insertion;
         if (anchor is { } actual) insertion = remaining.FindIndex(t => t.Id == actual);
         else if (folder is not null && remaining.FindLastIndex(t => t.FolderId == folder) is var last && last >= 0) insertion = last + 1;
+        // An empty folder stands where its order anchor is; its first tab goes there, so filing
+        // into the folder never carries it off to where the tab came from.
+        else if (folder is { } empty && remainingTree.TabAnchor(empty, remaining) is { } standing
+            && remaining.FindIndex(t => t.Id == standing && t.Placement == location) is var at && at >= 0) insertion = at;
         else insertion = folder is null ? SectionEnd(remaining, location) : Math.Min(tabs.FindIndex(t => memberIds.Contains(t.Id)), remaining.Count);
         if (detachSplitMembers && anchor is null && insertion > 0 && insertion < remaining.Count
             && remaining[insertion].SplitGroupId is { } crossing && remaining[insertion - 1].SplitGroupId == crossing)
