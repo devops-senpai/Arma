@@ -17,6 +17,7 @@ enum CrestThemeSection: String, Codable, CaseIterable, Sendable {
     case icon
     case folders
     case commandPalette = "command-palette"
+    case popovers
 }
 
 /// A theme as the file holds it: the look, and the look for dark windows.
@@ -107,17 +108,26 @@ struct CrestTheme: Codable, Equatable, Sendable {
         var dark: Surface?
     }
 
-    /// The four sections of one look, as the file's top level and its `dark`
+    /// The popovers the window presents, such as Site Controls.
+    struct Popovers: Codable, Equatable, Sendable {
+        /// The color that fills them, or `default` for the standard surface.
+        var background: String?
+        /// The color their text reads in, or `default` for the standard text.
+        var text: String?
+    }
+
+    /// The five sections of one look, as the file's top level and its `dark`
     /// object each hold them.
     struct Sections: Codable, Equatable, Sendable {
         var background: Background?
         var icon: Icon?
         var folders: Folders?
         var commandPalette: CommandPalette?
+        var popovers: Popovers?
 
         /// Whether the sections name anything at all.
         var isEmpty: Bool {
-            background == nil && icon == nil && folders == nil && commandPalette == nil
+            background == nil && icon == nil && folders == nil && commandPalette == nil && popovers == nil
         }
 
         /// These sections with `section` as `other` has it, the rest kept.
@@ -128,6 +138,7 @@ struct CrestTheme: Codable, Equatable, Sendable {
             case .icon: reset.icon = other.icon
             case .folders: reset.folders = other.folders
             case .commandPalette: reset.commandPalette = other.commandPalette
+            case .popovers: reset.popovers = other.popovers
             }
             return reset
         }
@@ -172,6 +183,12 @@ struct CrestTheme: Codable, Equatable, Sendable {
                 section.light = Self.merged(section.light, with: palette.light)
                 section.dark = Self.merged(section.dark, with: palette.dark)
                 merged.commandPalette = section
+            }
+            if let popovers = other.popovers {
+                var section = merged.popovers ?? Popovers()
+                if let value = popovers.background { section.background = value }
+                if let value = popovers.text { section.text = value }
+                merged.popovers = section
             }
             return merged
         }
@@ -224,6 +241,7 @@ struct CrestTheme: Codable, Equatable, Sendable {
     var icon: Icon?
     var folders: Folders?
     var commandPalette: CommandPalette?
+    var popovers: Popovers?
     /// The look for dark windows, worn in them while `darkLook` says so and
     /// kept, turned off, otherwise; nil when none was ever made.
     var dark: Sections?
@@ -241,12 +259,17 @@ struct CrestTheme: Codable, Equatable, Sendable {
 
     /// The top-level sections: the look, or the light look of a pair.
     var sections: Sections {
-        get { Sections(background: background, icon: icon, folders: folders, commandPalette: commandPalette) }
+        get {
+            Sections(
+                background: background, icon: icon, folders: folders, commandPalette: commandPalette,
+                popovers: popovers)
+        }
         set {
             background = newValue.background
             icon = newValue.icon
             folders = newValue.folders
             commandPalette = newValue.commandPalette
+            popovers = newValue.popovers
         }
     }
 
@@ -269,7 +292,7 @@ struct CrestTheme: Codable, Equatable, Sendable {
     var sectionTitles: [String] {
         [
             (background != nil, "background"), (icon != nil, "icon"), (folders != nil, "folders"),
-            (commandPalette != nil, "command palette"), (dark != nil, "dark look"),
+            (commandPalette != nil, "command palette"), (popovers != nil, "popovers"), (dark != nil, "dark look"),
             (backgroundImage != nil, "background image"),
         ].filter(\.0).map(\.1)
     }

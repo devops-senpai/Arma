@@ -6790,7 +6790,9 @@ struct SpaceBranding: Equatable, Sendable {
         folderOverrides: nil,
         sidebarSecondaryTextColor: nil,
         folderHighlightColor: nil,
-        folderHighlightOpacity: 0.12
+        folderHighlightOpacity: 0.12,
+        popoverBackgroundColor: nil,
+        popoverTextColor: nil
     )
 
     var colors: ColorPalette
@@ -6817,6 +6819,8 @@ struct SpaceBranding: Equatable, Sendable {
     var sidebarSecondaryTextColor: BrandColor?
     var folderHighlightColor: BrandColor?
     var folderHighlightOpacity: Double
+    var popoverBackgroundColor: BrandColor?
+    var popoverTextColor: BrandColor?
 }
 
 struct SpaceCrest: Equatable, Sendable {
@@ -23005,7 +23009,9 @@ struct SpaceAccent: Hashable, Sendable {
             folderOverrides: nil,
             sidebarSecondaryTextColor: nil,
             folderHighlightColor: nil,
-            folderHighlightOpacity: 0.12
+            folderHighlightOpacity: 0.12,
+            popoverBackgroundColor: nil,
+            popoverTextColor: nil
         ),
         swatch: BrandColor(red: 0.29, green: 0.25, blue: 0.58, alpha: 1)
     )
@@ -23087,7 +23093,9 @@ struct SpaceAccent: Hashable, Sendable {
             folderOverrides: nil,
             sidebarSecondaryTextColor: nil,
             folderHighlightColor: nil,
-            folderHighlightOpacity: 0.12
+            folderHighlightOpacity: 0.12,
+            popoverBackgroundColor: nil,
+            popoverTextColor: nil
         ),
         swatch: BrandColor(red: 0.85, green: 0.27, blue: 0.2, alpha: 1)
     )
@@ -23169,7 +23177,9 @@ struct SpaceAccent: Hashable, Sendable {
             folderOverrides: nil,
             sidebarSecondaryTextColor: nil,
             folderHighlightColor: nil,
-            folderHighlightOpacity: 0.12
+            folderHighlightOpacity: 0.12,
+            popoverBackgroundColor: nil,
+            popoverTextColor: nil
         ),
         swatch: BrandColor(red: 0.12, green: 0.49, blue: 0.52, alpha: 1)
     )
@@ -23251,7 +23261,9 @@ struct SpaceAccent: Hashable, Sendable {
             folderOverrides: nil,
             sidebarSecondaryTextColor: nil,
             folderHighlightColor: nil,
-            folderHighlightOpacity: 0.12
+            folderHighlightOpacity: 0.12,
+            popoverBackgroundColor: nil,
+            popoverTextColor: nil
         ),
         swatch: BrandColor(red: 0.72, green: 0.25, blue: 0.42, alpha: 1)
     )
@@ -23503,7 +23515,9 @@ struct SpaceHouse: Hashable, Sendable {
             folderOverrides: nil,
             sidebarSecondaryTextColor: nil,
             folderHighlightColor: nil,
-            folderHighlightOpacity: 0.12
+            folderHighlightOpacity: 0.12,
+            popoverBackgroundColor: nil,
+            popoverTextColor: nil
         ),
         appIconName: "ArmaWinter"
     )
@@ -23580,7 +23594,9 @@ struct SpaceHouse: Hashable, Sendable {
             folderOverrides: nil,
             sidebarSecondaryTextColor: nil,
             folderHighlightColor: nil,
-            folderHighlightOpacity: 0.12
+            folderHighlightOpacity: 0.12,
+            popoverBackgroundColor: nil,
+            popoverTextColor: nil
         ),
         appIconName: "ArmaLion"
     )
@@ -23657,7 +23673,9 @@ struct SpaceHouse: Hashable, Sendable {
             folderOverrides: nil,
             sidebarSecondaryTextColor: nil,
             folderHighlightColor: nil,
-            folderHighlightOpacity: 0.12
+            folderHighlightOpacity: 0.12,
+            popoverBackgroundColor: nil,
+            popoverTextColor: nil
         ),
         appIconName: "ArmaStorm"
     )
@@ -23734,7 +23752,9 @@ struct SpaceHouse: Hashable, Sendable {
             folderOverrides: nil,
             sidebarSecondaryTextColor: nil,
             folderHighlightColor: nil,
-            folderHighlightOpacity: 0.12
+            folderHighlightOpacity: 0.12,
+            popoverBackgroundColor: nil,
+            popoverTextColor: nil
         ),
         appIconName: "ArmaDragon"
     )
@@ -23811,7 +23831,9 @@ struct SpaceHouse: Hashable, Sendable {
             folderOverrides: nil,
             sidebarSecondaryTextColor: nil,
             folderHighlightColor: nil,
-            folderHighlightOpacity: 0.12
+            folderHighlightOpacity: 0.12,
+            popoverBackgroundColor: nil,
+            popoverTextColor: nil
         ),
         appIconName: "ArmaMeadow"
     )
@@ -23888,7 +23910,9 @@ struct SpaceHouse: Hashable, Sendable {
             folderOverrides: nil,
             sidebarSecondaryTextColor: nil,
             folderHighlightColor: nil,
-            folderHighlightOpacity: 0.12
+            folderHighlightOpacity: 0.12,
+            popoverBackgroundColor: nil,
+            popoverTextColor: nil
         ),
         appIconName: "ArmaIron"
     )
@@ -23965,7 +23989,9 @@ struct SpaceHouse: Hashable, Sendable {
             folderOverrides: nil,
             sidebarSecondaryTextColor: nil,
             folderHighlightColor: nil,
-            folderHighlightOpacity: 0.12
+            folderHighlightOpacity: 0.12,
+            popoverBackgroundColor: nil,
+            popoverTextColor: nil
         ),
         appIconName: "ArmaRiver"
     )
@@ -24042,7 +24068,9 @@ struct SpaceHouse: Hashable, Sendable {
             folderOverrides: nil,
             sidebarSecondaryTextColor: nil,
             folderHighlightColor: nil,
-            folderHighlightOpacity: 0.12
+            folderHighlightOpacity: 0.12,
+            popoverBackgroundColor: nil,
+            popoverTextColor: nil
         ),
         appIconName: "ArmaSun"
     )
@@ -24119,7 +24147,9 @@ struct SpaceHouse: Hashable, Sendable {
             folderOverrides: nil,
             sidebarSecondaryTextColor: nil,
             folderHighlightColor: nil,
-            folderHighlightOpacity: 0.12
+            folderHighlightOpacity: 0.12,
+            popoverBackgroundColor: nil,
+            popoverTextColor: nil
         ),
         appIconName: "ArmaVigil"
     )
@@ -24196,7 +24226,9 @@ struct SpaceHouse: Hashable, Sendable {
             folderOverrides: nil,
             sidebarSecondaryTextColor: nil,
             folderHighlightColor: nil,
-            folderHighlightOpacity: 0.12
+            folderHighlightOpacity: 0.12,
+            popoverBackgroundColor: nil,
+            popoverTextColor: nil
         ),
         appIconName: "Arma"
     )
@@ -24359,7 +24391,9 @@ struct SpaceScheme: Hashable, Sendable {
             folderOverrides: nil,
             sidebarSecondaryTextColor: nil,
             folderHighlightColor: nil,
-            folderHighlightOpacity: 0.12
+            folderHighlightOpacity: 0.12,
+            popoverBackgroundColor: nil,
+            popoverTextColor: nil
         )
     )
 

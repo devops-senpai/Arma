@@ -37,7 +37,8 @@ public sealed partial record SpaceBranding {
             SpaceIconStyle.SimpleSymbol, SymbolColor: null, crest, BaselineRenderingVersion, FolderColorIntensity: 0,
             SpaceTextColorMode.Automatic, HasCustomAppearance: null, FolderColor: null, FolderBackColor: null, CommandPalette: null,
             SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
-            FolderHighlightColor: null, FolderHighlightOpacity: SpaceBranding.DefaultHighlightOpacity);
+            FolderHighlightColor: null, FolderHighlightOpacity: SpaceBranding.DefaultHighlightOpacity,
+            PopoverBackgroundColor: null, PopoverTextColor: null);
     }
 
     #endregion

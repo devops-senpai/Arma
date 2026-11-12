@@ -27,7 +27,8 @@ public sealed class SpaceTemplate {
             chargeScale: 1),
         RenderingVersion: 2, FolderColorIntensity: 0, SpaceTextColorMode.Automatic, HasCustomAppearance: null, FolderColor: null,
         FolderBackColor: null, CommandPalette: null, SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
-        FolderHighlightColor: null, FolderHighlightOpacity: SpaceBranding.DefaultHighlightOpacity);
+        FolderHighlightColor: null, FolderHighlightOpacity: SpaceBranding.DefaultHighlightOpacity,
+        PopoverBackgroundColor: null, PopoverTextColor: null);
 
     /// What an ordinary Space searches and keeps: the device's default search
     /// and suggestions, which it follows.

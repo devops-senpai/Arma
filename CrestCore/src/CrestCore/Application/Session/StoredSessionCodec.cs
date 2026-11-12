@@ -167,6 +167,8 @@ internal static partial class StoredSessionCodec {
         public const string SidebarSecondaryTextColor = "sidebarSecondaryTextColor";
         public const string FolderHighlightColor = "folderHighlightColor";
         public const string FolderHighlightOpacity = "folderHighlightOpacity";
+        public const string PopoverBackgroundColor = "popoverBackgroundColor";
+        public const string PopoverTextColor = "popoverTextColor";
         public const string Path = "path";
         public const string BackColor = "backColor";
         public const string OutlineColor = "outlineColor";

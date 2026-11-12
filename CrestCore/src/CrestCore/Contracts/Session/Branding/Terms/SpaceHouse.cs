@@ -153,7 +153,8 @@ public sealed class SpaceHouse {
             arms, CrestVocabulary.Studio.Version, FolderColorIntensity: 0, SpaceTextColorMode.Automatic, HasCustomAppearance: false,
             FolderColor: null, FolderBackColor: null, CommandPalette: null,
             SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
-            FolderHighlightColor: null, FolderHighlightOpacity: SpaceBranding.DefaultHighlightOpacity);
+            FolderHighlightColor: null, FolderHighlightOpacity: SpaceBranding.DefaultHighlightOpacity,
+            PopoverBackgroundColor: null, PopoverTextColor: null);
 
     /// A house's arms: its figure on its field, each part in a tincture of its
     /// own, `colors` holding the field, second field, band, emblem, border and

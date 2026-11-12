@@ -55,7 +55,11 @@ struct BrowserCrestStudioStep: Hashable, Identifiable, Sendable {
     /// The rest of the window the Space dresses, beyond its crest and sidebar.
     static let other = BrowserCrestStudioStep(
         kind: .other, name: "other", title: "Other", symbol: "slider.horizontal.3", isCrestOnly: false,
-        summary: { $0.commandPalette?.isTinted == true ? "Tinted palette" : "Default" })
+        summary: { branding in
+            if branding.commandPalette?.isTinted == true { return "Tinted palette" }
+            return branding.popoverBackgroundColor != nil || branding.popoverTextColor != nil
+                ? "Tinted popovers" : "Default"
+        })
 
     /// Every step, in the step bar's order.
     static let all: [BrowserCrestStudioStep] = [start, shape, field, band, emblem, border, finish, sidebar, other]

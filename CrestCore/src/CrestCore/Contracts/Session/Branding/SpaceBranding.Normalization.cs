@@ -55,6 +55,8 @@ public sealed partial record SpaceBranding {
                 ? NormalizedColor(secondaryText) : null,
             FolderHighlightColor = branding.FolderHighlightColor is { } highlight ? NormalizedColor(highlight) : null,
             FolderHighlightOpacity = Unit(branding.FolderHighlightOpacity),
+            PopoverBackgroundColor = branding.PopoverBackgroundColor is { } popover ? NormalizedColor(popover) : null,
+            PopoverTextColor = branding.PopoverTextColor is { } popoverText ? NormalizedColor(popoverText) : null,
             Crest = crest with {
                 Palette = palette is null ? null : new(palette),
                 BackplateColorIndex = LayerIndex(crest.BackplateColorIndex, layers),

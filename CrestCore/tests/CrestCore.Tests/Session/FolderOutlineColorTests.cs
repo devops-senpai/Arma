@@ -7,8 +7,9 @@ namespace CrestCore.Tests;
 
 public sealed class FolderOutlineColorTests {
     /// A Space's folder outline color, its folder overrides by path, its
-    /// sidebar's secondary text color and its folder highlight survive the
-    /// stored session, and a branding without them reads back without them.
+    /// sidebar's secondary text color, its folder highlight and its popover
+    /// colors survive the stored session, and a branding without them reads
+    /// back without them.
     [Fact]
     public void FolderOutlineColorSurvivesTheStoredSession() {
         var outline = new BrandColor(0.05, 0.44, 0.58);
@@ -35,11 +36,20 @@ public sealed class FolderOutlineColorTests {
         Assert.Equal(highlight, litBack.FolderHighlightColor);
         Assert.Equal(0.4, litBack.FolderHighlightOpacity, precision: 6);
 
+        var popoverBack = new BrandColor(0.12, 0.1, 0.2);
+        var popoverText = new BrandColor(0.95, 0.9, 0.7);
+        var dressed = SpaceBranding.Normalized(SpaceBranding.Neutral with { PopoverBackgroundColor = popoverBack, PopoverTextColor = popoverText });
+        var dressedBack = StoredSessionCodec.DecodeBranding(StoredSessionCodec.Encode(dressed));
+        Assert.Equal(popoverBack, dressedBack.PopoverBackgroundColor);
+        Assert.Equal(popoverText, dressedBack.PopoverTextColor);
+
         var plain = StoredSessionCodec.Encode(SpaceBranding.Neutral);
         Assert.Null(StoredSessionCodec.DecodeBranding(plain).FolderOutlineColor);
         Assert.Null(StoredSessionCodec.DecodeBranding(plain).FolderOverrides);
         Assert.Null(StoredSessionCodec.DecodeBranding(plain).SidebarSecondaryTextColor);
         Assert.Null(StoredSessionCodec.DecodeBranding(plain).FolderHighlightColor);
+        Assert.Null(StoredSessionCodec.DecodeBranding(plain).PopoverBackgroundColor);
+        Assert.Null(StoredSessionCodec.DecodeBranding(plain).PopoverTextColor);
         Assert.Equal(SpaceBranding.DefaultHighlightOpacity, StoredSessionCodec.DecodeBranding(plain).FolderHighlightOpacity);
 
         // A record from before highlights keeps the tint its intensity gave.

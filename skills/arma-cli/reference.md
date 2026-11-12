@@ -261,8 +261,8 @@ usage: arma theme <action> [options]
                                 Space using it; --dark edits its dark look, and
                                 --unpair-dark turns the dark look off, keeping it
   reset <section>... [<theme>] [--space <space>] [--dark]
-                                put background, icon, folders, command-palette or
-                                all back to the plain look
+                                put background, icon, folders, command-palette,
+                                popovers or all back to the plain look
   use <theme> [--space <space>] have a Space, or the shown one, use a theme
 
 Look options:
@@ -286,6 +286,8 @@ Look options:
   --folder-highlight-opacity <0-1>
   --palette-light <hex>|default  --palette-light-opacity <0-1>  --palette-light-text <hex>|default
   --palette-dark <hex>|default   --palette-dark-opacity <0-1>   --palette-dark-text <hex>|default
+  --popover-background <hex>|default    the fill of popovers such as Site Controls
+  --popover-text <hex>|default          the color of their text
 
 A theme is named by its name (any case). Colors are #RRGGBB or #RRGGBBAA. A Space's
 crest and icon are not part of its theme: shape and color them with arma crest.

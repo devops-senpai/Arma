@@ -313,6 +313,16 @@ struct BrowserCrestForge: View {
     @ViewBuilder
     private var otherSections: some View {
         BrowserCrestStudioCommandPalette(context: context, isEmbedded: true) { stageHeader }
+        Section {
+            BrowserCrestStudioColorPickerRow(
+                title: "Background color", value: context.setting(\.popoverBackgroundColor, default: nil),
+                fallback: CrestFlyoutColors.standardBackground)
+            BrowserCrestStudioColorPickerRow(
+                title: "Text color", value: context.setting(\.popoverTextColor, default: nil),
+                fallback: CrestFlyoutColors.standardText)
+        } header: {
+            Text("Popovers")
+        }
         if let themeFiles {
             Section {
                 Button("Export Theme…") { run(themeFiles.export) }

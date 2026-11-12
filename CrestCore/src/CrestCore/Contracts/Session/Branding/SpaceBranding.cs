@@ -17,6 +17,9 @@ namespace CrestCore.Contracts;
 /// rows while it is open, hovered or chosen, or null to tint them with the folder's color, and
 /// <see cref="FolderHighlightOpacity"/> is how opaque that tint is. <see cref="FolderColorIntensity"/> is
 /// what set that opacity before a look could choose it, kept so an older record reads as it drew.
+/// <see cref="PopoverBackgroundColor"/> fills the popovers the Space's window presents, such as Site
+/// Controls, and <see cref="PopoverTextColor"/> is the color their text reads in, each null for the
+/// standard flyout surface and text.
 /// </summary>
 public sealed partial record SpaceBranding(
     ColorPalette Colors,
@@ -42,7 +45,9 @@ public sealed partial record SpaceBranding(
     FolderColorOverrides? FolderOverrides,
     BrandColor? SidebarSecondaryTextColor,
     BrandColor? FolderHighlightColor,
-    double FolderHighlightOpacity) {
+    double FolderHighlightOpacity,
+    BrandColor? PopoverBackgroundColor,
+    BrandColor? PopoverTextColor) {
     #region Static Variables
 
     /// The rendering vocabulary every shipped build draws. A banner strength stored
@@ -65,7 +70,8 @@ public sealed partial record SpaceBranding(
             chargeScale: 1),
         BaselineRenderingVersion, FolderColorIntensity: 0, SpaceTextColorMode.Automatic, HasCustomAppearance: null,
         FolderColor: null, FolderBackColor: null, CommandPalette: null, SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
-        FolderHighlightColor: null, FolderHighlightOpacity: DefaultHighlightOpacity);
+        FolderHighlightColor: null, FolderHighlightOpacity: DefaultHighlightOpacity,
+        PopoverBackgroundColor: null, PopoverTextColor: null);
 
     #endregion
 
@@ -95,7 +101,8 @@ public sealed partial record SpaceBranding(
             KeepsControlsReadable: true, SpaceThemeMode.Banner, GradientAngle: 0, ShowsTexture: false, SpaceIconStyle.SimpleSymbol,
             SymbolColor: null, crest, BaselineRenderingVersion, FolderColorIntensity: 0, SpaceTextColorMode.Automatic,
             HasCustomAppearance: null, FolderColor: null, FolderBackColor: null, CommandPalette: null, SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
-            FolderHighlightColor: null, FolderHighlightOpacity: DefaultHighlightOpacity);
+            FolderHighlightColor: null, FolderHighlightOpacity: DefaultHighlightOpacity,
+            PopoverBackgroundColor: null, PopoverTextColor: null);
     }
 
     /// The crest figure an SF Symbol name suggested before crests had their own.

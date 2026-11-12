@@ -41,7 +41,8 @@ internal sealed partial record SpacePayload {
             OptionalColor(value.Value["sidebarTextColor"]), OptionalColor(value.Value["folderOutlineColor"]),
             StoredSessionCodec.DecodeFolderOverrides(value.Value["folderOverrides"]),
             OptionalColor(value.Value["sidebarSecondaryTextColor"]), OptionalColor(value.Value["folderHighlightColor"]),
-            value.TolerantNumber("folderHighlightOpacity") ?? SpaceBranding.HighlightOpacity(intensity));
+            value.TolerantNumber("folderHighlightOpacity") ?? SpaceBranding.HighlightOpacity(intensity),
+            OptionalColor(value.Value["popoverBackgroundColor"]), OptionalColor(value.Value["popoverTextColor"]));
         return SpaceBranding.Normalized(branding);
     }
 

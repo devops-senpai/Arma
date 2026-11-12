@@ -44,7 +44,9 @@ internal static partial class StoredSessionCodec {
             value[Key.SidebarSecondaryTextColor] is JsonObject secondaryText ? DecodeColor(secondaryText) : null,
             value[Key.FolderHighlightColor] is JsonObject highlight ? DecodeColor(highlight) : null,
             // A record from before highlights keeps the tint its intensity gave.
-            OptionalNumber(value[Key.FolderHighlightOpacity]) ?? SpaceBranding.HighlightOpacity(intensity));
+            OptionalNumber(value[Key.FolderHighlightOpacity]) ?? SpaceBranding.HighlightOpacity(intensity),
+            value[Key.PopoverBackgroundColor] is JsonObject popover ? DecodeColor(popover) : null,
+            value[Key.PopoverTextColor] is JsonObject popoverText ? DecodeColor(popoverText) : null);
     }
 
     /// A look's folder overrides, each an object with a path and its colors;
@@ -100,6 +102,8 @@ internal static partial class StoredSessionCodec {
         // session from before highlights reads back as it was written.
         if (branding.FolderHighlightOpacity != SpaceBranding.HighlightOpacity(branding.FolderColorIntensity))
             value[Key.FolderHighlightOpacity] = branding.FolderHighlightOpacity;
+        if (branding.PopoverBackgroundColor is { } popover) value[Key.PopoverBackgroundColor] = Encode(popover);
+        if (branding.PopoverTextColor is { } popoverText) value[Key.PopoverTextColor] = Encode(popoverText);
         return value;
     }
 
