@@ -7,8 +7,9 @@ extension EnvironmentValues {
 }
 
 /// Draws content in the scheme a Space's sidebar reads in over the window,
-/// keeping the window's own scheme for the controls that read the same on
-/// every Space.
+/// and in the one text color the Space chose, when it chose one, keeping the
+/// window's own scheme for the controls that read the same on every Space.
+/// Popovers presented from the content wear the Space's popover colors.
 ///
 /// The scheme follows the device's dark dimming, which a person drags. Working
 /// it out here, rather than in the view that wraps the sidebar, keeps a drag to
@@ -24,8 +25,18 @@ struct SpaceColorScheme: ViewModifier {
 
     func body(content: Content) -> some View {
         content
+            .modifier(
+                SpaceTextColor(color: branding?.sidebarTextColor, secondary: branding?.sidebarSecondaryTextColor)
+            )
             .environment(\.colorScheme, branding?.shown.colorScheme(over: colorScheme) ?? .dark)
             .environment(\.deviceColorScheme, deviceColorScheme ?? colorScheme)
+            .environment(
+                \.crestFlyoutColors,
+                CrestFlyoutColors(
+                    background: branding?.popoverBackgroundColor, text: branding?.popoverTextColor,
+                    secondaryText: branding?.popoverSecondaryTextColor, accent: branding?.popoverAccentColor,
+                    accentOpacity: branding?.popoverAccentOpacity ?? 1, button: branding?.popoverButtonColor,
+                    buttonOutline: branding?.popoverButtonOutlineColor))
     }
 }
 

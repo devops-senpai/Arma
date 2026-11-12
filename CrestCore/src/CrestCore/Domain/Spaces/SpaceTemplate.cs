@@ -6,7 +6,9 @@ namespace CrestCore.Domain;
 /// accent and look, what it searches and keeps, whether it offers to save
 /// passwords, and the tabs it starts with. Every new Space has a profile of
 /// its own and opens freely. An ordinary Space takes the next accent in turn
-/// and wears that accent's house look; a private one wears the private look
+/// and wears the look SpaceHouse.NewSpaceLook gives that accent: Arma's own
+/// house for the first, the accent's house colors under Arma's arms for the
+/// rest; a private one wears the private look
 /// and never offers to save or sync passwords. Both start with one Start Page
 /// tab. The Getting Started practice starts from its own Space, holding the
 /// practice tabs, and a first launch from the Personal Space.
@@ -23,7 +25,11 @@ public sealed class SpaceTemplate {
         ShowsTexture: false, SpaceIconStyle.SimpleSymbol, SymbolColor: null,
         SpaceCrest.PlainField(CrestBackplate.None, CrestSymbol.Key, CrestTrim.None, layers: [0, 0, 0, 0, 0, 0], trimWeight: 1,
             chargeScale: 1),
-        RenderingVersion: 2, FolderColorIntensity: 0, SpaceTextColorMode.Automatic, HasCustomAppearance: null);
+        RenderingVersion: 2, FolderColorIntensity: 0, SpaceTextColorMode.Automatic, HasCustomAppearance: null, FolderColor: null,
+        FolderBackColor: null, CommandPalette: null, SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
+        FolderHighlightColor: null, FolderHighlightOpacity: SpaceBranding.DefaultHighlightOpacity,
+        PopoverBackgroundColor: null, PopoverTextColor: null, PopoverSecondaryTextColor: null,
+        PopoverAccentColor: null, PopoverAccentOpacity: 1, PopoverButtonColor: null, PopoverButtonOutlineColor: null);
 
     /// What an ordinary Space searches and keeps: the device's default search
     /// and suggestions, which it follows.
@@ -41,7 +47,7 @@ public sealed class SpaceTemplate {
 
     public static readonly SpaceTemplate Ordinary = new(isPrivate: false, name: number => $"Space {number}",
         symbol: "square.grid.2x2.fill", accent: number => SpaceAccent.All[(number - 1) % SpaceAccent.All.Count],
-        look: accent => accent.House, browsing: OrdinaryBrowsing, credentials: SavesPasswords, tabs: StartPage);
+        look: SpaceHouse.NewSpaceLook, browsing: OrdinaryBrowsing, credentials: SavesPasswords, tabs: StartPage);
 
     public static readonly SpaceTemplate Private = new(isPrivate: true, name: number => number == 1 ? "Private" : $"Private {number}",
         symbol: "eyeglasses", accent: _ => SpaceAccent.Indigo, look: _ => PrivateLook,
@@ -64,10 +70,11 @@ public sealed class SpaceTemplate {
     /// Personal, wearing the Winter house look, with one Start Page tab. No
     /// new Space comes from it.
     public static readonly SpaceTemplate FirstInstall = new(isPrivate: false, name: _ => "Personal", symbol: "person.fill",
-        accent: _ => SpaceAccent.Indigo, look: accent => accent.House, browsing: OrdinaryBrowsing, credentials: SavesPasswords,
+        accent: _ => SpaceAccent.Indigo, look: SpaceHouse.NewSpaceLook, browsing: OrdinaryBrowsing, credentials: SavesPasswords,
         tabs: StartPage);
 
     #endregion
+
 
     #region Variables
 

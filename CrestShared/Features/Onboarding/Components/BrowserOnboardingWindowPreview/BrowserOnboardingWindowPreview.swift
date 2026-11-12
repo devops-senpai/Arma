@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 /// A Space as the Crest window shows it: its field across the whole window,
@@ -14,6 +15,12 @@ struct BrowserOnboardingWindowPreview<Page: View>: View {
     let name: String
     var editableName: Binding<String>? = nil
     var showsNameHint = false
+    /// A picture behind the field, as the store keeps it for the owner it
+    /// names, such as a theme's on the Themes page.
+    var backdrop: (ownerID: UUID, store: BrowserSpaceBackdropStore)? = nil
+    /// Whether the page card is dark in a dark appearance, as a page is in
+    /// the window, rather than paper in both as setup shows it.
+    var pageFollowsAppearance = false
     /// How the switcher shows the Spaces, or nil to show this Space alone.
     var spaceIcons: BrowserSpaceIconDisplay? = nil
     /// The look the other Spaces in the switcher wear, or nil for their own.
@@ -39,7 +46,11 @@ struct BrowserOnboardingWindowPreview<Page: View>: View {
 
     var body: some View {
         ZStack {
-            BrowserSpaceBannerBackground(branding: branding)
+            if let backdrop {
+                BrowserSpaceBackdropLayer(spaceID: backdrop.ownerID, branding: branding, store: backdrop.store)
+            } else {
+                BrowserSpaceBannerBackground(branding: branding)
+            }
             if let space {
                 HStack(spacing: 0) {
                     sidebar(space)
@@ -57,15 +68,31 @@ struct BrowserOnboardingWindowPreview<Page: View>: View {
         .shadow(color: .black.opacity(0.45), radius: 30, y: 24)
         .environment(\.colorScheme, branding.colorScheme(over: colorScheme))
         .accessibilityElement(children: editableName == nil ? .ignore : .contain)
-        .accessibilityLabel("Preview of \(shownName) in a Crest window")
+        .accessibilityLabel("Preview of \(shownName) in a Arma window")
         .onChange(of: draft, initial: true) { _, draft in space = SpaceModel.detached(draft) }
+    }
+
+    /// The window background as a dark window draws it: the card is drawn in the look's own scheme, which a light look keeps light
+    /// over a dark window, so a dynamic color would resolve light there.
+    private var darkPage: Color {
+        var resolved = NSColor.windowBackgroundColor
+        NSAppearance(named: .darkAqua)?.performAsCurrentDrawingAppearance {
+            resolved = NSColor.windowBackgroundColor.usingColorSpace(.sRGB) ?? resolved
+        }
+        return Color(nsColor: resolved)
+    }
+
+    /// What the page card is filled with: paper, or the dark window's
+    /// background while a dark appearance is followed.
+    private var pageColor: Color {
+        pageFollowsAppearance && colorScheme == .dark ? darkPage : CrestBrandPalette.paper
     }
 
     /// The page beside the sidebar, inset as the window insets it.
     private var pageCard: some View {
         ZStack {
             RoundedRectangle(cornerRadius: BrowserChromeLayout.pageCornerRadius, style: .continuous)
-                .fill(CrestBrandPalette.paper)
+                .fill(pageColor)
                 .shadow(color: .black.opacity(0.18), radius: 6, y: 2)
             page
         }

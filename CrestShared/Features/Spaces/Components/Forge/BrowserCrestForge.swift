@@ -87,6 +87,11 @@ struct BrowserCrestForge: View {
     @State private var initialAppearance: SpaceBranding?
     @State private var ownHistory = BrowserCrestForgeHistory()
     @State private var choosesEmoji = false
+    @Environment(\.browserSpaceThemeFiles) private var themeFiles
+    @Environment(\.browserSpaceSidebarSections) private var extraSidebarSections
+    @Environment(\.colorScheme) private var colorScheme
+    /// Why the last theme file could not be written or read, until the next try.
+    @State private var themeFileProblem: String?
 
     private var history: Binding<BrowserCrestForgeHistory> { sharedHistory ?? $ownHistory }
 
@@ -104,7 +109,21 @@ struct BrowserCrestForge: View {
 
     /// The step shown: the one chosen, unless an icon has no use for it.
     private var shownStep: BrowserCrestStudioStep {
-        isIcon && step.isCrestOnly ? .emblem : step
+        guard offeredSteps.contains(step) else { return offeredSteps.first ?? .sidebar }
+        return isIcon && step.isCrestOnly ? .emblem : step
+    }
+
+    /// Whether this Forge edits the sidebar's colors and pattern.
+    private var offersSidebar: Bool { offeredSteps.contains(.sidebar) }
+
+    /// Whether this Forge edits the crest or icon.
+    private var offersCrest: Bool {
+        offeredSteps.contains { $0.isCrestOnly || $0 == .emblem }
+    }
+
+    /// The steps the step bar greys out.
+    private var disabledSteps: Set<BrowserCrestStudioStep> {
+        Set(offeredSteps.filter { isIcon && $0.isCrestOnly })
     }
 
     /// The style the studio shows the Space's look in.
@@ -221,13 +240,15 @@ struct BrowserCrestForge: View {
             finishSections
         case .sidebar:
             sidebarSections
+        case .other:
+            otherSections
         }
     }
 
     // MARK: - Step sections
 
     private var startSections: some View {
-        gallery(SpaceHouse.all, id: \.self) { house in
+        gallery(SpaceHouse.offered, id: \.self) { house in
             BrowserCrestStudioChoice(title: house.title, selected: house.isWorn(by: branding)) {
                 branding = house.applying(to: branding)
             } artwork: {
@@ -242,7 +263,7 @@ struct BrowserCrestForge: View {
 
     @ViewBuilder
     private var shapeSections: some View {
-        crestGallery(\.backplate, CrestBackplate.all)
+        crestGallery(\.backplate, CrestBackplate.offered)
         Section {
             context.slider("Edge", \.edgeWidth, range: CrestMeasure.edgeWidth.range)
             context.slider("Size", \.plateScale, range: CrestMeasure.plateScale.range)
@@ -318,6 +339,58 @@ struct BrowserCrestForge: View {
     private var sidebarSections: some View {
         sidebarGallery
         sidebarSection
+        BrowserCrestStudioFolders(context: context, isEmbedded: true)
+        if let extraSidebarSections {
+            extraSidebarSections.content()
+        }
+    }
+
+    /// What the Space dresses beyond its crest and sidebar: the command
+    /// palette's card, then the look as a file to share. The stage heads the
+    /// page as the galleries' do.
+    @ViewBuilder
+    private var otherSections: some View {
+        BrowserCrestStudioCommandPalette(context: context, isEmbedded: true) { stageHeader }
+        Section {
+            BrowserCrestStudioColorPickerRow(
+                title: "Background color", value: context.setting(\.popoverBackgroundColor, default: nil),
+                fallback: CrestFlyoutColors.standardBackground)
+            BrowserCrestStudioColorPickerRow(
+                title: "Text color", value: context.setting(\.popoverTextColor, default: nil),
+                fallback: CrestFlyoutColors.standardText)
+            BrowserCrestStudioColorPickerRow(
+                title: "Secondary text color", value: context.setting(\.popoverSecondaryTextColor, default: nil),
+                fallback: branding.popoverTextColor ?? CrestFlyoutColors.standardText)
+            BrowserCrestStudioColorPickerRow(
+                title: "Accent color", value: context.setting(\.popoverAccentColor, default: nil),
+                fallback: CrestFlyoutColors.standardAccent)
+            BrowserCrestStudioSlider(
+                title: "Accent opacity", value: context.setting(\.popoverAccentOpacity, default: 1))
+            BrowserCrestStudioColorPickerRow(
+                title: "Button color", value: context.setting(\.popoverButtonColor, default: nil),
+                fallback: branding.popoverBackgroundColor ?? CrestFlyoutColors.standardBackground)
+            BrowserCrestStudioColorPickerRow(
+                title: "Button outline color", value: context.setting(\.popoverButtonOutlineColor, default: nil),
+                fallback: branding.popoverAccentColor ?? CrestFlyoutColors.standardAccent)
+        } header: {
+            Text("Popovers")
+        }
+        if let themeFiles {
+            Section {
+                Button("Export Theme…") { run(themeFiles.export) }
+                Button("Load Theme from File…") { run(themeFiles.load) }
+                if let themeFileProblem {
+                    Text(themeFileProblem).font(.caption).foregroundStyle(.secondary)
+                }
+            } header: {
+                Text("Theme")
+            }
+        }
+    }
+
+    /// Runs one theme file action and keeps what went wrong for the section.
+    private func run(_ action: @escaping @MainActor () async -> String?) {
+        Task { @MainActor in themeFileProblem = await action() }
     }
 
     private var identityRow: some View {
@@ -410,12 +483,17 @@ struct BrowserCrestForge: View {
                 }
             }
             BrowserCrestStudioSlider(title: "Readability fade", value: context.setting(\.readabilityFade))
-            BrowserCrestStudioSlider(title: "Folder colors", value: context.setting(\.folderColorIntensity))
             let texture = context.setting(\.showsTexture)
             CrestSettingRow("Texture", setting: texture.resettable("Texture")) {
                 Toggle("Texture", isOn: texture.binding).labelsHidden()
             }
             segmentedText
+            BrowserCrestStudioColorPickerRow(
+                title: "Text color", value: context.setting(\.sidebarTextColor, default: nil),
+                fallback: branding.sidebarTextColor(over: colorScheme))
+            BrowserCrestStudioColorPickerRow(
+                title: "System text color", value: context.setting(\.sidebarSecondaryTextColor, default: nil),
+                fallback: branding.sidebarTextColor(over: colorScheme))
         }
     }
 
@@ -479,11 +557,12 @@ struct BrowserCrestForge: View {
         VStack(spacing: 16) {
             BrowserCrestForgeStage(
                 branding: $branding, symbol: symbol, name: name, canUndo: history.wrappedValue.canUndo,
+                showsCrest: offersCrest, showsSidebar: offersSidebar,
                 shuffle: shuffle, undo: undo, openStep: { step = $0 })
             if showsStepBar && !listsSteps {
                 BrowserPlatformCrestForgeStepBar(
                     step: Binding(get: { shownStep }, set: { step = $0 }),
-                    disabledSteps: isIcon ? Set(BrowserCrestStudioStep.all.filter(\.isCrestOnly)) : [])
+                    disabledSteps: disabledSteps, steps: offeredSteps)
             }
         }
         .textCase(nil)
@@ -517,8 +596,21 @@ struct BrowserCrestForge: View {
         branding = previous
     }
 
+    /// Shuffles only what this Forge edits, keeping the crest or the sidebar
+    /// it doesn't offer.
     private func shuffle() {
-        branding = Self.shuffled(branding)
+        var look = Self.shuffled(branding)
+        if !offersSidebar {
+            look.themeMode = branding.themeMode
+            look.bannerPattern = branding.bannerPattern
+            look.gradientAngle = branding.gradientAngle
+            look.colors = branding.colors
+        }
+        if !offersCrest {
+            look.crest = branding.crest
+            look.iconStyle = branding.iconStyle
+        }
+        branding = look.normalized()
     }
 
     // MARK: - Looks

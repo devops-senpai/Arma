@@ -1,0 +1,97 @@
+{
+ "background": {
+  "angle": 45,
+  "colors": [
+   "#e4eff4",
+   "#54c8f1",
+   "#c2dee6"
+  ],
+  "intensity": 0.8,
+  "pattern": "solid",
+  "readabilityFade": 0,
+  "sidebarSecondaryText": "#7b838c",
+  "sidebarText": "#001e2a",
+  "style": "banner",
+  "textColor": "dark",
+  "texture": true
+ },
+ "commandPalette": {
+  "dark": {
+   "opacity": 0.94,
+   "text": "#001e2a",
+   "tint": "#fcfdfe"
+  },
+  "light": {
+   "opacity": 0.94,
+   "text": "#001e2a",
+   "tint": "#fcfdfe"
+  }
+ },
+ "dark": {
+  "background": {
+   "colors": [
+    "#001e2a",
+    "#54c8f1",
+    "#2a8ba7"
+   ],
+   "intensity": 0.8,
+   "pattern": "solid",
+   "readabilityFade": 0,
+   "sidebarText": "#d1e6ec",
+   "style": "banner",
+   "textColor": "light",
+   "texture": true
+  },
+  "commandPalette": {
+   "dark": {
+    "opacity": 0.94,
+    "text": "#d1e6ec",
+    "tint": "#000f15"
+   },
+   "light": {
+    "opacity": 0.94,
+    "text": "#d1e6ec",
+    "tint": "#000f15"
+   }
+  },
+  "folders": {
+   "backColor": "#2a8ba7",
+   "color": "#1d4a5c",
+   "highlightColor": "#1d4a5c",
+   "highlightOpacity": 0.384,
+   "outlineColor": "#84cff0"
+  },
+  "icon": {
+   "color": "#dcf3fc"
+  },
+  "popovers": {
+   "accent": "#84cff0",
+   "accentOpacity": 1,
+   "background": "#0b2733",
+   "button": "#12394a",
+   "buttonOutline": "#2a8ba7",
+   "secondaryText": "#9bbcc8",
+   "text": "#d1e6ec"
+  }
+ },
+ "folders": {
+  "backColor": "#84cff0",
+  "color": "#e5f4fb",
+  "highlightColor": "#84cff0",
+  "highlightOpacity": 0.384,
+  "outlineColor": "#0e7195"
+ },
+ "icon": {
+  "color": "#1f5f80"
+ },
+ "name": "Arc Sky",
+ "popovers": {
+  "accent": "#0b5d7a",
+  "accentOpacity": 1,
+  "background": "#e9f2f6",
+  "button": "#cdd5d9",
+  "buttonOutline": "#c1d1f6",
+  "secondaryText": "#000000",
+  "text": "#000000"
+ }
+}

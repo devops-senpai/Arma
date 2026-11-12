@@ -4,6 +4,28 @@ namespace CrestCore.Contracts;
 /// How a Space's sidebar and icon look. <see cref="RenderingVersion"/> is the newest
 /// vocabulary the branding uses, which older readers need to read it faithfully.
 /// <see cref="HasCustomAppearance"/> is null for branding stored before it was recorded.
+/// <see cref="FolderColor"/> is the color a folder without one of its own wears, and
+/// <see cref="FolderBackColor"/> its back face, each null to follow the default folder
+/// color. <see cref="CommandPalette"/> is null to leave the palette to the system material.
+/// <see cref="SidebarTextColor"/> is the one color the sidebar's text reads in, or null to
+/// follow <see cref="TextColorMode"/>. <see cref="FolderOutlineColor"/> draws a line
+/// around a folder without a color of its own, or null for none.
+/// <see cref="FolderOverrides"/> are the colors folders wear in place of the Space's,
+/// by folder path, or null for none. <see cref="SidebarSecondaryTextColor"/> is the color
+/// the sidebar's quieter text reads in, such as New Tab and Clear, or null to dim the
+/// sidebar's text as the system does. <see cref="FolderHighlightColor"/> tints a folder's
+/// rows while it is open, hovered or chosen, or null to tint them with the folder's color, and
+/// <see cref="FolderHighlightOpacity"/> is how opaque that tint is. <see cref="FolderColorIntensity"/> is
+/// what set that opacity before a look could choose it, kept so an older record reads as it drew.
+/// <see cref="PopoverBackgroundColor"/> fills the popovers the Space's window presents, such as Site
+/// Controls, and <see cref="PopoverTextColor"/> is the color their text reads in, each null for the
+/// standard flyout surface and text. <see cref="PopoverSecondaryTextColor"/> is the color their
+/// quieter text reads in, or null to dim the text color. <see cref="PopoverAccentColor"/> colors their
+/// buttons and links, or null for Arma's accent, at <see cref="PopoverAccentOpacity"/>.
+/// <see cref="PopoverButtonColor"/> fills their plain buttons and <see cref="PopoverButtonOutlineColor"/>
+/// outlines them, each null for the system's button.
+/// <see cref="PopoverButtonColor"/> fills their plain buttons and <see cref="PopoverButtonOutlineColor"/>
+/// outlines them, each null for the system's button.
 /// </summary>
 public sealed partial record SpaceBranding(
     ColorPalette Colors,
@@ -20,7 +42,23 @@ public sealed partial record SpaceBranding(
     int RenderingVersion,
     double FolderColorIntensity,
     SpaceTextColorMode TextColorMode,
-    bool? HasCustomAppearance) {
+    bool? HasCustomAppearance,
+    BrandColor? FolderColor,
+    BrandColor? FolderBackColor,
+    SpacePaletteLook? CommandPalette,
+    BrandColor? SidebarTextColor,
+    BrandColor? FolderOutlineColor,
+    FolderColorOverrides? FolderOverrides,
+    BrandColor? SidebarSecondaryTextColor,
+    BrandColor? FolderHighlightColor,
+    double FolderHighlightOpacity,
+    BrandColor? PopoverBackgroundColor,
+    BrandColor? PopoverTextColor,
+    BrandColor? PopoverSecondaryTextColor,
+    BrandColor? PopoverAccentColor,
+    double PopoverAccentOpacity,
+    BrandColor? PopoverButtonColor,
+    BrandColor? PopoverButtonOutlineColor) {
     #region Static Variables
 
     /// The rendering vocabulary every shipped build draws. A banner strength stored
@@ -30,6 +68,9 @@ public sealed partial record SpaceBranding(
     /// The fade a branding from before readability fades wears for its old switch.
     public const double LegacyReadabilityFade = 0.25;
 
+    /// The opacity a folder's tint had at the least, before a look chose one.
+    public const double DefaultHighlightOpacity = 0.12;
+
     /// <summary>The quiet look a Space from another browser wears when that browser
     /// gave it no colors: a gray solid banner that keeps controls readable, with a
     /// plain mountain crest.</summary>
@@ -38,11 +79,20 @@ public sealed partial record SpaceBranding(
         SpaceIconStyle.SimpleSymbol, SymbolColor: null,
         SpaceCrest.PlainField(CrestBackplate.Shield, CrestSymbol.Mountain, CrestTrim.None, layers: [1, 1, 2, 1, 2, 1], trimWeight: 1,
             chargeScale: 1),
-        BaselineRenderingVersion, FolderColorIntensity: 0, SpaceTextColorMode.Automatic, HasCustomAppearance: null);
+        BaselineRenderingVersion, FolderColorIntensity: 0, SpaceTextColorMode.Automatic, HasCustomAppearance: null,
+        FolderColor: null, FolderBackColor: null, CommandPalette: null, SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
+        FolderHighlightColor: null, FolderHighlightOpacity: DefaultHighlightOpacity,
+        PopoverBackgroundColor: null, PopoverTextColor: null, PopoverSecondaryTextColor: null,
+        PopoverAccentColor: null, PopoverAccentOpacity: 1, PopoverButtonColor: null, PopoverButtonOutlineColor: null);
 
     #endregion
 
     #region Actions - Looks
+
+    /// <summary>The opacity a folder's tint had when <paramref name="intensity"/> set it, before a
+    /// look could choose one: at least the default, rising to full at full intensity.</summary>
+    public static double HighlightOpacity(double intensity) =>
+        DefaultHighlightOpacity + (1 - DefaultHighlightOpacity) * Math.Clamp(double.IsFinite(intensity) ? intensity : 0, 0, 1);
 
     /// <summary>This branding with a banner strength stored before the baseline
     /// vocabulary in today's units, <c>min(1, 0.72 + strength × 0.28)</c>, which it then
@@ -62,7 +112,10 @@ public sealed partial record SpaceBranding(
         return new(new(accent.LegacyColors), SpaceBannerPattern.Diagonal, BannerStrength: 1, LegacyReadabilityFade,
             KeepsControlsReadable: true, SpaceThemeMode.Banner, GradientAngle: 0, ShowsTexture: false, SpaceIconStyle.SimpleSymbol,
             SymbolColor: null, crest, BaselineRenderingVersion, FolderColorIntensity: 0, SpaceTextColorMode.Automatic,
-            HasCustomAppearance: null);
+            HasCustomAppearance: null, FolderColor: null, FolderBackColor: null, CommandPalette: null, SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
+            FolderHighlightColor: null, FolderHighlightOpacity: DefaultHighlightOpacity,
+            PopoverBackgroundColor: null, PopoverTextColor: null, PopoverSecondaryTextColor: null,
+            PopoverAccentColor: null, PopoverAccentOpacity: 1, PopoverButtonColor: null, PopoverButtonOutlineColor: null);
     }
 
     /// The crest figure an SF Symbol name suggested before crests had their own.
