@@ -242,11 +242,12 @@ final class MobileBrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
             spaceID: space.id,
             spaceName: space.settings.name,
             permissionCenter: permissionCenter,
-            prompt: { origin, destinationURL, requestedSpaceName in
+            prompt: { [webKitPage] origin, destinationURL, requestedSpaceName in
                 await MobileBrowserDialogPresenter.presentExternalApplicationPermission(
                     origin: origin,
                     destinationURL: destinationURL,
-                    spaceName: requestedSpaceName
+                    spaceName: requestedSpaceName,
+                    in: webKitPage.webView.window
                 )
             },
             opensExternalURL: opensExternalURL
@@ -355,9 +356,9 @@ final class MobileBrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
             },
             recoverSystemAuthorization:
                 recoverGeolocationSystemAuthorization
-                ?? {
+                ?? { [webKitPage] in
                     await MobileBrowserDialogPresenter
-                        .recoverGeolocationSystemAuthorization()
+                        .recoverGeolocationSystemAuthorization(in: webKitPage.webView.window)
                 }
         )
         if ownsUserContentController {
@@ -786,7 +787,7 @@ final class MobileBrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
         guard canAddToHomeScreen else { return }
         MobileBrowserDialogPresenter.present(
             MobileBrowserHomeScreenActivityController(webView: webView, title: live.title, favicon: faviconData),
-            from: source, fallback: {})
+            in: webView.window, from: source, fallback: {})
     }
 
     func pdfData() async throws -> Data {
@@ -804,12 +805,14 @@ final class MobileBrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
                 try await MobileBrowserDialogPresenter.exportDocument(
                     data,
                     filename: suggestedFilename,
-                    to: destination
+                    to: destination,
+                    in: webView.window
                 )
             } catch {
                 MobileBrowserDialogPresenter.presentError(
                     title: "The page couldn’t be exported.",
-                    message: error.localizedDescription
+                    message: error.localizedDescription,
+                    in: webView.window
                 )
             }
         }
@@ -832,12 +835,14 @@ final class MobileBrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
                 try await MobileBrowserDialogPresenter.exportDocument(
                     data,
                     filename: suggestedFilename,
-                    to: destination
+                    to: destination,
+                    in: webView.window
                 )
             } catch {
                 MobileBrowserDialogPresenter.presentError(
                     title: "The page couldn’t be saved as a web archive.",
-                    message: error.localizedDescription
+                    message: error.localizedDescription,
+                    in: webView.window
                 )
             }
         }
