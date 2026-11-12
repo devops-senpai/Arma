@@ -23,9 +23,11 @@ namespace CrestCore.Contracts;
 /// quieter text reads in, or null to dim the text color. <see cref="PopoverAccentColor"/> colors their
 /// buttons and links, or null for Arma's accent, at <see cref="PopoverAccentOpacity"/>.
 /// <see cref="PopoverButtonColor"/> fills their plain buttons and <see cref="PopoverButtonOutlineColor"/>
-/// outlines them, each null for the system's button.
-/// <see cref="PopoverButtonColor"/> fills their plain buttons and <see cref="PopoverButtonOutlineColor"/>
-/// outlines them, each null for the system's button.
+/// outlines them, each null for the system's button. <see cref="ControlsFillColor"/> fills the
+/// controls over the sidebar, the address field and the pins, at <see cref="ControlsFillOpacity"/>,
+/// or null for the window's own surface. <see cref="ControlsTextColor"/> is the color their text and
+/// icons read in, such as the address field's site, and <see cref="ControlsSecondaryTextColor"/> the
+/// color their quieter text reads in, such as the page's path, each null for the window's own.
 /// </summary>
 public sealed partial record SpaceBranding(
     ColorPalette Colors,
@@ -58,7 +60,11 @@ public sealed partial record SpaceBranding(
     BrandColor? PopoverAccentColor,
     double PopoverAccentOpacity,
     BrandColor? PopoverButtonColor,
-    BrandColor? PopoverButtonOutlineColor) {
+    BrandColor? PopoverButtonOutlineColor,
+    BrandColor? ControlsFillColor,
+    double ControlsFillOpacity,
+    BrandColor? ControlsTextColor,
+    BrandColor? ControlsSecondaryTextColor) {
     #region Static Variables
 
     /// The rendering vocabulary every shipped build draws. A banner strength stored
@@ -83,7 +89,9 @@ public sealed partial record SpaceBranding(
         FolderColor: null, FolderBackColor: null, CommandPalette: null, SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
         FolderHighlightColor: null, FolderHighlightOpacity: DefaultHighlightOpacity,
         PopoverBackgroundColor: null, PopoverTextColor: null, PopoverSecondaryTextColor: null,
-        PopoverAccentColor: null, PopoverAccentOpacity: 1, PopoverButtonColor: null, PopoverButtonOutlineColor: null);
+        PopoverAccentColor: null, PopoverAccentOpacity: 1, PopoverButtonColor: null, PopoverButtonOutlineColor: null,
+        ControlsFillColor: null, ControlsFillOpacity: 1, ControlsTextColor: null,
+        ControlsSecondaryTextColor: null);
 
     #endregion
 
@@ -115,7 +123,9 @@ public sealed partial record SpaceBranding(
             HasCustomAppearance: null, FolderColor: null, FolderBackColor: null, CommandPalette: null, SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
             FolderHighlightColor: null, FolderHighlightOpacity: DefaultHighlightOpacity,
             PopoverBackgroundColor: null, PopoverTextColor: null, PopoverSecondaryTextColor: null,
-            PopoverAccentColor: null, PopoverAccentOpacity: 1, PopoverButtonColor: null, PopoverButtonOutlineColor: null);
+            PopoverAccentColor: null, PopoverAccentOpacity: 1, PopoverButtonColor: null, PopoverButtonOutlineColor: null,
+            ControlsFillColor: null, ControlsFillOpacity: 1, ControlsTextColor: null,
+            ControlsSecondaryTextColor: null);
     }
 
     /// The crest figure an SF Symbol name suggested before crests had their own.

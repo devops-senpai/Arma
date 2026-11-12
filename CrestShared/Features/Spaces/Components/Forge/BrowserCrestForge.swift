@@ -346,7 +346,8 @@ struct BrowserCrestForge: View {
     }
 
     /// What the Space dresses beyond its crest and sidebar: the command
-    /// palette's card, then the look as a file to share. The stage heads the
+    /// palette's card, its popovers, the address field and pins over the
+    /// sidebar, then the look as a file to share. The stage heads the
     /// page as the galleries' do.
     @ViewBuilder
     private var otherSections: some View {
@@ -374,6 +375,21 @@ struct BrowserCrestForge: View {
                 fallback: branding.popoverAccentColor ?? CrestFlyoutColors.standardAccent)
         } header: {
             Text("Popovers")
+        }
+        Section {
+            BrowserCrestStudioColorPickerRow(
+                title: "Fill color", value: context.setting(\.controlsFillColor, default: nil),
+                fallback: branding.primaryColor)
+            BrowserCrestStudioSlider(
+                title: "Fill opacity", value: context.setting(\.controlsFillOpacity, default: 1))
+            BrowserCrestStudioColorPickerRow(
+                title: "Text color", value: context.setting(\.controlsTextColor, default: nil),
+                fallback: CrestFlyoutColors.standardText)
+            BrowserCrestStudioColorPickerRow(
+                title: "Secondary text color", value: context.setting(\.controlsSecondaryTextColor, default: nil),
+                fallback: branding.controlsTextColor ?? CrestFlyoutColors.standardText)
+        } header: {
+            Text("Address field and pins")
         }
         if let themeFiles {
             Section {

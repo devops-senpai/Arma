@@ -174,6 +174,10 @@ internal static partial class StoredSessionCodec {
         public const string PopoverAccentOpacity = "popoverAccentOpacity";
         public const string PopoverButtonColor = "popoverButtonColor";
         public const string PopoverButtonOutlineColor = "popoverButtonOutlineColor";
+        public const string ControlsFillColor = "controlsFillColor";
+        public const string ControlsFillOpacity = "controlsFillOpacity";
+        public const string ControlsTextColor = "controlsTextColor";
+        public const string ControlsSecondaryTextColor = "controlsSecondaryTextColor";
         public const string Path = "path";
         public const string BackColor = "backColor";
         public const string OutlineColor = "outlineColor";

@@ -6807,7 +6807,11 @@ struct SpaceBranding: Equatable, Sendable {
         popoverAccentColor: nil,
         popoverAccentOpacity: 1,
         popoverButtonColor: nil,
-        popoverButtonOutlineColor: nil
+        popoverButtonOutlineColor: nil,
+        controlsFillColor: nil,
+        controlsFillOpacity: 1,
+        controlsTextColor: nil,
+        controlsSecondaryTextColor: nil
     )
 
     var colors: ColorPalette
@@ -6841,6 +6845,10 @@ struct SpaceBranding: Equatable, Sendable {
     var popoverAccentOpacity: Double
     var popoverButtonColor: BrandColor?
     var popoverButtonOutlineColor: BrandColor?
+    var controlsFillColor: BrandColor?
+    var controlsFillOpacity: Double
+    var controlsTextColor: BrandColor?
+    var controlsSecondaryTextColor: BrandColor?
 }
 
 struct SpaceCrest: Equatable, Sendable {
@@ -23065,7 +23073,11 @@ struct SpaceAccent: Hashable, Sendable {
             popoverAccentColor: nil,
             popoverAccentOpacity: 1,
             popoverButtonColor: nil,
-            popoverButtonOutlineColor: nil
+            popoverButtonOutlineColor: nil,
+            controlsFillColor: nil,
+            controlsFillOpacity: 1,
+            controlsTextColor: nil,
+            controlsSecondaryTextColor: nil
         ),
         swatch: BrandColor(red: 0.29, green: 0.25, blue: 0.58, alpha: 1)
     )
@@ -23154,7 +23166,11 @@ struct SpaceAccent: Hashable, Sendable {
             popoverAccentColor: nil,
             popoverAccentOpacity: 1,
             popoverButtonColor: nil,
-            popoverButtonOutlineColor: nil
+            popoverButtonOutlineColor: nil,
+            controlsFillColor: nil,
+            controlsFillOpacity: 1,
+            controlsTextColor: nil,
+            controlsSecondaryTextColor: nil
         ),
         swatch: BrandColor(red: 0.85, green: 0.27, blue: 0.2, alpha: 1)
     )
@@ -23243,7 +23259,11 @@ struct SpaceAccent: Hashable, Sendable {
             popoverAccentColor: nil,
             popoverAccentOpacity: 1,
             popoverButtonColor: nil,
-            popoverButtonOutlineColor: nil
+            popoverButtonOutlineColor: nil,
+            controlsFillColor: nil,
+            controlsFillOpacity: 1,
+            controlsTextColor: nil,
+            controlsSecondaryTextColor: nil
         ),
         swatch: BrandColor(red: 0.12, green: 0.49, blue: 0.52, alpha: 1)
     )
@@ -23332,7 +23352,11 @@ struct SpaceAccent: Hashable, Sendable {
             popoverAccentColor: nil,
             popoverAccentOpacity: 1,
             popoverButtonColor: nil,
-            popoverButtonOutlineColor: nil
+            popoverButtonOutlineColor: nil,
+            controlsFillColor: nil,
+            controlsFillOpacity: 1,
+            controlsTextColor: nil,
+            controlsSecondaryTextColor: nil
         ),
         swatch: BrandColor(red: 0.72, green: 0.25, blue: 0.42, alpha: 1)
     )
@@ -23591,7 +23615,11 @@ struct SpaceHouse: Hashable, Sendable {
             popoverAccentColor: nil,
             popoverAccentOpacity: 1,
             popoverButtonColor: nil,
-            popoverButtonOutlineColor: nil
+            popoverButtonOutlineColor: nil,
+            controlsFillColor: nil,
+            controlsFillOpacity: 1,
+            controlsTextColor: nil,
+            controlsSecondaryTextColor: nil
         ),
         appIconName: "ArmaWinter"
     )
@@ -23675,7 +23703,11 @@ struct SpaceHouse: Hashable, Sendable {
             popoverAccentColor: nil,
             popoverAccentOpacity: 1,
             popoverButtonColor: nil,
-            popoverButtonOutlineColor: nil
+            popoverButtonOutlineColor: nil,
+            controlsFillColor: nil,
+            controlsFillOpacity: 1,
+            controlsTextColor: nil,
+            controlsSecondaryTextColor: nil
         ),
         appIconName: "ArmaLion"
     )
@@ -23759,7 +23791,11 @@ struct SpaceHouse: Hashable, Sendable {
             popoverAccentColor: nil,
             popoverAccentOpacity: 1,
             popoverButtonColor: nil,
-            popoverButtonOutlineColor: nil
+            popoverButtonOutlineColor: nil,
+            controlsFillColor: nil,
+            controlsFillOpacity: 1,
+            controlsTextColor: nil,
+            controlsSecondaryTextColor: nil
         ),
         appIconName: "ArmaStorm"
     )
@@ -23843,7 +23879,11 @@ struct SpaceHouse: Hashable, Sendable {
             popoverAccentColor: nil,
             popoverAccentOpacity: 1,
             popoverButtonColor: nil,
-            popoverButtonOutlineColor: nil
+            popoverButtonOutlineColor: nil,
+            controlsFillColor: nil,
+            controlsFillOpacity: 1,
+            controlsTextColor: nil,
+            controlsSecondaryTextColor: nil
         ),
         appIconName: "ArmaDragon"
     )
@@ -23927,7 +23967,11 @@ struct SpaceHouse: Hashable, Sendable {
             popoverAccentColor: nil,
             popoverAccentOpacity: 1,
             popoverButtonColor: nil,
-            popoverButtonOutlineColor: nil
+            popoverButtonOutlineColor: nil,
+            controlsFillColor: nil,
+            controlsFillOpacity: 1,
+            controlsTextColor: nil,
+            controlsSecondaryTextColor: nil
         ),
         appIconName: "ArmaMeadow"
     )
@@ -24011,7 +24055,11 @@ struct SpaceHouse: Hashable, Sendable {
             popoverAccentColor: nil,
             popoverAccentOpacity: 1,
             popoverButtonColor: nil,
-            popoverButtonOutlineColor: nil
+            popoverButtonOutlineColor: nil,
+            controlsFillColor: nil,
+            controlsFillOpacity: 1,
+            controlsTextColor: nil,
+            controlsSecondaryTextColor: nil
         ),
         appIconName: "ArmaIron"
     )
@@ -24095,7 +24143,11 @@ struct SpaceHouse: Hashable, Sendable {
             popoverAccentColor: nil,
             popoverAccentOpacity: 1,
             popoverButtonColor: nil,
-            popoverButtonOutlineColor: nil
+            popoverButtonOutlineColor: nil,
+            controlsFillColor: nil,
+            controlsFillOpacity: 1,
+            controlsTextColor: nil,
+            controlsSecondaryTextColor: nil
         ),
         appIconName: "ArmaRiver"
     )
@@ -24179,7 +24231,11 @@ struct SpaceHouse: Hashable, Sendable {
             popoverAccentColor: nil,
             popoverAccentOpacity: 1,
             popoverButtonColor: nil,
-            popoverButtonOutlineColor: nil
+            popoverButtonOutlineColor: nil,
+            controlsFillColor: nil,
+            controlsFillOpacity: 1,
+            controlsTextColor: nil,
+            controlsSecondaryTextColor: nil
         ),
         appIconName: "ArmaSun"
     )
@@ -24263,7 +24319,11 @@ struct SpaceHouse: Hashable, Sendable {
             popoverAccentColor: nil,
             popoverAccentOpacity: 1,
             popoverButtonColor: nil,
-            popoverButtonOutlineColor: nil
+            popoverButtonOutlineColor: nil,
+            controlsFillColor: nil,
+            controlsFillOpacity: 1,
+            controlsTextColor: nil,
+            controlsSecondaryTextColor: nil
         ),
         appIconName: "ArmaVigil"
     )
@@ -24347,7 +24407,11 @@ struct SpaceHouse: Hashable, Sendable {
             popoverAccentColor: nil,
             popoverAccentOpacity: 1,
             popoverButtonColor: nil,
-            popoverButtonOutlineColor: nil
+            popoverButtonOutlineColor: nil,
+            controlsFillColor: nil,
+            controlsFillOpacity: 1,
+            controlsTextColor: nil,
+            controlsSecondaryTextColor: nil
         ),
         appIconName: "Arma"
     )
@@ -24517,7 +24581,11 @@ struct SpaceScheme: Hashable, Sendable {
             popoverAccentColor: nil,
             popoverAccentOpacity: 1,
             popoverButtonColor: nil,
-            popoverButtonOutlineColor: nil
+            popoverButtonOutlineColor: nil,
+            controlsFillColor: nil,
+            controlsFillOpacity: 1,
+            controlsTextColor: nil,
+            controlsSecondaryTextColor: nil
         )
     )
 

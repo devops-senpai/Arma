@@ -45,7 +45,9 @@ internal sealed partial record SpacePayload {
             OptionalColor(value.Value["popoverBackgroundColor"]), OptionalColor(value.Value["popoverTextColor"]),
             OptionalColor(value.Value["popoverSecondaryTextColor"]), OptionalColor(value.Value["popoverAccentColor"]),
             value.TolerantNumber("popoverAccentOpacity") ?? 1,
-            OptionalColor(value.Value["popoverButtonColor"]), OptionalColor(value.Value["popoverButtonOutlineColor"]));
+            OptionalColor(value.Value["popoverButtonColor"]), OptionalColor(value.Value["popoverButtonOutlineColor"]),
+            OptionalColor(value.Value["controlsFillColor"]), value.TolerantNumber("controlsFillOpacity") ?? 1,
+            OptionalColor(value.Value["controlsTextColor"]), OptionalColor(value.Value["controlsSecondaryTextColor"]));
         return SpaceBranding.Normalized(branding);
     }
 

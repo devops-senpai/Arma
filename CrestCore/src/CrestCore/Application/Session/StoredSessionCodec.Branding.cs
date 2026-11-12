@@ -51,7 +51,11 @@ internal static partial class StoredSessionCodec {
             value[Key.PopoverAccentColor] is JsonObject popoverAccent ? DecodeColor(popoverAccent) : null,
             OptionalNumber(value[Key.PopoverAccentOpacity]) ?? 1,
             value[Key.PopoverButtonColor] is JsonObject popoverButton ? DecodeColor(popoverButton) : null,
-            value[Key.PopoverButtonOutlineColor] is JsonObject popoverButtonOutline ? DecodeColor(popoverButtonOutline) : null);
+            value[Key.PopoverButtonOutlineColor] is JsonObject popoverButtonOutline ? DecodeColor(popoverButtonOutline) : null,
+            value[Key.ControlsFillColor] is JsonObject controlsFill ? DecodeColor(controlsFill) : null,
+            OptionalNumber(value[Key.ControlsFillOpacity]) ?? 1,
+            value[Key.ControlsTextColor] is JsonObject controlsText ? DecodeColor(controlsText) : null,
+            value[Key.ControlsSecondaryTextColor] is JsonObject controlsSecondary ? DecodeColor(controlsSecondary) : null);
     }
 
     /// A look's folder overrides, each an object with a path and its colors;
@@ -114,6 +118,10 @@ internal static partial class StoredSessionCodec {
         if (branding.PopoverAccentOpacity != 1) value[Key.PopoverAccentOpacity] = branding.PopoverAccentOpacity;
         if (branding.PopoverButtonColor is { } popoverButton) value[Key.PopoverButtonColor] = Encode(popoverButton);
         if (branding.PopoverButtonOutlineColor is { } popoverButtonOutline) value[Key.PopoverButtonOutlineColor] = Encode(popoverButtonOutline);
+        if (branding.ControlsFillColor is { } controlsFill) value[Key.ControlsFillColor] = Encode(controlsFill);
+        if (branding.ControlsFillOpacity != 1) value[Key.ControlsFillOpacity] = branding.ControlsFillOpacity;
+        if (branding.ControlsTextColor is { } controlsText) value[Key.ControlsTextColor] = Encode(controlsText);
+        if (branding.ControlsSecondaryTextColor is { } controlsSecondary) value[Key.ControlsSecondaryTextColor] = Encode(controlsSecondary);
         return value;
     }
 

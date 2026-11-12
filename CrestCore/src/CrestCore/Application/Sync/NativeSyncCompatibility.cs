@@ -42,7 +42,7 @@ internal static class NativeSyncCompatibility {
         new() { ["light"] = PaletteSurface, ["dark"] = PaletteSurface });
 
     private static readonly Shape Branding = new(
-        "colors bannerPattern bannerStrength readabilityFade keepsControlsReadable themeMode gradientAngle showsTexture iconStyle symbolColor crest renderingVersion folderColorIntensity textColorMode hasCustomAppearance folderColor folderBackColor commandPalette sidebarTextColor folderOutlineColor folderOverrides sidebarSecondaryTextColor folderHighlightColor folderHighlightOpacity popoverBackgroundColor popoverTextColor popoverSecondaryTextColor popoverAccentColor popoverAccentOpacity popoverButtonColor popoverButtonOutlineColor",
+        "colors bannerPattern bannerStrength readabilityFade keepsControlsReadable themeMode gradientAngle showsTexture iconStyle symbolColor crest renderingVersion folderColorIntensity textColorMode hasCustomAppearance folderColor folderBackColor commandPalette sidebarTextColor folderOutlineColor folderOverrides sidebarSecondaryTextColor folderHighlightColor folderHighlightOpacity popoverBackgroundColor popoverTextColor popoverSecondaryTextColor popoverAccentColor popoverAccentOpacity popoverButtonColor popoverButtonOutlineColor controlsFillColor controlsFillOpacity controlsTextColor controlsSecondaryTextColor",
         new() {
             ["colors"] = List(Color),
             ["symbolColor"] = Color,
@@ -60,7 +60,10 @@ internal static class NativeSyncCompatibility {
             ["popoverSecondaryTextColor"] = Color,
             ["popoverAccentColor"] = Color,
             ["popoverButtonColor"] = Color,
-            ["popoverButtonOutlineColor"] = Color
+            ["popoverButtonOutlineColor"] = Color,
+            ["controlsFillColor"] = Color,
+            ["controlsTextColor"] = Color,
+            ["controlsSecondaryTextColor"] = Color
         });
 
     private static readonly Shape SearchProvider = new("id name searchURLTemplate suggestionURLTemplate");

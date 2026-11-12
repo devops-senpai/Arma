@@ -155,7 +155,9 @@ public sealed class SpaceHouse {
             SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
             FolderHighlightColor: null, FolderHighlightOpacity: SpaceBranding.DefaultHighlightOpacity,
             PopoverBackgroundColor: null, PopoverTextColor: null, PopoverSecondaryTextColor: null,
-            PopoverAccentColor: null, PopoverAccentOpacity: 1, PopoverButtonColor: null, PopoverButtonOutlineColor: null);
+            PopoverAccentColor: null, PopoverAccentOpacity: 1, PopoverButtonColor: null, PopoverButtonOutlineColor: null,
+            ControlsFillColor: null, ControlsFillOpacity: 1, ControlsTextColor: null,
+            ControlsSecondaryTextColor: null);
 
     /// A house's arms: its figure on its field, each part in a tincture of its
     /// own, `colors` holding the field, second field, band, emblem, border and

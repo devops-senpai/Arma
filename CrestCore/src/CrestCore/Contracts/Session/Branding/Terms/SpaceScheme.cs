@@ -60,7 +60,9 @@ public sealed class SpaceScheme {
             SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
             FolderHighlightColor: null, FolderHighlightOpacity: SpaceBranding.DefaultHighlightOpacity,
             PopoverBackgroundColor: null, PopoverTextColor: null, PopoverSecondaryTextColor: null,
-            PopoverAccentColor: null, PopoverAccentOpacity: 1, PopoverButtonColor: null, PopoverButtonOutlineColor: null);
+            PopoverAccentColor: null, PopoverAccentOpacity: 1, PopoverButtonColor: null, PopoverButtonOutlineColor: null,
+            ControlsFillColor: null, ControlsFillOpacity: 1, ControlsTextColor: null,
+            ControlsSecondaryTextColor: null);
 
     #endregion
 }

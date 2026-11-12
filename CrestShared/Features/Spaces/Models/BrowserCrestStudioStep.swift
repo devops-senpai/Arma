@@ -57,8 +57,9 @@ struct BrowserCrestStudioStep: Hashable, Identifiable, Sendable {
         kind: .other, name: "other", title: "Other", symbol: "slider.horizontal.3", isCrestOnly: false,
         summary: { branding in
             if branding.commandPalette?.isTinted == true { return "Tinted palette" }
-            return branding.popoverBackgroundColor != nil || branding.popoverTextColor != nil
-                ? "Tinted popovers" : "Default"
+            if branding.popoverBackgroundColor != nil || branding.popoverTextColor != nil { return "Tinted popovers" }
+            return branding.controlsFillColor != nil || branding.controlsTextColor != nil
+                ? "Tinted controls" : "Default"
         })
 
     /// Every step, in the step bar's order.

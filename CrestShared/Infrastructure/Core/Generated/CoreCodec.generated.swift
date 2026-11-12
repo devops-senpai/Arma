@@ -7,7 +7,7 @@ import Foundation
 enum CoreCodec {
     /// SHA-256 of the canonical contract schema. The core refuses any other.
     static let fingerprint: [UInt8] = [
-        0x31, 0x51, 0x08, 0x76, 0x66, 0x66, 0xa1, 0x20, 0xf8, 0x62, 0x76, 0x26, 0x3c, 0xb9, 0xf4, 0x87, 0x23, 0xe2, 0x75, 0x62, 0xdc, 0xc1, 0x45, 0xef, 0x0a, 0xa2, 0xf3, 0xfa, 0xa9, 0x99, 0x11, 0x3f
+        0xd4, 0x86, 0x14, 0xb3, 0x48, 0x8c, 0xac, 0x0e, 0xab, 0xed, 0x66, 0x29, 0x72, 0x95, 0x62, 0x6e, 0xde, 0x90, 0xb1, 0xd4, 0xd6, 0x86, 0x9b, 0xae, 0x07, 0x7e, 0x33, 0x4e, 0x3f, 0xfe, 0xec, 0x06
     ]
     /// SHA-256 of the engine contract alone, which an engine binding registers with.
     static let engineFingerprint: [UInt8] = [
@@ -23917,7 +23917,29 @@ extension SpaceBranding {
         } else {
             popoverButtonOutlineColor = nil
         }
-        self.init(colors: colors, bannerPattern: bannerPattern, bannerStrength: bannerStrength, readabilityFade: readabilityFade, keepsControlsReadable: keepsControlsReadable, themeMode: themeMode, gradientAngle: gradientAngle, showsTexture: showsTexture, iconStyle: iconStyle, symbolColor: symbolColor, crest: crest, renderingVersion: renderingVersion, folderColorIntensity: folderColorIntensity, textColorMode: textColorMode, hasCustomAppearance: hasCustomAppearance, folderColor: folderColor, folderBackColor: folderBackColor, commandPalette: commandPalette, sidebarTextColor: sidebarTextColor, folderOutlineColor: folderOutlineColor, folderOverrides: folderOverrides, sidebarSecondaryTextColor: sidebarSecondaryTextColor, folderHighlightColor: folderHighlightColor, folderHighlightOpacity: folderHighlightOpacity, popoverBackgroundColor: popoverBackgroundColor, popoverTextColor: popoverTextColor, popoverSecondaryTextColor: popoverSecondaryTextColor, popoverAccentColor: popoverAccentColor, popoverAccentOpacity: popoverAccentOpacity, popoverButtonColor: popoverButtonColor, popoverButtonOutlineColor: popoverButtonOutlineColor)
+        let controlsFillColor: BrandColor?
+        if try reader.readPresence() {
+            let controlsFillColorValue = try BrandColor(from: &reader)
+            controlsFillColor = controlsFillColorValue
+        } else {
+            controlsFillColor = nil
+        }
+        let controlsFillOpacity = try reader.readDouble()
+        let controlsTextColor: BrandColor?
+        if try reader.readPresence() {
+            let controlsTextColorValue = try BrandColor(from: &reader)
+            controlsTextColor = controlsTextColorValue
+        } else {
+            controlsTextColor = nil
+        }
+        let controlsSecondaryTextColor: BrandColor?
+        if try reader.readPresence() {
+            let controlsSecondaryTextColorValue = try BrandColor(from: &reader)
+            controlsSecondaryTextColor = controlsSecondaryTextColorValue
+        } else {
+            controlsSecondaryTextColor = nil
+        }
+        self.init(colors: colors, bannerPattern: bannerPattern, bannerStrength: bannerStrength, readabilityFade: readabilityFade, keepsControlsReadable: keepsControlsReadable, themeMode: themeMode, gradientAngle: gradientAngle, showsTexture: showsTexture, iconStyle: iconStyle, symbolColor: symbolColor, crest: crest, renderingVersion: renderingVersion, folderColorIntensity: folderColorIntensity, textColorMode: textColorMode, hasCustomAppearance: hasCustomAppearance, folderColor: folderColor, folderBackColor: folderBackColor, commandPalette: commandPalette, sidebarTextColor: sidebarTextColor, folderOutlineColor: folderOutlineColor, folderOverrides: folderOverrides, sidebarSecondaryTextColor: sidebarSecondaryTextColor, folderHighlightColor: folderHighlightColor, folderHighlightOpacity: folderHighlightOpacity, popoverBackgroundColor: popoverBackgroundColor, popoverTextColor: popoverTextColor, popoverSecondaryTextColor: popoverSecondaryTextColor, popoverAccentColor: popoverAccentColor, popoverAccentOpacity: popoverAccentOpacity, popoverButtonColor: popoverButtonColor, popoverButtonOutlineColor: popoverButtonOutlineColor, controlsFillColor: controlsFillColor, controlsFillOpacity: controlsFillOpacity, controlsTextColor: controlsTextColor, controlsSecondaryTextColor: controlsSecondaryTextColor)
     }
 
     func encode(into writer: inout WireWriter) {
@@ -24027,6 +24049,25 @@ extension SpaceBranding {
             writer.writePresence(false)
         }
         if let present0 = popoverButtonOutlineColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = controlsFillColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        writer.writeDouble(controlsFillOpacity)
+        if let present0 = controlsTextColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = controlsSecondaryTextColor {
             writer.writePresence(true)
             present0.encode(into: &writer)
         } else {

@@ -1,17 +1,22 @@
 import SwiftUI
 
 /// One layer above the sidebar's base UI: the device's surface material in
-/// `shape`, with an accent tint and a hover tint laid over it.
+/// `shape`, with the fill a theme gives its controls, an accent tint and a
+/// hover tint laid over it.
 struct CrestSurfaceLayer<LayerShape: Shape>: View {
     let shape: LayerShape
     var tint: Color? = nil
     var hoverTint: Color? = nil
 
     @Environment(\.crestSurfaceMaterial) private var materialOverride
+    @Environment(\.crestSurfaceFill) private var fill
 
     var body: some View {
         shape
             .fill(CrestSurfaceMaterial.shown(materialOverride).material)
+            .overlay {
+                if let fill { shape.fill(fill) }
+            }
             .overlay {
                 if let tint { shape.fill(tint) }
             }
@@ -19,6 +24,12 @@ struct CrestSurfaceLayer<LayerShape: Shape>: View {
                 if let hoverTint { shape.fill(hoverTint) }
             }
     }
+}
+
+extension EnvironmentValues {
+    /// The color laid over every surface layer here, before its own tint: a
+    /// theme's fill for the controls over the sidebar, or nil for none.
+    @Entry var crestSurfaceFill: Color? = nil
 }
 
 #if DEBUG

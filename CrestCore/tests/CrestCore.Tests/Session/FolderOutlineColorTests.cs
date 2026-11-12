@@ -53,6 +53,14 @@ public sealed class FolderOutlineColorTests {
         Assert.Equal(popoverSecondary, dressedBack.PopoverButtonColor);
         Assert.Equal(popoverAccent, dressedBack.PopoverButtonOutlineColor);
 
+        var controls = SpaceBranding.Normalized(SpaceBranding.Neutral with { ControlsFillColor = popoverBack, ControlsFillOpacity = 0.6 });
+        controls = SpaceBranding.Normalized(controls with { ControlsTextColor = popoverText, ControlsSecondaryTextColor = popoverSecondary });
+        var controlsBack = StoredSessionCodec.DecodeBranding(StoredSessionCodec.Encode(controls));
+        Assert.Equal(popoverBack, controlsBack.ControlsFillColor);
+        Assert.Equal(0.6, controlsBack.ControlsFillOpacity, precision: 6);
+        Assert.Equal(popoverText, controlsBack.ControlsTextColor);
+        Assert.Equal(popoverSecondary, controlsBack.ControlsSecondaryTextColor);
+
         var plain = StoredSessionCodec.Encode(SpaceBranding.Neutral);
         Assert.Null(StoredSessionCodec.DecodeBranding(plain).FolderOutlineColor);
         Assert.Null(StoredSessionCodec.DecodeBranding(plain).FolderOverrides);
