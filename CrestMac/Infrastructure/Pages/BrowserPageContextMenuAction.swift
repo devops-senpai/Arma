@@ -206,18 +206,32 @@ struct BrowserPageContextMenu {
     // MARK: - Actions - Menu
 
     /// Puts the rows ahead of what `menu` holds, with a separator between.
-    /// The row that opens a link in a new window goes under `linkRow`, the
-    /// engine's own row that opens the link in a new tab, where the menu has
-    /// one.
+    /// Where the menu has `linkRow`, the engine's own row that opens the link
+    /// in a new tab, that row's section stays first: the row that opens the
+    /// link in a new window goes under it, and the other rows follow the
+    /// section.
     func insert(into menu: NSMenu, linkRow: NSMenuItem? = nil) {
         var actions = actions
-        if let index = linkRow.flatMap(menu.items.firstIndex(of:)),
-            let window = actions.first(where: { $0.kind == .window })
-        {
-            menu.insertItem(item(for: window), at: index + 1)
-            actions.removeAll { $0.kind == .window }
+        var start = 0
+        if let index = linkRow.flatMap(menu.items.firstIndex(of:)) {
+            if let window = actions.first(where: { $0.kind == .window }) {
+                menu.insertItem(item(for: window), at: index + 1)
+                actions.removeAll { $0.kind == .window }
+            }
+            let end = menu.items[index...].firstIndex(where: \.isSeparatorItem) ?? menu.items.count
+            if end < menu.items.count {
+                start = end + 1
+            } else {
+                menu.addItem(.separator())
+                start = menu.items.count
+            }
         }
-        guard !actions.isEmpty else { return }
+        guard !actions.isEmpty else {
+            if start == menu.items.count, menu.items.last?.isSeparatorItem == true {
+                menu.removeItem(at: start - 1)
+            }
+            return
+        }
         var items: [NSMenuItem] = []
         let spaceActions = actions.filter(\.isSpaceDestination)
         if !spaceActions.isEmpty {
@@ -236,8 +250,12 @@ struct BrowserPageContextMenu {
             items.append(group)
         }
         items.append(contentsOf: actions.filter { !$0.isSpaceDestination && !$0.isTrailing }.map(item(for:)))
-        for (index, item) in items.enumerated() { menu.insertItem(item, at: index) }
-        if !items.isEmpty, menu.items.count > items.count { menu.insertItem(.separator(), at: items.count) }
+        for (offset, item) in items.enumerated() { menu.insertItem(item, at: start + offset) }
+        if !items.isEmpty, menu.items.count > start + items.count,
+            !menu.items[start + items.count].isSeparatorItem
+        {
+            menu.insertItem(.separator(), at: start + items.count)
+        }
         let trailing = actions.filter(\.isTrailing).map(item(for:))
         if !trailing.isEmpty, menu.items.last?.isSeparatorItem == false { menu.addItem(.separator()) }
         for item in trailing { menu.addItem(item) }
