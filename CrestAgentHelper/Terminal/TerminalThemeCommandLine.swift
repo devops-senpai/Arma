@@ -49,6 +49,10 @@ enum TerminalThemeCommandLine: TerminalSection {
           --palette-dark <hex>|default   --palette-dark-opacity <0-1>   --palette-dark-text <hex>|default
           --popover-background <hex>|default    the fill of popovers such as Site Controls
           --popover-text <hex>|default          the color of their text
+          --popover-secondary-text <hex>|default
+                                        their quieter text, such as a folder's path
+          --popover-accent <hex>|default        their buttons and links
+          --popover-accent-opacity <0-1>
 
         A theme is named by its name (any case). Colors are #RRGGBB or #RRGGBBAA. A Space's
         crest and icon are not part of its theme: shape and color them with arma crest.
@@ -212,6 +216,9 @@ enum TerminalThemeCommandLine: TerminalSection {
         var popovers = CrestTheme.Popovers()
         popovers.background = try color("popover-background")
         popovers.text = try color("popover-text")
+        popovers.secondaryText = try color("popover-secondary-text")
+        popovers.accent = try color("popover-accent")
+        popovers.accentOpacity = try unit("popover-accent-opacity")
         if popovers != CrestTheme.Popovers() { flags.popovers = popovers }
 
         let file = try arguments.option("from-file").map { (path) throws(TerminalArguments.Problem) in

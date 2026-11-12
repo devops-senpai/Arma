@@ -41,11 +41,6 @@ struct BrowserFolderAppearanceEditor: View {
         }
         .padding(CrestSpacing.large)
         .frame(width: 320)
-        // The popover opens from the sidebar, which may draw in the Space's
-        // scheme, so its text drops the Space's tone and color, and the popover
-        // itself, glass included, takes the window's scheme in every engine.
-        .foregroundStyle(.primary)
-        .preferredColorScheme(BrowserDeviceAppearanceStore.shared.shownColorScheme)
     }
 
     private var isOverridden: Bool {

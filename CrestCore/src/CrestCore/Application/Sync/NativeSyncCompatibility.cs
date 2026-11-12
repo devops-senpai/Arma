@@ -42,7 +42,7 @@ internal static class NativeSyncCompatibility {
         new() { ["light"] = PaletteSurface, ["dark"] = PaletteSurface });
 
     private static readonly Shape Branding = new(
-        "colors bannerPattern bannerStrength readabilityFade keepsControlsReadable themeMode gradientAngle showsTexture iconStyle symbolColor crest renderingVersion folderColorIntensity textColorMode hasCustomAppearance folderColor folderBackColor commandPalette sidebarTextColor folderOutlineColor folderOverrides sidebarSecondaryTextColor folderHighlightColor folderHighlightOpacity popoverBackgroundColor popoverTextColor",
+        "colors bannerPattern bannerStrength readabilityFade keepsControlsReadable themeMode gradientAngle showsTexture iconStyle symbolColor crest renderingVersion folderColorIntensity textColorMode hasCustomAppearance folderColor folderBackColor commandPalette sidebarTextColor folderOutlineColor folderOverrides sidebarSecondaryTextColor folderHighlightColor folderHighlightOpacity popoverBackgroundColor popoverTextColor popoverSecondaryTextColor popoverAccentColor popoverAccentOpacity",
         new() {
             ["colors"] = List(Color),
             ["symbolColor"] = Color,
@@ -56,7 +56,9 @@ internal static class NativeSyncCompatibility {
             ["sidebarSecondaryTextColor"] = Color,
             ["folderHighlightColor"] = Color,
             ["popoverBackgroundColor"] = Color,
-            ["popoverTextColor"] = Color
+            ["popoverTextColor"] = Color,
+            ["popoverSecondaryTextColor"] = Color,
+            ["popoverAccentColor"] = Color
         });
 
     private static readonly Shape SearchProvider = new("id name searchURLTemplate suggestionURLTemplate");

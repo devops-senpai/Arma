@@ -16,9 +16,10 @@ import SwiftUI
 /// presentation. A flyout laid over the page inside the window draws it in
 /// its own shape, and leaves the window's appearance alone.
 ///
-/// A Space's theme can fill the surface and color the labels with
-/// ``CrestFlyoutColors``. A fill lays over the material, and a light one
-/// reads its labels in the light appearance, so they stay dark on it.
+/// A Space's theme can fill the surface, color the labels and quieter
+/// labels, and choose the accent with ``CrestFlyoutColors``. A fill lays over
+/// the material, and a light one reads its labels in the light appearance, so
+/// they stay dark on it.
 struct CrestFlyoutStyle: ViewModifier {
     // MARK: - Static Variables
 
@@ -35,10 +36,11 @@ struct CrestFlyoutStyle: ViewModifier {
     @ViewBuilder
     func body(content: Content) -> some View {
         let colorScheme = colors.colorScheme
+        let accent = colors.accent.map(\.color) ?? CrestBrandTheme.accent(colorScheme)
         let labels =
             content
-            .foregroundStyle(colors.text.map { AnyShapeStyle($0.color) } ?? AnyShapeStyle(.primary))
-            .tint(CrestBrandTheme.accent(colorScheme))
+            .modifier(Labels(colors: colors))
+            .tint(accent.opacity(colors.accentOpacity))
             .environment(\.colorScheme, colorScheme)
         if let inWindowShape {
             labels.background { surface(in: inWindowShape) }
@@ -62,6 +64,23 @@ struct CrestFlyoutStyle: ViewModifier {
     }
 }
 
+/// A flyout's labels in the theme's text color, and its quieter labels in the
+/// theme's secondary text color, or the text color dimmed as the system dims it.
+private struct Labels: ViewModifier {
+    let colors: CrestFlyoutColors
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if let secondary = colors.secondaryText {
+            content.foregroundStyle(colors.text?.color ?? Color.primary, secondary.color)
+        } else if let text = colors.text {
+            content.foregroundStyle(text.color)
+        } else {
+            content.foregroundStyle(.primary)
+        }
+    }
+}
+
 /// The colors a Space's theme gives the flyouts its window shows: a fill for
 /// the surface and one color for the labels, each nil for the standard one.
 struct CrestFlyoutColors: Equatable, Sendable {
@@ -71,11 +90,15 @@ struct CrestFlyoutColors: Equatable, Sendable {
     /// well with nothing chosen.
     static let standardBackground = BrandColor(red: 0.17, green: 0.17, blue: 0.18, alpha: 1)
     static let standardText = BrandColor(red: 1, green: 1, blue: 1, alpha: 1)
+    static let standardAccent = BrandColor(red: 241 / 255, green: 117 / 255, blue: 98 / 255, alpha: 1)
 
     // MARK: - Variables
 
     var background: BrandColor?
     var text: BrandColor?
+    var secondaryText: BrandColor?
+    var accent: BrandColor?
+    var accentOpacity: Double = 1
 
     /// The appearance the flyout reads in: light over a light fill, so the
     /// standard labels stay dark on it, and dark otherwise.

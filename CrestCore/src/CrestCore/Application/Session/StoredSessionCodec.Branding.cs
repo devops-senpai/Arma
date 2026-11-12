@@ -46,7 +46,10 @@ internal static partial class StoredSessionCodec {
             // A record from before highlights keeps the tint its intensity gave.
             OptionalNumber(value[Key.FolderHighlightOpacity]) ?? SpaceBranding.HighlightOpacity(intensity),
             value[Key.PopoverBackgroundColor] is JsonObject popover ? DecodeColor(popover) : null,
-            value[Key.PopoverTextColor] is JsonObject popoverText ? DecodeColor(popoverText) : null);
+            value[Key.PopoverTextColor] is JsonObject popoverText ? DecodeColor(popoverText) : null,
+            value[Key.PopoverSecondaryTextColor] is JsonObject popoverSecondary ? DecodeColor(popoverSecondary) : null,
+            value[Key.PopoverAccentColor] is JsonObject popoverAccent ? DecodeColor(popoverAccent) : null,
+            OptionalNumber(value[Key.PopoverAccentOpacity]) ?? 1);
     }
 
     /// A look's folder overrides, each an object with a path and its colors;
@@ -104,6 +107,9 @@ internal static partial class StoredSessionCodec {
             value[Key.FolderHighlightOpacity] = branding.FolderHighlightOpacity;
         if (branding.PopoverBackgroundColor is { } popover) value[Key.PopoverBackgroundColor] = Encode(popover);
         if (branding.PopoverTextColor is { } popoverText) value[Key.PopoverTextColor] = Encode(popoverText);
+        if (branding.PopoverSecondaryTextColor is { } popoverSecondary) value[Key.PopoverSecondaryTextColor] = Encode(popoverSecondary);
+        if (branding.PopoverAccentColor is { } popoverAccent) value[Key.PopoverAccentColor] = Encode(popoverAccent);
+        if (branding.PopoverAccentOpacity != 1) value[Key.PopoverAccentOpacity] = branding.PopoverAccentOpacity;
         return value;
     }
 

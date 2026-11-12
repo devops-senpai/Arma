@@ -14,7 +14,7 @@ namespace CrestCore.Native;
 public static class ContractCodec {
     /// <summary>SHA-256 of the canonical contract schema.</summary>
     public static ReadOnlySpan<byte> Fingerprint => [
-        0x5c, 0x80, 0x70, 0x81, 0xab, 0x97, 0x60, 0x3b, 0x34, 0x35, 0xda, 0xa2, 0x3f, 0x05, 0xd0, 0x37, 0x80, 0xf4, 0x82, 0x1c, 0x7c, 0xa1, 0x3d, 0x25, 0xd6, 0x8a, 0xb8, 0x0a, 0x22, 0x38, 0xa0, 0xe9
+        0x3b, 0x70, 0x9c, 0x5c, 0x82, 0x2c, 0x2a, 0x71, 0xf3, 0xdb, 0x91, 0xec, 0x80, 0x8c, 0x91, 0xfd, 0xd3, 0xf0, 0xa4, 0x96, 0x40, 0x69, 0x7e, 0xe2, 0x8d, 0x54, 0x83, 0x82, 0xa3, 0x3e, 0x6d, 0xb7
     ];
 
     /// <summary>SHA-256 of the engine contract alone, which an engine binding registers with.</summary>
@@ -18830,7 +18830,10 @@ public static class ContractCodec {
             reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
             reader.ReadDouble(),
             reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
-            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null);
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadDouble());
     }
 
     public static void WriteSpaceBranding(WireWriter writer, SpaceBranding value) {
@@ -18922,6 +18925,19 @@ public static class ContractCodec {
         } else {
             writer.WritePresence(false);
         }
+        if (value.PopoverSecondaryTextColor is { } presentPopoverSecondaryTextColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentPopoverSecondaryTextColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.PopoverAccentColor is { } presentPopoverAccentColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentPopoverAccentColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        writer.WriteDouble(value.PopoverAccentOpacity);
     }
 
     public static SpaceCrest ReadSpaceCrest(WireReader reader) {

@@ -7,7 +7,7 @@ import Foundation
 enum CoreCodec {
     /// SHA-256 of the canonical contract schema. The core refuses any other.
     static let fingerprint: [UInt8] = [
-        0x5c, 0x80, 0x70, 0x81, 0xab, 0x97, 0x60, 0x3b, 0x34, 0x35, 0xda, 0xa2, 0x3f, 0x05, 0xd0, 0x37, 0x80, 0xf4, 0x82, 0x1c, 0x7c, 0xa1, 0x3d, 0x25, 0xd6, 0x8a, 0xb8, 0x0a, 0x22, 0x38, 0xa0, 0xe9
+        0x3b, 0x70, 0x9c, 0x5c, 0x82, 0x2c, 0x2a, 0x71, 0xf3, 0xdb, 0x91, 0xec, 0x80, 0x8c, 0x91, 0xfd, 0xd3, 0xf0, 0xa4, 0x96, 0x40, 0x69, 0x7e, 0xe2, 0x8d, 0x54, 0x83, 0x82, 0xa3, 0x3e, 0x6d, 0xb7
     ]
     /// SHA-256 of the engine contract alone, which an engine binding registers with.
     static let engineFingerprint: [UInt8] = [
@@ -23843,7 +23843,22 @@ extension SpaceBranding {
         } else {
             popoverTextColor = nil
         }
-        self.init(colors: colors, bannerPattern: bannerPattern, bannerStrength: bannerStrength, readabilityFade: readabilityFade, keepsControlsReadable: keepsControlsReadable, themeMode: themeMode, gradientAngle: gradientAngle, showsTexture: showsTexture, iconStyle: iconStyle, symbolColor: symbolColor, crest: crest, renderingVersion: renderingVersion, folderColorIntensity: folderColorIntensity, textColorMode: textColorMode, hasCustomAppearance: hasCustomAppearance, folderColor: folderColor, folderBackColor: folderBackColor, commandPalette: commandPalette, sidebarTextColor: sidebarTextColor, folderOutlineColor: folderOutlineColor, folderOverrides: folderOverrides, sidebarSecondaryTextColor: sidebarSecondaryTextColor, folderHighlightColor: folderHighlightColor, folderHighlightOpacity: folderHighlightOpacity, popoverBackgroundColor: popoverBackgroundColor, popoverTextColor: popoverTextColor)
+        let popoverSecondaryTextColor: BrandColor?
+        if try reader.readPresence() {
+            let popoverSecondaryTextColorValue = try BrandColor(from: &reader)
+            popoverSecondaryTextColor = popoverSecondaryTextColorValue
+        } else {
+            popoverSecondaryTextColor = nil
+        }
+        let popoverAccentColor: BrandColor?
+        if try reader.readPresence() {
+            let popoverAccentColorValue = try BrandColor(from: &reader)
+            popoverAccentColor = popoverAccentColorValue
+        } else {
+            popoverAccentColor = nil
+        }
+        let popoverAccentOpacity = try reader.readDouble()
+        self.init(colors: colors, bannerPattern: bannerPattern, bannerStrength: bannerStrength, readabilityFade: readabilityFade, keepsControlsReadable: keepsControlsReadable, themeMode: themeMode, gradientAngle: gradientAngle, showsTexture: showsTexture, iconStyle: iconStyle, symbolColor: symbolColor, crest: crest, renderingVersion: renderingVersion, folderColorIntensity: folderColorIntensity, textColorMode: textColorMode, hasCustomAppearance: hasCustomAppearance, folderColor: folderColor, folderBackColor: folderBackColor, commandPalette: commandPalette, sidebarTextColor: sidebarTextColor, folderOutlineColor: folderOutlineColor, folderOverrides: folderOverrides, sidebarSecondaryTextColor: sidebarSecondaryTextColor, folderHighlightColor: folderHighlightColor, folderHighlightOpacity: folderHighlightOpacity, popoverBackgroundColor: popoverBackgroundColor, popoverTextColor: popoverTextColor, popoverSecondaryTextColor: popoverSecondaryTextColor, popoverAccentColor: popoverAccentColor, popoverAccentOpacity: popoverAccentOpacity)
     }
 
     func encode(into writer: inout WireWriter) {
@@ -23933,6 +23948,19 @@ extension SpaceBranding {
         } else {
             writer.writePresence(false)
         }
+        if let present0 = popoverSecondaryTextColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = popoverAccentColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        writer.writeDouble(popoverAccentOpacity)
     }
 }
 

@@ -23,6 +23,9 @@ struct SpaceColorScheme: ViewModifier {
             .environment(\.colorScheme, branding?.shown.colorScheme(over: colorScheme) ?? .dark)
             .environment(
                 \.crestFlyoutColors,
-                CrestFlyoutColors(background: branding?.popoverBackgroundColor, text: branding?.popoverTextColor))
+                CrestFlyoutColors(
+                    background: branding?.popoverBackgroundColor, text: branding?.popoverTextColor,
+                    secondaryText: branding?.popoverSecondaryTextColor, accent: branding?.popoverAccentColor,
+                    accentOpacity: branding?.popoverAccentOpacity ?? 1))
     }
 }

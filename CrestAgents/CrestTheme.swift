@@ -114,6 +114,12 @@ struct CrestTheme: Codable, Equatable, Sendable {
         var background: String?
         /// The color their text reads in, or `default` for the standard text.
         var text: String?
+        /// The color their quieter text reads in, or `default` to dim `text`.
+        var secondaryText: String?
+        /// The color of their buttons and links, or `default` for Arma's accent.
+        var accent: String?
+        /// How opaque that accent is, 0 through 1.
+        var accentOpacity: Double?
     }
 
     /// The five sections of one look, as the file's top level and its `dark`
@@ -188,6 +194,9 @@ struct CrestTheme: Codable, Equatable, Sendable {
                 var section = merged.popovers ?? Popovers()
                 if let value = popovers.background { section.background = value }
                 if let value = popovers.text { section.text = value }
+                if let value = popovers.secondaryText { section.secondaryText = value }
+                if let value = popovers.accent { section.accent = value }
+                if let value = popovers.accentOpacity { section.accentOpacity = value }
                 merged.popovers = section
             }
             return merged

@@ -38,10 +38,17 @@ public sealed class FolderOutlineColorTests {
 
         var popoverBack = new BrandColor(0.12, 0.1, 0.2);
         var popoverText = new BrandColor(0.95, 0.9, 0.7);
+        var popoverSecondary = new BrandColor(0.7, 0.7, 0.8);
+        var popoverAccent = new BrandColor(0.9, 0.4, 0.3);
         var dressed = SpaceBranding.Normalized(SpaceBranding.Neutral with { PopoverBackgroundColor = popoverBack, PopoverTextColor = popoverText });
+        dressed = SpaceBranding.Normalized(dressed with { PopoverSecondaryTextColor = popoverSecondary, PopoverAccentColor = popoverAccent });
+        dressed = SpaceBranding.Normalized(dressed with { PopoverAccentOpacity = 0.8 });
         var dressedBack = StoredSessionCodec.DecodeBranding(StoredSessionCodec.Encode(dressed));
         Assert.Equal(popoverBack, dressedBack.PopoverBackgroundColor);
         Assert.Equal(popoverText, dressedBack.PopoverTextColor);
+        Assert.Equal(popoverSecondary, dressedBack.PopoverSecondaryTextColor);
+        Assert.Equal(popoverAccent, dressedBack.PopoverAccentColor);
+        Assert.Equal(0.8, dressedBack.PopoverAccentOpacity, precision: 6);
 
         var plain = StoredSessionCodec.Encode(SpaceBranding.Neutral);
         Assert.Null(StoredSessionCodec.DecodeBranding(plain).FolderOutlineColor);
@@ -50,6 +57,8 @@ public sealed class FolderOutlineColorTests {
         Assert.Null(StoredSessionCodec.DecodeBranding(plain).FolderHighlightColor);
         Assert.Null(StoredSessionCodec.DecodeBranding(plain).PopoverBackgroundColor);
         Assert.Null(StoredSessionCodec.DecodeBranding(plain).PopoverTextColor);
+        Assert.Null(StoredSessionCodec.DecodeBranding(plain).PopoverAccentColor);
+        Assert.Equal(1, StoredSessionCodec.DecodeBranding(plain).PopoverAccentOpacity);
         Assert.Equal(SpaceBranding.DefaultHighlightOpacity, StoredSessionCodec.DecodeBranding(plain).FolderHighlightOpacity);
 
         // A record from before highlights keeps the tint its intensity gave.

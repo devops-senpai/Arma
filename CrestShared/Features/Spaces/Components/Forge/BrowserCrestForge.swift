@@ -320,6 +320,14 @@ struct BrowserCrestForge: View {
             BrowserCrestStudioColorPickerRow(
                 title: "Text color", value: context.setting(\.popoverTextColor, default: nil),
                 fallback: CrestFlyoutColors.standardText)
+            BrowserCrestStudioColorPickerRow(
+                title: "Secondary text color", value: context.setting(\.popoverSecondaryTextColor, default: nil),
+                fallback: branding.popoverTextColor ?? CrestFlyoutColors.standardText)
+            BrowserCrestStudioColorPickerRow(
+                title: "Accent color", value: context.setting(\.popoverAccentColor, default: nil),
+                fallback: CrestFlyoutColors.standardAccent)
+            BrowserCrestStudioSlider(
+                title: "Accent opacity", value: context.setting(\.popoverAccentOpacity, default: 1))
         } header: {
             Text("Popovers")
         }

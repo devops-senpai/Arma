@@ -63,7 +63,10 @@ changes; everything else keeps the plain look.
     "light": { "tint": "#ffffff", "opacity": 0.5, "text": "#1e1e2e" },
     "dark":  { "tint": "#1e1e2e", "opacity": 0.92, "text": "#cdd6f4" }
   },
-  "popovers": { "background": "#1e1e2e", "text": "#cdd6f4" }
+  "popovers": {
+    "background": "#1e1e2e", "text": "#cdd6f4", "secondaryText": "#a6adc8",
+    "accent": "#f38ba8", "accentOpacity": 1
+  }
 }
 ```
 
@@ -79,7 +82,8 @@ changes; everything else keeps the plain look.
 | `folders.*Color` | a color, or `default` |
 | `folders.highlightOpacity`, `folders.intensity` | 0 to 1 |
 | `commandPalette.light` / `.dark` | `tint`, `opacity` (0 is glass alone, 1 is solid), `text` |
-| `popovers.background`, `popovers.text` | a color, or `default`: the fill and text of popovers such as Site Controls |
+| `popovers.background`, `text`, `secondaryText`, `accent` | a color, or `default`: the fill, text, quieter text and buttons of popovers such as Site Controls |
+| `popovers.accentOpacity` | 0 to 1 |
 
 Colors are `#RRGGBB` or `#RRGGBBAA`. The word `default` lets a chosen color go.
 

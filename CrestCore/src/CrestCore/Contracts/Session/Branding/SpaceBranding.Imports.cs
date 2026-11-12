@@ -38,7 +38,8 @@ public sealed partial record SpaceBranding {
             SpaceTextColorMode.Automatic, HasCustomAppearance: null, FolderColor: null, FolderBackColor: null, CommandPalette: null,
             SidebarTextColor: null, FolderOutlineColor: null, FolderOverrides: null, SidebarSecondaryTextColor: null,
             FolderHighlightColor: null, FolderHighlightOpacity: SpaceBranding.DefaultHighlightOpacity,
-            PopoverBackgroundColor: null, PopoverTextColor: null);
+            PopoverBackgroundColor: null, PopoverTextColor: null, PopoverSecondaryTextColor: null,
+            PopoverAccentColor: null, PopoverAccentOpacity: 1);
     }
 
     #endregion

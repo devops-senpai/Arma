@@ -57,6 +57,10 @@ public sealed partial record SpaceBranding {
             FolderHighlightOpacity = Unit(branding.FolderHighlightOpacity),
             PopoverBackgroundColor = branding.PopoverBackgroundColor is { } popover ? NormalizedColor(popover) : null,
             PopoverTextColor = branding.PopoverTextColor is { } popoverText ? NormalizedColor(popoverText) : null,
+            PopoverSecondaryTextColor = branding.PopoverSecondaryTextColor is { } popoverSecondary
+                ? NormalizedColor(popoverSecondary) : null,
+            PopoverAccentColor = branding.PopoverAccentColor is { } popoverAccent ? NormalizedColor(popoverAccent) : null,
+            PopoverAccentOpacity = Unit(branding.PopoverAccentOpacity),
             Crest = crest with {
                 Palette = palette is null ? null : new(palette),
                 BackplateColorIndex = LayerIndex(crest.BackplateColorIndex, layers),
