@@ -73,7 +73,12 @@ extension CrestTheme.Sections {
                 accent: look.popoverAccentColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord,
                 accentOpacity: look.popoverAccentOpacity,
                 button: look.popoverButtonColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord,
-                buttonOutline: look.popoverButtonOutlineColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord))
+                buttonOutline: look.popoverButtonOutlineColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord),
+            controls: CrestTheme.Controls(
+                fill: look.controlsFillColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord,
+                fillOpacity: look.controlsFillOpacity,
+                text: look.controlsTextColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord,
+                secondaryText: look.controlsSecondaryTextColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord))
     }
 
     private static func surface(_ surface: SpacePaletteSurface?) -> CrestTheme.CommandPalette.Surface {
@@ -163,6 +168,12 @@ extension SpaceBranding {
             if let opacity = popovers.accentOpacity { look.popoverAccentOpacity = opacity }
             if let text = popovers.button { look.popoverButtonColor = try CrestTheme.color(text) }
             if let text = popovers.buttonOutline { look.popoverButtonOutlineColor = try CrestTheme.color(text) }
+        }
+        if let controls = sections.controls {
+            if let text = controls.fill { look.controlsFillColor = try CrestTheme.color(text) }
+            if let opacity = controls.fillOpacity { look.controlsFillOpacity = opacity }
+            if let text = controls.text { look.controlsTextColor = try CrestTheme.color(text) }
+            if let text = controls.secondaryText { look.controlsSecondaryTextColor = try CrestTheme.color(text) }
         }
         if look != self { look.hasCustomAppearance = true }
         return look

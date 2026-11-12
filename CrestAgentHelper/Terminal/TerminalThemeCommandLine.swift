@@ -23,7 +23,7 @@ enum TerminalThemeCommandLine: TerminalSection {
                                         --unpair-dark turns the dark look off, keeping it
           reset <section>... [<theme>] [--space <space>] [--dark]
                                         put background, icon, folders, command-palette,
-                                        popovers or all back to the plain look
+                                        popovers, controls or all back to the plain look
           use <theme> [--space <space>] have a Space, or the shown one, use a theme
 
         Look options:
@@ -55,6 +55,11 @@ enum TerminalThemeCommandLine: TerminalSection {
           --popover-accent-opacity <0-1>
           --popover-button <hex>|default        the fill of their plain buttons
           --popover-button-outline <hex>|default
+          --controls-fill <hex>|default         the fill of the address field and pins
+          --controls-fill-opacity <0-1>
+          --controls-text <hex>|default         their text and icons, such as the site
+          --controls-secondary-text <hex>|default
+                                        their quieter text, such as the page's path
 
         A theme is named by its name (any case). Colors are #RRGGBB or #RRGGBBAA. A Space's
         crest and icon are not part of its theme: shape and color them with arma crest.
@@ -118,7 +123,7 @@ enum TerminalThemeCommandLine: TerminalSection {
             }
             guard !sections.isEmpty else {
                 throw TerminalArguments.Problem(
-                    message: "Name a section: background, icon, folders, command-palette, popovers or all.")
+                    message: "Name a section: background, icon, folders, command-palette, popovers, controls or all.")
             }
             guard theme != nil || arguments.option("space") != nil else {
                 throw TerminalArguments.Problem(message: "Name the theme, or a Space with --space.")
@@ -224,6 +229,13 @@ enum TerminalThemeCommandLine: TerminalSection {
         popovers.button = try color("popover-button")
         popovers.buttonOutline = try color("popover-button-outline")
         if popovers != CrestTheme.Popovers() { flags.popovers = popovers }
+
+        var controls = CrestTheme.Controls()
+        controls.fill = try color("controls-fill")
+        controls.fillOpacity = try unit("controls-fill-opacity")
+        controls.text = try color("controls-text")
+        controls.secondaryText = try color("controls-secondary-text")
+        if controls != CrestTheme.Controls() { flags.controls = controls }
 
         let file = try arguments.option("from-file").map { (path) throws(TerminalArguments.Problem) in
             try Self.file(path)
