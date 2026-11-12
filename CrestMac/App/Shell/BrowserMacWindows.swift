@@ -207,6 +207,15 @@ final class BrowserMacWindows {
         return coordinator.existingModel(for: request.id).map(Self.context(of:))
     }
 
+    /// Checks for an update the person asked for. Its answer, whether an
+    /// update, none or an error, shows in the sidebar's update card, so a
+    /// hidden sidebar rolls out over the page in the window they use until
+    /// they click elsewhere.
+    func checkForUpdates() {
+        application.softwareUpdates.checkForUpdates()
+        contextBringingBrowserWindowForward()?.chrome.floatSidebarUntilClickElsewhere()
+    }
+
     private static func context(of model: BrowserMacWindowModel) -> BrowserMacWindowContext {
         BrowserMacWindowContext(
             browser: model.browser, pages: model.pages, chrome: model.chrome, windowID: model.id)
