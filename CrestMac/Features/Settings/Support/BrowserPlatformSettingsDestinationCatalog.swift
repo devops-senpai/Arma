@@ -6,8 +6,11 @@ enum BrowserPlatformSettingsDestinationCatalog {
     /// the last two groups. Spaces, Passwords and Extensions are pages of a
     /// Space, and Feature Flags is a page of Advanced, so none has a row.
     static let groups: [[BrowserSettingsDestination]] = [
-        [.general, .tabs, .search, .lookAndFeel, .links, .engines, .shortcuts, .sync, .privacy, .adBlocking],
-        [.agents, .advanced, .about],
+        [
+            .general, .tabs, .search, .lookAndFeel, .themes, .links, .engines, .shortcuts, .sync, .privacy,
+            .adBlocking,
+        ],
+        [.agents, .automation, .advanced, .about],
     ]
 
     /// Destinations without a row, each opened from the page of the
