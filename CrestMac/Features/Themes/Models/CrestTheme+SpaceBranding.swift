@@ -163,36 +163,6 @@ extension SpaceBranding {
         return (look, try (dark ?? look).dressed(in: darkSections))
     }
 
-    /// This look with `section` back to what `starting` gives it.
-    func resetting(_ section: CrestThemeSection, to starting: SpaceBranding) -> SpaceBranding {
-        var look = self
-        switch section {
-        case .background:
-            look.colors = starting.colors
-            look.themeMode = starting.themeMode
-            look.bannerPattern = starting.bannerPattern
-            look.gradientAngle = starting.gradientAngle
-            look.bannerStrength = starting.bannerStrength
-            look.readabilityFade = starting.readabilityFade
-            look.showsTexture = starting.showsTexture
-            look.textColorMode = starting.textColorMode
-            look.sidebarTextColor = starting.sidebarTextColor
-            look.sidebarSecondaryTextColor = starting.sidebarSecondaryTextColor
-        case .icon:
-            look.symbolColor = starting.symbolColor
-        case .folders:
-            look.folderColor = starting.folderColor
-            look.folderBackColor = starting.folderBackColor
-            look.folderOutlineColor = starting.folderOutlineColor
-            look.folderOverrides = starting.folderOverrides
-            look.folderHighlightColor = starting.folderHighlightColor
-            look.folderHighlightOpacity = starting.folderHighlightOpacity
-        case .commandPalette:
-            look.commandPalette = starting.commandPalette
-        }
-        return look
-    }
-
     // MARK: - Mutators
 
     private mutating func dressSurface(in surface: CrestTheme.CommandPalette.Surface?, dark: Bool)
