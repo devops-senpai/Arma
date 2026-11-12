@@ -1,5 +1,62 @@
 import SwiftUI
 
+// MARK: - Types
+
+/// The looks a Space's Crest Studio can put back. The Forge keeps one, and
+/// shares it with the step pages it opens on a phone, so a drag on any page is
+/// one change to undo and Undo on any page steps back through the same past.
+struct BrowserCrestForgeHistory {
+    // MARK: - Static Variables
+
+    static let limit = 40
+
+    // MARK: - Variables
+
+    private var looks: [SpaceBranding] = []
+    /// The look a drag started from; the drag ends as one change from it.
+    private(set) var editingStart: SpaceBranding?
+    /// The look Undo put back, which is not itself a change to remember.
+    private var restoredLook: SpaceBranding?
+
+    var canUndo: Bool { !looks.isEmpty }
+
+    // MARK: - Mutators
+
+    /// Remembers the look a change replaced, unless a drag is still running
+    /// or the change is Undo putting a look back.
+    mutating func noteChange(from previous: SpaceBranding, to current: SpaceBranding) {
+        if let restored = restoredLook {
+            restoredLook = nil
+            if current == restored { return }
+        }
+        guard editingStart == nil else { return }
+        remember(previous)
+    }
+
+    /// Marks a drag's start or end over `current`: one change to undo,
+    /// however many samples the drag sent.
+    mutating func setEditing(_ editing: Bool, over current: SpaceBranding) {
+        if editing {
+            if editingStart == nil { editingStart = current }
+        } else if let start = editingStart {
+            editingStart = nil
+            if start != current { remember(start) }
+        }
+    }
+
+    /// Takes the look to put back, if there is one.
+    mutating func undo() -> SpaceBranding? {
+        guard let previous = looks.popLast() else { return nil }
+        restoredLook = previous
+        return previous
+    }
+
+    private mutating func remember(_ previous: SpaceBranding) {
+        looks.append(previous)
+        if looks.count > Self.limit { looks.removeFirst() }
+    }
+}
+
 /// A Space's Crest Studio: the crest on the Space's own sidebar field, and
 /// one step of its making at a time, beside the window's live sidebar.
 ///
@@ -17,16 +74,23 @@ struct BrowserCrestForge: View {
     var listsSteps = false
     /// Whether the stage carries the step bar; a step's own page has none.
     var showsStepBar = true
+    /// The Forge's history, on one of the step pages it opens; the Forge
+    /// itself keeps its own.
+    var sharedHistory: Binding<BrowserCrestForgeHistory>? = nil
+    /// The steps a person may open, every one unless the page edits only
+    /// part of a look, as a theme's.
+    var offeredSteps: [BrowserCrestStudioStep] = BrowserCrestStudioStep.all
     /// The Space whose customization style the studio shows, or nil for the
     /// whole studio alone.
     var spaceID: UUID? = nil
 
     @State private var initialAppearance: SpaceBranding?
-    @State private var history: [SpaceBranding] = []
-    @State private var editingStart: SpaceBranding?
-    /// The look Undo put back, which is not itself a change to remember.
-    @State private var restoredBranding: SpaceBranding?
+    @State private var ownHistory = BrowserCrestForgeHistory()
     @State private var choosesEmoji = false
+
+    private var history: Binding<BrowserCrestForgeHistory> { sharedHistory ?? $ownHistory }
+
+    private var editingStart: SpaceBranding? { history.wrappedValue.editingStart }
     @State private var showsAdvanced = false
 
     private var context: BrowserCrestStudioContext {
@@ -67,9 +131,12 @@ struct BrowserCrestForge: View {
         #if os(iOS)
             .modifier(
                 BrowserCrestForgeStepPages(isEnabled: listsSteps) { step in
-                    BrowserCrestForge(branding: $branding, symbol: $symbol, step: .constant(step), showsStepBar: false)
-                        .navigationTitle(Text(step.title))
-                        .navigationBarTitleDisplayMode(.inline)
+                    BrowserCrestForge(
+                        branding: $branding, symbol: $symbol, step: .constant(step), showsStepBar: false,
+                        sharedHistory: history
+                    )
+                    .navigationTitle(Text(step.title))
+                    .navigationBarTitleDisplayMode(.inline)
                 })
         #endif
         #if os(macOS)
@@ -80,22 +147,15 @@ struct BrowserCrestForge: View {
             BrowserCrestStudioEditingAction { editing in
                 // A drag is one change to undo, and the galleries keep their
                 // compositions while it runs.
-                if editing {
-                    if editingStart == nil { editingStart = branding }
-                } else if let start = editingStart {
-                    editingStart = nil
-                    if start != branding { remember(start) }
-                }
+                history.wrappedValue.setEditing(editing, over: branding)
             }
         )
         .onAppear { if initialAppearance == nil { initialAppearance = branding } }
         .onChange(of: branding) { previous, current in
-            if let restored = restoredBranding {
-                restoredBranding = nil
-                if current == restored { return }
-            }
-            guard editingStart == nil else { return }
-            remember(previous)
+            // The Forge sees its step pages' changes through the shared
+            // binding, so it alone remembers them.
+            guard sharedHistory == nil else { return }
+            history.wrappedValue.noteChange(from: previous, to: current)
         }
         .accessibilityIdentifier("space-customization-controls")
     }
@@ -418,8 +478,8 @@ struct BrowserCrestForge: View {
     private var stageHeader: some View {
         VStack(spacing: 16) {
             BrowserCrestForgeStage(
-                branding: $branding, symbol: symbol, name: name, canUndo: !history.isEmpty, shuffle: shuffle,
-                undo: undo, openStep: { step = $0 })
+                branding: $branding, symbol: symbol, name: name, canUndo: history.wrappedValue.canUndo,
+                shuffle: shuffle, undo: undo, openStep: { step = $0 })
             if showsStepBar && !listsSteps {
                 BrowserPlatformCrestForgeStepBar(
                     step: Binding(get: { shownStep }, set: { step = $0 }),
@@ -452,14 +512,8 @@ struct BrowserCrestForge: View {
 
     // MARK: - History
 
-    private func remember(_ previous: SpaceBranding) {
-        history.append(previous)
-        if history.count > BrowserCrestForgeHistory.limit { history.removeFirst() }
-    }
-
     private func undo() {
-        guard let previous = history.popLast() else { return }
-        restoredBranding = previous
+        guard let previous = history.wrappedValue.undo() else { return }
         branding = previous
     }
 
@@ -519,10 +573,6 @@ struct BrowserCrestForge: View {
         look.hasCustomAppearance = true
         return look.normalized()
     }
-}
-
-private enum BrowserCrestForgeHistory {
-    static let limit = 40
 }
 
 #if os(iOS)
