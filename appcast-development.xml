@@ -6,6 +6,31 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.80</title>
+            <pubDate>Thu, 12 Nov 2026 17:05:13 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>900080</sparkle:version>
+            <sparkle:shortVersionString>0.9.80</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### New
+- Themes can color the address field and pins: a fill at any opacity, a text color for the site and icons, and a quieter color for the page's path. Find them in Settings › Themes › Other › Address field and pins, in a theme file's `controls` section, or with `arma theme edit --controls-…`.
+- The themes Arma comes with color the address field and pins to match, in light and dark looks.
+
+### Improved
+- Right-clicking a link lists Open Link in New Tab and New Window first, with Arma's Space, Peek and Split View rows after them.
+
+### From Crest 0.9.8
+- Choose how much customization to see with three styles in Settings › Appearance: Heraldic (Full) keeps every control, while Modern and Simple show fewer and keep the rest under Advanced. Setup offers Simple as a look too.
+- Space icons in the switcher can be dots.
+- Text over a Space's colors is easier to read, and the address field and pins look the same on every Space unless a theme colors them.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.80/Arma-0.9.80.dmg" length="195125881" type="application/octet-stream" sparkle:edSignature="jQagHw4p56omBprhkZHgy8BssyhCwLco6RdsnrNX4KtG9veke4mho1rZ3xKxX5tedAD11XsuG5cKRRqzpANRAg=="/>
+        </item>
+        <item>
             <title>0.9.78</title>
             <pubDate>Thu, 12 Nov 2026 13:39:00 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -525,6 +550,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: x3gdFQ+n8NrnxpBeP30QiZyLBBt8IP6DaDdwrBBvW+HaSynv89Wjad2YnbVWPpWOKz7Pwuc6Svn5blN4BU7VAw==
-length: 38172
+edSignature: sAcsqts7nfPMJtvEta4ugK7JLiSB3PZZee/iXHlmq4Gqkt9j+7e8XHc7eszXKM6CS4fLfTqYjdJU62q+8XuKDQ==
+length: 40049
 -->
