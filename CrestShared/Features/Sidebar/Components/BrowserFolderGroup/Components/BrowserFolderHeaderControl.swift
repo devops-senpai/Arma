@@ -27,7 +27,8 @@ struct BrowserFolderHeaderControl: View {
                     BrowserFolderIcon(
                         folder: folder,
                         isExpanded: interaction.isExpanded.wrappedValue,
-                        metrics: configuration.headerMetrics
+                        metrics: configuration.headerMetrics,
+                        branding: configuration.displayBranding, space: configuration.context.space
                     )
 
                     TextField("Folder Name", text: interaction.draftTitle)
@@ -61,11 +62,14 @@ struct BrowserFolderHeaderControl: View {
                         BrowserFolderIcon(
                             folder: folder,
                             isExpanded: interaction.isExpanded.wrappedValue,
-                            metrics: configuration.headerMetrics
+                            metrics: configuration.headerMetrics,
+                            branding: configuration.displayBranding, space: configuration.context.space
                         )
 
                         BrowserFolderHeaderTitle(
                             folder: folder, context: configuration.context, tintsTitle: tintsTitle,
+                            tint: configuration.displayBranding?.folderColor(
+                                of: folder, in: configuration.context.space) ?? folder.displayColor,
                             emphasizesShownTab: alwaysVisible
                         )
                         .equatable()
@@ -97,6 +101,8 @@ private struct BrowserFolderHeaderTitle: View, @MainActor Equatable {
     let folder: FolderStateModel
     let context: BrowserSidebarListContext
     let tintsTitle: Bool
+    /// The folder's color as its Space draws it, which the title follows when tinted.
+    let tint: BrandColor
     let emphasizesShownTab: Bool
 
     @Environment(\.colorScheme) private var colorScheme
@@ -105,7 +111,7 @@ private struct BrowserFolderHeaderTitle: View, @MainActor Equatable {
         Text(folder.shownTitle)
             .foregroundStyle(
                 tintsTitle
-                    ? folder.displayColor.folderTitleColor(onDarkBackground: colorScheme == .dark).color
+                    ? tint.folderTitleColor(onDarkBackground: colorScheme == .dark).color
                     : .primary
             )
             .fontWeight(tintsTitle || holdsShownTab ? .semibold : .regular)

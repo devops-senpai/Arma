@@ -9,7 +9,10 @@ extension EnvironmentValues {
 /// Shared by live folder groups and the inline settings preview.
 struct BrowserFolderHighlightSurface: ViewModifier {
     let color: BrandColor
-    let intensity: Double
+    /// The color the fill takes instead of `color`; the border keeps `color`.
+    var highlightColor: BrandColor? = nil
+    /// How opaque the fill is.
+    var highlightOpacity: Double = 1
     var textColorMode: SpaceTextColorMode = .automatic
     var showsFill = true
     var showsBorders = true
@@ -32,23 +35,26 @@ struct BrowserFolderHighlightSurface: ViewModifier {
         if let override = textColorMode.foregroundTone(system: BrowserSpaceForegroundTone(readingIn: colorScheme)) {
             return override == .light ? .dark : .light
         }
-        guard showsFill, intensity > 0 else { return colorScheme }
+        guard showsFill else { return colorScheme }
         return compositedColor.foregroundTone.colorScheme
     }
+
+    private var fillColor: BrandColor { highlightColor ?? color }
 
     private var compositedColor: BrandColor {
         // The tint lies over the material, which reads in its material color.
         let surfaceScheme = CrestSurfaceTone.shownScheme(over: colorScheme, window: deviceColorScheme)
         let channel = surfaceScheme == .dark ? 0.0 : 1.0
-        return color.composited(
+        return fillColor.composited(
             opacity: fillOpacity,
             over: parentBackgroundColor ?? BrandColor(red: channel, green: channel, blue: channel))
     }
 
+    /// Reduced transparency keeps the fill at least as solid as it draws
+    /// its quietest tint.
     private var fillOpacity: Double {
-        let strength = intensity.isFinite ? min(max(intensity, 0), 1) : 0
-        let baseline = reduceTransparency ? 0.28 : 0.12
-        return baseline + (1 - baseline) * strength
+        let opacity = highlightOpacity.isFinite ? min(max(highlightOpacity, 0), 1) : 1
+        return reduceTransparency ? max(opacity, 0.28) : opacity
     }
 
     private var shape: RoundedRectangle {
@@ -59,7 +65,7 @@ struct BrowserFolderHighlightSurface: ViewModifier {
         content
             .background {
                 if showsFill {
-                    CrestSurfaceLayer(shape: shape, tint: color.color.opacity(fillOpacity))
+                    CrestSurfaceLayer(shape: shape, tint: fillColor.color.opacity(fillOpacity))
                         .overlay {
                             if emphasisOpacity > 0 { shape.fill(.primary.opacity(emphasisOpacity)) }
                         }

@@ -23,6 +23,7 @@ struct BrowserImportSpaceCustomizationView: View {
                         name: name, symbol: current.symbol, accent: current.accent, branding: current.branding)
                 },
                 identity: identity(of: review),
+                theme: flow.theme?.theme,
                 back: BrowserOnboardingBackAction(closes: false, action: done),
                 advanceTitle: Text("Done"),
                 advance: done
