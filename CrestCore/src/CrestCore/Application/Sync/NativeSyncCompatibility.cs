@@ -34,9 +34,37 @@ internal static class NativeSyncCompatibility {
         "backplate fieldDivision ordinary trim symbol chargeLayout backplateColorIndex secondaryFieldColorIndex ordinaryColorIndex trimColorIndex symbolColorIndex edgeColorIndex palette charge plateScale edgeWidth divisionCount finish ordinaryWidth trimWeight trimDetail chargeScale chargeOffset chargeWeight startingPresetID sheenAngle sealTeeth showsOutline depth",
         new() { ["palette"] = List(Color), ["charge"] = Charge });
 
+    private static readonly Shape FolderOverride = new("path color backColor outlineColor",
+        new() { ["color"] = Color, ["backColor"] = Color, ["outlineColor"] = Color });
+    private static readonly Shape PaletteSurface = new("tint opacity textColor", new() { ["tint"] = Color, ["textColor"] = Color });
+
+    private static readonly Shape PaletteLook = new("light dark",
+        new() { ["light"] = PaletteSurface, ["dark"] = PaletteSurface });
+
     private static readonly Shape Branding = new(
-        "colors bannerPattern bannerStrength readabilityFade keepsControlsReadable themeMode gradientAngle showsTexture textureStrength iconStyle symbolColor crest renderingVersion folderColorIntensity textColorMode hasCustomAppearance",
-        new() { ["colors"] = List(Color), ["symbolColor"] = Color, ["crest"] = Crest });
+        "colors bannerPattern bannerStrength readabilityFade keepsControlsReadable themeMode gradientAngle showsTexture textureStrength iconStyle symbolColor crest renderingVersion folderColorIntensity textColorMode hasCustomAppearance folderColor folderBackColor commandPalette sidebarTextColor folderOutlineColor folderOverrides sidebarSecondaryTextColor folderHighlightColor folderHighlightOpacity popoverBackgroundColor popoverTextColor popoverSecondaryTextColor popoverAccentColor popoverAccentOpacity popoverButtonColor popoverButtonOutlineColor controlsFillColor controlsFillOpacity controlsTextColor controlsSecondaryTextColor",
+        new() {
+            ["colors"] = List(Color),
+            ["symbolColor"] = Color,
+            ["crest"] = Crest,
+            ["folderColor"] = Color,
+            ["folderBackColor"] = Color,
+            ["commandPalette"] = PaletteLook,
+            ["sidebarTextColor"] = Color,
+            ["folderOutlineColor"] = Color,
+            ["folderOverrides"] = List(FolderOverride),
+            ["sidebarSecondaryTextColor"] = Color,
+            ["folderHighlightColor"] = Color,
+            ["popoverBackgroundColor"] = Color,
+            ["popoverTextColor"] = Color,
+            ["popoverSecondaryTextColor"] = Color,
+            ["popoverAccentColor"] = Color,
+            ["popoverButtonColor"] = Color,
+            ["popoverButtonOutlineColor"] = Color,
+            ["controlsFillColor"] = Color,
+            ["controlsTextColor"] = Color,
+            ["controlsSecondaryTextColor"] = Color
+        });
 
     private static readonly Shape SearchProvider = new("id name searchURLTemplate suggestionURLTemplate");
 
@@ -59,6 +87,7 @@ internal static class NativeSyncCompatibility {
             [StoredSessionCodec.Key.Id] = Identity,
             [StoredSessionCodec.Key.PrimarySpaceId] = Identity,
             [StoredSessionCodec.Key.Branding] = Branding,
+            [StoredSessionCodec.Key.DarkBranding] = Branding,
             [StoredSessionCodec.Key.BrowsingPreferences] = Browsing,
             [StoredSessionCodec.Key.SplitGroups] = List(Group, true)
         }),
