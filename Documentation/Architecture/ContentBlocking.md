@@ -1,6 +1,6 @@
 # Content blocking
 
-Crest blocks ads and trackers with filter lists in EasyList and uBlock Origin
+Arma blocks ads and trackers with filter lists in EasyList and uBlock Origin
 syntax, matched by Brave's open-source engine,
 [adblock-rust](https://github.com/brave/adblock-rust), which the core links as
 its content filter (`CrestCore/native/ContentFilter`). The core owns the lists,
@@ -44,14 +44,14 @@ The resources that scriptlets and redirect filters name are downloaded the same
 way, from uBlock Origin's own release, which
 `Scripts/control-plane/ublock-resources` converts into the engine's format and
 publishes as a release asset. They are data the engine loads, not part of
-Crest's binary.
+Arma's binary.
 
 uBlock Origin's lists wrap platform-specific rules in `!#if` blocks, which the
 engine would read as comments. `FilterListText` resolves them for the platform
 before the engine sees them: Safari's conditions for WebKit, plus `env_mobile`
 on iPhone and iPad, and Chromium's for Chromium.
 
-Until the first list arrives, Crest's own baseline rules block third-party
+Until the first list arrives, Arma's own baseline rules block third-party
 loads from well-known advertising and analytics hosts. They stay beside the
 lists afterwards.
 
@@ -93,7 +93,7 @@ list that is on together and splits the rules into lists of at most 70,000,
 well under WebKit's 150,000, with every exception repeated at the end of each.
 Each list's identifier changes with its rules, so a rule-list store compiles
 it once and keeps it across launches; the core answers the source of one the
-store lacks (`ContentRuleListSource`), and the lists Crest compiled earlier are
+store lacks (`ContentRuleListSource`), and the lists Arma compiled earlier are
 removed when no set names them. The set before the current one is kept, its
 converted rules in the core and its compiled lists in the store for the rest of
 the launch, so switching back, as between Balanced and Strict, applies at once.
@@ -101,7 +101,7 @@ WebKit's store compiles on the main thread and parses a whole list first, so a
 set it has never seen still costs that parse once.
 
 Each page owns its user content controller. A main-frame navigation installs
-or removes Crest's lists for the site it goes to before the page loads it, so a
+or removes Arma's lists for the site it goes to before the page loads it, so a
 site's switch costs no compilation. A list update takes effect on each page's
 next navigation; the page whose site the person switched reloads. The lists
 carry the sites' own hiding rules; generic hiding, and what WebKit cannot
