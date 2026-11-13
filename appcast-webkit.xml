@@ -6,6 +6,33 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.92</title>
+            <pubDate>Fri, 13 Nov 2026 00:12:31 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>900092</sparkle:version>
+            <sparkle:shortVersionString>0.9.92</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### Fixed
+- The iPhone and iPad app builds again.
+
+### From Crest
+- Move a folder to another Space from its menu, with its sub-folders, tabs and Split Views. Deleting a folder asks first and sends its tabs to the Archive.
+- A closed folder keeps showing the tabs that were loaded when it closed, and clicking a folder inside it opens that folder.
+- Split Views look and work like folders: click to collapse, double-click to rename.
+- Texture is now a strength from none to full, in every style. Modern has its gradient angle dial back.
+- The selected tab wears the window's glass, like the address field and pins.
+- Appearance › Material color sets whether the address field, pins and extension strip read light or dark: following the Space (the default), always light, always dark, or as the window reads. A theme's own control colors still win.
+- Copy URL and Site Controls sit side by side, and the sidebar can narrow further. In a narrow address field, Copy URL appears while the pointer is over it.
+- Appearance can show the address on two lines, on one line, or as the site alone.
+- Super Copy, on by default, removes trackers from links you copy or share.
+- The Start Page shows the app icon you picked, and its title follows the Space's colors.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.92/Arma-0.9.92.dmg" length="195392047" type="application/octet-stream" sparkle:edSignature="1D3sdOQHrizh/33BiHwAvGH+Y2oo5Pcy/q8Qf/iRkiBQlg3/ReytgVNxMwRi/8XkqY/zyyO9h6OMEZ7rJqtXAQ=="/>
+        </item>
+        <item>
             <title>0.9.80</title>
             <pubDate>Thu, 12 Nov 2026 17:05:12 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -524,6 +551,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: x4r3C8agy8ivLOjUsAGLt3oN6sq9bHCWbXrJsn0JR8+YYA2HW8ojXrK43ZVNMpBexaoStIQZ7EgyLxv1HwxSBA==
-length: 38515
+edSignature: c0/OcoQYDisxCESUqaE84e8T3UhHyHf8eDU7y5HTTKeZXU7K+cYEPv4D25S//FwPrKmI2y8+zIc3zik8h56ABA==
+length: 40614
 -->
