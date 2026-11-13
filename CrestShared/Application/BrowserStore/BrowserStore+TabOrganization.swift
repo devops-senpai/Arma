@@ -599,6 +599,13 @@ extension BrowserStore {
         guard let space = shownSpace, activateSessionTab(id, in: space.id) else { return }
     }
 
+    /// Shows tab `tabID` of Space `spaceID` in this window, showing that
+    /// Space first when the window shows another.
+    func showTab(_ tabID: UUID, in spaceID: UUID) {
+        selectSpace(spaceID)
+        selectTab(tabID)
+    }
+
     /// Stops showing a tab without closing it: the window returns to the tab
     /// it showed before in the shown Space, or shows nothing there.
     func selectDismissalFallback(afterDismissing id: UUID) {
