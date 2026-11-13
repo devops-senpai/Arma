@@ -6,6 +6,24 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.97</title>
+            <pubDate>Fri, 13 Nov 2026 14:22:44 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>900097</sparkle:version>
+            <sparkle:shortVersionString>0.9.97</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### From Crest
+- A Quick Window opened from a link in another app opens once, where it stays, without flashing or jumping, and Arma's other windows stay out of the way.
+- Closing that Quick Window returns you to the app the link came from, and Quick Windows open on the display you are using.
+- Settings pages scroll with the pointer anywhere on the page.
+- A test copy of Arma keeps its own sidebar width instead of changing the installed app's.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.97/Arma-0.9.97.dmg" length="195409003" type="application/octet-stream" sparkle:edSignature="ZU6R2rWTY56DhixN6HqBsl4Wm9M0ReAe2eZD09etxUvNvG7zum+IIVcK1nHnzVO5Dp2ZyWGr7MQ7zTDKCcjPDA=="/>
+        </item>
+        <item>
             <title>0.9.92</title>
             <pubDate>Fri, 13 Nov 2026 00:12:21 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -551,6 +569,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: SxJyUMdHWK3Li8zmbIhsdLdBhyT0Zzisj6sXqP/6R5+z7Iz2dDXP9+7erLeOBqZboTt+Cu4DDBrzVeEATAKTAA==
-length: 40614
+edSignature: 9jP++Ehx/EYMDn5dwx3FAypHj1xiVVKqDmkctlG80ABNFLblp65fku/bkdC246UjXJ7dB0vvFvWl/Zpxz7ERDg==
+length: 41905
 -->
