@@ -46,7 +46,7 @@ struct BrowserStartPageContent: View {
                 },
                 // The page shows the Space's backdrop, so its title reads in
                 // the Space's scheme, as the sidebar's text does.
-                headerColorScheme: space.settings.look.shown.colorScheme(over: colorScheme),
+                headerColorScheme: space.settings.shownLook.colorScheme(over: colorScheme),
                 commands: commands
             )
         } else {
