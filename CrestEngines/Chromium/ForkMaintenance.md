@@ -126,6 +126,7 @@ after the last. Every patch states its reason in its header.
 | `certificate-transparency-enforced.patch` | Enforces Certificate Transparency, which Chromium does only in Google Chrome builds. |
 | `manifest-v2-extensions.patch` | Keeps Manifest V2 extensions loading, without deprecation warnings. |
 | `content-filter.patch` | Puts each Crest page's requests through the core's content filter, which blocks ads and trackers from the enabled filter lists, wires Chromium's `js_injection` renderer component in so each page runs the filter's scriptlets as its documents start, and gives Crest's content bridge user style sheets for its hiding rules, which the page can't read or override. |
+| `automation.patch` | DevTools remote debugging for browser automation, limited to the profile Settings › Automation chose: that profile is the default browser context, contexts DevTools creates show in its Space, and remote clients see only its targets (`Overlay/chrome/browser/ui/crest/crest_automation.h`). |
 
 `network-time-off`, `intranet-redirect-detector-off`, most of
 `privacy-defaults`, `certificate-transparency-enforced` and
