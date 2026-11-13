@@ -18,6 +18,7 @@ enum CrestThemeSection: String, Codable, CaseIterable, Sendable {
     case folders
     case commandPalette = "command-palette"
     case popovers
+    case controls
 }
 
 /// A theme as the file holds it: the look, and the look for dark windows.
@@ -126,7 +127,21 @@ struct CrestTheme: Codable, Equatable, Sendable {
         var buttonOutline: String?
     }
 
-    /// The five sections of one look, as the file's top level and its `dark`
+    /// The controls over the sidebar: the address field and the pins.
+    struct Controls: Codable, Equatable, Sendable {
+        /// The color that fills them, or `default` for the window's surface.
+        var fill: String?
+        /// How opaque that fill is, 0 through 1.
+        var fillOpacity: Double?
+        /// The color their text and icons read in, such as the address
+        /// field's site, or `default` for the window's text.
+        var text: String?
+        /// The color their quieter text reads in, such as the page's path,
+        /// or `default` to dim `text`.
+        var secondaryText: String?
+    }
+
+    /// The six sections of one look, as the file's top level and its `dark`
     /// object each hold them.
     struct Sections: Codable, Equatable, Sendable {
         var background: Background?
@@ -134,10 +149,12 @@ struct CrestTheme: Codable, Equatable, Sendable {
         var folders: Folders?
         var commandPalette: CommandPalette?
         var popovers: Popovers?
+        var controls: Controls?
 
         /// Whether the sections name anything at all.
         var isEmpty: Bool {
             background == nil && icon == nil && folders == nil && commandPalette == nil && popovers == nil
+                && controls == nil
         }
 
         /// These sections with `section` as `other` has it, the rest kept.
@@ -149,6 +166,7 @@ struct CrestTheme: Codable, Equatable, Sendable {
             case .folders: reset.folders = other.folders
             case .commandPalette: reset.commandPalette = other.commandPalette
             case .popovers: reset.popovers = other.popovers
+            case .controls: reset.controls = other.controls
             }
             return reset
         }
@@ -205,6 +223,14 @@ struct CrestTheme: Codable, Equatable, Sendable {
                 if let value = popovers.buttonOutline { section.buttonOutline = value }
                 merged.popovers = section
             }
+            if let controls = other.controls {
+                var section = merged.controls ?? Controls()
+                if let value = controls.fill { section.fill = value }
+                if let value = controls.fillOpacity { section.fillOpacity = value }
+                if let value = controls.text { section.text = value }
+                if let value = controls.secondaryText { section.secondaryText = value }
+                merged.controls = section
+            }
             return merged
         }
 
@@ -257,6 +283,7 @@ struct CrestTheme: Codable, Equatable, Sendable {
     var folders: Folders?
     var commandPalette: CommandPalette?
     var popovers: Popovers?
+    var controls: Controls?
     /// The look for dark windows, worn in them while `darkLook` says so and
     /// kept, turned off, otherwise; nil when none was ever made.
     var dark: Sections?
@@ -277,7 +304,7 @@ struct CrestTheme: Codable, Equatable, Sendable {
         get {
             Sections(
                 background: background, icon: icon, folders: folders, commandPalette: commandPalette,
-                popovers: popovers)
+                popovers: popovers, controls: controls)
         }
         set {
             background = newValue.background
@@ -285,6 +312,7 @@ struct CrestTheme: Codable, Equatable, Sendable {
             folders = newValue.folders
             commandPalette = newValue.commandPalette
             popovers = newValue.popovers
+            controls = newValue.controls
         }
     }
 
@@ -307,7 +335,8 @@ struct CrestTheme: Codable, Equatable, Sendable {
     var sectionTitles: [String] {
         [
             (background != nil, "background"), (icon != nil, "icon"), (folders != nil, "folders"),
-            (commandPalette != nil, "command palette"), (popovers != nil, "popovers"), (dark != nil, "dark look"),
+            (commandPalette != nil, "command palette"), (popovers != nil, "popovers"), (controls != nil, "controls"),
+            (dark != nil, "dark look"),
             (backgroundImage != nil, "background image"),
         ].filter(\.0).map(\.1)
     }
