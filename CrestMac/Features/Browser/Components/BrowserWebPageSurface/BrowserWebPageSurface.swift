@@ -104,7 +104,8 @@ struct BrowserWebPageSurface: View {
             BrowserCredentialChrome(
                 presentation: BrowserCredentialChromePresentation.resolve(
                     saveCandidate: page.credentialSaveCandidate,
-                    fillRequest: page.credentialFillRequest
+                    fillRequest: page.credentialFillRequest,
+                    pauseOffer: page.credentialPauseOffer
                 ),
                 fillPort: credentialFillPort,
                 savePort: credentialSavePort,
@@ -168,7 +169,8 @@ struct BrowserWebPageSurface: View {
             fillGeneratedPassword: { password, requestID in
                 try await page.fillGeneratedPassword(password, for: requestID)
             },
-            dismiss: page.dismissCredentialFillRequest
+            dismiss: page.dismissCredentialFillRequest,
+            close: page.snoozeCredentialPrompts
         )
     }
 
@@ -179,6 +181,9 @@ struct BrowserWebPageSurface: View {
             spaceID: page.spaceID,
             presentedCandidateID: { page.credentialSaveCandidate?.id },
             dismiss: page.dismissCredentialSaveCandidate,
+            close: page.snoozeCredentialPrompts,
+            pause: page.pauseCredentialPrompts(for:),
+            dismissPauseOffer: page.dismissCredentialPauseOffer,
             offerToSystemPasswords: nil
         )
     }

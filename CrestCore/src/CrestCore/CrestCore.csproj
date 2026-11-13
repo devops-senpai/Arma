@@ -8,4 +8,8 @@
          connection, and history tests walk visits against a small history limit. -->
     <InternalsVisibleTo Include="CrestCore.Tests" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- The Public Suffix List (MPL 2.0), read by Domain/Sites/PublicSuffixList.cs. -->
+    <EmbeddedResource Include="Domain/Sites/public_suffix_list.dat" LogicalName="CrestCore.Domain.Sites.public_suffix_list.dat" />
+  </ItemGroup>
 </Project>
