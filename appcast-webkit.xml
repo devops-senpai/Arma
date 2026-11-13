@@ -6,6 +6,21 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.101</title>
+            <pubDate>Fri, 13 Nov 2026 17:03:39 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>900101</sparkle:version>
+            <sparkle:shortVersionString>0.9.101</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### From Crest
+- A folder's hover card keeps its text readable whatever Material color is set to.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.101/Arma-0.9.101.dmg" length="195657126" type="application/octet-stream" sparkle:edSignature="dVXo0SXrE5E7LQd3gwxrT0FEmix4nqBLpQRNS1wiSSQEVYCa8495qbIjUIqt6GukRYRM6j04P7WOKdZrqkU7Ag=="/>
+        </item>
+        <item>
             <title>0.9.100</title>
             <pubDate>Fri, 13 Nov 2026 15:53:28 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -586,6 +601,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: Bijo7bWlpv3bYjSO57SSAZ78YP1EyLKNddnXYYThLNhJ6QEhWlsOUBasCTlP252rtAdbFDr7LkqqsVW1fmxaBw==
-length: 43109
+edSignature: yWM3kjet7EzhF3V7EPP1AyYCIecz4hycOpYYBh+2QADZ9RlNXRHjhqBrc7WFNkdi8hTVfx0Mfk1JCPsPa81+DQ==
+length: 44055
 -->
