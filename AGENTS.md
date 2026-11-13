@@ -64,15 +64,22 @@ has the details.
 
 ## Keeping up with upstream
 
-Arma is a fork of pauljoda/Crest. It merges upstream's `main`
-regularly and never rebases its own `main`.
+Arma is a fork of pauljoda/Crest. Its `main` is upstream's `main` plus one
+commit per fork change, with no merge commits: each fix to Crest's code is
+its own commit, and each feature Arma adds is one commit with every later
+change to it folded in. `Documentation/ForkRunbook.md` has the steps and
+`Taskfile.yml` the commands (`task --list`).
 
-- Sync with `Scripts/sync-upstream.sh`. It fetches upstream, merges without
-  committing, takes upstream's copy of `Config/Version.xcconfig`, merges
-  `Documentation/ReleaseNotes.json` three ways with
-  `Scripts/merge-release-notes.py`, takes upstream's copy of every generated
-  file and regenerates them, runs the lint, the script tests and the version
-  check, then commits. Anything else that conflicts it leaves for a person.
+- Sync with `task sync` (`Scripts/fork/sync.sh`). It merges upstream on a
+  temporary branch with
+  `Scripts/sync-upstream.sh` (which takes upstream's copy of
+  `Config/Version.xcconfig`, merges `Documentation/ReleaseNotes.json` three
+  ways, regenerates generated files and runs the lint, script tests and
+  version check), replays each fork commit onto upstream's `main` with its
+  `fixup!` commits folded in, and checks the result matches the merge. Anything that conflicts in the merge
+  it leaves for a person.
+- A change to an existing fork feature is committed with
+  `task fixup -- '<that commit's subject>'`, so it folds into the feature.
 - Fork work never edits `Config/Version.xcconfig` or
   `Documentation/ReleaseNotes.json`. Those two files change only as upstream
   wrote them, through a merge; a fork change adds its note as
@@ -82,14 +89,18 @@ regularly and never rebases its own `main`.
   "What Arma adds" list in the same commit, under its kind.
 - Resolve a code conflict by reading both sides' commits. When upstream fixed
   what a fork commit fixed, keep upstream's version and drop the fork's.
-- No engine input ever differs from upstream: the patches, overlay, host
-  header, source lock, host inputs and control-plane build scripts under
-  `CrestEngines/Chromium` and `Scripts/control-plane`, and
-  `CrestContracts/include/crest_engine_contract.h`. Prose there may change;
-  the inputs may not. keeping them identical keeps the engine key equal
-  to upstream's, and `Scripts/sync-upstream-engine.sh` mirrors upstream's
-  prebuilt engine for that key into this fork's releases. Run it after a sync
-  whenever `Scripts/control-plane/chromium_engine.py tag` changed.
+- Arma builds its own Chromium engine. Its engine inputs differ from
+  upstream's: the patches, overlay, host header, source lock, host inputs
+  and control-plane build scripts under `CrestEngines/Chromium` and
+  `Scripts/control-plane`, and `CrestContracts/include/crest_engine_contract.h`
+  (which carries Arma's third engine kind, Servo). Upstream's prebuilt engine
+  therefore no longer matches; `Scripts/sync-upstream-engine.sh` is retired
+  for this fork. After any change to those inputs, or a sync that changes
+  `Scripts/control-plane/chromium_engine.py tag`, build with
+  `Scripts/control-plane/chromium-fork.py --workspace ~/Dev/CrestChromium build`
+  on the build Mac and publish with `publish-chromium-engine.py` to this
+  repository. Resolve conflicts in those inputs by keeping upstream's change
+  and re-applying Arma's on top.
 
 ## Generated localization catalog
 
@@ -155,3 +166,30 @@ regularly and never rebases its own `main`.
 - During cleanup, consolidate overlapping fixtures and cases rather than
   adding a new test framework. Run the affected retained tests and report what
   was removed, what protection remains, and any remaining validation gaps.
+
+## Fix it the way upstream would
+
+Arma's code should read like Paul Davis's, so it merges cleanly and stays
+native. His fixes share a shape; follow it.
+
+- **Find the exact cause first.** Name the mechanism, not the symptom: which
+  view, which event, which framework behavior. "`.onDrag` in a `List` starts a
+  drag after one point and the drag session takes the click's mouse-up" is a
+  cause; "the row sometimes ignores clicks" is not.
+- **Then make the smallest native change at that spot.** Swap the one API
+  that misbehaves for the one the framework meant for the job before touching
+  anything around it: `.onDrag` became `.itemProvider` (#1010), a
+  `LazyVStack` became a `VStack` (#927), one `.fixedSize` held a row to its
+  height (#933). Look up the alternative modifiers in Apple's documentation
+  before deciding a container is broken.
+- **Don't rebuild a container to dodge one modifier.** Replacing a `List`,
+  hand-rolling drag or focus, or reimplementing what AppKit or SwiftUI already
+  does is a last resort, and only after the narrow change has been tried and
+  shown not to work. If two symptoms appear together, fix each at its own
+  cause; don't pick a rewrite because it covers both.
+- **Check upstream before a large fix.** Read Paul's recent commits in the
+  same area; he may have fixed it, or his fix shows the native route.
+- **Comment the why at the change.** A short comment where the code changed
+  says what the framework does and why this API avoids it, as #1010's does.
+- **Say what was and wasn't verified.** The commit body states the cause,
+  the change, and the validation that ran, and names what was not run.
