@@ -31,9 +31,26 @@ struct BrowserCredentialObservation<FillTarget> {
 final class BrowserCredentialPageState<FillTarget> {
     let spaceID: UUID
     @ObservationIgnored private let core: CrestCore
+    /// The sites the page's Space never offers to save passwords on, read
+    /// fresh for each decision so an edit in Settings applies at once.
+    @ObservationIgnored private let neverSavedSites: @MainActor () -> [NeverSavedSite]
+    /// Whether the page may offer to save a submitted password; a private
+    /// window's never does.
+    @ObservationIgnored private let allowsSaving: Bool
 
     private(set) var fillRequest: BrowserCredentialFillRequest?
     private(set) var saveCandidate: BrowserCredentialSaveCandidate?
+    /// Whether the person paused Arma's password prompts on this page, so
+    /// another password manager can have it. A new tab is not paused.
+    private(set) var isPaused = false
+    /// When a timed pause ends on its own, or nil for one until resumed.
+    private(set) var pausedUntil: Date?
+    @ObservationIgnored private var pauseExpiry: Task<Void, Never>?
+    /// The offer to pause the prompts on this page, made when the person
+    /// closes one, until they answer it or it goes.
+    private(set) var pauseOffer: UUID?
+    /// Until when the prompts stay away after the person closed one.
+    @ObservationIgnored private var snoozedUntil: Date?
 
     @ObservationIgnored private var fillTargets: [UUID: FillTarget] = [:]
 
@@ -47,9 +64,14 @@ final class BrowserCredentialPageState<FillTarget> {
     @ObservationIgnored private var pendingSaveCandidate: BrowserCredentialSaveCandidate?
     @ObservationIgnored private var candidateExpirationTask: Task<Void, Never>?
 
-    init(spaceID: UUID, core: CrestCore) {
+    init(
+        spaceID: UUID, core: CrestCore, neverSavedSites: @escaping @MainActor () -> [NeverSavedSite] = { [] },
+        allowsSaving: Bool = true
+    ) {
         self.spaceID = spaceID
         self.core = core
+        self.neverSavedSites = neverSavedSites
+        self.allowsSaving = allowsSaving
     }
 
     /// Applies one validated form message. The portable core decides what
@@ -63,7 +85,11 @@ final class BrowserCredentialPageState<FillTarget> {
         fillTarget: FillTarget?
     ) {
         guard let event = message.event.captureEvent else {
-            followField(message, frameOrigin: frameOrigin, isMainFrame: isMainFrame)
+            if message.event.closesFillOfItsForm {
+                if message.formID != nil, message.formID == fillFormID { dismissFillRequest() }
+            } else {
+                followField(message, frameOrigin: frameOrigin, isMainFrame: isMainFrame)
+            }
             return
         }
         let now = Date.now
@@ -118,7 +144,7 @@ final class BrowserCredentialPageState<FillTarget> {
             request.id == requestID,
             fillAllowed(from: .saved, into: request.passwordKind),
             credential.descriptor.spaceID == spaceID,
-            credential.descriptor.origin == request.origin,
+            fills(request.origin, with: credential.descriptor),
             let target = fillTargets[requestID]
         else {
             throw BrowserCredentialFillError.staleOrMismatchedRequest
@@ -165,6 +191,53 @@ final class BrowserCredentialPageState<FillTarget> {
         guard let request = fillRequest else { return }
         fillTargets[request.id] = nil
         fillRequest = nil
+    }
+
+    /// How long the prompts stay away after the person closes one.
+    static var snoozeDuration: TimeInterval { 3 }
+
+    /// Closes the prompt the person closed, keeps every prompt away for
+    /// `snoozeDuration`, so the field they return to doesn't raise it again
+    /// at once, and offers to pause them on this page.
+    func snooze(now: Date = .now) {
+        snoozedUntil = now.addingTimeInterval(Self.snoozeDuration)
+        dismissFillRequest()
+        dismissSaveCandidate()
+        if !isPaused { pauseOffer = UUID() }
+    }
+
+    func dismissPauseOffer() {
+        pauseOffer = nil
+    }
+
+    /// Pauses Arma's password prompts on this page for `length`, after which
+    /// they come back on their own unless the person resumes them sooner.
+    func pause(for length: BrowserCredentialPauseLength, now: Date = .now) {
+        isPaused = true
+        pauseOffer = nil
+        pausedUntil = length.end(from: now)
+        dismissFillRequest()
+        dismissSaveCandidate()
+        pauseExpiry?.cancel()
+        guard let seconds = length.seconds else { return }
+        pauseExpiry = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(seconds))
+            guard !Task.isCancelled else { return }
+            self?.resume()
+        }
+    }
+
+    /// Resumes Arma's password prompts on this page.
+    func resume() {
+        pauseExpiry?.cancel()
+        pauseExpiry = nil
+        isPaused = false
+        pausedUntil = nil
+    }
+
+    /// Whether a prompt may appear now: not while paused or snoozed.
+    private func offersPrompts(at now: Date) -> Bool {
+        !isPaused && (snoozedUntil.map { now >= $0 } ?? true)
     }
 
     func dismissSaveCandidate() {
@@ -240,7 +313,8 @@ final class BrowserCredentialPageState<FillTarget> {
             pending: pendingCandidate.map {
                 CredentialPendingCandidate(origin: $0.origin, submittedAt: $0.submittedAt.timeIntervalSince1970)
             },
-            now: now.timeIntervalSince1970)
+            now: now.timeIntervalSince1970,
+            neverSavedSites: neverSavedSites())
         guard let decision = try? core.query(capture), decision.candidateLifetime > 0, decision.usernameHintLifetime > 0
         else { return nil }
         return decision
@@ -250,6 +324,15 @@ final class BrowserCredentialPageState<FillTarget> {
     /// a field of this kind. A core that refuses fills nothing.
     private func fillAllowed(from source: CredentialFillSource, into passwordKind: CredentialPasswordKind) -> Bool {
         (try? core.query(CredentialFill(source: source, passwordKind: passwordKind)))?.isAllowed ?? false
+    }
+
+    /// Whether `descriptor`'s password may fill a page at `origin`: saved for
+    /// it, or reaching it from the site above. A core that refuses fills
+    /// nothing.
+    private func fills(_ origin: CredentialOrigin, with descriptor: CredentialDescriptor) -> Bool {
+        if descriptor.origin == origin { return true }
+        let reaching = descriptor.includesSubdomains ? [0] : []
+        return (try? core.fills(origin, from: [descriptor.origin], reaching: reaching))?.first ?? false
     }
 
     /// The username the core chose: the message's own, or the remembered one.
@@ -288,6 +371,7 @@ extension BrowserCredentialPageState: CredentialCapturePerformer {
     }
 
     func offerFill(_ observation: BrowserCredentialObservation<FillTarget>) {
+        guard offersPrompts(at: observation.now) else { return }
         let message = observation.message
         let decision = observation.decision
         guard let passwordKind = message.passwordKind, let formID = message.formID,
@@ -312,6 +396,7 @@ extension BrowserCredentialPageState: CredentialCapturePerformer {
     }
 
     func captureCandidate(_ observation: BrowserCredentialObservation<FillTarget>) {
+        guard allowsSaving, !isPaused else { return }
         let message = observation.message
         let decision = observation.decision
         guard
@@ -348,7 +433,7 @@ extension BrowserCredentialPageState: CredentialCapturePerformer {
     }
 
     func offerSave(_ observation: BrowserCredentialObservation<FillTarget>) {
-        guard let candidate = pendingSaveCandidate else { return }
+        guard let candidate = pendingSaveCandidate, offersPrompts(at: observation.now) else { return }
         pendingSaveCandidate = nil
         saveCandidate = candidate
     }

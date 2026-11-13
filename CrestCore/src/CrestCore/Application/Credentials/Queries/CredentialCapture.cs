@@ -6,12 +6,14 @@ namespace CrestCore.Contracts;
 /// `Hint` is the page's remembered username from an earlier login step and
 /// `Pending` the submitted credential still waiting for a sign-in; neither
 /// carries the username or the password. `Now` is in seconds since 1970.
+/// `NeverSavedSites` are the page's Space's, where no save is offered.
 public sealed record CredentialCapture(CredentialFormFacts Facts, CredentialUsernameHint? Hint,
-    CredentialPendingCandidate? Pending, double Now) : Query<CredentialCaptureDecision> {
+    CredentialPendingCandidate? Pending, double Now, IReadOnlyList<NeverSavedSite> NeverSavedSites)
+    : Query<CredentialCaptureDecision> {
     #region Actions - Answering
 
     internal override CredentialCaptureDecision Answer(CrestApp app) {
-        return Facts.Event.Decide(Facts, Hint, Pending, Now);
+        return Facts.Event.Decide(Facts, Hint, Pending, Now, NeverSavedSites);
     }
 
     #endregion
