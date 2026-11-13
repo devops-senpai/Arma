@@ -1,3 +1,4 @@
+import AppKit
 import Foundation
 import Observation
 import SwiftUI
@@ -62,6 +63,9 @@ final class BrowserRootModel {
     /// Whether the floating sidebar came out because the pointer reached the
     /// window edge, rather than from a click, command or page request.
     private(set) var isFloatingSidebarRevealedByPointer = false
+    /// Watches for the click outside the sidebar that puts away a sidebar
+    /// the chrome holds out, while it holds one.
+    @ObservationIgnored private var floatingSidebarHoldMonitor: Any?
     private var sidebarMorphRevision = 0
     /// Cancels or awaits the current sidebar transition.
     @ObservationIgnored private(set) var sidebarMorphTask: Task<Void, Never>?
@@ -509,6 +513,27 @@ extension BrowserRootModel {
     func floatingSidebarPresentationChanged() {
         guard !isFloatingSidebarPresented else { return }
         isFloatingSidebarRevealedByPointer = false
+        chrome.holdsFloatingSidebar = false
+    }
+
+    /// Follows whether the chrome holds the floating sidebar out: while it
+    /// does, a press of the mouse anywhere but over the sidebar puts it away.
+    func floatingSidebarHoldChanged(reduceMotion: Bool) {
+        if let floatingSidebarHoldMonitor {
+            NSEvent.removeMonitor(floatingSidebarHoldMonitor)
+            self.floatingSidebarHoldMonitor = nil
+        }
+        guard chrome.holdsFloatingSidebar else { return }
+        floatingSidebarHoldMonitor = NSEvent.addLocalMonitorForEvents(
+            matching: [.leftMouseDown, .rightMouseDown]
+        ) { [weak self] event in
+            MainActor.assumeIsolated {
+                guard let self, !self.isSidebarSurfaceHovered else { return }
+                self.chrome.holdsFloatingSidebar = false
+                self.dismissFloatingSidebar(reduceMotion: reduceMotion)
+            }
+            return event
+        }
     }
 
     func columnVisibilityChanged(reduceMotion: Bool) {
@@ -535,6 +560,7 @@ extension BrowserRootModel {
     ) {
         guard !isSidebarMorphing,
             !isSidebarSurfaceHovered,
+            !chrome.holdsFloatingSidebar,
             !chrome.utilityPresentation.isSidebarInteractionActive
         else { return }
         dismissFloatingSidebar(reduceMotion: reduceMotion)
