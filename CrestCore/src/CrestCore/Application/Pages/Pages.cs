@@ -206,7 +206,7 @@ internal sealed class Pages(Device device, Engines engines, IClock clock, IIdSou
     /// video service otherwise opens in an engine that plays its media.
     internal Engine? Chosen(SpaceState space, string url) {
         if (new WebAddress(url).Origin is not { } origin) return null;
-        if (device.ChosenEngine(space.Id, origin) is { } kind) return engines.Registered(kind);
+        if (device.ChosenEngine(space.Id, origin) is { } kind) return engines.Serving(kind);
         return ProtectedMediaService.Serving(origin) is not null ? engines.PlayingProtectedMedia(except: null) : null;
     }
 
