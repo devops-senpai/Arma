@@ -73,7 +73,12 @@ extension CrestTheme.Sections {
                 accent: look.popoverAccentColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord,
                 accentOpacity: look.popoverAccentOpacity,
                 button: look.popoverButtonColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord,
-                buttonOutline: look.popoverButtonOutlineColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord))
+                buttonOutline: look.popoverButtonOutlineColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord),
+            controls: CrestTheme.Controls(
+                fill: look.controlsFillColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord,
+                fillOpacity: look.controlsFillOpacity,
+                text: look.controlsTextColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord,
+                secondaryText: look.controlsSecondaryTextColor.map(CrestTheme.text) ?? CrestTheme.defaultColorWord))
     }
 
     private static func surface(_ surface: SpacePaletteSurface?) -> CrestTheme.CommandPalette.Surface {
@@ -164,6 +169,12 @@ extension SpaceBranding {
             if let text = popovers.button { look.popoverButtonColor = try CrestTheme.color(text) }
             if let text = popovers.buttonOutline { look.popoverButtonOutlineColor = try CrestTheme.color(text) }
         }
+        if let controls = sections.controls {
+            if let text = controls.fill { look.controlsFillColor = try CrestTheme.color(text) }
+            if let opacity = controls.fillOpacity { look.controlsFillOpacity = opacity }
+            if let text = controls.text { look.controlsTextColor = try CrestTheme.color(text) }
+            if let text = controls.secondaryText { look.controlsSecondaryTextColor = try CrestTheme.color(text) }
+        }
         if look != self { look.hasCustomAppearance = true }
         return look
     }
@@ -178,36 +189,6 @@ extension SpaceBranding {
         let look = try dressed(in: theme)
         guard let darkSections = theme.wornDark else { return (look, dark) }
         return (look, try (dark ?? look).dressed(in: darkSections))
-    }
-
-    /// This look with `section` back to what `starting` gives it.
-    func resetting(_ section: CrestThemeSection, to starting: SpaceBranding) -> SpaceBranding {
-        var look = self
-        switch section {
-        case .background:
-            look.colors = starting.colors
-            look.themeMode = starting.themeMode
-            look.bannerPattern = starting.bannerPattern
-            look.gradientAngle = starting.gradientAngle
-            look.bannerStrength = starting.bannerStrength
-            look.readabilityFade = starting.readabilityFade
-            look.showsTexture = starting.showsTexture
-            look.textColorMode = starting.textColorMode
-            look.sidebarTextColor = starting.sidebarTextColor
-            look.sidebarSecondaryTextColor = starting.sidebarSecondaryTextColor
-        case .icon:
-            look.symbolColor = starting.symbolColor
-        case .folders:
-            look.folderColor = starting.folderColor
-            look.folderBackColor = starting.folderBackColor
-            look.folderOutlineColor = starting.folderOutlineColor
-            look.folderOverrides = starting.folderOverrides
-            look.folderHighlightColor = starting.folderHighlightColor
-            look.folderHighlightOpacity = starting.folderHighlightOpacity
-        case .commandPalette:
-            look.commandPalette = starting.commandPalette
-        }
-        return look
     }
 
     // MARK: - Mutators
