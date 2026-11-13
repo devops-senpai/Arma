@@ -71,4 +71,34 @@ public sealed partial class BrowserContractsTests {
         Assert.Equal(new ClosePage(page, KeepsState: true), webKitBinding.Commands[^1]);
         Assert.IsType<CreatePage>(chromiumBinding.Commands[^1]);
     }
+
+    [Fact]
+    public void APageStillOpeningMovesToAnotherEngineAtOnce() {
+        var fixture = SavedSession();
+        var (app, webKit, webKitBinding, workspace, window) = PageHost(fixture.Document["session"]!);
+        using var disposal = app;
+        var chromiumBinding = new RecordingEngine();
+        var chromium = app.RegisterEngine(new EngineRegistration(EngineKind.Chromium, [.. EngineCapability.Required], IsDefault: false),
+            chromiumBinding.Run);
+        var page = Guid.NewGuid();
+        const string article = "https://example.com/article";
+        app.Send(new OpenPage(page, workspace, fixture.Space, fixture.Tab, window));
+        app.Send(new Navigate(page, article));
+        app.Drain();
+
+        // Its engine has made no document that could ask to stay, so the page moves without a question, heading where it was.
+        var moved = app.Send(new RehostPage(page, EngineKind.Chromium));
+        var state = Assert.Single(moved.OfType<PageChanged>()).Page;
+        Assert.Equal((EngineKind.Chromium, PagePhase.Opening, article), (state.Engine, state.Phase, state.Live.Address));
+        Assert.DoesNotContain(new CheckBeforeUnload(page), webKitBinding.Commands);
+        Assert.Equal(new ClosePage(page, KeepsState: true), webKitBinding.Commands[^1]);
+        Assert.IsType<CreatePage>(Assert.Single(chromiumBinding.Commands));
+
+        // The engine it left finishing the page it was making changes nothing, and the new one loads once it has created it.
+        app.Report(webKit, new PageCreated(page));
+        Assert.Empty(app.Drain());
+        app.Report(chromium, new PageCreated(page));
+        Assert.Equal(PagePhase.Live, Assert.IsType<PageChanged>(Assert.Single(app.Drain())).Page.Phase);
+        Assert.Equal(new LoadPage(page, article), chromiumBinding.Commands[^1]);
+    }
 }
