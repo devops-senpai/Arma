@@ -6,6 +6,23 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.100</title>
+            <pubDate>Fri, 13 Nov 2026 15:53:17 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>900100</sparkle:version>
+            <sparkle:shortVersionString>0.9.100</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### From Crest
+- Rest the pointer on a tab or pin to see a card beside the sidebar with its title, site and the last picture of its page, without loading the page.
+- Rest on a folder to see all its tabs, sub-folders included, with a search; open or unload them from the card.
+- Settings › Appearance › Preview hover turns the cards off on this device.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.100/Arma-0.9.100.dmg" length="195646423" type="application/octet-stream" sparkle:edSignature="nNZKrJVVEN4KshJQEVthlCdc2ISQGllhaQcoQqiABKyiNdHw63mG/oQyohFojJsDAGMoEL5ScARn/lRCVAjtAQ=="/>
+        </item>
+        <item>
             <title>0.9.97</title>
             <pubDate>Fri, 13 Nov 2026 14:22:44 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -569,6 +586,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: 9jP++Ehx/EYMDn5dwx3FAypHj1xiVVKqDmkctlG80ABNFLblp65fku/bkdC246UjXJ7dB0vvFvWl/Zpxz7ERDg==
-length: 41905
+edSignature: ML/xrr49g+lX6e8lJ/t6zcWaFWt5lWKMdvNnPgwiAbdJj68qNw+34cPsU3xx5WSYMOjDxlfoxWe9TFt/U+T+Bw==
+length: 43109
 -->
