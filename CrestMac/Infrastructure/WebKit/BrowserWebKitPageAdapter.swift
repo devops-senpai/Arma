@@ -81,6 +81,9 @@ final class BrowserWebKitPageAdapter: BrowserPageEngineAdapter {
     var credentialEvaluator: BrowserCredentialSession.Evaluate? {
         BrowserCredentialSession.evaluator(in: webView)
     }
+    var credentialMainFrameEvaluator: BrowserCredentialSession.MainFrameEvaluate? {
+        BrowserCredentialSession.mainFrameEvaluator(in: webView)
+    }
     var translationDocument: BrowserTranslationDocument? { BrowserTranslationDocument(webView: webView) }
 
     // MARK: - Initializers
