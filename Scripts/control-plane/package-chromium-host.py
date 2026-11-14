@@ -28,6 +28,9 @@ ENGINE_APP_ENTITLEMENTS = {
     "com.apple.security.personal-information.location": True,
     "com.apple.security.personal-information.photos-library": True,
 }
+# Servo runs in the browser process, and its SpiderMonkey maps executable memory
+# there; without this the hardened runtime stops the engine from starting.
+SERVO_APP_ENTITLEMENTS = {"com.apple.security.cs.allow-jit": True}
 JIT_ENTITLEMENT = "com.apple.security.cs.allow-jit"
 BUNDLE_SUFFIXES = {".app", ".framework", ".xpc", ".appex", ".plugin", ".docktileplugin", ".bundle"}
 MACHO_MAGICS = {b"\xcf\xfa\xed\xfe", b"\xce\xfa\xed\xfe", b"\xca\xfe\xba\xbe", b"\xbe\xba\xfe\xca"}
@@ -218,6 +221,8 @@ def main():
                         help="Resolved entitlements plist for the product identity; build-setting variables must already be expanded")
     parser.add_argument("--ui", type=Path, help="Built CrestChromiumUI.framework or CrestChromiumUIProduct.framework")
     parser.add_argument("--core", type=Path, help="Published CrestCore.Native.dylib")
+    parser.add_argument("--servo", type=Path,
+                        help="libarma_servo.dylib from Scripts/build-servo-engine.sh, which adds the Servo engine")
     parser.add_argument("--output", required=True, type=Path, help="New absolute .app path outside /Applications")
     parser.add_argument("--distribution", action="store_true",
                         help="Sign for notarization: hardened runtime, secure timestamps and the engine's helper entitlements")
@@ -320,6 +325,8 @@ def main():
     if not args.baseline:
         subprocess.run(["ditto", str(ui), str(frameworks / ui.name)], check=True)
         shutil.copy2(core, frameworks / "CrestCore.Native.dylib")
+        if args.servo:
+            shutil.copy2(args.servo.resolve(), frameworks / "libarma_servo.dylib")
     resources = output / "Contents/Resources"
     resources.mkdir(exist_ok=True)
     if not args.baseline:
@@ -421,6 +428,7 @@ def main():
         name_engine_helpers(frameworks, info["CFBundleDisplayName"])
         name_product_in_localized_info(resources, info["CFBundleDisplayName"])
     targets = [] if args.baseline else [frameworks / "CrestCore.Native.dylib", frameworks / ui.name,
+                                      *([frameworks / "libarma_servo.dylib"] if args.servo else []),
                                       output / "Contents/PlugIns/CrestDockTilePlugin.docktileplugin",
                                       output / "Contents/Helpers/crest-browser"]
     targets += sorted((p for p in frameworks.rglob("*.app") if not p.is_symlink()), key=lambda p: len(p.parts), reverse=True)
@@ -430,6 +438,7 @@ def main():
     if args.distribution:
         sign_for_distribution(output, args.signing_identity, {
             **(ENGINE_APP_ENTITLEMENTS if args.product else {}),
+            **(SERVO_APP_ENTITLEMENTS if args.servo else {}),
             **(product_entitlements or {}), **(cloud_entitlements or {})})
         targets = []
     for target in [*targets, *([] if args.distribution else [output])]:
