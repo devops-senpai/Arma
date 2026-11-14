@@ -68,7 +68,9 @@ final class BrowserCredentialTests: XCTestCase {
         var seed = SessionState.Seed.preview
         let space = try XCTUnwrap(seed.spaces.first)
         seed.spaces[0].settings.credentialPreferences = CredentialPreferences(
-            isEnabled: false, syncsCrestPasswordsWithICloud: true, alsoOffersSaveToSystemPasswords: false)
+            isEnabled: false, syncsCrestPasswordsWithICloud: true, alsoOffersSaveToSystemPasswords: false,
+            savePromptSeconds: CredentialPreferences.defaultSavePromptSeconds, neverSavedSites: [],
+            authentication: .eachTime, suggestsInPrivateWindows: false, generation: .standard, allowsCommandLine: false)
         let vault = InMemoryCredentialVault()
         let store = BrowserStore(
             seed: seed,
@@ -332,8 +334,13 @@ final class BrowserCredentialTests: XCTestCase {
 
     func testSensitiveCredentialRevealAuthenticatesBeforeReadingTheExactSpace() async throws {
         let vault = InMemoryCredentialVault()
+        // Spaces that ask before showing a password; Don't Ask is the default.
+        var seed = SessionState.Seed.preview
+        for index in seed.spaces.indices {
+            seed.spaces[index].settings.credentialPreferences.authentication = .eachTime
+        }
         let store = BrowserStore(
-            seed: .preview,
+            seed: seed,
             credentialVault: vault
         )
         let work = try XCTUnwrap(store.spaceModels.first)

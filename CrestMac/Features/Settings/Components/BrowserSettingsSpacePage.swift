@@ -13,6 +13,8 @@ struct BrowserSettingsSpacePage: View {
 
     @State private var downloads = BrowserSpaceDownloadSettingsModel()
     @State private var passwordSearchText = ""
+    /// The site a new password starts for, until the Passwords page takes it.
+    @State private var newPasswordSite: String?
     @State private var pendingDeletion: BrowserSpaceDeletionRequest?
     @State private var pendingGroupChange: BrowserSpaceGroupChange?
     @State private var showsArtworkCredits = false
@@ -149,8 +151,19 @@ struct BrowserSettingsSpacePage: View {
                 spaceAccess: spaceAccess,
                 layout: .macOSSpacePage,
                 searchText: $passwordSearchText,
-                fixedSpaceID: space.id
+                fixedSpaceID: space.id,
+                newPasswordSite: $newPasswordSite
             )
+            .onChange(of: tabState.passwordsRoute?.id, initial: true) {
+                guard let route = tabState.passwordsRoute else { return }
+                tabState.passwordsRoute = nil
+                if route.addsPassword {
+                    passwordSearchText = ""
+                    newPasswordSite = route.site
+                } else {
+                    passwordSearchText = route.site
+                }
+            }
         case .extensions:
             BrowserEngineExtensionSettingsPane(browser: browser, spaceAccess: spaceAccess, spaceID: space.id)
         }

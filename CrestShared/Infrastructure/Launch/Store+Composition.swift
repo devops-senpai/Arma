@@ -182,13 +182,23 @@ extension BrowserStore {
     }
 
     /// A window over a new private workspace, which starts from the core's
-    /// private template and keeps nothing.
-    static func privateBrowsing(core: CrestCore = CrestCore()) -> BrowserStore {
-        BrowserStore(
-            credentialVault: PrivateBrowsingCredentialVault(),
+    /// private template and keeps nothing. It suggests the passwords of the
+    /// Spaces of `passwordsFrom` that chose to be suggested in private
+    /// windows, and saves none.
+    static func privateBrowsing(
+        core: CrestCore = CrestCore(), passwordsFrom browser: BrowserStore? = nil
+    ) -> BrowserStore {
+        let sources: @MainActor () -> [UUID] = { [weak browser] in
+            browser?.spacesSuggestingPasswordsInPrivateWindows() ?? []
+        }
+        let store = BrowserStore(
+            credentialVault: PrivateBrowsingCredentialVault(
+                readingFrom: browser?.credentialVault, sources: { await sources() }),
             browsingMode: .privateBrowsing,
             family: BrowserStoreFamily(privateIn: core),
             core: core
         )
+        store.privateWindowPasswordSources = sources
+        return store
     }
 }

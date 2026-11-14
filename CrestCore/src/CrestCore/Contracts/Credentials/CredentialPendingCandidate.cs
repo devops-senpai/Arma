@@ -5,8 +5,10 @@ namespace CrestCore.Contracts;
 public sealed record CredentialPendingCandidate(CredentialOrigin Origin, double SubmittedAt) {
     #region Static Variables
 
-    /// Seconds a submitted credential waits for the page to show it signed in.
-    internal const double Lifetime = 45;
+    /// Seconds a submitted credential waits for the page to show it signed in,
+    /// and the longest a person has to answer the offer to save it, correcting
+    /// the account or password first if need be.
+    internal const double Lifetime = 3 * 60;
 
     #endregion
 

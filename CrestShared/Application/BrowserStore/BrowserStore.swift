@@ -34,6 +34,9 @@ final class BrowserStore {
     /// The process's core, which every window of every browsing mode shares.
     @ObservationIgnored let core: CrestCore
     @ObservationIgnored let credentialVault: any CredentialVault
+    /// For a private window: the Spaces whose passwords it suggests, which
+    /// chose to be suggested in private windows. None for any other window.
+    @ObservationIgnored var privateWindowPasswordSources: @MainActor () -> [UUID] = { [] }
     @ObservationIgnored var credentialSaveOperations: [BrowserCredentialSaveKey: BrowserCredentialSaveOperation] = [:]
     @ObservationIgnored let linkPreferences: BrowserLinkPreferenceStore
     @ObservationIgnored var pendingMovedTabActivation: BrowserTabRuntimeAssignment?

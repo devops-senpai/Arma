@@ -1,6 +1,8 @@
 import SwiftUI
 
-/// The passwords this Space already holds for the site asking for one.
+/// The passwords this Space already holds for the site asking for one. It
+/// appears only once the vault answers with some, so a field on a site with no
+/// saved password raises nothing.
 ///
 /// Everything the prompt needs from the page arrives through
 /// `BrowserCredentialFillPort`, everything about how big it is comes from
@@ -17,6 +19,24 @@ struct BrowserCredentialSuggestionPrompt: View {
     @State private var fillErrorMessage: String?
 
     var body: some View {
+        Group {
+            if model.hasSomethingToShow {
+                surface
+            } else {
+                // Measured as nothing, so an anchored placement never shows it.
+                Color.clear.frame(width: 0, height: 0).accessibilityHidden(true)
+            }
+        }
+        .task(id: request.id) {
+            fillErrorMessage = nil
+            await model.load(request, in: port.spaceID, using: browser)
+            guard !Task.isCancelled, model.phase == .empty else { return }
+            port.dismiss()
+        }
+        .onDisappear(perform: model.cancel)
+    }
+
+    private var surface: some View {
         BrowserCredentialPromptSurface(
             accessibilityLabel: Text("Crest password suggestions"),
             accessibilityIdentifier: "crest-password-suggestions",
@@ -30,15 +50,10 @@ struct BrowserCredentialSuggestionPrompt: View {
                 model: model,
                 fillErrorMessage: fillErrorMessage,
                 metrics: metrics,
-                dismiss: port.dismiss,
+                dismiss: port.close ?? port.dismiss,
                 fill: fill
             )
         }
-        .task(id: request.id) {
-            fillErrorMessage = nil
-            await model.load(request, in: port.spaceID, using: browser)
-        }
-        .onDisappear(perform: model.cancel)
     }
 
     private var space: BrowserSpaceIdentity? {

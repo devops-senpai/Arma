@@ -80,7 +80,7 @@ public sealed record PaletteTheme(Guid Id, string Name, string Detail);
 /// as opening an engine's extensions or moving the page to another engine:
 /// the scope it belongs to, its name and the line beneath it, and the SF
 /// Symbol its row wears. The platform keeps what it does, by `Id`.
-public sealed record PaletteChoice(Guid Id, PaletteScope Scope, string Name, string Detail, string Symbol);
+public sealed record PaletteChoice(Guid Id, PaletteScope Scope, string Name, string Detail, string Symbol, bool StepsInto);
 
 /// A settings page the palette may open, named as the platform's settings name
 /// it, with its title and the words a person might type to find it.

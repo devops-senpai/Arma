@@ -32,6 +32,7 @@ internal static partial class StoredSessionCodec {
         public const string Archive = "archive";
         public const string ArchivedAt = "archivedAt";
         public const string ArchivedTabs = "archivedTabs";
+        public const string Authentication = "authentication";
         public const string AutomaticallyEntersPictureInPicture = "automaticallyEntersPictureInPicture";
         public const string AutomaticallyShowsDeveloperToolbar = "automaticallyShowsDeveloperToolbar";
         public const string AutomaticallyTranslates = "automaticallyTranslates";
@@ -81,10 +82,12 @@ internal static partial class StoredSessionCodec {
         public const string Green = "green";
         public const string HasCustomAppearance = "hasCustomAppearance";
         public const string History = "history";
+        public const string Host = "host";
         public const string IconAccent = "iconAccent";
         public const string IconModifiedAt = "iconModifiedAt";
         public const string IconStyle = "iconStyle";
         public const string Id = "id";
+        public const string IncludesSubdomains = "includesSubdomains";
         public const string IsCollapsed = "isCollapsed";
         public const string IsEnabled = "isEnabled";
         public const string IsSavedTabsExpanded = "isSavedTabsExpanded";
@@ -104,6 +107,17 @@ internal static partial class StoredSessionCodec {
         public const string MembershipModifiedAt = "membershipModifiedAt";
         public const string Name = "name";
         public const string NativeContent = "nativeContent";
+        public const string NeverSavedSites = "neverSavedSites";
+        public const string NeverSaves = "neverSaves";
+        public const string AllowsCommandLine = "allowsCommandLine";
+        public const string PasswordSites = "passwordSites";
+        public const string SuggestsInPrivateWindows = "suggestsInPrivateWindows";
+        public const string Generation = "generation";
+        public const string Length = "length";
+        public const string Lowercase = "lowercase";
+        public const string Uppercase = "uppercase";
+        public const string Numbers = "numbers";
+        public const string Symbols = "symbols";
         public const string OffersTranslation = "offersTranslation";
         public const string Opacity = "opacity";
         public const string OperationId = "operationID";
@@ -126,6 +140,7 @@ internal static partial class StoredSessionCodec {
         public const string Red = "red";
         public const string RenderingVersion = "renderingVersion";
         public const string ResourceId = "resourceID";
+        public const string SavePromptSeconds = "savePromptSeconds";
         public const string SavedTabClosePolicy = "savedTabClosePolicy";
         public const string SavedTabFaviconReturnsToSavedUrl = "savedTabFaviconReturnsToSavedURL";
         public const string SavedTabsExpansionModifiedAt = "savedTabsExpansionModifiedAt";
