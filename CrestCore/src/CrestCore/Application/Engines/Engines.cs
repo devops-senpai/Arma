@@ -15,8 +15,8 @@ internal sealed class Engines {
     public IReadOnlyCollection<Engine> All => registered.Values;
 
     /// The engine new pages open on, or null while none is registered.
-    public Engine? Default => preferred is { } kind && registered.TryGetValue(kind, out var chosen)
-        ? chosen : registered.Values.FirstOrDefault(engine => engine.IsDefault);
+    public Engine? Default => (preferred is { } kind ? Serving(kind) : null)
+        ?? registered.Values.FirstOrDefault(engine => engine.IsDefault);
 
     #endregion
 
@@ -46,6 +46,12 @@ internal sealed class Engines {
 
     /// The registered engine of `kind`, or null while none is.
     public Engine? Registered(EngineKind kind) => registered.GetValueOrDefault(kind);
+
+    /// The engine that serves pages, rules and the default set to `kind`: that
+    /// engine while it is registered, else Chromium standing in for it, as for
+    /// Servo in a build that leaves Servo out. Null when neither is registered.
+    public Engine? Serving(EngineKind kind) =>
+        registered.GetValueOrDefault(kind) ?? registered.GetValueOrDefault(EngineKind.Chromium);
 
     /// The first registered engine, in `EngineKind.All` order, other than
     /// `except`, that plays protected media through the platform, or null
