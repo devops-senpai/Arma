@@ -13,4 +13,6 @@ enum CredentialVaultError: Error, Equatable, Sendable {
     case preferenceUpdateFailed
     /// The portable core could not answer a save decision. Nothing is saved.
     case saveDecisionUnavailable
+    /// Notes longer than `credentialNotesByteLimit` are refused, not cut.
+    case notesTooLong
 }
