@@ -81,14 +81,17 @@ internal sealed class ClosePreparations(Device device, Pages pages, Downloads do
     /// Moving engines discards the old document. Its normal before-unload
     /// decision must finish first, and a canceled or stale move changes no
     /// site preference. A page that moved, closed or lost access while the
-    /// question was open never moves from this answer.
+    /// question was open never moves from this answer. A page its engine is
+    /// still making shows no document that could ask to stay, so it is asked
+    /// nothing and moves at once, heading where it was.
     internal void Move(Page page, Engine engine, string? address, RehostReason reason, bool remembersSite, PageTurn turn) {
         var previous = page.Engine;
+        var phase = page.Phase == PagePhase.Opening ? PagePhase.Opening : PagePhase.Live;
         long document = page.Documents;
         var origin = address is null ? null : new WebAddress(address).Origin;
         var siteEngine = origin is null ? null : device.ChosenEngine(page.SpaceId, origin);
         Start(ids.Next(), quits: false, [page.Id], turn.Changes, turn.Issue, (allowed, changes) => {
-            if (!allowed || !Stays(page, previous, document)) return;
+            if (!allowed || !Stays(page, previous, phase, document)) return;
             if (remembersSite && origin is not null) {
                 if (device.ChosenEngine(page.SpaceId, origin) != siteEngine) return;
                 device.Choose(page.SpaceId, origin, engine.Kind);
@@ -106,7 +109,7 @@ internal sealed class ClosePreparations(Device device, Pages pages, Downloads do
         var previous = page.Engine;
         long document = page.Documents;
         Start(ids.Next(), quits: false, [page.Id], turn.Changes, turn.Issue, (allowed, changes) => {
-            if (!allowed || !Stays(page, previous, document)) return;
+            if (!allowed || !Stays(page, previous, PagePhase.Live, document)) return;
             pages.Return(page, entryId, new PageTurn(changes, turn.Issue, this));
         });
     }
@@ -166,11 +169,11 @@ internal sealed class ClosePreparations(Device device, Pages pages, Downloads do
     private Page? Asking(Guid pageId) => pages.Hosted(pageId) is { } page && page.Phase == PagePhase.Live ? page : null;
 
     /// Whether a page asked whether it may go is still the page that was
-    /// asked: the core hosts it, live on `previous` and showing the document
-    /// it showed then, in a Space this process shows. One that moved, closed,
-    /// lost access or shows another document stays where it is.
-    private bool Stays(Page page, Engine previous, long document) =>
-        ReferenceEquals(pages.Hosted(page.Id), page) && page.Phase == PagePhase.Live && ReferenceEquals(page.Engine, previous)
+    /// asked: the core hosts it, in `phase` on `previous` and showing the
+    /// document it showed then, in a Space this process shows. One that moved,
+    /// closed, lost access or shows another document stays where it is.
+    private bool Stays(Page page, Engine previous, PagePhase phase, long document) =>
+        ReferenceEquals(pages.Hosted(page.Id), page) && page.Phase == phase && ReferenceEquals(page.Engine, previous)
             && page.Documents == document && pages.Shown(page) is not null;
 
     #endregion
