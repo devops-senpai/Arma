@@ -87,6 +87,11 @@ final class BrowserSidebarPointerNavigationView: NSView, BrowserMacWindowPointer
         return true
     }
 
+    func pageDragTarget(at event: NSEvent) -> (any BrowserMacWindowPageDragTarget)? {
+        guard event.window === window else { return nil }
+        return pageUnderPointer(for: event) as? any BrowserMacWindowPageDragTarget
+    }
+
     private func pointerScope(
         for event: NSEvent,
         page: (any BrowserSidebarMouseNavigationTarget)?
