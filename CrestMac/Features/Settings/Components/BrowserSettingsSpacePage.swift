@@ -58,16 +58,6 @@ struct BrowserSettingsSpacePage: View {
         }
     }
 
-    /// The look this Space started from, as its house or scheme draws it.
-    private var startingAppearance: SpaceBranding? {
-        space.settings.look.startingLook
-    }
-
-    private func resetAppearance() {
-        guard let startingAppearance else { return }
-        browser.spaceBrandingBinding(in: space).wrappedValue = startingAppearance
-    }
-
     // MARK: - Header
 
     private var header: some View {
@@ -87,8 +77,6 @@ struct BrowserSettingsSpacePage: View {
                         addSubSpace: addSubSpace, requestDeletion: { pendingDeletion = $0 },
                         requestGroupChange: { pendingGroupChange = $0 })
                     Divider()
-                    Button("Reset Appearance", systemImage: "arrow.counterclockwise") { resetAppearance() }
-                        .disabled(startingAppearance == nil || startingAppearance == space.settings.look)
                     Button("Artwork Credits", systemImage: "info.circle") { showsArtworkCredits = true }
                 }
                 .crestMenuActionLabelStyle()
