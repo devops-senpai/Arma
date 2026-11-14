@@ -17,7 +17,10 @@ struct BrowserChromeAppearancePersistence: ViewModifier {
                 // The window's corners change shape with its chrome, so the
                 // radius is read live rather than assumed.
                 .onGeometryChange(for: CGFloat?.self) { proxy in
-                    BrowserChromeAppearance.windowCornerRadius(from: proxy.containerCornerInsets)
+                    // Container corner insets need macOS 26; before it the
+                    // page keeps the radius it has without a window's.
+                    guard #available(macOS 26.0, *) else { return nil }
+                    return BrowserChromeAppearance.windowCornerRadius(from: proxy.containerCornerInsets)
                 } action: { radius in
                     windowCornerRadius = radius
                 }
