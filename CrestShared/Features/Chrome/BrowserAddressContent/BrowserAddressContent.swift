@@ -31,6 +31,7 @@ struct BrowserAddressContent: View {
     let submit: () -> Void
 
     @FocusState private var isFocused: Bool
+    @Environment(\.spaceControlColors) private var controlColors
     @State private var selection: TextSelection?
     /// How much farther the field reaches past the address's leading edge
     /// than past its trailing edge.
@@ -184,7 +185,7 @@ struct BrowserAddressContent: View {
                 if let route = presentation.route {
                     Text(route)
                         .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(routeStyle)
                         .lineLimit(1)
                         .truncationMode(.middle)
                 }
@@ -199,7 +200,7 @@ struct BrowserAddressContent: View {
                 if let route = presentation.route {
                     Text(route)
                         .font(.callout)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(routeStyle)
                         .lineLimit(1)
                         .truncationMode(.tail)
                 }
@@ -208,6 +209,13 @@ struct BrowserAddressContent: View {
             domainLabel(presentation)
                 .truncationMode(.middle)
         }
+    }
+
+    /// The page's path in the theme's quieter color. Text takes `.secondary`
+    /// as its primary color dimmed, not the second level a theme sets, so
+    /// the theme's is named.
+    private var routeStyle: AnyShapeStyle {
+        controlColors.secondaryText.map { AnyShapeStyle($0.color) } ?? AnyShapeStyle(.secondary)
     }
 
     private func domainLabel(_ presentation: BrowserAddressPresentation) -> some View {
