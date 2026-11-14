@@ -6,6 +6,24 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.104</title>
+            <pubDate>Fri, 13 Nov 2026 19:53:03 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>900104</sparkle:version>
+            <sparkle:shortVersionString>0.9.104</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### From Crest
+- A click anywhere on the sidebar's address field opens it, not only on its line of text.
+- Settings › Appearance sets how long the pointer waits at the window edge before the hidden sidebar shows, from instant to 1,000 ms.
+- A second slider sets how fast the sidebar slides, from a snap to 480 ms.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.104/Arma-0.9.104.dmg" length="195659190" type="application/octet-stream" sparkle:edSignature="p98Ok/cGnmeoAKdVbEtUaUdwPCqnPuy21IeDpztIEmFKno40LKLzQ2YIBKeaztyoIZRTWXeXT6M3M2xTNmsjDw=="/>
+        </item>
+        <item>
             <title>0.9.101</title>
             <pubDate>Fri, 13 Nov 2026 17:03:42 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -631,6 +649,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: QMWgjgFowB2oH7tfLn1IHsp+SVad1nNJIJ1crnpjstUs9hqV4wffAjBX283Y+qgqmesUN4pKrqGpW1LzyWZsCA==
-length: 45825
+edSignature: Hx3tthvPlr+7/7DvjDmX6+5LP+fLb2+qa48GpfL2nATFh1tOiIyg62V/PKRfPfwjXxPqrcmbyMN90YfClr4mCQ==
+length: 47048
 -->
