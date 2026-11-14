@@ -331,6 +331,47 @@ final class BrowserMacWindows {
             })
     }
 
+    // MARK: - Actions - Window on a tab
+
+    /// Whether window `sourceWindowID` gives a tab or a link a window of its
+    /// own: a browser window does, a normal one and one already on its own. A
+    /// private window keeps what it opens to itself.
+    func opensWindows(from sourceWindowID: UUID) -> Bool {
+        application.windowCoordinator.existingModel(for: sourceWindowID).map { !$0.browser.isPrivateBrowsing } ?? false
+    }
+
+    /// Moves tab `tabID` of Space `spaceID` out of window `sourceWindowID`
+    /// into a window of its own, as dragging the tab out of the window does:
+    /// the tab leaves its Space and keeps its page. Answers whether the tab
+    /// may leave, which the core decides.
+    @discardableResult
+    func openWindow(showing tabID: UUID, in spaceID: UUID, from sourceWindowID: UUID) -> Bool {
+        let coordinator = application.windowCoordinator
+        guard opensWindows(from: sourceWindowID),
+            let space = coordinator.existingModel(for: sourceWindowID)?.browser.spaceModel(spaceID),
+            let request = coordinator.prepareTearOff(
+                BrowserTabDragItem(tabID: tabID, spaceID: spaceID, profileID: space.profileID), from: sourceWindowID)
+        else { return false }
+        open(request, activation: .key)
+        return true
+    }
+
+    /// Opens `url` in a window of its own over Space `spaceID` of window
+    /// `sourceWindowID`, the kind of window a tab dragged out of the window
+    /// gets: it browses with the Space's profile and keeps its tab to itself.
+    @discardableResult
+    func openWindow(opening url: URL, in spaceID: UUID, from sourceWindowID: UUID) -> Bool {
+        let coordinator = application.windowCoordinator
+        guard opensWindows(from: sourceWindowID),
+            let space = coordinator.existingModel(for: sourceWindowID)?.browser.spaceModel(spaceID),
+            !application.spaceAccess.isLocked(space)
+        else { return false }
+        let request = BrowserMacWindowRequest.temporary(
+            sourceWindowID: sourceWindowID, assignment: BrowserSpaceRuntimeAssignment(space: space))
+        open(request, activation: .key)
+        return coordinator.existingModel(for: request.id)?.browser.openNewTab(url: url) != nil
+    }
+
     // MARK: - Actions - Private window
 
     func openPrivateWindow() {
