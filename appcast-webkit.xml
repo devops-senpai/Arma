@@ -6,6 +6,24 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.114</title>
+            <pubDate>Sat, 14 Nov 2026 17:08:43 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>900114</sparkle:version>
+            <sparkle:shortVersionString>0.9.114</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### From Crest
+- A narrow sidebar keeps back, forward and reload, drawn smaller where the full strip does not fit.
+- Going back in a tab reopened after a relaunch shows the earlier page again, on sites such as Reddit.
+- Revealing the hidden sidebar no longer pops up the preview of the row under the pointer, and a preview card goes when the sidebar hides.
+- The hidden sidebar comes out when the pointer overshoots the window's edge.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.114/Arma-0.9.114.dmg" length="195621663" type="application/octet-stream" sparkle:edSignature="2UXgbXVYuAAAMOFklnYIA2sL8au0+9XAH6F18eRj800VtciRTne4VI/sQbMN3Ohug1wC1SID67kXJ7ZZOSDMCQ=="/>
+        </item>
+        <item>
             <title>0.9.110</title>
             <pubDate>Sat, 14 Nov 2026 00:06:52 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -652,6 +670,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: YdDJp5ZVM83RkGolS19Yr+oPm8IYj/v/lNZ5aDatSMUuYHYcVU+t8zAcVyIGk4Wj/WpuEAsIrB77il9oOQBCAw==
-length: 47637
+edSignature: sSc9lBAc/c7oAymI4LWFmI7ShPZwhspc+3hyzrjOVdveY8DqDL6h2eU02kJzBbC4E6uRsFcVOjL+jFfo7tglCg==
+length: 48920
 -->
