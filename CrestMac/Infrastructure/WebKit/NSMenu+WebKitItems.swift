@@ -8,6 +8,11 @@ extension NSMenu {
         items.first { $0.identifier == .webKitDownloadImage }
     }
 
+    /// WebKit's item that opens a link in a new tab, when the menu has one.
+    var webKitLinkDestinationItem: NSMenuItem? {
+        items.first { $0.identifier == .webKitOpenLinkInNewWindow }
+    }
+
     /// WebKit's Paste item, when the menu has one.
     var webKitPasteItem: NSMenuItem? {
         items.first { $0.identifier == .webKitPaste }
@@ -25,7 +30,6 @@ extension NSMenu {
     /// Names WebKit's open-link item for where Crest actually opens it,
     /// keeping its action and shortcut.
     func relabelWebKitLinkDestination() {
-        items.first { $0.identifier == .webKitOpenLinkInNewWindow }?.title =
-            String(localized: "Open Link in This Space")
+        webKitLinkDestinationItem?.title = String(localized: "Open Link in This Space")
     }
 }
