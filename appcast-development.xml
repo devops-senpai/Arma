@@ -6,6 +6,24 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.110</title>
+            <pubDate>Sat, 14 Nov 2026 00:06:53 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>900110</sparkle:version>
+            <sparkle:shortVersionString>0.9.110</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### From Crest
+- Tab size is a slider with nine steps from 60% to 140%: Thin, Compact, Default, Comfortable and Large. Text and icons follow it half as far.
+- Settings › Appearance › Spacing sets the room the sidebar keeps between rows and pins and around the address field: None, Tight, Default or Relaxed.
+- The sidebar slides faster by default. A slide time you chose keeps its speed.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.110/Arma-0.9.110.dmg" length="195611427" type="application/octet-stream" sparkle:edSignature="ajzvTRU9SGvutnlJo86UtSSh/0N878CdMX4ZYAu1WMD4M9f3d8LqWvI4ecpZVkWK9tqCzP4XjA5PQwbgvRoGCA=="/>
+        </item>
+        <item>
             <title>0.9.107</title>
             <pubDate>Fri, 13 Nov 2026 21:49:16 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -667,6 +685,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: 5peiKtQNYCwG6rnKpLsaYJFvZ3LsSrRuYxMEBotNGzIL4h13l45xbllHIC0OUn45aTtvCTZNr42OmM0TZb7dAw==
-length: 48285
+edSignature: lVcS41OgbNnls5dFeszJhIsV3SdMWBtnk0cHZ9p+a0e4hcF5gu2nZSpprXNm3Yi9RFmdYMJILEgo7Nug4ByXCw==
+length: 49584
 -->
