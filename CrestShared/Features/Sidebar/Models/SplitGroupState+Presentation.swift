@@ -8,7 +8,8 @@ extension SplitGroupState {
     static func unchosen(_ id: UUID) -> SplitGroupState {
         SplitGroupState(
             id: id, customTitle: nil, titleModifiedAt: nil, customIconSymbol: nil, iconModifiedAt: nil, tint: nil,
-            tintModifiedAt: nil, isCollapsed: false, collapseModifiedAt: nil, displayTitle: nil, displayEmojiIcon: nil)
+            tintModifiedAt: nil, isCollapsed: false, collapseModifiedAt: nil, layout: nil, layoutModifiedAt: nil,
+            displayTitle: nil, displayEmojiIcon: nil)
     }
 
     /// The name the split's row shows: the one a person gave it, or the core's
