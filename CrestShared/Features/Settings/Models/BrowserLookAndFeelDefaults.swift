@@ -6,7 +6,7 @@ import Foundation
 /// so a default can no longer drift between the `@AppStorage` declaration that
 /// seeds a control and the migration code that seeds the store.
 enum BrowserLookAndFeelDefaults {
-    static let appearanceMode = BrowserAppearanceMode.standard
+    static let appearanceMode = BrowserAppearanceMode.light
     static let customizationStyle = BrowserCustomizationStyle.standard
     static let darkSpaceDimming = 0.0
     static let windowBorderWidth = BrowserChromeAppearance.defaultBorderWidth
