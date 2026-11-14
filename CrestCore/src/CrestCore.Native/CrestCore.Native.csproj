@@ -6,6 +6,8 @@
     <IsAotCompatible>true</IsAotCompatible>
     <!-- The apps' deployment target (project.yml), which the content filter is built for too. -->
     <AppleMinOSVersion>26.1</AppleMinOSVersion>
+    <!-- The Mac app runs from macOS 15.2. The content filter links as built: it calls nothing newer. -->
+    <AppleMinOSVersion Condition="'$(RuntimeIdentifier)' == 'osx-arm64'">15.2</AppleMinOSVersion>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../CrestCore/CrestCore.csproj" />
