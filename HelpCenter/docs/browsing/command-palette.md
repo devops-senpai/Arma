@@ -1,13 +1,13 @@
 ---
 title: Use the command palette
-description: Search, navigate, switch tabs, revisit history, search any site or ask an AI assistant, and run Crest commands from one field.
+description: Search, navigate, switch tabs, revisit history, search any site or ask an AI assistant, and run Arma commands from one field.
 slug: /command-palette
 keywords: [command palette, address bar, search, commands, tabs, history, top hit, recent tabs, search providers, site search, AI assistant, Tab, autocomplete, scopes, calculator]
 ---
 
 # Use the command palette
 
-Click the address display or press **Command-L**. The same palette can resolve a web address, search query, open tab, saved page, history entry, Space, settings page, or Crest command.
+Click the address display or press **Command-L**. The same palette can resolve a web address, search query, open tab, saved page, history entry, Space, settings page, or Arma command.
 
 In a Quick Window on Mac, the palette opens from the Quick Window's address field: the address stays where it was, ready to edit, and the results drop below it. What you choose opens in the Quick Window, and a tab opens in the browser window. On iPhone, tap the address bar: the palette rises from the bar, with the best match just above it.
 
@@ -27,11 +27,20 @@ As you type the start of a site you've typed or opened before, or one a tab show
 
 Type a provider's shortcut, such as **g** for Google, **ddg** for DuckDuckGo, **yt** for YouTube, **w** for Wikipedia, or **claude**, and press **Tab**; this needs **Tab to search providers**, which is on unless you turn it off. While you type the first word, every provider it names or starts to name shows as a chip under the field, with its shortcut; the first is the one **Tab** chooses, and you can click any of them. Once a provider is chosen, a chip with its icon and color appears beside the field. Type your search and press **Return** to search that provider, or to ask an AI assistant. When what you typed is exactly a shortcut, **Tab** chooses the provider even while the field completes an address. Type `$` before a shortcut, such as `$yt`, and a space to choose the provider without pressing **Tab**. **Space to search providers** in **Settings → Search** turns this off, or lets a shortcut alone, such as `yt`, and a space choose the provider too. Its suggestions, where it offers them, come only from that provider. Press **Escape**, **Delete** in an empty field, or the chip's close control to leave and keep your text.
 
-Crest offers search engines such as Google, DuckDuckGo, Bing, Brave Search and Startpage; AI assistants such as ChatGPT, Claude and Perplexity; and websites such as YouTube, Wikipedia, GitHub, Reddit and Amazon. Turn providers on or off, change their shortcuts, set their options, choose your default search and the one private windows use, and add your own in **Settings → Search**. Search providers stay on this device.
+Arma offers search engines such as Google, DuckDuckGo, Bing, Brave Search and Startpage; AI assistants such as ChatGPT, Claude and Perplexity; and websites such as YouTube, Wikipedia, GitHub, Reddit and Amazon. Turn providers on or off, change their shortcuts, set their options, choose your default search and the one private windows use, and add your own in **Settings → Search**. Search providers stay on this device.
 
 ## Narrow to one kind of result
 
-Type `@tabs`, `@history`, `@saved`, `@actions`, or `@spaces` and press **Space** or **Tab** to list every match of that kind and nothing else. Leave the same way you leave a provider. Turn these off with **@ Filters** in **Settings → Search**.
+Type `@tabs`, `@history`, `@saved`, `@actions`, `@spaces` or `@themes` and press **Space** or **Tab** to list every match of that kind and nothing else. Leave the same way you leave a provider. Turn these off with **@ Filters** in **Settings → Search**.
+
+On Mac, tool scopes act instead of listing:
+
+- `@extensions` opens Chromium's extensions page, the Chrome Web Store, or a Space's extension settings.
+- `@engine` moves the page to another engine, or always opens its site there.
+- `@developer` opens the page's developer tools.
+- `@cli` installs the `arma` command, or copies the line to install it yourself.
+- `@update` checks for a new version of Arma; the answer shows in the sidebar.
+- `@passwords` lists the saved logins of the Space on screen by site and username, after a row for its Passwords settings. Press **Return** on a login to see what you can do with it: copy its username, password or website, **Fill on This Page** when the page is that site, or **Open Website**. **Escape** goes back to the list. Copying a password asks you to authenticate as the Space's **Ask to authenticate** setting says, and the clipboard clears it after 60 seconds. A locked Space, a private window, or a Space with Arma Passwords off lists no logins.
 
 ## Run commands by name
 

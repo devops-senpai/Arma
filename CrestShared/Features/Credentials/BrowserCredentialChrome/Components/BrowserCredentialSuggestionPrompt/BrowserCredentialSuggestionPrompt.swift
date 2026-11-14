@@ -38,7 +38,7 @@ struct BrowserCredentialSuggestionPrompt: View {
 
     private var surface: some View {
         BrowserCredentialPromptSurface(
-            accessibilityLabel: Text("Crest password suggestions"),
+            accessibilityLabel: Text("Arma password suggestions"),
             accessibilityIdentifier: "crest-password-suggestions",
             width: metrics.fillPromptWidth,
             metrics: metrics
@@ -74,7 +74,7 @@ struct BrowserCredentialSuggestionPrompt: View {
                 }
                 try await port.fill(credential, request.id)
             } catch {
-                fillErrorMessage = "The form changed before Crest could fill it."
+                fillErrorMessage = "The form changed before Arma could fill it."
             }
         }
     }
