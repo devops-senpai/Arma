@@ -17,9 +17,9 @@ host can do, through `BrowserMacEngineHost`.
 | `BrowserMacApplication.swift`, `BrowserMacApplication+WindowRequests.swift` | The app's services, the window content every product shows, and window requests |
 | `BrowserMacWindowScene.swift` | A window's scene, following the session revision without rebuilding its body |
 | `BrowserEngineMoveNotices.swift` | Explains automatic engine switches for protected video and offers the move back |
-| `Commands/` | `BrowserMacCommands`, which answers `arma theme` over the commands socket, `CrestTheme+SpaceBranding`, a theme file read onto a Space's branding and back, and `CrestThemeProblem`, why a theme could not dress a Space |
-| `Agents/` | `BrowserMacAgents`: the agent tool catalog and calls (tabs, pages, windows), approvals, failures and fill refusals |
-| `Shell/` | `BrowserMacShell`, `BrowserMacEngineHost`, launch recovery, main menu and menu bar, Dock menu and tile, external opening, window controller and kinds, quit |
+| `Terminal/` | `BrowserMacTerminalEndpoint`, the commands socket's end in the app, which hears each `arma <section> <action>` and answers it; `BrowserMacTerminal`, which runs the command, with one `+Section` file per section (spaces, tabs, windows, folders, splits, menu commands, pages, extensions, history, archive, downloads, settings, sites, automation, themes, crests, passwords); `BrowserTerminalSetting`, the settings `arma settings` exposes, each with its key, values and store calls; `BrowserTerminalPagePreference`, the off-by-default Command-line page control switch |
+| `Agents/` | `BrowserMacAgents`: the agent tool catalog and calls (tabs, pages, windows), approvals, failures and fill refusals; `BrowserPageControl`, the page reading and input that agents and `arma page` share |
+| `Shell/` | `BrowserMacShell`, `BrowserMacEngineHost`, launch recovery, main menu and menu bar, Dock menu and tile, external opening, window controller and kinds, moving a window by the top of its page (`BrowserMacWindowPageDrag`), presses on a notice's action (`BrowserMacWindowNoticePress`), `BrowserMacExtensionManaging` (the per-Space extension store `arma extension` reaches, which the Chromium host supplies), quit |
 | `Services/` | `BrowserMacWindowCoordinator` (normal and temporary windows), `BrowserWindowCloseGate`, quit preparation, tab tear-off placement and window drops |
 | `Models/` | `BrowserMacWindowModel` and `BrowserMacWindowRequest` |
 | `Components/` | `BrowserMacWindowAttachment`: tells a window's content which AppKit window hosts it |

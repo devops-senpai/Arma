@@ -83,7 +83,7 @@ $ arma tab engine 6c11 chromium              # the first few characters are enou
 `arma` lives inside the app (`/Applications/Arma.app/Contents/Helpers/arma`)
 and drives the running browser. Every command takes `--json` for scripts.
 
-![arma --help in a terminal, listing every section the command line manages](Brand/Readme/terminal-arma-help.jpg)
+![arma --help in a terminal, listing every section the command line manages](Brand/Readme/terminal-help.jpg)
 
 ```sh
 arma space list                              # Spaces; * marks the one shown
