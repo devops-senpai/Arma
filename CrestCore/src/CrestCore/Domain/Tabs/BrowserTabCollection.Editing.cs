@@ -25,7 +25,11 @@ public sealed partial class BrowserTabCollection {
         int insertion = before is { } target ? remaining.FindIndex(t => t.Id == target && Matches(t)) : -1;
         if (insertion < 0) {
             int last = remaining.FindLastIndex(t => Matches(t));
-            insertion = last >= 0 ? last + 1 : NextSection(remaining, placement);
+            // An empty folder stands where its order anchor is; its first tab goes there.
+            var standing = last < 0 && folder is { } empty ? new FolderTree(folders).TabAnchor(empty, remaining) : null;
+            insertion = last >= 0 ? last + 1
+                : standing is { } s && remaining.FindIndex(t => t.Id == s && t.Placement == placement) is var at && at >= 0 ? at
+                : NextSection(remaining, placement);
         }
         if (tabs.IndexOf(tab) == insertion && tab.Placement == placement && tab.FolderId == folder
             && (!detachSplit || tab.SplitGroupId is null)) return false;
