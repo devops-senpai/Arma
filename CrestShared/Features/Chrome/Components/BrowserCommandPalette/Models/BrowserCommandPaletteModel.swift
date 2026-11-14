@@ -497,6 +497,7 @@ final class BrowserCommandPaletteModel {
             settingsPages: commands?.settingsPages ?? [], remote: remote, provider: activeProvider?.seed,
             scope: activeScope, allowsCompletion: completionEditing.canPropose(for: text),
             pasteboard: text.isEmpty || text == openedWith ? pasteboard : nil, themes: commands?.themes() ?? [],
+            choices: activeScope.flatMap { scope in commands?.choices(in: scope) } ?? [],
             spaceID: destination?.paletteSpaceID)
     }
 
@@ -538,7 +539,8 @@ final class BrowserCommandPaletteModel {
                             windowID: question.windowID, text: question.text, commands: question.commands,
                             settingsPages: question.settingsPages, remote: fetched, provider: question.provider,
                             scope: question.scope, allowsCompletion: question.allowsCompletion,
-                            pasteboard: question.pasteboard, themes: question.themes, spaceID: question.spaceID),
+                            pasteboard: question.pasteboard, themes: question.themes, choices: question.choices,
+                            spaceID: question.spaceID),
                         from: core),
                     asked == sequence
                 else { return }
