@@ -21,7 +21,7 @@ public sealed record AppPreferences(StartupBehavior Startup, bool OffersTranslat
 
     /// The documented defaults for a person who never chose, which a platform
     /// shows and applies until its session holds the record.
-    public static AppPreferences Default { get; } = new(StartupBehavior.ShowStartPage, OffersTranslation: true,
+    public static AppPreferences Default { get; } = new(StartupBehavior.LastActiveTab, OffersTranslation: true,
         AutomaticallyTranslates: false, TranslationRules: [], ChecksSpelling: false, AutomaticallyEntersPictureInPicture: true,
         SavedTabClosePolicy.ResumeLastLocation, SavedTabFaviconReturnsToSavedUrl: false, UnloadedSavedTabsStay: true,
         SplitFocusFollowsMouse: false,
