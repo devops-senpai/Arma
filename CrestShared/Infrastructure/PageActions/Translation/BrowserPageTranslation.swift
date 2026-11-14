@@ -269,6 +269,9 @@ final class BrowserPageTranslation {
     }
 
     func automaticallyTranslateIfAvailable(enabled: Bool) async {
+        // A session over installed languages, which translates without asking,
+        // needs macOS 26. Before it, a page is translated only on request.
+        guard #available(macOS 26.0, *) else { return }
         if !enabled, isAutomaticOperation { cancel() }
         guard enabled, isActive, hasDetected, !isDismissed,
             !automaticAttempted, !isWorking, !isTranslated, !sourceID.isEmpty
@@ -374,7 +377,8 @@ final class BrowserPageTranslation {
             }
         }
         do {
-            if automatic {
+            // Only macOS 26 starts an automatic translation.
+            if automatic, #available(macOS 26.0, *) {
                 let ready = await session.isReady
                 try validate(operation, revision: revision)
                 guard ready else {
@@ -485,7 +489,9 @@ final class BrowserPageTranslation {
 
     func cancel(restoringCompleted: Bool = false) {
         guard isWorking || restoringCompleted else { return }
-        session?.cancel()
+        // Before macOS 26 a session cannot be cancelled; clearing the token
+        // below stops the run at its next batch.
+        if #available(macOS 26.0, *) { session?.cancel() }
         session = nil
         configuration = nil
         isWorking = false
