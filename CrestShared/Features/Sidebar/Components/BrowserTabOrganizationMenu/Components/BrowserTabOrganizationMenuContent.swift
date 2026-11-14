@@ -213,6 +213,12 @@ struct BrowserTabOrganizationMenuContent: View {
 
         Divider()
 
+        if let openInNewWindow = context.openInNewWindow {
+            Button("Open in New Window", systemImage: "macwindow.badge.plus") {
+                performIfCurrent { openInNewWindow(tab.id) }
+            }
+        }
+
         Button("Split with Current Tab", systemImage: "rectangle.split.2x1") {
             performIfCurrent {
                 browser.splitTabWithSelectedTab(
