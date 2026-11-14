@@ -13,6 +13,7 @@ struct BrowserCommandPaletteCard: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @Environment(\.browserCommandPaletteTransitionPhase) private var transitionPhase
+    @Environment(\.colorScheme) private var colorScheme
 
     let model: BrowserCommandPaletteModel
     let presentation: BrowserCommandPalettePresentation
@@ -42,6 +43,12 @@ struct BrowserCommandPaletteCard: View {
         model.space.map { .commandPalette(spaceID: $0.id) }
     }
 
+    /// The Space's surface for the appearance the card shows in, or nil where
+    /// the Space leaves the card to the system material.
+    private var paletteSurface: SpacePaletteSurface? {
+        model.space?.settings.shownLook.commandPalette?.surface(dark: colorScheme == .dark)
+    }
+
     var body: some View {
         surface
             .accessibilityElement(children: .contain)
@@ -68,7 +75,8 @@ struct BrowserCommandPaletteCard: View {
                 .modifier(
                     BrowserCommandPaletteShellMaterial(
                         shape: morphingShape,
-                        reduceTransparency: reduceTransparency
+                        reduceTransparency: reduceTransparency,
+                        surface: paletteSurface
                     )
                 )
                 .clipShape(morphingShape)
@@ -92,7 +100,8 @@ struct BrowserCommandPaletteCard: View {
                 .modifier(
                     BrowserCommandPaletteShellMaterial(
                         shape: restingShape,
-                        reduceTransparency: reduceTransparency
+                        reduceTransparency: reduceTransparency,
+                        surface: paletteSurface
                     )
                 )
                 .clipShape(restingShape)
@@ -101,12 +110,21 @@ struct BrowserCommandPaletteCard: View {
         }
     }
 
+    /// The contents in the text color the Space chose for this appearance,
+    /// when it chose one, and in the scheme that text reads in, so the query
+    /// field, its placeholder and the secondary text read on a dark surface
+    /// in a light window too.
+    private var contents: some View {
+        rows.modifier(SpaceTextColor(color: paletteSurface?.textColor))
+            .environment(\.colorScheme, paletteSurface?.foregroundTone?.colorScheme ?? colorScheme)
+    }
+
     /// The field, the provider chips while what is typed names some, and the
     /// results, which a palette rising from the bottom of the screen lists
     /// above the field. An overlay card keeps one height whatever the results,
     /// so it never moves as they change; the chips take their room from the
     /// results.
-    private var contents: some View {
+    private var rows: some View {
         VStack(spacing: 0) {
             if presentation.listsUpward {
                 if showsResults {

@@ -1,15 +1,20 @@
 import SwiftUI
 
-/// Making a Space yours: the Space as its sidebar beside a page, its name
-/// edited there, and one sheet of what the look lets a first run change. The
-/// full Forge waits in Settings.
+/// Making a Space yours: its crest large with its name under it, the crest
+/// again at the sidebar's sizes on the theme's sidebar, so the person sees
+/// how it reads small, and one sheet of what a first run changes on the
+/// crest. The sidebar's colors belong to the theme. The full Forge waits in
+/// Settings.
 struct BrowserOnboardingMakePage: View {
     let look: SetupLook
     @Binding var branding: SpaceBranding
     @Binding var symbol: String
     @Binding var name: String
-    /// The Space as its icon draws it, for the page beside the sidebar.
+    /// The Space as its icon draws it, shown large.
     let identity: BrowserSpaceIdentity
+    /// The theme setup dresses the Spaces in, which the small window wears,
+    /// or nil for the Space's own look.
+    var theme: CrestTheme? = nil
     /// The Spaces being made, as chips, or nil for a page that makes one
     /// Space alone.
     var picker: BrowserOnboardingMakePicker? = nil
@@ -28,10 +33,10 @@ struct BrowserOnboardingMakePage: View {
                     Spacer()
                     if look.kind == .heraldic {
                         Button("Shuffle", systemImage: "shuffle") {
-                            branding = BrowserCrestForge.shuffled(branding)
+                            branding = branding.shuffledCrest()
                         }
                         .buttonStyle(.crestSecondary)
-                        .help("A new crest and sidebar for this Space")
+                        .help("A new crest for this Space")
                         .accessibilityIdentifier("space-forge-shuffle")
                     }
                     if let picker {
@@ -76,15 +81,58 @@ struct BrowserOnboardingMakePage: View {
         max(BrowserOnboardingMakeMetrics.minimumPreviewWidth, available * 0.44)
     }
 
-    /// The Space as its window, its icon large on the page.
+    /// The Space's crest on the sidebar the chosen theme gives it: large,
+    /// and again at the sizes the sidebar draws it, so the person sees how it
+    /// contrasts; its name under the box.
     private var preview: some View {
-        BrowserOnboardingWindowPreview(
-            branding: branding, symbol: symbol, name: name, editableName: $name, showsNameHint: true
-        ) {
-            BrowserSpaceIdentityIcon(identity: identity, size: BrowserOnboardingMakeMetrics.pageIconSize)
-                .frame(
-                    width: BrowserOnboardingMakeMetrics.pageIconSize, height: BrowserOnboardingMakeMetrics.pageIconSize)
+        VStack(spacing: 18) {
+            Spacer(minLength: 0)
+            crestBox
+            VStack(spacing: 4) {
+                BrowserInlineSpaceName(
+                    name: $name, size: 24, titleFont: CrestTypography.sans(24, weight: .semibold)
+                )
+                .fixedSize()
+                Text("Click the name to rename")
+                    .font(CrestTypography.sans(11))
+                    .foregroundStyle(CrestBrandTheme.textDisplay.opacity(0.55))
+            }
+            Spacer(minLength: 0)
         }
+        .frame(maxWidth: .infinity)
+    }
+
+    private var crestBox: some View {
+        VStack(spacing: 28) {
+            BrowserSpaceIdentityIcon(identity: identity, size: BrowserOnboardingMakeMetrics.crestSize)
+                .frame(width: BrowserOnboardingMakeMetrics.crestSize, height: BrowserOnboardingMakeMetrics.crestSize)
+            HStack(spacing: 24) {
+                ForEach(BrowserOnboardingMakeMetrics.sidebarCrestSizes, id: \.self) { size in
+                    BrowserSpaceIdentityIcon(identity: identity, size: size)
+                        .frame(width: size, height: size)
+                }
+            }
+        }
+        .padding(BrowserOnboardingMakeMetrics.crestBoxPadding)
+        .background {
+            BrowserSpaceBannerBackground(branding: windowBranding)
+        }
+        .clipShape(.rect(cornerRadius: CrestRadius.card, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: CrestRadius.card, style: .continuous)
+                .strokeBorder(.primary.opacity(0.14), lineWidth: CrestLayout.hairline)
+        }
+        .shadow(color: .black.opacity(0.3), radius: 20, y: 12)
+        .environment(\.colorScheme, windowBranding.colorScheme(over: .dark))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("The crest on the theme's sidebar, large and at sidebar sizes")
+    }
+
+    /// The Space's look dressed in the setup's theme, as its sidebar will
+    /// wear it once setup finishes.
+    private var windowBranding: SpaceBranding {
+        guard let theme, let dressed = try? branding.dressed(in: theme) else { return branding }
+        return dressed
     }
 
     @ViewBuilder private var sheet: some View {
@@ -136,7 +184,13 @@ enum BrowserOnboardingMakeMetrics {
     static let spacing: CGFloat = 48
     /// The most of the header the Space chips take once they scroll.
     static let chipsWidth: CGFloat = 520
-    static let pageIconSize: CGFloat = 180
+    /// The crest, large, above the Space's name.
+    static let crestSize: CGFloat = 200
+    /// The sizes the sidebar draws a crest: a Space row, the switcher, and
+    /// the Space header.
+    static let sidebarCrestSizes: [CGFloat] = [18, 22, 32]
+    /// The room around the crests inside their theme-colored box.
+    static let crestBoxPadding: CGFloat = 36
     /// The artwork of a choice tile on the sheet.
     static let tileArtworkSize: CGFloat = 40
     static let swatchSize: CGFloat = 34

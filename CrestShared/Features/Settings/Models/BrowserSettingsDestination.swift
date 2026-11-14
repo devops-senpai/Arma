@@ -34,6 +34,7 @@ struct BrowserSettingsDestination: Hashable, Identifiable, Sendable {
         case advanced
         case about
         case agents
+        case themes
     }
 
     // MARK: - Static Variables
@@ -117,6 +118,11 @@ struct BrowserSettingsDestination: Hashable, Identifiable, Sendable {
         searchTerms:
             "agents AI MCP model context protocol coding agents scripts automation Claude Codex Cursor command line terminal",
         symbol: "sparkles", tincture: .meadowForest)
+    static let themes = BrowserSettingsDestination(
+        kind: .themes, name: "themes", title: "Themes", subtitle: "Saved themes for Spaces",
+        searchTerms:
+            "themes saved theme new duplicate rename delete import export colors look dark light background image picture tab backing Catppuccin",
+        symbol: "swatchpalette", tincture: .meadowRose)
     static let about = BrowserSettingsDestination(
         kind: .about, name: "about", title: "About", subtitle: "Version, updates, and support",
         searchTerms:
@@ -125,8 +131,8 @@ struct BrowserSettingsDestination: Hashable, Identifiable, Sendable {
 
     /// Every destination, in catalog order.
     static let all: [BrowserSettingsDestination] = [
-        general, tabs, search, engines, lookAndFeel, links, shortcuts, spaces, sync, privacy, adBlocking, passwords,
-        extensions, featureFlags, agents, advanced, about,
+        general, tabs, search, engines, lookAndFeel, themes, links, shortcuts, spaces, sync, privacy, adBlocking,
+        passwords, extensions, featureFlags, agents, automation, advanced, about,
     ]
 
     // MARK: - Variables

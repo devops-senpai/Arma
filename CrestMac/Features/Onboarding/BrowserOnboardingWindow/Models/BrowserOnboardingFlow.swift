@@ -60,6 +60,20 @@ final class BrowserOnboardingFlow {
     /// The look the Spaces setup makes wear, which the stage and every
     /// preview follow.
     var look: SetupLook { state?.look ?? .heraldic }
+    /// A theme Arma ships with that the Spaces setup makes wear over the
+    /// heraldic look, or nil for the look alone: the default theme until
+    /// the person picks another look. It is this Mac's choice, as the theme
+    /// library is, so the flow keeps it rather than the core.
+    private(set) var theme: BrowserBundledTheme? = .default
+
+    /// The look the stage and every preview show: the setup look, dressed in
+    /// the chosen theme when there is one.
+    var previewBranding: SpaceBranding {
+        guard let theme = theme?.theme, let dressed = try? look.previewBranding.dressed(in: theme) else {
+            return look.previewBranding
+        }
+        return dressed
+    }
     var failure: SetupFailure? { state?.failure }
     var review: SetupImportReview? { state?.review }
     var selectedImportApplications: Set<ImportSource> { Set(state?.selected ?? []) }
@@ -225,10 +239,19 @@ final class BrowserOnboardingFlow {
         send(ShowSetupStep(step: step))
     }
 
-    /// Gives the Spaces setup makes from here on `look`.
+    /// Gives the Spaces setup makes from here on `look`, and no theme.
     func chooseLook(_ look: SetupLook) {
         guard !isImportSelectionLocked else { return }
+        theme = nil
         send(ChooseSetupLook(look: look))
+    }
+
+    /// Gives the Spaces setup makes from here on the heraldic look dressed in
+    /// `theme`, which each wears once setup finishes.
+    func chooseTheme(_ theme: BrowserBundledTheme) {
+        guard !isImportSelectionLocked else { return }
+        send(ChooseSetupLook(look: .heraldic))
+        self.theme = theme
     }
 
     /// Sets Spaces up by hand, leaving any read that has not finished.
@@ -383,6 +406,12 @@ final class BrowserOnboardingFlow {
                     extensions: extensionInstaller == nil ? [] : output.extensions,
                     leftOut: output.leftOut,
                     title: offeredSource(application)?.title))
+            // Arc's Spaces carry no crest, so each one comes in wearing a
+            // crest of its own rather than all wearing the same one. The
+            // review publishes on the next turn of the main actor.
+            if application == .arc {
+                Task { @MainActor [weak self] in self?.shuffleReviewedCrests() }
+            }
         } catch {
             send(FailImport(source: application, reason: .read, detail: error.personFacingDescription))
         }
@@ -437,6 +466,22 @@ final class BrowserOnboardingFlow {
         guard let review = reviewSpaces.first(where: { $0.id == sourceSpaceID }) else { return }
         for item in review.extensions where review.includedExtensionIDs.contains(item.extensionID) != isIncluded {
             setExtensionIncluded(item.extensionID, isIncluded, in: sourceSpaceID)
+        }
+    }
+
+    /// Gives every reviewed Space a crest shuffled from the Forge's parts, as
+    /// the crest page's Shuffle does, which the person can still change.
+    /// Whether the look counts as the person's own stays as the import set it,
+    /// so the theme setup chose still dresses the Space.
+    private func shuffleReviewedCrests() {
+        for review in reviewSpaces {
+            let current = review.customization
+            var branding = current.branding.shuffledCrest()
+            branding.hasCustomAppearance = current.branding.hasCustomAppearance
+            customize(
+                review.id,
+                as: SpaceCustomization(
+                    name: current.name, symbol: current.symbol, accent: current.accent, branding: branding))
         }
     }
 

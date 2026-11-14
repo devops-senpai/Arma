@@ -75,7 +75,7 @@ struct SpaceSidebarAddressBand: View {
             spaceID: space.id,
             spaceHasAddress: selectedTab?.url?.isEmpty == false,
             commandPaletteHandoff: commandPaletteHandoff,
-            branding: space.settings.look
+            branding: space.settings.shownLook
         )
     }
 

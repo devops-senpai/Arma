@@ -1,0 +1,109 @@
+{
+ "background": {
+  "colors": [
+   "#eff1f5",
+   "#8839ef",
+   "#bcc0cc"
+  ],
+  "intensity": 1,
+  "pattern": "solid",
+  "readabilityFade": 0,
+  "sidebarSecondaryText": "#6c6f85",
+  "sidebarText": "#4c4f69",
+  "style": "banner",
+  "textColor": "dark",
+  "texture": false
+ },
+ "commandPalette": {
+  "dark": {
+   "opacity": 0.92,
+   "text": "#4c4f69",
+   "tint": "#eff1f5"
+  },
+  "light": {
+   "opacity": 0.92,
+   "text": "#4c4f69",
+   "tint": "#eff1f5"
+  }
+ },
+ "controls": {
+  "fill": "#e6e9ef",
+  "fillOpacity": 0.85,
+  "secondaryText": "#5c5f77",
+  "text": "#4c4f69"
+ },
+ "dark": {
+  "background": {
+   "colors": [
+    "#1e1e2e",
+    "#cba6f7",
+    "#45475a"
+   ],
+   "intensity": 1,
+   "pattern": "solid",
+   "readabilityFade": 0,
+   "sidebarSecondaryText": "#a6adc8",
+   "sidebarText": "#cdd6f4",
+   "style": "banner",
+   "textColor": "light",
+   "texture": false
+  },
+  "commandPalette": {
+   "dark": {
+    "opacity": 0.92,
+    "text": "#cdd6f4",
+    "tint": "#1e1e2e"
+   },
+   "light": {
+    "opacity": 0.92,
+    "text": "#cdd6f4",
+    "tint": "#1e1e2e"
+   }
+  },
+  "controls": {
+   "fill": "#313244",
+   "fillOpacity": 0.9,
+   "secondaryText": "#a6adc8",
+   "text": "#cdd6f4"
+  },
+  "folders": {
+   "backColor": "#585b70",
+   "color": "#cba6f7",
+   "highlightColor": "#cba6f7",
+   "highlightOpacity": 0.34,
+   "outlineColor": "#6c7086"
+  },
+  "icon": {
+   "color": "#cba6f7"
+  },
+  "popovers": {
+   "accent": "#cba6f7",
+   "accentOpacity": 1,
+   "background": "#1e1e2e",
+   "button": "#313244",
+   "buttonOutline": "#7f849c",
+   "secondaryText": "#a6adc8",
+   "text": "#cdd6f4"
+  }
+ },
+ "folders": {
+  "backColor": "#acb0be",
+  "color": "#1e66f5",
+  "highlightColor": "#1e66f5",
+  "highlightOpacity": 0.34,
+  "outlineColor": "#9ca0b0"
+ },
+ "icon": {
+  "color": "#8839ef"
+ },
+ "name": "Catppuccin Latte / Mocha",
+ "popovers": {
+  "accent": "#8839ef",
+  "accentOpacity": 1,
+  "background": "#eff1f5",
+  "button": "#e6e9ef",
+  "buttonOutline": "#7287fd",
+  "secondaryText": "#5c5f77",
+  "text": "#4c4f69"
+ }
+}

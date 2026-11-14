@@ -75,7 +75,7 @@ struct BrowserFolderGroupSurface: View {
             isPresented: interaction.isChoosingColor,
             arrowEdge: .trailing
         ) {
-            BrowserFolderColorPicker(color: interaction.folderColor)
+            BrowserFolderAppearanceEditor(configuration: configuration)
                 .presentationCompactAdaptation(.popover)
         }
         .browserIconCustomizationPopover(

@@ -17,7 +17,7 @@ struct BrowserOnboardingWindowContent: View {
     @State private var welcomeHouse = 0
 
     var body: some View {
-        BrowserOnboardingStage(step: flow.step, branding: stageBranding) {
+        BrowserOnboardingStage(step: flow.step) {
             VStack(spacing: 0) {
                 if let customizationSpaceID, flow.review != nil {
                     BrowserImportSpaceCustomizationView(
@@ -37,7 +37,8 @@ struct BrowserOnboardingWindowContent: View {
                         selectedManualSpaceID: $selectedManualSpaceID,
                         customizationSpaceID: $customizationSpaceID,
                         close: close,
-                        openCrest: openCrest
+                        openCrest: openCrest,
+                        welcomeBranding: BrowserOnboardingWelcomeLook.look(at: welcomeHouse)
                     )
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
@@ -70,27 +71,6 @@ struct BrowserOnboardingWindowContent: View {
         }
         .onDisappear(perform: flow.cancelOperations)
         .animation(motion(CrestMotion.onboardingStep), value: flow.step)
-    }
-
-    /// The look the stage wears behind the step: on the welcome, the
-    /// templates in turn; while a Space is being made or reviewed, that
-    /// Space's own; otherwise the look setup chose.
-    private var stageBranding: SpaceBranding {
-        switch flow.step.kind {
-        case .welcome:
-            return SpaceHouse.all[welcomeHouse % SpaceHouse.all.count].look
-        case .manualSetup:
-            return flow.manualSetup.space(selectedManualSpaceID)?.customization.branding ?? flow.look.previewBranding
-        case .review:
-            guard let review = flow.selectedReview(id: flow.shownReviewSpaceID) else {
-                return flow.look.previewBranding
-            }
-            return flow.previewDestinationSpace(for: review)?.settings.look ?? flow.look.previewBranding
-        case .complete:
-            return flow.manualSetup.spaces.first?.customization.branding ?? flow.look.previewBranding
-        case .look, .featureSpaces, .featureTabs, .featureSync, .importBrowser:
-            return flow.look.previewBranding
-        }
     }
 
     private func start() async {
