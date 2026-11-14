@@ -62,6 +62,39 @@ has the details.
   commit subjects, implementation details, issue IDs, or test descriptions.
 - Never reuse, rename, edit, or delete an existing entry or entry file.
 
+## Keeping up with upstream
+
+Arma is a fork of pauljoda/Crest. It merges upstream's `main`
+regularly and never rebases its own `main`.
+
+- Sync with `Scripts/sync-upstream.sh`. It fetches upstream, merges without
+  committing, takes upstream's copy of `Config/Version.xcconfig`, merges
+  `Documentation/ReleaseNotes.json` three ways with
+  `Scripts/merge-release-notes.py`, takes upstream's copy of every generated
+  file and regenerates them, runs the lint, the script tests and the version
+  check, then commits. Anything else that conflicts it leaves for a person.
+- Fork work never edits `Config/Version.xcconfig` or
+  `Documentation/ReleaseNotes.json`. Those two files change only as upstream
+  wrote them, through a merge; a fork change adds its note as
+  `Documentation/ReleaseNotes/<id>.json`. This keeps both files out of every
+  merge conflict.
+- A change that adds something over upstream adds one line to the README's
+  "What Arma adds" list in the same commit, under its kind.
+- Resolve a code conflict by reading both sides' commits. When upstream fixed
+  what a fork commit fixed, keep upstream's version and drop the fork's.
+- Arma builds its own Chromium engine. Its engine inputs differ from
+  upstream's: the patches, overlay, host header, source lock, host inputs
+  and control-plane build scripts under `CrestEngines/Chromium` and
+  `Scripts/control-plane`, and `CrestContracts/include/crest_engine_contract.h`
+  (which carries Arma's third engine kind, Servo). Upstream's prebuilt engine
+  therefore no longer matches; `Scripts/sync-upstream-engine.sh` is retired
+  for this fork. After any change to those inputs, or a sync that changes
+  `Scripts/control-plane/chromium_engine.py tag`, build with
+  `Scripts/control-plane/chromium-fork.py --workspace ~/Dev/CrestChromium build`
+  on the build Mac and publish with `publish-chromium-engine.py` to this
+  repository. Resolve conflicts in those inputs by keeping upstream's change
+  and re-applying Arma's on top.
+
 ## Generated localization catalog
 
 - Whenever `CrestShared/Resources/Localizable.xcstrings` changes, treat the
