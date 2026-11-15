@@ -1,20 +1,19 @@
 import Darwin
 import Foundation
 
-// crest-browser, the helper that reaches the Crest it ships inside:
+// arma, the helper that reaches the Crest it ships inside:
 //
-//   crest-browser mcp
-//   crest-browser theme --space <name> [options]
+//   arma mcp
+//   arma <section> <action> [options]
 //
 // `mcp` speaks the Model Context Protocol over its standard streams for an
-// agent, and needs Crest running with agents turned on. `theme` dresses one
-// Space from the terminal, and needs only Crest running.
-
-let usage = "usage: crest-browser mcp\n       crest-browser theme --space <name> [options]\n"
+// agent, and needs Crest running with agents turned on. The sections
+// (`TerminalCommandLine`) manage Spaces, tabs, windows, themes and the rest
+// of the running Crest; they need only Crest running.
 let arguments = Array(CommandLine.arguments.dropFirst())
 
 /// The `lane` socket of the Crest this helper ships inside, at
-/// Crest.app/Contents/Helpers/crest-browser, unless a review run names one.
+/// Arma.app/Contents/Helpers/arma, unless a review run names one.
 @MainActor func socketPath(lane: AgentSocketLocation.Lane) -> String? {
     if let index = arguments.firstIndex(of: "--socket"), arguments.indices.contains(index + 1) {
         return arguments[index + 1]
@@ -36,16 +35,6 @@ case "mcp":
         await endpoint.receive(line)
     }
     exit(0)
-case "theme":
-    let command: ThemeCommandLine
-    do {
-        command = try ThemeCommandLine(arguments: Array(arguments.dropFirst()))
-    } catch let problem as ThemeCommandLine.Problem {
-        FileHandle.standardError.write(Data((problem.message + "\n\n" + ThemeCommandLine.usage).utf8))
-        exit(64)
-    }
-    exit(await command.run(over: CommandAppLink(path: socketPath(lane: .commands))))
 default:
-    FileHandle.standardError.write(Data(usage.utf8))
-    exit(64)
+    exit(await TerminalCommandLine.run(arguments, over: CommandAppLink(path: socketPath(lane: .commands))))
 }

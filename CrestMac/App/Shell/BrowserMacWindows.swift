@@ -73,6 +73,12 @@ final class BrowserMacWindows {
     /// as About Crest credits it.
     var engineCredits: String? { engineHost.aboutCredits }
 
+    /// What manages the engine's per-Space extensions for the terminal, or
+    /// nil for an engine that runs none.
+    var extensionManager: (any BrowserMacExtensionManaging)? {
+        engineHost.importedExtensionInstaller as? any BrowserMacExtensionManaging
+    }
+
     /// The windows open now, in the order they opened.
     private var controllers: [BrowserMacWindowController] = []
     /// The content of each Quick Window open now, by its identity.
@@ -273,7 +279,7 @@ final class BrowserMacWindows {
     /// of an app that quit while it reopened its windows. True to reopen them.
     private static func reopensPagesAfterQuit() -> Bool {
         let alert = NSAlert()
-        alert.messageText = String(localized: "Crest quit unexpectedly while reopening your pages.")
+        alert.messageText = String(localized: "Arma quit unexpectedly while reopening your pages.")
         alert.informativeText = String(localized: "Do you want to try to reopen them?")
         alert.addButton(withTitle: String(localized: "Reopen"))
         alert.addButton(withTitle: String(localized: "Don’t Reopen"))

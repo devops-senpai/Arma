@@ -19,7 +19,7 @@ final class BrowserMacShell {
         let dockMenu: BrowserMacDockMenu
         let externalOpening: BrowserMacExternalOpening
         let agents: BrowserMacAgents
-        let commands: BrowserMacCommands
+        let terminal: BrowserMacTerminalEndpoint
     }
 
     /// Links and documents that arrived before the launch finished, and the
@@ -107,7 +107,7 @@ final class BrowserMacShell {
             dockMenu: BrowserMacDockMenu(application: application, windows: windows),
             externalOpening: BrowserMacExternalOpening(application: application, windows: windows),
             agents: BrowserMacAgents(application: application, windows: windows),
-            commands: BrowserMacCommands(application: application))
+            terminal: BrowserMacTerminalEndpoint(application: application, windows: windows))
         recovery?.close()
         recovery = nil
         guard application.presentsInstalledApplicationUI else { return }
@@ -163,7 +163,7 @@ final class BrowserMacShell {
             // No agent or command reaches a Crest that is going.
             if allowed {
                 running.agents.stop()
-                running.commands.stop()
+                running.terminal.stop()
             }
             finish(allowed)
         }
