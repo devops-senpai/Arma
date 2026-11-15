@@ -183,7 +183,7 @@ extension BrowserMacShell {
     }
 
     func checkForUpdates() {
-        application?.softwareUpdates.checkForUpdates()
+        windows?.checkForUpdates()
     }
 
     /// Opens Settings in the browser window the person is using, opening one
