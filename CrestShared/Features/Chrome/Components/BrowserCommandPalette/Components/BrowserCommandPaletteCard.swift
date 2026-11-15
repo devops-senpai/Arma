@@ -124,6 +124,12 @@ struct BrowserCommandPaletteCard: View {
     /// above the field. An overlay card keeps one height whatever the results,
     /// so it never moves as they change; the chips take their room from the
     /// results.
+    ///
+    /// The field and the chips sit in front of the results. On the Mac a
+    /// results list in a window's toolbar strip, as in a Quick Window, takes
+    /// the strip's safe area as its own and stretches its scroll view over
+    /// the input line, where it would otherwise take the presses that select
+    /// part of the address.
     private var rows: some View {
         VStack(spacing: 0) {
             if presentation.listsUpward {
@@ -131,11 +137,11 @@ struct BrowserCommandPaletteCard: View {
                     results
                     Divider()
                 }
-                chips
-                field
+                chips.zIndex(1)
+                field.zIndex(1)
             } else {
-                field
-                chips
+                field.zIndex(1)
+                chips.zIndex(1)
                 if showsResults {
                     Divider()
                     results
