@@ -56,6 +56,8 @@ struct BrowserSpaceBrandingEditor: View {
                 BrowserCrestStudioOrnaments(context: context, symbol: symbol)
             }
             BrowserCrestStudioBackground(context: context, symbol: symbol)
+            BrowserCrestStudioFolders(context: context)
+            BrowserCrestStudioCommandPalette(context: context)
             Text("Tab, address bar, and sidebar sizing are in Look and Feel. These choices belong to this Space.")
                 .font(.caption).foregroundStyle(.secondary)
             HStack {
@@ -88,7 +90,7 @@ struct BrowserSpaceBrandingEditor: View {
     private var presets: some View {
         BrowserCrestStudioGroup(step: .start) {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 84), spacing: 10)], spacing: 10) {
-                ForEach(SpaceHouse.all, id: \.self) { house in
+                ForEach(SpaceHouse.offered, id: \.self) { house in
                     BrowserCrestStudioChoice(title: house.title, selected: house.isWorn(by: branding)) {
                         branding = house.applying(to: branding)
                         beforeShuffle = nil

@@ -1,0 +1,56 @@
+{
+ "background": {
+  "angle": 79.97563552520852,
+  "colors": [
+   "#303446",
+   "#ca9ee6",
+   "#51576d"
+  ],
+  "intensity": 1,
+  "pattern": "solid",
+  "readabilityFade": 0,
+  "sidebarSecondaryText": "#a5adce",
+  "sidebarText": "#c6d0f5",
+  "style": "banner",
+  "textColor": "light",
+  "texture": false
+ },
+ "commandPalette": {
+  "dark": {
+   "opacity": 0.92,
+   "text": "#c6d0f5",
+   "tint": "#303446"
+  },
+  "light": {
+   "opacity": 0.92,
+   "text": "#c6d0f5",
+   "tint": "#303446"
+  }
+ },
+ "controls": {
+  "fill": "#414559",
+  "fillOpacity": 0.9,
+  "secondaryText": "#b5bfe2",
+  "text": "#c6d0f5"
+ },
+ "folders": {
+  "backColor": "#626880",
+  "color": "#81c8be",
+  "highlightColor": "#81c8be",
+  "highlightOpacity": 0.34,
+  "outlineColor": "#2e303b"
+ },
+ "icon": {
+  "color": "#ca9ee6"
+ },
+ "name": "Catppuccin Frappé",
+ "popovers": {
+  "accent": "#81c8be",
+  "accentOpacity": 1,
+  "background": "#303446",
+  "button": "#414559",
+  "buttonOutline": "#838ba7",
+  "secondaryText": "#a5adce",
+  "text": "#c6d0f5"
+ }
+}

@@ -7,7 +7,7 @@ import Foundation
 enum CoreCodec {
     /// SHA-256 of the canonical contract schema. The core refuses any other.
     static let fingerprint: [UInt8] = [
-        0x5b, 0x13, 0x79, 0x94, 0x96, 0x76, 0xef, 0x1a, 0xab, 0x67, 0x7e, 0xca, 0xe6, 0x05, 0x44, 0x4c, 0x15, 0x2c, 0x1d, 0x1f, 0xe7, 0x34, 0xd6, 0xdf, 0xf2, 0xe7, 0x41, 0x01, 0xfb, 0x4f, 0x42, 0x26
+        0x1d, 0xcb, 0xbc, 0x6b, 0xd2, 0x35, 0xe6, 0xea, 0x59, 0x5b, 0x8f, 0xe2, 0x63, 0x6d, 0x05, 0xf9, 0xd2, 0x95, 0x06, 0x38, 0x2f, 0xff, 0xb9, 0x3e, 0x9e, 0x39, 0xc8, 0x14, 0x2e, 0x07, 0xfe, 0xd0
     ]
     /// SHA-256 of the engine contract alone, which an engine binding registers with.
     static let engineFingerprint: [UInt8] = [
@@ -269,36 +269,37 @@ enum CoreCodec {
         case 249: return try SetSiteContentBlocking(from: &reader)
         case 250: return try SetSpaceAccess(from: &reader)
         case 251: return try SetSpaceBranding(from: &reader)
-        case 252: return try SetSpaceIdentity(from: &reader)
-        case 253: return try SetSpaceSearch(from: &reader)
-        case 254: return try SetSplitIcon(from: &reader)
-        case 255: return try SetTranslationRule(from: &reader)
-        case 256: return try SettleCloudOverwrite(from: &reader)
-        case 257: return try ShowAdjacentSpace(from: &reader)
-        case 258: return try ShowAdjacentTab(from: &reader)
-        case 259: return try ShowHistoryEntry(from: &reader)
-        case 260: return try ShowImportSpace(from: &reader)
-        case 261: return try ShowLeastRecentTab(from: &reader)
-        case 262: return try ShowMostRecentTab(from: &reader)
-        case 263: return try ShowSetupStep(from: &reader)
-        case 264: return try ShowSpace(from: &reader)
-        case 265: return try ShowStartPage(from: &reader)
-        case 266: return try ShowTab(from: &reader)
-        case 267: return try SplitTabs(from: &reader)
-        case 268: return try StageLink(from: &reader)
-        case 269: return try StartCloudSync(from: &reader)
-        case 270: return try StartSetup(from: &reader)
-        case 271: return try StepHistory(from: &reader)
-        case 272: return try StepSplitMember(from: &reader)
-        case 273: return try StopAgentTab(from: &reader)
-        case 274: return try StopAllAgents(from: &reader)
-        case 275: return try SweepExpiredRecords(from: &reader)
-        case 276: return try TileSplitMember(from: &reader)
-        case 277: return try TintSplit(from: &reader)
-        case 278: return try ToggleImportSource(from: &reader)
-        case 279: return try TogglePin(from: &reader)
-        case 280: return try UnassignShortcut(from: &reader)
-        case 281: return try UnblockElements(from: &reader)
+        case 252: return try SetSpaceDarkBranding(from: &reader)
+        case 253: return try SetSpaceIdentity(from: &reader)
+        case 254: return try SetSpaceSearch(from: &reader)
+        case 255: return try SetSplitIcon(from: &reader)
+        case 256: return try SetTranslationRule(from: &reader)
+        case 257: return try SettleCloudOverwrite(from: &reader)
+        case 258: return try ShowAdjacentSpace(from: &reader)
+        case 259: return try ShowAdjacentTab(from: &reader)
+        case 260: return try ShowHistoryEntry(from: &reader)
+        case 261: return try ShowImportSpace(from: &reader)
+        case 262: return try ShowLeastRecentTab(from: &reader)
+        case 263: return try ShowMostRecentTab(from: &reader)
+        case 264: return try ShowSetupStep(from: &reader)
+        case 265: return try ShowSpace(from: &reader)
+        case 266: return try ShowStartPage(from: &reader)
+        case 267: return try ShowTab(from: &reader)
+        case 268: return try SplitTabs(from: &reader)
+        case 269: return try StageLink(from: &reader)
+        case 270: return try StartCloudSync(from: &reader)
+        case 271: return try StartSetup(from: &reader)
+        case 272: return try StepHistory(from: &reader)
+        case 273: return try StepSplitMember(from: &reader)
+        case 274: return try StopAgentTab(from: &reader)
+        case 275: return try StopAllAgents(from: &reader)
+        case 276: return try SweepExpiredRecords(from: &reader)
+        case 277: return try TileSplitMember(from: &reader)
+        case 278: return try TintSplit(from: &reader)
+        case 279: return try ToggleImportSource(from: &reader)
+        case 280: return try TogglePin(from: &reader)
+        case 281: return try UnassignShortcut(from: &reader)
+        case 282: return try UnblockElements(from: &reader)
         default: throw WireError.malformed("Unknown Intent tag \(tag)")
         }
     }
@@ -10609,6 +10610,76 @@ extension FolderAlreadyExists {
     }
 }
 
+extension FolderColorOverride {
+    init(from reader: inout WireReader) throws(WireError) {
+        let path = try reader.readString()
+        let color: BrandColor?
+        if try reader.readPresence() {
+            let colorValue = try BrandColor(from: &reader)
+            color = colorValue
+        } else {
+            color = nil
+        }
+        let backColor: BrandColor?
+        if try reader.readPresence() {
+            let backColorValue = try BrandColor(from: &reader)
+            backColor = backColorValue
+        } else {
+            backColor = nil
+        }
+        let outlineColor: BrandColor?
+        if try reader.readPresence() {
+            let outlineColorValue = try BrandColor(from: &reader)
+            outlineColor = outlineColorValue
+        } else {
+            outlineColor = nil
+        }
+        self.init(path: path, color: color, backColor: backColor, outlineColor: outlineColor)
+    }
+
+    func encode(into writer: inout WireWriter) {
+        writer.writeString(path)
+        if let present0 = color {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = backColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = outlineColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+    }
+}
+
+extension FolderColorOverrides {
+    init(from reader: inout WireReader) throws(WireError) {
+        let overridesCount = try reader.readCount()
+        var overrides: [FolderColorOverride] = []
+        overrides.reserveCapacity(overridesCount)
+        for _ in 0..<overridesCount {
+            let overridesElement = try FolderColorOverride(from: &reader)
+            overrides.append(overridesElement)
+        }
+        self.init(overrides: overrides)
+    }
+
+    func encode(into writer: inout WireWriter) {
+        writer.writeCount(overrides.count)
+        for element0 in overrides {
+            element0.encode(into: &writer)
+        }
+    }
+}
+
 extension FolderCycle {
     init(from reader: inout WireReader) throws(WireError) {
         let folderID = try reader.readUUID()
@@ -17616,6 +17687,13 @@ extension PaletteSuggestions {
         } else {
             pasteboard = nil
         }
+        let themesCount = try reader.readCount()
+        var themes: [PaletteTheme] = []
+        themes.reserveCapacity(themesCount)
+        for _ in 0..<themesCount {
+            let themesElement = try PaletteTheme(from: &reader)
+            themes.append(themesElement)
+        }
         let spaceID: UUID?
         if try reader.readPresence() {
             let spaceIDValue = try reader.readUUID()
@@ -17623,7 +17701,7 @@ extension PaletteSuggestions {
         } else {
             spaceID = nil
         }
-        self.init(windowID: windowID, text: text, commands: commands, settingsPages: settingsPages, remote: remote, provider: provider, scope: scope, allowsCompletion: allowsCompletion, pasteboard: pasteboard, spaceID: spaceID)
+        self.init(windowID: windowID, text: text, commands: commands, settingsPages: settingsPages, remote: remote, provider: provider, scope: scope, allowsCompletion: allowsCompletion, pasteboard: pasteboard, themes: themes, spaceID: spaceID)
     }
 
     func encode(into writer: inout WireWriter) {
@@ -17660,6 +17738,10 @@ extension PaletteSuggestions {
         } else {
             writer.writePresence(false)
         }
+        writer.writeCount(themes.count)
+        for element0 in themes {
+            element0.encode(into: &writer)
+        }
         if let present0 = spaceID {
             writer.writePresence(true)
             writer.writeUUID(present0)
@@ -17676,6 +17758,21 @@ extension PaletteSuggestions {
     static func decodeAnswer(from reader: inout WireReader) throws(WireError) -> PaletteAnswer {
         let answer = try PaletteAnswer(from: &reader)
         return answer
+    }
+}
+
+extension PaletteTheme {
+    init(from reader: inout WireReader) throws(WireError) {
+        let id = try reader.readUUID()
+        let name = try reader.readString()
+        let detail = try reader.readString()
+        self.init(id: id, name: name, detail: detail)
+    }
+
+    func encode(into writer: inout WireWriter) {
+        writer.writeUUID(id)
+        writer.writeString(name)
+        writer.writeString(detail)
     }
 }
 
@@ -21457,7 +21554,13 @@ extension SetFolderColor {
         let workspaceID = try reader.readUUID()
         let spaceID = try reader.readUUID()
         let folderID = try reader.readUUID()
-        let color = try BrandColor(from: &reader)
+        let color: BrandColor?
+        if try reader.readPresence() {
+            let colorValue = try BrandColor(from: &reader)
+            color = colorValue
+        } else {
+            color = nil
+        }
         self.init(workspaceID: workspaceID, spaceID: spaceID, folderID: folderID, color: color)
     }
 
@@ -21465,7 +21568,12 @@ extension SetFolderColor {
         writer.writeUUID(workspaceID)
         writer.writeUUID(spaceID)
         writer.writeUUID(folderID)
-        color.encode(into: &writer)
+        if let present0 = color {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
     }
 
     func encodeIntent(into writer: inout WireWriter) {
@@ -21771,6 +21879,37 @@ extension SetSpaceBranding {
     }
 }
 
+extension SetSpaceDarkBranding {
+    init(from reader: inout WireReader) throws(WireError) {
+        let workspaceID = try reader.readUUID()
+        let spaceID = try reader.readUUID()
+        let branding: SpaceBranding?
+        if try reader.readPresence() {
+            let brandingValue = try SpaceBranding(from: &reader)
+            branding = brandingValue
+        } else {
+            branding = nil
+        }
+        self.init(workspaceID: workspaceID, spaceID: spaceID, branding: branding)
+    }
+
+    func encode(into writer: inout WireWriter) {
+        writer.writeUUID(workspaceID)
+        writer.writeUUID(spaceID)
+        if let present0 = branding {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+    }
+
+    func encodeIntent(into writer: inout WireWriter) {
+        writer.writeTag(252)
+        encode(into: &writer)
+    }
+}
+
 extension SetSpaceIdentity {
     init(from reader: inout WireReader) throws(WireError) {
         let workspaceID = try reader.readUUID()
@@ -21790,7 +21929,7 @@ extension SetSpaceIdentity {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(252)
+        writer.writeTag(253)
         encode(into: &writer)
     }
 }
@@ -21834,7 +21973,7 @@ extension SetSpaceSearch {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(253)
+        writer.writeTag(254)
         encode(into: &writer)
     }
 }
@@ -21867,7 +22006,7 @@ extension SetSplitIcon {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(254)
+        writer.writeTag(255)
         encode(into: &writer)
     }
 }
@@ -21889,7 +22028,7 @@ extension SetTranslationRule {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(255)
+        writer.writeTag(256)
         encode(into: &writer)
     }
 }
@@ -21927,7 +22066,7 @@ extension SettleCloudOverwrite {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(256)
+        writer.writeTag(257)
         encode(into: &writer)
     }
 }
@@ -22801,7 +22940,7 @@ extension ShowAdjacentSpace {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(257)
+        writer.writeTag(258)
         encode(into: &writer)
     }
 }
@@ -22819,7 +22958,7 @@ extension ShowAdjacentTab {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(258)
+        writer.writeTag(259)
         encode(into: &writer)
     }
 }
@@ -22858,7 +22997,7 @@ extension ShowHistoryEntry {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(259)
+        writer.writeTag(260)
         encode(into: &writer)
     }
 }
@@ -22874,7 +23013,7 @@ extension ShowImportSpace {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(260)
+        writer.writeTag(261)
         encode(into: &writer)
     }
 }
@@ -22890,7 +23029,7 @@ extension ShowLeastRecentTab {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(261)
+        writer.writeTag(262)
         encode(into: &writer)
     }
 }
@@ -22906,7 +23045,7 @@ extension ShowMostRecentTab {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(262)
+        writer.writeTag(263)
         encode(into: &writer)
     }
 }
@@ -22943,7 +23082,7 @@ extension ShowSetupStep {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(263)
+        writer.writeTag(264)
         encode(into: &writer)
     }
 }
@@ -22961,7 +23100,7 @@ extension ShowSpace {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(264)
+        writer.writeTag(265)
         encode(into: &writer)
     }
 }
@@ -22987,7 +23126,7 @@ extension ShowStartPage {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(265)
+        writer.writeTag(266)
         encode(into: &writer)
     }
 }
@@ -23018,7 +23157,7 @@ extension ShowTab {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(266)
+        writer.writeTag(267)
         encode(into: &writer)
     }
 }
@@ -23544,7 +23683,129 @@ extension SpaceBranding {
         } else {
             hasCustomAppearance = nil
         }
-        self.init(colors: colors, bannerPattern: bannerPattern, bannerStrength: bannerStrength, readabilityFade: readabilityFade, keepsControlsReadable: keepsControlsReadable, themeMode: themeMode, gradientAngle: gradientAngle, textureStrength: textureStrength, iconStyle: iconStyle, symbolColor: symbolColor, crest: crest, renderingVersion: renderingVersion, folderColorIntensity: folderColorIntensity, textColorMode: textColorMode, hasCustomAppearance: hasCustomAppearance)
+        let folderColor: BrandColor?
+        if try reader.readPresence() {
+            let folderColorValue = try BrandColor(from: &reader)
+            folderColor = folderColorValue
+        } else {
+            folderColor = nil
+        }
+        let folderBackColor: BrandColor?
+        if try reader.readPresence() {
+            let folderBackColorValue = try BrandColor(from: &reader)
+            folderBackColor = folderBackColorValue
+        } else {
+            folderBackColor = nil
+        }
+        let commandPalette: SpacePaletteLook?
+        if try reader.readPresence() {
+            let commandPaletteValue = try SpacePaletteLook(from: &reader)
+            commandPalette = commandPaletteValue
+        } else {
+            commandPalette = nil
+        }
+        let sidebarTextColor: BrandColor?
+        if try reader.readPresence() {
+            let sidebarTextColorValue = try BrandColor(from: &reader)
+            sidebarTextColor = sidebarTextColorValue
+        } else {
+            sidebarTextColor = nil
+        }
+        let folderOutlineColor: BrandColor?
+        if try reader.readPresence() {
+            let folderOutlineColorValue = try BrandColor(from: &reader)
+            folderOutlineColor = folderOutlineColorValue
+        } else {
+            folderOutlineColor = nil
+        }
+        let folderOverrides: FolderColorOverrides?
+        if try reader.readPresence() {
+            let folderOverridesValue = try FolderColorOverrides(from: &reader)
+            folderOverrides = folderOverridesValue
+        } else {
+            folderOverrides = nil
+        }
+        let sidebarSecondaryTextColor: BrandColor?
+        if try reader.readPresence() {
+            let sidebarSecondaryTextColorValue = try BrandColor(from: &reader)
+            sidebarSecondaryTextColor = sidebarSecondaryTextColorValue
+        } else {
+            sidebarSecondaryTextColor = nil
+        }
+        let folderHighlightColor: BrandColor?
+        if try reader.readPresence() {
+            let folderHighlightColorValue = try BrandColor(from: &reader)
+            folderHighlightColor = folderHighlightColorValue
+        } else {
+            folderHighlightColor = nil
+        }
+        let folderHighlightOpacity = try reader.readDouble()
+        let popoverBackgroundColor: BrandColor?
+        if try reader.readPresence() {
+            let popoverBackgroundColorValue = try BrandColor(from: &reader)
+            popoverBackgroundColor = popoverBackgroundColorValue
+        } else {
+            popoverBackgroundColor = nil
+        }
+        let popoverTextColor: BrandColor?
+        if try reader.readPresence() {
+            let popoverTextColorValue = try BrandColor(from: &reader)
+            popoverTextColor = popoverTextColorValue
+        } else {
+            popoverTextColor = nil
+        }
+        let popoverSecondaryTextColor: BrandColor?
+        if try reader.readPresence() {
+            let popoverSecondaryTextColorValue = try BrandColor(from: &reader)
+            popoverSecondaryTextColor = popoverSecondaryTextColorValue
+        } else {
+            popoverSecondaryTextColor = nil
+        }
+        let popoverAccentColor: BrandColor?
+        if try reader.readPresence() {
+            let popoverAccentColorValue = try BrandColor(from: &reader)
+            popoverAccentColor = popoverAccentColorValue
+        } else {
+            popoverAccentColor = nil
+        }
+        let popoverAccentOpacity = try reader.readDouble()
+        let popoverButtonColor: BrandColor?
+        if try reader.readPresence() {
+            let popoverButtonColorValue = try BrandColor(from: &reader)
+            popoverButtonColor = popoverButtonColorValue
+        } else {
+            popoverButtonColor = nil
+        }
+        let popoverButtonOutlineColor: BrandColor?
+        if try reader.readPresence() {
+            let popoverButtonOutlineColorValue = try BrandColor(from: &reader)
+            popoverButtonOutlineColor = popoverButtonOutlineColorValue
+        } else {
+            popoverButtonOutlineColor = nil
+        }
+        let controlsFillColor: BrandColor?
+        if try reader.readPresence() {
+            let controlsFillColorValue = try BrandColor(from: &reader)
+            controlsFillColor = controlsFillColorValue
+        } else {
+            controlsFillColor = nil
+        }
+        let controlsFillOpacity = try reader.readDouble()
+        let controlsTextColor: BrandColor?
+        if try reader.readPresence() {
+            let controlsTextColorValue = try BrandColor(from: &reader)
+            controlsTextColor = controlsTextColorValue
+        } else {
+            controlsTextColor = nil
+        }
+        let controlsSecondaryTextColor: BrandColor?
+        if try reader.readPresence() {
+            let controlsSecondaryTextColorValue = try BrandColor(from: &reader)
+            controlsSecondaryTextColor = controlsSecondaryTextColorValue
+        } else {
+            controlsSecondaryTextColor = nil
+        }
+        self.init(colors: colors, bannerPattern: bannerPattern, bannerStrength: bannerStrength, readabilityFade: readabilityFade, keepsControlsReadable: keepsControlsReadable, themeMode: themeMode, gradientAngle: gradientAngle, textureStrength: textureStrength, iconStyle: iconStyle, symbolColor: symbolColor, crest: crest, renderingVersion: renderingVersion, folderColorIntensity: folderColorIntensity, textColorMode: textColorMode, hasCustomAppearance: hasCustomAppearance, folderColor: folderColor, folderBackColor: folderBackColor, commandPalette: commandPalette, sidebarTextColor: sidebarTextColor, folderOutlineColor: folderOutlineColor, folderOverrides: folderOverrides, sidebarSecondaryTextColor: sidebarSecondaryTextColor, folderHighlightColor: folderHighlightColor, folderHighlightOpacity: folderHighlightOpacity, popoverBackgroundColor: popoverBackgroundColor, popoverTextColor: popoverTextColor, popoverSecondaryTextColor: popoverSecondaryTextColor, popoverAccentColor: popoverAccentColor, popoverAccentOpacity: popoverAccentOpacity, popoverButtonColor: popoverButtonColor, popoverButtonOutlineColor: popoverButtonOutlineColor, controlsFillColor: controlsFillColor, controlsFillOpacity: controlsFillOpacity, controlsTextColor: controlsTextColor, controlsSecondaryTextColor: controlsSecondaryTextColor)
     }
 
     func encode(into writer: inout WireWriter) {
@@ -23570,6 +23831,111 @@ extension SpaceBranding {
         if let present0 = hasCustomAppearance {
             writer.writePresence(true)
             writer.writeBool(present0)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = folderColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = folderBackColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = commandPalette {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = sidebarTextColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = folderOutlineColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = folderOverrides {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = sidebarSecondaryTextColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = folderHighlightColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        writer.writeDouble(folderHighlightOpacity)
+        if let present0 = popoverBackgroundColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = popoverTextColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = popoverSecondaryTextColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = popoverAccentColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        writer.writeDouble(popoverAccentOpacity)
+        if let present0 = popoverButtonColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = popoverButtonOutlineColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = controlsFillColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        writer.writeDouble(controlsFillOpacity)
+        if let present0 = controlsTextColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = controlsSecondaryTextColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
         } else {
             writer.writePresence(false)
         }
@@ -23922,6 +24288,56 @@ extension SpaceMembership {
     }
 }
 
+extension SpacePaletteLook {
+    init(from reader: inout WireReader) throws(WireError) {
+        let light = try SpacePaletteSurface(from: &reader)
+        let dark = try SpacePaletteSurface(from: &reader)
+        self.init(light: light, dark: dark)
+    }
+
+    func encode(into writer: inout WireWriter) {
+        light.encode(into: &writer)
+        dark.encode(into: &writer)
+    }
+}
+
+extension SpacePaletteSurface {
+    init(from reader: inout WireReader) throws(WireError) {
+        let tint: BrandColor?
+        if try reader.readPresence() {
+            let tintValue = try BrandColor(from: &reader)
+            tint = tintValue
+        } else {
+            tint = nil
+        }
+        let opacity = try reader.readDouble()
+        let textColor: BrandColor?
+        if try reader.readPresence() {
+            let textColorValue = try BrandColor(from: &reader)
+            textColor = textColorValue
+        } else {
+            textColor = nil
+        }
+        self.init(tint: tint, opacity: opacity, textColor: textColor)
+    }
+
+    func encode(into writer: inout WireWriter) {
+        if let present0 = tint {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        writer.writeDouble(opacity)
+        if let present0 = textColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+    }
+}
+
 extension SpaceProfileChanged {
     init(from reader: inout WireReader) throws(WireError) {
         let spaceID = try reader.readUUID()
@@ -24021,9 +24437,17 @@ extension SpaceSettings {
         } else {
             protectionModifiedAt = nil
         }
+        let darkBranding: SpaceBranding?
+        if try reader.readPresence() {
+            let darkBrandingValue = try SpaceBranding(from: &reader)
+            darkBranding = darkBrandingValue
+        } else {
+            darkBranding = nil
+        }
         let look = try SpaceBranding(from: &reader)
+        let darkLook = try SpaceBranding(from: &reader)
         let requiresAuthentication = try reader.readBool()
-        self.init(name: name, symbol: symbol, accent: accent, branding: branding, browsingPreferences: browsingPreferences, credentialPreferences: credentialPreferences, accessPolicy: accessPolicy, isSavedTabsExpanded: isSavedTabsExpanded, savedTabsExpansionModifiedAt: savedTabsExpansionModifiedAt, credentialsEnabledModifiedAt: credentialsEnabledModifiedAt, accessPolicyModifiedAt: accessPolicyModifiedAt, separatesPinnedTabs: separatesPinnedTabs, separatesPinnedTabsModifiedAt: separatesPinnedTabsModifiedAt, protectionModifiedAt: protectionModifiedAt, look: look, requiresAuthentication: requiresAuthentication)
+        self.init(name: name, symbol: symbol, accent: accent, branding: branding, browsingPreferences: browsingPreferences, credentialPreferences: credentialPreferences, accessPolicy: accessPolicy, isSavedTabsExpanded: isSavedTabsExpanded, savedTabsExpansionModifiedAt: savedTabsExpansionModifiedAt, credentialsEnabledModifiedAt: credentialsEnabledModifiedAt, accessPolicyModifiedAt: accessPolicyModifiedAt, separatesPinnedTabs: separatesPinnedTabs, separatesPinnedTabsModifiedAt: separatesPinnedTabsModifiedAt, protectionModifiedAt: protectionModifiedAt, darkBranding: darkBranding, look: look, darkLook: darkLook, requiresAuthentication: requiresAuthentication)
     }
 
     func encode(into writer: inout WireWriter) {
@@ -24071,7 +24495,14 @@ extension SpaceSettings {
         } else {
             writer.writePresence(false)
         }
+        if let present0 = darkBranding {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
         look.encode(into: &writer)
+        darkLook.encode(into: &writer)
         writer.writeBool(requiresAuthentication)
     }
 }
@@ -24128,7 +24559,14 @@ extension SpaceSettings.Seed {
         } else {
             protectionModifiedAt = nil
         }
-        self.init(name: name, symbol: symbol, accent: accent, branding: branding, browsingPreferences: browsingPreferences, credentialPreferences: credentialPreferences, accessPolicy: accessPolicy, isSavedTabsExpanded: isSavedTabsExpanded, savedTabsExpansionModifiedAt: savedTabsExpansionModifiedAt, credentialsEnabledModifiedAt: credentialsEnabledModifiedAt, accessPolicyModifiedAt: accessPolicyModifiedAt, separatesPinnedTabs: separatesPinnedTabs, separatesPinnedTabsModifiedAt: separatesPinnedTabsModifiedAt, protectionModifiedAt: protectionModifiedAt)
+        let darkBranding: SpaceBranding?
+        if try reader.readPresence() {
+            let darkBrandingValue = try SpaceBranding(from: &reader)
+            darkBranding = darkBrandingValue
+        } else {
+            darkBranding = nil
+        }
+        self.init(name: name, symbol: symbol, accent: accent, branding: branding, browsingPreferences: browsingPreferences, credentialPreferences: credentialPreferences, accessPolicy: accessPolicy, isSavedTabsExpanded: isSavedTabsExpanded, savedTabsExpansionModifiedAt: savedTabsExpansionModifiedAt, credentialsEnabledModifiedAt: credentialsEnabledModifiedAt, accessPolicyModifiedAt: accessPolicyModifiedAt, separatesPinnedTabs: separatesPinnedTabs, separatesPinnedTabsModifiedAt: separatesPinnedTabsModifiedAt, protectionModifiedAt: protectionModifiedAt, darkBranding: darkBranding)
     }
 
     func encode(into writer: inout WireWriter) {
@@ -24173,6 +24611,12 @@ extension SpaceSettings.Seed {
         if let present0 = protectionModifiedAt {
             writer.writePresence(true)
             writer.writeDate(present0)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = darkBranding {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
         } else {
             writer.writePresence(false)
         }
@@ -24979,7 +25423,7 @@ extension SplitTabs {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(267)
+        writer.writeTag(268)
         encode(into: &writer)
     }
 }
@@ -25001,7 +25445,7 @@ extension StageLink {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(268)
+        writer.writeTag(269)
         encode(into: &writer)
     }
 }
@@ -25079,7 +25523,7 @@ extension StartCloudSync {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(269)
+        writer.writeTag(270)
         encode(into: &writer)
     }
 }
@@ -25108,7 +25552,7 @@ extension StartSetup {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(270)
+        writer.writeTag(271)
         encode(into: &writer)
     }
 }
@@ -25126,7 +25570,7 @@ extension StepHistory {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(271)
+        writer.writeTag(272)
         encode(into: &writer)
     }
 }
@@ -25148,7 +25592,7 @@ extension StepSplitMember {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(272)
+        writer.writeTag(273)
         encode(into: &writer)
     }
 }
@@ -25164,7 +25608,7 @@ extension StopAgentTab {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(273)
+        writer.writeTag(274)
         encode(into: &writer)
     }
 }
@@ -25178,7 +25622,7 @@ extension StopAllAgents {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(274)
+        writer.writeTag(275)
         encode(into: &writer)
     }
 }
@@ -25442,7 +25886,7 @@ extension SweepExpiredRecords {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(275)
+        writer.writeTag(276)
         encode(into: &writer)
     }
 }
@@ -26392,7 +26836,7 @@ extension TileSplitMember {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(276)
+        writer.writeTag(277)
         encode(into: &writer)
     }
 }
@@ -26425,7 +26869,7 @@ extension TintSplit {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(277)
+        writer.writeTag(278)
         encode(into: &writer)
     }
 }
@@ -26441,7 +26885,7 @@ extension ToggleImportSource {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(278)
+        writer.writeTag(279)
         encode(into: &writer)
     }
 }
@@ -26461,7 +26905,7 @@ extension TogglePin {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(279)
+        writer.writeTag(280)
         encode(into: &writer)
     }
 }
@@ -26636,7 +27080,7 @@ extension UnassignShortcut {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(280)
+        writer.writeTag(281)
         encode(into: &writer)
     }
 }
@@ -26652,7 +27096,7 @@ extension UnblockElements {
     }
 
     func encodeIntent(into writer: inout WireWriter) {
-        writer.writeTag(281)
+        writer.writeTag(282)
         encode(into: &writer)
     }
 }
