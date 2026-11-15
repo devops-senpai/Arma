@@ -93,7 +93,7 @@ extension BrowserStore {
             let tabID = openNewTab(
                 url: url, in: spaceID, selecting: false, joinsFolder: true, savesInSavedFolder: savesInSavedFolder)
         else { return nil }
-        interactionObserver?.browserDidOpenBackgroundTab()
+        interactionObserver?.browserDidOpenBackgroundTab { [weak self] in self?.showTab(tabID, in: spaceID) }
         return tabID
     }
 
