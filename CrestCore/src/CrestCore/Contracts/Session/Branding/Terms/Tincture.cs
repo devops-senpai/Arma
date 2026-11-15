@@ -62,6 +62,18 @@ public sealed class Tincture {
     public static readonly Tincture VigilBone = new("vigilBone", "Bone", new(0.812, 0.820, 0.831));
     public static readonly Tincture NeutralSmoke = new("neutralSmoke", "Smoke", new(0.337, 0.337, 0.337));
     public static readonly Tincture NeutralGray = new("neutralGray", "Gray", new(0.588, 0.588, 0.588));
+    // Arma's own colors, as its logo draws them.
+    public static readonly Tincture ArmaNavy = new("armaNavy", "Arma Navy", new(0.192, 0.196, 0.267));
+    public static readonly Tincture ArmaRed = new("armaRed", "Arma Red", new(0.843, 0.216, 0.263));
+    public static readonly Tincture ArmaGold = new("armaGold", "Arma Gold", new(0.725, 0.608, 0.376));
+    public static readonly Tincture ArmaWhite = new("armaWhite", "Arma White", new(0.97, 0.97, 0.96));
+    /// The dark grey of the Catppuccin Macchiato theme Arma starts with.
+    public static readonly Tincture ArmaGrey = new("armaGrey", "Arma Grey", new(0.286, 0.302, 0.392));
+    // Catppuccin Macchiato's own colors, which a new Space's crest wears.
+    public static readonly Tincture MacchiatoBase = new("macchiatoBase", "Macchiato Base", new(0.141, 0.153, 0.227));
+    public static readonly Tincture MacchiatoMauve = new("macchiatoMauve", "Macchiato Mauve", new(0.776, 0.627, 0.965));
+    public static readonly Tincture MacchiatoLavender = new("macchiatoLavender", "Macchiato Lavender", new(0.718, 0.741, 0.973));
+    public static readonly Tincture MacchiatoText = new("macchiatoText", "Macchiato Text", new(0.792, 0.827, 0.961));
 
     public static IReadOnlyList<Tincture> All { get; } = [
         Ink, Indigo, Ocean, Sky, Teal, Sage, Gold, Ember, Rose, Sand, WinterSlate, WinterSteel, WinterIce, LionOxblood,
@@ -69,7 +81,8 @@ public sealed class Tincture {
         MeadowForest, MeadowMoss, MeadowWheat, IronBlack, IronPewter, IronPatina, RiverNavy, RiverLapis, RiverRust,
         SunUmber, SunTerracotta, SunDune, VigilOnyx, VigilCharcoal, VigilAsh, WinterArgent, WinterWolf, LionGules, LionOr,
         StormOr, StormSable, DragonSable, DragonFire, MeadowVert, MeadowRose, IronOr, RiverAzure, RiverGules, RiverArgent,
-        SunTenne, SunGules, SunOr, VigilBone, NeutralSmoke, NeutralGray
+        SunTenne, SunGules, SunOr, VigilBone, NeutralSmoke, NeutralGray, ArmaNavy, ArmaRed, ArmaGold, ArmaWhite, ArmaGrey,
+        MacchiatoBase, MacchiatoMauve, MacchiatoLavender, MacchiatoText
     ];
 
     public string Name { get; }

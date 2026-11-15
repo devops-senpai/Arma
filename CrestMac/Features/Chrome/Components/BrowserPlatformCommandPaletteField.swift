@@ -51,6 +51,10 @@ struct BrowserPlatformCommandPaletteField: NSViewRepresentable {
     }
 
     func updateNSView(_ field: NSTextField, context: Context) {
+        // The text, placeholder and completion suffix are AppKit's, so they
+        // read the field's appearance rather than SwiftUI's scheme: a Space's
+        // dark palette in a light window would otherwise draw dark on dark.
+        field.appearance = NSAppearance(named: context.environment.colorScheme == .dark ? .darkAqua : .aqua)
         let canFocus = context.environment.isEnabled && context.environment.spaceContentIsInteractive
         field.isEditable = canFocus
         field.isSelectable = canFocus
@@ -189,11 +193,25 @@ struct BrowserPlatformCommandPaletteField: NSViewRepresentable {
             refreshSuffix()
         }
 
+        /// Shows `text` as the field's placeholder, in the Space's system
+        /// text color when its theme names one, else in AppKit's own.
+        func setPlaceholder(_ text: String) {
+            guard let field else { return }
+            guard let color = model.space?.settings.shownLook.sidebarSecondaryTextColor else {
+                if field.placeholderString != text { field.placeholderString = text }
+                return
+            }
+            let font = field.font ?? .preferredFont(forTextStyle: .title2)
+            let placeholder = NSAttributedString(
+                string: text, attributes: [.foregroundColor: NSColor(color.color), .font: font])
+            if field.placeholderAttributedString != placeholder { field.placeholderAttributedString = placeholder }
+        }
+
         func refreshSuffix() {
-            field?.placeholderString =
+            setPlaceholder(
                 model.activeProvider.map { "\($0.actionTitle)…" }
-                ?? model.activeScope.map { String(localized: "Search \(String(localized: $0.title))…") }
-                ?? String(localized: "Search or Enter URL…")
+                    ?? model.activeScope.map { String(localized: "Search \(String(localized: $0.title))…") }
+                    ?? String(localized: "Search or Enter URL…"))
             if model.urlCompletion == nil, let provider = model.providerOffer {
                 suffixLabel.isHidden = true
                 suffixLabel.rootView.isVisible = false

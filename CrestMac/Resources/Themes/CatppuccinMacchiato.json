@@ -1,0 +1,56 @@
+{
+ "background": {
+  "angle": 45,
+  "colors": [
+   "#24273a",
+   "#c6a0f6",
+   "#494d64"
+  ],
+  "intensity": 1,
+  "pattern": "solid",
+  "readabilityFade": 0,
+  "sidebarSecondaryText": "#a5adcb",
+  "sidebarText": "#cad3f5",
+  "style": "banner",
+  "textColor": "light",
+  "texture": false
+ },
+ "commandPalette": {
+  "dark": {
+   "opacity": 0.92,
+   "text": "#cad3f5",
+   "tint": "#24273a"
+  },
+  "light": {
+   "opacity": 0.92,
+   "text": "#cad3f5",
+   "tint": "#24273a"
+  }
+ },
+ "controls": {
+  "fill": "#363a4f",
+  "fillOpacity": 0.9,
+  "secondaryText": "#a5adcb",
+  "text": "#cad3f5"
+ },
+ "folders": {
+  "backColor": "#5b6078",
+  "color": "#b7bdf8",
+  "highlightColor": "#b7bdf8",
+  "highlightOpacity": 0.34,
+  "outlineColor": "#6e738d"
+ },
+ "icon": {
+  "color": "#c6a0f6"
+ },
+ "name": "Catppuccin Macchiato",
+ "popovers": {
+  "accent": "#b7bdf8",
+  "accentOpacity": 1,
+  "background": "#24273a",
+  "button": "#363a4f",
+  "buttonOutline": "#6e738d",
+  "secondaryText": "#a5adcb",
+  "text": "#cad3f5"
+ }
+}

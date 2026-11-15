@@ -14,7 +14,7 @@ namespace CrestCore.Native;
 public static class ContractCodec {
     /// <summary>SHA-256 of the canonical contract schema.</summary>
     public static ReadOnlySpan<byte> Fingerprint => [
-        0xbd, 0x7d, 0x03, 0xee, 0x04, 0xae, 0xd4, 0x1a, 0x48, 0xf4, 0xb0, 0xd3, 0x37, 0x1f, 0xcd, 0x60, 0x20, 0xf1, 0xc1, 0xd6, 0x57, 0xe8, 0x89, 0xc5, 0x22, 0xc0, 0xa5, 0xe1, 0x50, 0x18, 0x94, 0xbc
+        0xc1, 0xd1, 0x63, 0xf1, 0xe8, 0x9b, 0xea, 0x5a, 0xb3, 0x64, 0x08, 0x25, 0xb6, 0x9b, 0x02, 0xa6, 0xc9, 0x05, 0xbb, 0xe0, 0x62, 0x65, 0xfc, 0xe2, 0x1c, 0xca, 0xc5, 0x0d, 0xfc, 0x32, 0x48, 0x24
     ];
 
     /// <summary>SHA-256 of the engine contract alone, which an engine binding registers with.</summary>
@@ -278,36 +278,37 @@ public static class ContractCodec {
             case 250: return ReadSetSiteContentBlocking(reader);
             case 251: return ReadSetSpaceAccess(reader);
             case 252: return ReadSetSpaceBranding(reader);
-            case 253: return ReadSetSpaceIdentity(reader);
-            case 254: return ReadSetSpaceSearch(reader);
-            case 255: return ReadSetSplitIcon(reader);
-            case 256: return ReadSetTranslationRule(reader);
-            case 257: return ReadSettleCloudOverwrite(reader);
-            case 258: return ReadShowAdjacentSpace(reader);
-            case 259: return ReadShowAdjacentTab(reader);
-            case 260: return ReadShowHistoryEntry(reader);
-            case 261: return ReadShowImportSpace(reader);
-            case 262: return ReadShowLeastRecentTab(reader);
-            case 263: return ReadShowMostRecentTab(reader);
-            case 264: return ReadShowSetupStep(reader);
-            case 265: return ReadShowSpace(reader);
-            case 266: return ReadShowStartPage(reader);
-            case 267: return ReadShowTab(reader);
-            case 268: return ReadSplitTabs(reader);
-            case 269: return ReadStageLink(reader);
-            case 270: return ReadStartCloudSync(reader);
-            case 271: return ReadStartSetup(reader);
-            case 272: return ReadStepHistory(reader);
-            case 273: return ReadStepSplitMember(reader);
-            case 274: return ReadStopAgentTab(reader);
-            case 275: return ReadStopAllAgents(reader);
-            case 276: return ReadSweepExpiredRecords(reader);
-            case 277: return ReadTileSplitMember(reader);
-            case 278: return ReadTintSplit(reader);
-            case 279: return ReadToggleImportSource(reader);
-            case 280: return ReadTogglePin(reader);
-            case 281: return ReadUnassignShortcut(reader);
-            case 282: return ReadUnblockElements(reader);
+            case 253: return ReadSetSpaceDarkBranding(reader);
+            case 254: return ReadSetSpaceIdentity(reader);
+            case 255: return ReadSetSpaceSearch(reader);
+            case 256: return ReadSetSplitIcon(reader);
+            case 257: return ReadSetTranslationRule(reader);
+            case 258: return ReadSettleCloudOverwrite(reader);
+            case 259: return ReadShowAdjacentSpace(reader);
+            case 260: return ReadShowAdjacentTab(reader);
+            case 261: return ReadShowHistoryEntry(reader);
+            case 262: return ReadShowImportSpace(reader);
+            case 263: return ReadShowLeastRecentTab(reader);
+            case 264: return ReadShowMostRecentTab(reader);
+            case 265: return ReadShowSetupStep(reader);
+            case 266: return ReadShowSpace(reader);
+            case 267: return ReadShowStartPage(reader);
+            case 268: return ReadShowTab(reader);
+            case 269: return ReadSplitTabs(reader);
+            case 270: return ReadStageLink(reader);
+            case 271: return ReadStartCloudSync(reader);
+            case 272: return ReadStartSetup(reader);
+            case 273: return ReadStepHistory(reader);
+            case 274: return ReadStepSplitMember(reader);
+            case 275: return ReadStopAgentTab(reader);
+            case 276: return ReadStopAllAgents(reader);
+            case 277: return ReadSweepExpiredRecords(reader);
+            case 278: return ReadTileSplitMember(reader);
+            case 279: return ReadTintSplit(reader);
+            case 280: return ReadToggleImportSource(reader);
+            case 281: return ReadTogglePin(reader);
+            case 282: return ReadUnassignShortcut(reader);
+            case 283: return ReadUnblockElements(reader);
             default: throw new WireFormatException($"Unknown Intent tag {tag}.");
         }
     }
@@ -1328,124 +1329,128 @@ public static class ContractCodec {
                 writer.WriteTag(252);
                 WriteSetSpaceBranding(writer, member);
                 break;
-            case SetSpaceIdentity member:
+            case SetSpaceDarkBranding member:
                 writer.WriteTag(253);
+                WriteSetSpaceDarkBranding(writer, member);
+                break;
+            case SetSpaceIdentity member:
+                writer.WriteTag(254);
                 WriteSetSpaceIdentity(writer, member);
                 break;
             case SetSpaceSearch member:
-                writer.WriteTag(254);
+                writer.WriteTag(255);
                 WriteSetSpaceSearch(writer, member);
                 break;
             case SetSplitIcon member:
-                writer.WriteTag(255);
+                writer.WriteTag(256);
                 WriteSetSplitIcon(writer, member);
                 break;
             case SetTranslationRule member:
-                writer.WriteTag(256);
+                writer.WriteTag(257);
                 WriteSetTranslationRule(writer, member);
                 break;
             case SettleCloudOverwrite member:
-                writer.WriteTag(257);
+                writer.WriteTag(258);
                 WriteSettleCloudOverwrite(writer, member);
                 break;
             case ShowAdjacentSpace member:
-                writer.WriteTag(258);
+                writer.WriteTag(259);
                 WriteShowAdjacentSpace(writer, member);
                 break;
             case ShowAdjacentTab member:
-                writer.WriteTag(259);
+                writer.WriteTag(260);
                 WriteShowAdjacentTab(writer, member);
                 break;
             case ShowHistoryEntry member:
-                writer.WriteTag(260);
+                writer.WriteTag(261);
                 WriteShowHistoryEntry(writer, member);
                 break;
             case ShowImportSpace member:
-                writer.WriteTag(261);
+                writer.WriteTag(262);
                 WriteShowImportSpace(writer, member);
                 break;
             case ShowLeastRecentTab member:
-                writer.WriteTag(262);
+                writer.WriteTag(263);
                 WriteShowLeastRecentTab(writer, member);
                 break;
             case ShowMostRecentTab member:
-                writer.WriteTag(263);
+                writer.WriteTag(264);
                 WriteShowMostRecentTab(writer, member);
                 break;
             case ShowSetupStep member:
-                writer.WriteTag(264);
+                writer.WriteTag(265);
                 WriteShowSetupStep(writer, member);
                 break;
             case ShowSpace member:
-                writer.WriteTag(265);
+                writer.WriteTag(266);
                 WriteShowSpace(writer, member);
                 break;
             case ShowStartPage member:
-                writer.WriteTag(266);
+                writer.WriteTag(267);
                 WriteShowStartPage(writer, member);
                 break;
             case ShowTab member:
-                writer.WriteTag(267);
+                writer.WriteTag(268);
                 WriteShowTab(writer, member);
                 break;
             case SplitTabs member:
-                writer.WriteTag(268);
+                writer.WriteTag(269);
                 WriteSplitTabs(writer, member);
                 break;
             case StageLink member:
-                writer.WriteTag(269);
+                writer.WriteTag(270);
                 WriteStageLink(writer, member);
                 break;
             case StartCloudSync member:
-                writer.WriteTag(270);
+                writer.WriteTag(271);
                 WriteStartCloudSync(writer, member);
                 break;
             case StartSetup member:
-                writer.WriteTag(271);
+                writer.WriteTag(272);
                 WriteStartSetup(writer, member);
                 break;
             case StepHistory member:
-                writer.WriteTag(272);
+                writer.WriteTag(273);
                 WriteStepHistory(writer, member);
                 break;
             case StepSplitMember member:
-                writer.WriteTag(273);
+                writer.WriteTag(274);
                 WriteStepSplitMember(writer, member);
                 break;
             case StopAgentTab member:
-                writer.WriteTag(274);
+                writer.WriteTag(275);
                 WriteStopAgentTab(writer, member);
                 break;
             case StopAllAgents member:
-                writer.WriteTag(275);
+                writer.WriteTag(276);
                 WriteStopAllAgents(writer, member);
                 break;
             case SweepExpiredRecords member:
-                writer.WriteTag(276);
+                writer.WriteTag(277);
                 WriteSweepExpiredRecords(writer, member);
                 break;
             case TileSplitMember member:
-                writer.WriteTag(277);
+                writer.WriteTag(278);
                 WriteTileSplitMember(writer, member);
                 break;
             case TintSplit member:
-                writer.WriteTag(278);
+                writer.WriteTag(279);
                 WriteTintSplit(writer, member);
                 break;
             case ToggleImportSource member:
-                writer.WriteTag(279);
+                writer.WriteTag(280);
                 WriteToggleImportSource(writer, member);
                 break;
             case TogglePin member:
-                writer.WriteTag(280);
+                writer.WriteTag(281);
                 WriteTogglePin(writer, member);
                 break;
             case UnassignShortcut member:
-                writer.WriteTag(281);
+                writer.WriteTag(282);
                 WriteUnassignShortcut(writer, member);
                 break;
             case UnblockElements member:
-                writer.WriteTag(282);
+                writer.WriteTag(283);
                 WriteUnblockElements(writer, member);
                 break;
             default: throw new ArgumentOutOfRangeException(nameof(value), value.GetType().Name, "Not a contract Intent.");
@@ -10191,6 +10196,54 @@ public static class ContractCodec {
         writer.WriteGuid(value.FolderId);
     }
 
+    public static FolderColorOverride ReadFolderColorOverride(WireReader reader) {
+        ArgumentNullException.ThrowIfNull(reader);
+        return new FolderColorOverride(
+            reader.ReadString(),
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null);
+    }
+
+    public static void WriteFolderColorOverride(WireWriter writer, FolderColorOverride value) {
+        ArgumentNullException.ThrowIfNull(writer);
+        ArgumentNullException.ThrowIfNull(value);
+        writer.WriteString(value.Path);
+        if (value.Color is { } presentColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.BackColor is { } presentBackColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentBackColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.OutlineColor is { } presentOutlineColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentOutlineColor);
+        } else {
+            writer.WritePresence(false);
+        }
+    }
+
+    public static FolderColorOverrides ReadFolderColorOverrides(WireReader reader) {
+        ArgumentNullException.ThrowIfNull(reader);
+        return new FolderColorOverrides(
+            reader.ReadList(() => ReadFolderColorOverride(reader)));
+    }
+
+    public static void WriteFolderColorOverrides(WireWriter writer, FolderColorOverrides value) {
+        ArgumentNullException.ThrowIfNull(writer);
+        ArgumentNullException.ThrowIfNull(value);
+        writer.WriteCount(value.Overrides.Count);
+        foreach (var itemOverrides in value.Overrides) {
+            WriteFolderColorOverride(writer, itemOverrides);
+        }
+    }
+
     public static FolderCycle ReadFolderCycle(WireReader reader) {
         ArgumentNullException.ThrowIfNull(reader);
         return new FolderCycle(
@@ -14736,6 +14789,7 @@ public static class ContractCodec {
             reader.ReadPresence() ? (PaletteScope?)ReadPaletteScope(reader) : null,
             reader.ReadBool(),
             reader.ReadPresence() ? (string?)reader.ReadString() : null,
+            reader.ReadList(() => ReadPaletteTheme(reader)),
             reader.ReadPresence() ? (Guid?)reader.ReadGuid() : null);
     }
 
@@ -14775,12 +14829,32 @@ public static class ContractCodec {
         } else {
             writer.WritePresence(false);
         }
+        writer.WriteCount(value.Themes.Count);
+        foreach (var itemThemes in value.Themes) {
+            WritePaletteTheme(writer, itemThemes);
+        }
         if (value.SpaceId is { } presentSpaceId) {
             writer.WritePresence(true);
             writer.WriteGuid(presentSpaceId);
         } else {
             writer.WritePresence(false);
         }
+    }
+
+    public static PaletteTheme ReadPaletteTheme(WireReader reader) {
+        ArgumentNullException.ThrowIfNull(reader);
+        return new PaletteTheme(
+            reader.ReadGuid(),
+            reader.ReadString(),
+            reader.ReadString());
+    }
+
+    public static void WritePaletteTheme(WireWriter writer, PaletteTheme value) {
+        ArgumentNullException.ThrowIfNull(writer);
+        ArgumentNullException.ThrowIfNull(value);
+        writer.WriteGuid(value.Id);
+        writer.WriteString(value.Name);
+        writer.WriteString(value.Detail);
     }
 
     public static PasskeyAccess ReadPasskeyAccess(WireReader reader) {
@@ -17300,7 +17374,7 @@ public static class ContractCodec {
             reader.ReadGuid(),
             reader.ReadGuid(),
             reader.ReadGuid(),
-            ReadBrandColor(reader));
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null);
     }
 
     public static void WriteSetFolderColor(WireWriter writer, SetFolderColor value) {
@@ -17309,7 +17383,12 @@ public static class ContractCodec {
         writer.WriteGuid(value.WorkspaceId);
         writer.WriteGuid(value.SpaceId);
         writer.WriteGuid(value.FolderId);
-        WriteBrandColor(writer, value.Color);
+        if (value.Color is { } presentColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentColor);
+        } else {
+            writer.WritePresence(false);
+        }
     }
 
     public static SetFolderGroup ReadSetFolderGroup(WireReader reader) {
@@ -17505,6 +17584,27 @@ public static class ContractCodec {
         writer.WriteGuid(value.WorkspaceId);
         writer.WriteGuid(value.SpaceId);
         WriteSpaceBranding(writer, value.Branding);
+    }
+
+    public static SetSpaceDarkBranding ReadSetSpaceDarkBranding(WireReader reader) {
+        ArgumentNullException.ThrowIfNull(reader);
+        return new SetSpaceDarkBranding(
+            reader.ReadGuid(),
+            reader.ReadGuid(),
+            reader.ReadPresence() ? (SpaceBranding?)ReadSpaceBranding(reader) : null);
+    }
+
+    public static void WriteSetSpaceDarkBranding(WireWriter writer, SetSpaceDarkBranding value) {
+        ArgumentNullException.ThrowIfNull(writer);
+        ArgumentNullException.ThrowIfNull(value);
+        writer.WriteGuid(value.WorkspaceId);
+        writer.WriteGuid(value.SpaceId);
+        if (value.Branding is { } presentBranding) {
+            writer.WritePresence(true);
+            WriteSpaceBranding(writer, presentBranding);
+        } else {
+            writer.WritePresence(false);
+        }
     }
 
     public static SetSpaceIdentity ReadSetSpaceIdentity(WireReader reader) {
@@ -18731,7 +18831,27 @@ public static class ContractCodec {
             reader.ReadInt32(),
             reader.ReadDouble(),
             ReadSpaceTextColorMode(reader),
-            reader.ReadPresence() ? (bool?)reader.ReadBool() : null);
+            reader.ReadPresence() ? (bool?)reader.ReadBool() : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (SpacePaletteLook?)ReadSpacePaletteLook(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (FolderColorOverrides?)ReadFolderColorOverrides(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadDouble(),
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadDouble(),
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadDouble(),
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null);
     }
 
     public static void WriteSpaceBranding(WireWriter writer, SpaceBranding value) {
@@ -18759,6 +18879,111 @@ public static class ContractCodec {
         if (value.HasCustomAppearance is { } presentHasCustomAppearance) {
             writer.WritePresence(true);
             writer.WriteBool(presentHasCustomAppearance);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.FolderColor is { } presentFolderColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentFolderColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.FolderBackColor is { } presentFolderBackColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentFolderBackColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.CommandPalette is { } presentCommandPalette) {
+            writer.WritePresence(true);
+            WriteSpacePaletteLook(writer, presentCommandPalette);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.SidebarTextColor is { } presentSidebarTextColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentSidebarTextColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.FolderOutlineColor is { } presentFolderOutlineColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentFolderOutlineColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.FolderOverrides is { } presentFolderOverrides) {
+            writer.WritePresence(true);
+            WriteFolderColorOverrides(writer, presentFolderOverrides);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.SidebarSecondaryTextColor is { } presentSidebarSecondaryTextColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentSidebarSecondaryTextColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.FolderHighlightColor is { } presentFolderHighlightColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentFolderHighlightColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        writer.WriteDouble(value.FolderHighlightOpacity);
+        if (value.PopoverBackgroundColor is { } presentPopoverBackgroundColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentPopoverBackgroundColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.PopoverTextColor is { } presentPopoverTextColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentPopoverTextColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.PopoverSecondaryTextColor is { } presentPopoverSecondaryTextColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentPopoverSecondaryTextColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.PopoverAccentColor is { } presentPopoverAccentColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentPopoverAccentColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        writer.WriteDouble(value.PopoverAccentOpacity);
+        if (value.PopoverButtonColor is { } presentPopoverButtonColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentPopoverButtonColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.PopoverButtonOutlineColor is { } presentPopoverButtonOutlineColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentPopoverButtonOutlineColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.ControlsFillColor is { } presentControlsFillColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentControlsFillColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        writer.WriteDouble(value.ControlsFillOpacity);
+        if (value.ControlsTextColor is { } presentControlsTextColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentControlsTextColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.ControlsSecondaryTextColor is { } presentControlsSecondaryTextColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentControlsSecondaryTextColor);
         } else {
             writer.WritePresence(false);
         }
@@ -19044,6 +19269,46 @@ public static class ContractCodec {
         writer.WriteDate(value.ModifiedAt);
     }
 
+    public static SpacePaletteLook ReadSpacePaletteLook(WireReader reader) {
+        ArgumentNullException.ThrowIfNull(reader);
+        return new SpacePaletteLook(
+            ReadSpacePaletteSurface(reader),
+            ReadSpacePaletteSurface(reader));
+    }
+
+    public static void WriteSpacePaletteLook(WireWriter writer, SpacePaletteLook value) {
+        ArgumentNullException.ThrowIfNull(writer);
+        ArgumentNullException.ThrowIfNull(value);
+        WriteSpacePaletteSurface(writer, value.Light);
+        WriteSpacePaletteSurface(writer, value.Dark);
+    }
+
+    public static SpacePaletteSurface ReadSpacePaletteSurface(WireReader reader) {
+        ArgumentNullException.ThrowIfNull(reader);
+        return new SpacePaletteSurface(
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
+            reader.ReadDouble(),
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null);
+    }
+
+    public static void WriteSpacePaletteSurface(WireWriter writer, SpacePaletteSurface value) {
+        ArgumentNullException.ThrowIfNull(writer);
+        ArgumentNullException.ThrowIfNull(value);
+        if (value.Tint is { } presentTint) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentTint);
+        } else {
+            writer.WritePresence(false);
+        }
+        writer.WriteDouble(value.Opacity);
+        if (value.TextColor is { } presentTextColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentTextColor);
+        } else {
+            writer.WritePresence(false);
+        }
+    }
+
     public static SpaceProfileChanged ReadSpaceProfileChanged(WireReader reader) {
         ArgumentNullException.ThrowIfNull(reader);
         return new SpaceProfileChanged(
@@ -19100,7 +19365,9 @@ public static class ContractCodec {
             reader.ReadPresence() ? (DateTimeOffset?)reader.ReadDate() : null,
             reader.ReadBool(),
             reader.ReadPresence() ? (DateTimeOffset?)reader.ReadDate() : null,
-            reader.ReadPresence() ? (DateTimeOffset?)reader.ReadDate() : null);
+            reader.ReadPresence() ? (DateTimeOffset?)reader.ReadDate() : null,
+            reader.ReadPresence() ? (SpaceBranding?)ReadSpaceBranding(reader) : null);
+        _ = ReadSpaceBranding(reader);
         _ = ReadSpaceBranding(reader);
         _ = reader.ReadBool();
         return value;
@@ -19153,7 +19420,14 @@ public static class ContractCodec {
         } else {
             writer.WritePresence(false);
         }
+        if (value.DarkBranding is { } presentDarkBranding) {
+            writer.WritePresence(true);
+            WriteSpaceBranding(writer, presentDarkBranding);
+        } else {
+            writer.WritePresence(false);
+        }
         WriteSpaceBranding(writer, value.Look);
+        WriteSpaceBranding(writer, value.DarkLook);
         writer.WriteBool(value.RequiresAuthentication);
     }
 
@@ -19173,7 +19447,8 @@ public static class ContractCodec {
             reader.ReadPresence() ? (DateTimeOffset?)reader.ReadDate() : null,
             reader.ReadBool(),
             reader.ReadPresence() ? (DateTimeOffset?)reader.ReadDate() : null,
-            reader.ReadPresence() ? (DateTimeOffset?)reader.ReadDate() : null);
+            reader.ReadPresence() ? (DateTimeOffset?)reader.ReadDate() : null,
+            reader.ReadPresence() ? (SpaceBranding?)ReadSpaceBranding(reader) : null);
     }
 
     public static void WriteSpaceSettingsSeed(WireWriter writer, SpaceSettings value) {
@@ -19220,6 +19495,12 @@ public static class ContractCodec {
         if (value.ProtectionModifiedAt is { } presentProtectionModifiedAt) {
             writer.WritePresence(true);
             writer.WriteDate(presentProtectionModifiedAt);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.DarkBranding is { } presentDarkBranding) {
+            writer.WritePresence(true);
+            WriteSpaceBranding(writer, presentDarkBranding);
         } else {
             writer.WritePresence(false);
         }

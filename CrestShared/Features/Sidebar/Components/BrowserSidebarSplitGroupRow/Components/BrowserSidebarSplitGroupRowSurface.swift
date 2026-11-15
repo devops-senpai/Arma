@@ -16,7 +16,7 @@ struct BrowserSidebarSplitGroupRowSurface: ViewModifier {
             .modifier(
                 BrowserFolderSectionSurface(
                     color: configuration.tint ?? .folderDefault,
-                    intensity: configuration.displayBranding?.folderColorIntensity ?? 0,
+                    highlightOpacity: configuration.displayBranding?.folderHighlightOpacity ?? 1,
                     textColorMode: configuration.displayBranding?.shownTextColorMode ?? .automatic,
                     depth: depth,
                     isSelected: isMultiSelected,

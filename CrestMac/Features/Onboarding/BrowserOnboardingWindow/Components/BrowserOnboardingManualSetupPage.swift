@@ -18,6 +18,7 @@ struct BrowserOnboardingManualSetupPage: View {
                 symbol: setup.symbolBinding(for: draft.spaceID),
                 name: setup.nameBinding(for: draft.spaceID),
                 identity: BrowserSpaceIdentity(draft: draft),
+                theme: flow.theme?.theme,
                 picker: BrowserOnboardingMakePicker(
                     spaces: setup.previewSpaces,
                     selectedID: draft.spaceID,
