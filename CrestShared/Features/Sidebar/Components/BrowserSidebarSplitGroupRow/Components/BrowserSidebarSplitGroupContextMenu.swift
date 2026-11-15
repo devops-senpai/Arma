@@ -89,6 +89,9 @@ struct BrowserSidebarSplitGroupContextMenu: View {
                     }
                 }
             }
+            // A label style set on the outer menu doesn't reach a submenu's
+            // rows, which macOS then draws as titles only.
+            .crestMenuActionLabelStyle()
         }
         .disabled(!configuration.isAvailableForDisplay || members.count < 2)
     }
