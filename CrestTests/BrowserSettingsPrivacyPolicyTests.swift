@@ -45,6 +45,54 @@ final class BrowserSettingsPrivacyPolicyTests: XCTestCase {
     /// Switching Space cancels the load SwiftUI started for the old one, but the
     /// Keychain read it is in does not stop. When that read lands after the new
     /// Space's, it must neither replace the new list nor empty it.
+    /// Changing how often a Space asks to authenticate asks first, even when
+    /// the Space never asks, so the setting can't be lowered to read its
+    /// passwords; a refusal changes nothing.
+    func testChangingWhenToAuthenticateAlwaysAsksFirst() async throws {
+        var session = SessionState.Seed.preview
+        session.spaces[0].settings.credentialPreferences.authentication = .never
+        let space = session.spaces[0]
+        let browser = BrowserStore(seed: session, credentialVault: InMemoryCredentialVault())
+        let memory = BrowserCredentialAuthenticationMemory()
+
+        let refused = BrowserCredentialSensitiveAccess(
+            browser: browser, authenticator: SettingsPrivacyAuthenticatorStub(result: false), memory: memory)
+        do {
+            try await refused.authorizeAuthenticationChange(in: space.id)
+            XCTFail("A refused authentication must not authorize the change")
+        } catch {
+            XCTAssertEqual(error as? BrowserCredentialSensitiveAccessError, .authenticationDenied)
+        }
+
+        let granted = BrowserCredentialSensitiveAccess(
+            browser: browser, authenticator: SettingsPrivacyAuthenticatorStub(result: true), memory: memory)
+        try await granted.authorizeAuthenticationChange(in: space.id)
+    }
+
+    /// A terminal session key opens only the Space it was opened on, never
+    /// past its time, and nothing once ended; Arma keeps no key, so another
+    /// key, however close, opens nothing.
+    func testATerminalPasswordSessionOpensOnlyItsSpaceForItsTime() {
+        let sessions = BrowserCredentialTerminalSessions()
+        let space = UUID()
+        let start = Date(timeIntervalSince1970: 1_000_000)
+        let key = sessions.open(on: space, minutes: 90, now: start)
+
+        XCTAssertEqual(sessions.session(for: key, now: start)?.spaceID, space)
+        XCTAssertNil(sessions.session(for: key + "x", now: start))
+        XCTAssertNil(sessions.session(for: nil, now: start))
+        // An hour at most, whatever was asked for.
+        XCTAssertNotNil(sessions.session(for: key, now: start.addingTimeInterval(59 * 60)))
+        XCTAssertNil(sessions.session(for: key, now: start.addingTimeInterval(60 * 60)))
+
+        let other = sessions.open(on: UUID(), minutes: 5, now: start)
+        sessions.endAll(on: space)
+        XCTAssertNil(sessions.session(for: key, now: start))
+        XCTAssertNotNil(sessions.session(for: other, now: start))
+        sessions.endAll()
+        XCTAssertNil(sessions.session(for: other, now: start))
+    }
+
     func testSupersededSpaceLoadLeavesTheSelectedSpaceAlone() async throws {
         let session = SessionState.Seed.preview
         let first = session.spaces[0]
@@ -139,6 +187,10 @@ private actor GatedCredentialVault: CredentialVault {
     func deleteAll(in spaceID: UUID) async throws {
         await inner.deleteAll(in: spaceID)
     }
+
+    func notes(for id: UUID, in spaceID: UUID) async throws -> String? { nil }
+
+    func setNotes(_ notes: String?, for id: UUID, isSynchronizable: Bool, in spaceID: UUID) async throws {}
 
     func deleteUnreadableCredentials(in spaceID: UUID) async throws {
         await inner.deleteUnreadableCredentials(in: spaceID)

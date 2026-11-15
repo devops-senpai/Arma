@@ -9,10 +9,14 @@ import Observation
 final class BrowserCredentialSession {
     typealias FillTarget = (formID: String, frame: BrowserContentFrame)
     typealias Evaluate = @MainActor (String, [String: Any], BrowserContentFrame) async throws -> Any?
+    typealias MainFrameEvaluate = @MainActor (String, [String: Any]) async throws -> Any?
 
     let state: BrowserCredentialPageState<FillTarget>
     private(set) var isEnabled: Bool
     @ObservationIgnored private let supportsAccess: Bool
+    /// Whether the Space's "save passwords" preference turns the session on
+    /// and off. A private window's follows the Spaces it suggests from instead.
+    @ObservationIgnored private let followsSpacePreference: Bool
     @ObservationIgnored private let httpAuthentication: BrowserHTTPAuthenticationSession
 
     init(
@@ -20,16 +24,21 @@ final class BrowserCredentialSession {
         core: CrestCore,
         supportsAccess: Bool,
         isEnabled: Bool,
-        httpAuthentication: BrowserHTTPAuthenticationSession
+        httpAuthentication: BrowserHTTPAuthenticationSession,
+        neverSavedSites: @escaping @MainActor () -> [NeverSavedSite] = { [] },
+        allowsSaving: Bool = true,
+        followsSpacePreference: Bool = true
     ) {
-        state = BrowserCredentialPageState(spaceID: spaceID, core: core)
+        state = BrowserCredentialPageState(
+            spaceID: spaceID, core: core, neverSavedSites: neverSavedSites, allowsSaving: allowsSaving)
         self.supportsAccess = supportsAccess
-        self.isEnabled = supportsAccess && isEnabled
+        self.followsSpacePreference = followsSpacePreference
+        self.isEnabled = supportsAccess && (isEnabled || !followsSpacePreference)
         self.httpAuthentication = httpAuthentication
     }
 
     func setEnabled(_ isEnabled: Bool) {
-        let resolvedValue = supportsAccess && isEnabled
+        let resolvedValue = supportsAccess && (isEnabled || !followsSpacePreference)
         guard self.isEnabled != resolvedValue else { return }
         self.isEnabled = resolvedValue
         httpAuthentication.setCredentialStorageEnabled(resolvedValue)
@@ -77,6 +86,17 @@ final class BrowserCredentialSession {
             throw BrowserCredentialFillError.formChanged
         }
         state.completeFill(username: credential.descriptor.username, requestID: requestID)
+    }
+
+    /// Fills `credential` into the first login form of the page's main
+    /// document, for a saved login a person chose outside the page. Answers
+    /// whether a form took it.
+    func fillFirstLogin(_ credential: BrowserCredential, evaluate: MainFrameEvaluate) async throws -> Bool {
+        guard isEnabled else { return false }
+        let result = try await evaluate(
+            "return globalThis.__crestCredentialBridge?.fillFirstLogin(username, password) === true;",
+            ["username": credential.descriptor.username, "password": credential.password])
+        return result as? Bool == true
     }
 
     func fillGeneratedPassword(_ password: String, for requestID: UUID, evaluate: Evaluate) async throws {

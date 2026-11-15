@@ -172,7 +172,7 @@ public sealed class PaletteSource {
         section: PaletteSection.SearchSuggestions, isSection: true, isEnabledByDefault: true, restingSection: null, finders: []);
     public static readonly PaletteSource SettingsPages = new(name: "settingsPages", title: "Settings Pages", detail: "Finds Settings pages by name.",
         section: PaletteSection.Actions, isSection: false, isEnabledByDefault: true, restingSection: null, finders: [new SettingsPageFinder()]);
-    public static readonly PaletteSource Scopes = new(name: "scopes", title: "@ Filters", detail: "Type @tabs, @saved, @history, @actions, @spaces, @themes, @extensions, @engine, @developer, @cli or @update, then a space or Tab, to show only that kind.", section: PaletteSection.Intent,
+    public static readonly PaletteSource Scopes = new(name: "scopes", title: "@ Filters", detail: "Type @tabs, @saved, @history, @actions, @spaces, @themes, @extensions, @engine, @developer, @cli, @update or @passwords, then a space or Tab, to show only that kind.", section: PaletteSection.Intent,
         isSection: false, isEnabledByDefault: true, restingSection: null, finders: [new ScopeFinder()]);
     public static readonly PaletteSource Calculator = new(name: "calculator", title: "Calculator", detail: "Answers arithmetic such as 24 * 7. Return copies the answer.", section: PaletteSection.TopHit,
         isSection: false, isEnabledByDefault: true, restingSection: null, finders: []);
@@ -196,11 +196,14 @@ public sealed class PaletteSource {
     public static readonly PaletteSource Update = new(name: "update", title: "Software Update",
         detail: "Type @update to check for a new version.", section: PaletteSection.Update, isSection: false,
         isEnabledByDefault: true, restingSection: null, finders: [new ChoiceFinder()]);
+    public static readonly PaletteSource Passwords = new(name: "passwords", title: "Passwords",
+        detail: "Type @passwords to find a saved login and copy or fill it.", section: PaletteSection.Passwords, isSection: false,
+        isEnabledByDefault: true, restingSection: null, finders: [new ChoiceFinder()]);
 
     /// The kinds, sections first in their default order.
     public static IReadOnlyList<PaletteSource> All { get; } =
         [RecentTabs, OpenTabs, Saved, History, Actions, Spaces, ArchivedTabs, Suggestions, SettingsPages, Scopes, Calculator, PasteAndGo, Themes,
-            Extensions, Engine, Developer, CommandLine, Update];
+            Extensions, Engine, Developer, CommandLine, Update, Passwords];
 
     #endregion
 
