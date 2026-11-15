@@ -62,6 +62,7 @@ final class BrowserMacTerminal {
         case .archive(let archive): try archive.run(in: self)
         case .download(let download): try download.run(in: self)
         case .page(let page): try await page.run(in: self)
+        case .automation(let automation): try automation.run(in: self)
         case .settings(let settings): try await settings.run(in: self)
         case .site(let site): try await site.run(in: self)
         case .theme(let theme): try theme.run(in: self)
