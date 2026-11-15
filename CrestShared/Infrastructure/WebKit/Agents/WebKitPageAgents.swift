@@ -147,6 +147,14 @@ import WebKit
             return true
         }
 
+        /// Forgets what a page closed for good kept. Stopping a watch needs
+        /// the page, which is gone once it closes, so its activity would stay.
+        func forget(_ pageID: UUID) {
+            activities[pageID] = nil
+            observed.remove(pageID)
+            handlers.removeValue(forKey: pageID)?.stop()
+        }
+
         func console(_ request: ReadPageConsole) -> PageConsoleLog {
             let activity = activities[request.pageID] ?? Activity()
             return PageConsoleLog(
@@ -191,9 +199,10 @@ import WebKit
         }
 
         private func keep(_ message: WebKitAgentActivityMessage, for pageID: UUID) {
-            guard var activity = activities[pageID] else { return }
-            message.kind.keep(message, in: &activity)
-            activities[pageID] = activity
+            // Kept in place: a copy taken out of the dictionary shares its
+            // buffers, so each append would copy every message kept.
+            guard activities[pageID] != nil else { return }
+            message.kind.keep(message, in: &activities[pageID, default: Activity()])
         }
 
         // MARK: - Actions - Values
