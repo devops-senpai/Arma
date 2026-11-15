@@ -382,13 +382,14 @@
         // MARK: Menus and drags
 
         /// Puts Crest's rows for `link` or `selection` in the engine's context
-        /// menu for this page.
+        /// menu for this page. Chromium's menu for a link starts with its row
+        /// that opens the link in a new tab.
         func addMenuItems(to menu: NSMenu, link: URL?, selection: String?) {
             guard !disposed, let menuHost else { return }
             BrowserPageContextMenu(
                 actions: menuHost.contextMenuActions(linkURL: link, selectionText: selection), host: menuHost,
                 view: surface
-            ).insert(into: menu)
+            ).insert(into: menu, linkRow: link == nil ? nil : menu.items.first)
         }
 
         /// Starts Crest's own drag of the link to `url` out of the page; false
