@@ -4,14 +4,54 @@ import Foundation
 final class BrowserCredentialSensitiveAccess {
     private let browser: BrowserStore
     private let authenticator: any BrowserDeviceAuthenticating
+    private let memory: BrowserCredentialAuthenticationMemory
 
     init(
         browser: BrowserStore,
         authenticator: any BrowserDeviceAuthenticating =
-            SystemBrowserDeviceAuthenticator()
+            SystemBrowserDeviceAuthenticator(),
+        memory: BrowserCredentialAuthenticationMemory = .shared
     ) {
         self.browser = browser
         self.authenticator = authenticator
+        self.memory = memory
+    }
+
+    /// Asks the person to authenticate before one password of Space
+    /// `spaceID` is shown or copied, unless the Space's choice lets it through
+    /// without: it never asks, or the person authenticated for it recently
+    /// enough. Reading or exporting every password of a Space asks the
+    /// authenticator itself, always.
+    private func authenticate(for spaceID: UUID, reason: String) async throws {
+        let choice = browser.spaceModel(spaceID)?.settings.credentialPreferences.authentication ?? .eachTime
+        let check = CredentialAuthenticationCheck(
+            authentication: choice, secondsSinceLastAuthenticated: memory.secondsSinceAuthenticated(in: spaceID))
+        guard (try? browser.core.query(check))?.asks ?? true else { return }
+        guard try await authenticator.authenticate(reason: reason) else {
+            throw BrowserCredentialSensitiveAccessError.authenticationDenied
+        }
+        memory.authenticated(in: spaceID)
+    }
+
+    /// Asks the person to authenticate before Space `spaceID` changes how
+    /// often it asks, always, whatever it is set to now, so the setting can't
+    /// be lowered to get around it. Throws when they don't.
+    func authorizeAuthenticationChange(in spaceID: UUID) async throws {
+        try await authorize(
+            String(localized: "Authenticate to change when Arma asks before showing passwords."), in: spaceID)
+    }
+
+    /// Asks the person to authenticate before Space `spaceID` lets the
+    /// terminal reach its passwords, always. Throws when they don't.
+    func authorizeCommandLineAccess(in spaceID: UUID) async throws {
+        try await authorize(String(localized: "Authenticate to let the terminal reach these passwords."), in: spaceID)
+    }
+
+    private func authorize(_ reason: String, in spaceID: UUID) async throws {
+        guard try await authenticator.authenticate(reason: reason) else {
+            throw BrowserCredentialSensitiveAccessError.authenticationDenied
+        }
+        memory.authenticated(in: spaceID)
     }
 
     func revealCredential(
@@ -19,9 +59,7 @@ final class BrowserCredentialSensitiveAccess {
         in spaceID: UUID,
         reason: String = String(localized: "Authenticate to view this Crest password.")
     ) async throws -> BrowserCredential {
-        guard try await authenticator.authenticate(reason: reason) else {
-            throw BrowserCredentialSensitiveAccessError.authenticationDenied
-        }
+        try await authenticate(for: spaceID, reason: reason)
         guard let credential = try await browser.credential(id: id, in: spaceID),
             credential.descriptor.id == id,
             credential.descriptor.spaceID == spaceID
@@ -39,9 +77,7 @@ final class BrowserCredentialSensitiveAccess {
         guard browser.spaceModel(matching: assignment) != nil else {
             throw BrowserCredentialSensitiveAccessError.missingCredential
         }
-        guard try await authenticator.authenticate(reason: reason) else {
-            throw BrowserCredentialSensitiveAccessError.authenticationDenied
-        }
+        try await authenticate(for: assignment.spaceID, reason: reason)
         guard browser.spaceModel(matching: assignment) != nil else {
             throw BrowserCredentialSensitiveAccessError.missingCredential
         }

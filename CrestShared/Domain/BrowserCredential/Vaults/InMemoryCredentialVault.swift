@@ -2,6 +2,7 @@ import Foundation
 
 actor InMemoryCredentialVault: CredentialVault {
     private var credentialsBySpace: [UUID: [UUID: BrowserCredential]] = [:]
+    private var notesBySpace: [UUID: [UUID: String]] = [:]
 
     func descriptors(in spaceID: UUID) -> [CredentialDescriptor] {
         sortedDescriptors(
@@ -77,6 +78,7 @@ actor InMemoryCredentialVault: CredentialVault {
     }
 
     func delete(id: UUID, in spaceID: UUID) {
+        notesBySpace[spaceID]?[id] = nil
         credentialsBySpace[spaceID]?[id] = nil
         if credentialsBySpace[spaceID]?.isEmpty == true {
             credentialsBySpace[spaceID] = nil
@@ -84,10 +86,19 @@ actor InMemoryCredentialVault: CredentialVault {
     }
 
     func deleteAll(in spaceID: UUID) {
+        notesBySpace[spaceID] = nil
         credentialsBySpace[spaceID] = nil
     }
 
     func deleteUnreadableCredentials(in spaceID: UUID) {}
+
+    func notes(for id: UUID, in spaceID: UUID) -> String? {
+        notesBySpace[spaceID]?[id]
+    }
+
+    func setNotes(_ notes: String?, for id: UUID, isSynchronizable: Bool, in spaceID: UUID) {
+        notesBySpace[spaceID, default: [:]][id] = notes?.isEmpty == false ? notes : nil
+    }
 
     private func sortedDescriptors(_ descriptors: [CredentialDescriptor]) -> [CredentialDescriptor] {
         descriptors.sorted {

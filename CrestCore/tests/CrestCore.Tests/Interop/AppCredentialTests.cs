@@ -33,6 +33,7 @@ public sealed class AppCredentialTests {
                 else if (parameterType.IsClass && parameterType.Assembly == typeof(Query<>).Assembly) pending.Enqueue(parameterType);
             }
         }
-        Assert.Equal(["CredentialOrigin.Host", "CredentialOrigin.Scheme", "CredentialRecord.Username", "CredentialSaveMatch.Username"], text);
+        Assert.Equal(["CredentialOrigin.Host", "CredentialOrigin.Scheme", "CredentialRecord.Username", "CredentialSaveMatch.Username",
+            "NeverSavedSite.Host"], text);
     }
 }

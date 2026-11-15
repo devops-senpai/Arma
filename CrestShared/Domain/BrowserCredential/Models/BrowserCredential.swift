@@ -20,7 +20,9 @@ struct BrowserCredential: Equatable, Sendable, CustomStringConvertible, CustomDe
         BrowserCredential(
             descriptor: CredentialDescriptor(
                 id: descriptor.id, spaceID: spaceID, origin: descriptor.origin, scope: descriptor.scope,
-                username: descriptor.username, displayName: descriptor.displayName, createdAt: descriptor.createdAt,
+                username: descriptor.username, displayName: descriptor.displayName, email: descriptor.email,
+                category: descriptor.category, includesSubdomains: descriptor.includesSubdomains,
+                createdAt: descriptor.createdAt,
                 updatedAt: descriptor.updatedAt, lastUsedAt: descriptor.lastUsedAt,
                 isSynchronizable: descriptor.isSynchronizable),
             password: password)

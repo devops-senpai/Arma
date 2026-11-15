@@ -266,6 +266,7 @@ enum Rejection: Equatable, Error, Sendable {
     case invalidLinkRouteEdit(InvalidLinkRouteEdit)
     case invalidMediaSessionCount(InvalidMediaSessionCount)
     case invalidName(InvalidName)
+    case invalidNeverSavedSite(InvalidNeverSavedSite)
     case invalidNewPrimary(InvalidNewPrimary)
     case invalidPasswordLength(InvalidPasswordLength)
     case invalidRetentionLifetime(InvalidRetentionLifetime)
@@ -348,6 +349,7 @@ enum Rejection: Equatable, Error, Sendable {
     case storageRestoreInterrupted(StorageRestoreInterrupted)
     case storageUnreadable(StorageUnreadable)
     case storedSessionClosed(StoredSessionClosed)
+    case subdomainsOfPublicSuffix(SubdomainsOfPublicSuffix)
     case syncStagingRefused(SyncStagingRefused)
     case tabAlreadyExists(TabAlreadyExists)
     case tabAlreadyHasPage(TabAlreadyHasPage)
@@ -408,6 +410,7 @@ enum Rejection: Equatable, Error, Sendable {
         case .incompleteSplit(let value): value.message
         case .invalidAgent(let value): value.message
         case .invalidImport(let value): value.message
+        case .invalidNeverSavedSite(let value): value.message
         case .invalidSearchShortcut(let value): value.message
         case .invalidSyncRecords(let value): value.message
         case .legacyCloudStateUnreadable(let value): value.message
@@ -445,6 +448,7 @@ enum Rejection: Equatable, Error, Sendable {
         case .spaceProfileChanged(let value): value.message
         case .splitLimitReached(let value): value.message
         case .splitNeedsTwoTabs(let value): value.message
+        case .subdomainsOfPublicSuffix(let value): value.message
         case .unknownAgentSession(let value): value.message
         case .unknownCloudMerge(let value): value.message
         case .unknownExtension(let value): value.message
@@ -1164,7 +1168,8 @@ struct AppPreferences: Equatable, Sendable {
                 PaletteSourceChoice(source: PaletteSource.engine, isEnabled: true, limit: nil),
                 PaletteSourceChoice(source: PaletteSource.developer, isEnabled: true, limit: nil),
                 PaletteSourceChoice(source: PaletteSource.commandLine, isEnabled: true, limit: nil),
-                PaletteSourceChoice(source: PaletteSource.update, isEnabled: true, limit: nil)
+                PaletteSourceChoice(source: PaletteSource.update, isEnabled: true, limit: nil),
+                PaletteSourceChoice(source: PaletteSource.passwords, isEnabled: true, limit: nil)
             ],
             showsTopHit: true,
             prefersOpenTabs: true,
@@ -2032,6 +2037,17 @@ struct CreateSpace: Intent, SessionIntent, Equatable, Sendable {
     let spaceID: UUID
 }
 
+struct CredentialAuthenticationCheck: Query, Equatable, Sendable {
+    typealias Answer = CredentialAuthenticationDecision
+
+    let authentication: CredentialAuthentication
+    let secondsSinceLastAuthenticated: Double?
+}
+
+struct CredentialAuthenticationDecision: Equatable, Sendable {
+    let asks: Bool
+}
+
 struct CredentialCapture: Query, Equatable, Sendable {
     typealias Answer = CredentialCaptureDecision
 
@@ -2039,6 +2055,7 @@ struct CredentialCapture: Query, Equatable, Sendable {
     let hint: CredentialUsernameHint?
     let pending: CredentialPendingCandidate?
     let now: Double
+    let neverSavedSites: [NeverSavedSite]
 }
 
 struct CredentialCaptureDecision: Equatable, Sendable {
@@ -2143,9 +2160,19 @@ struct CredentialPendingCandidate: Equatable, Sendable {
 }
 
 struct CredentialPreferences: Equatable, Sendable {
+    static let defaultSavePromptSeconds: Int = 10
+    static let minimumSavePromptSeconds: Int = 3
+    static let maximumSavePromptSeconds: Int = 60
+
     var isEnabled: Bool
     var syncsCrestPasswordsWithICloud: Bool
     var alsoOffersSaveToSystemPasswords: Bool
+    var savePromptSeconds: Int
+    var neverSavedSites: [NeverSavedSite]
+    var authentication: CredentialAuthentication
+    var suggestsInPrivateWindows: Bool
+    var generation: PasswordGeneration
+    var allowsCommandLine: Bool
 }
 
 struct CredentialRecord: Equatable, Sendable, Identifiable {
@@ -2206,6 +2233,12 @@ struct CredentialStoredComparison: Equatable, Sendable, Identifiable {
     var passwordMatches: Bool
 }
 
+struct CredentialSubdomainReach: Query, Equatable, Sendable {
+    typealias Answer = CredentialFillDecision
+
+    let origin: CredentialOrigin
+}
+
 struct CredentialUsernameHint: Equatable, Sendable {
     var origin: CredentialOrigin
     var topLevelOrigin: CredentialOrigin
@@ -2217,6 +2250,7 @@ struct CredentialsFillingPage: Query, Equatable, Sendable {
 
     let page: CredentialOrigin
     let saved: [CredentialOrigin]
+    let reachingSubdomains: [Int]
 }
 
 struct CrestCharge: Equatable, Sendable {
@@ -3338,6 +3372,12 @@ struct ForgetEngineRule: Intent, Equatable, Sendable {
     let origin: SiteOrigin
 }
 
+struct ForgetNeverSavedSite: Intent, SessionIntent, Equatable, Sendable {
+    let workspaceID: UUID
+    let spaceID: UUID
+    let site: NeverSavedSite
+}
+
 struct ForgetPaletteChoices: Intent, PaletteIntent, Equatable, Sendable {
     let windowID: UUID
     let row: PaletteRow.Seed
@@ -3739,6 +3779,12 @@ struct InvalidMediaSessionCount: Equatable, Sendable {
 
 struct InvalidName: Equatable, Sendable {
     let limit: Int
+}
+
+struct InvalidNeverSavedSite: Equatable, Sendable {
+    var message: LocalizedStringResource {
+        LocalizedStringResource("Enter a website, such as example.com or *.example.com.")
+    }
 }
 
 struct InvalidNewPrimary: Equatable, Sendable {
@@ -4369,6 +4415,19 @@ struct NavigationStarted: EngineEvent, PageEvent, Equatable, Sendable {
     let pageID: UUID
     let url: String
     let sameDocument: Bool
+}
+
+struct NeverSaveSite: Intent, SessionIntent, Equatable, Sendable {
+    let workspaceID: UUID
+    let spaceID: UUID
+    let site: String
+    let includesSubdomains: Bool
+    let replacing: NeverSavedSite?
+}
+
+struct NeverSavedSite: Equatable, Sendable {
+    var host: String
+    var includesSubdomains: Bool
 }
 
 struct NoArchivedTabs: Equatable, Sendable {
@@ -5045,6 +5104,7 @@ struct PaletteChoice: Equatable, Sendable, Identifiable {
     var name: String
     var detail: String
     var symbol: String
+    var stepsInto: Bool
 }
 
 struct PaletteCommand: Equatable, Sendable {
@@ -5086,7 +5146,8 @@ struct PalettePreferences: Equatable, Sendable {
             PaletteSourceChoice(source: PaletteSource.engine, isEnabled: true, limit: nil),
             PaletteSourceChoice(source: PaletteSource.developer, isEnabled: true, limit: nil),
             PaletteSourceChoice(source: PaletteSource.commandLine, isEnabled: true, limit: nil),
-            PaletteSourceChoice(source: PaletteSource.update, isEnabled: true, limit: nil)
+            PaletteSourceChoice(source: PaletteSource.update, isEnabled: true, limit: nil),
+            PaletteSourceChoice(source: PaletteSource.passwords, isEnabled: true, limit: nil)
         ],
         showsTopHit: true,
         prefersOpenTabs: true,
@@ -5203,6 +5264,18 @@ struct PasskeyAccess: Query, Equatable, Sendable {
 
 struct PasskeyAccessVerdict: Equatable, Sendable {
     let status: PasskeyAccessStatus
+}
+
+struct PasswordGeneration: Equatable, Sendable {
+    static let defaultLength: Int = 16
+    static let minimumLength: Int = 8
+    static let maximumLength: Int = 64
+
+    var length: Int
+    var lowercase: Bool
+    var uppercase: Bool
+    var numbers: Bool
+    var symbols: Bool
 }
 
 struct PasswordImportPreview: Query, Equatable, Sendable {
@@ -7382,12 +7455,20 @@ struct StoredSite: Equatable, Sendable {
 struct StrongPassword: Query, Equatable, Sendable {
     typealias Answer = StrongPasswordRecipe
 
-    let length: Int?
+    let generation: PasswordGeneration?
 }
 
 struct StrongPasswordRecipe: Equatable, Sendable {
     let length: Int
     let groups: [String]
+}
+
+struct SubdomainsOfPublicSuffix: Equatable, Sendable {
+    let host: String
+
+    var message: LocalizedStringResource {
+        LocalizedStringResource("This website's subdomains belong to different owners, so they can't be included.")
+    }
 }
 
 struct SweepExpiredRecords: Intent, SessionIntent, Equatable, Sendable {
@@ -10349,6 +10430,96 @@ struct ContentBlockingPolicy: Hashable, Sendable {
             self.name = name
             self.title = title
             self.blocksContent = blocksContent
+        }
+    }
+}
+
+/// The members of the core's `CredentialAuthentication`. A member's wire tag is its index in `all`.
+struct CredentialAuthentication: Hashable, Sendable {
+    let tag: Int
+    var name: String { facts.name }
+    var title: LocalizedStringResource { facts.title }
+    var asksAtAll: Bool { facts.asksAtAll }
+    var asksAgainAfterSeconds: Double { facts.asksAgainAfterSeconds }
+    var confirmsChoosing: Bool { facts.confirmsChoosing }
+    private let facts: Facts
+
+    private init(
+        tag: Int,
+        name: String,
+        title: LocalizedStringResource,
+        asksAtAll: Bool,
+        asksAgainAfterSeconds: Double,
+        confirmsChoosing: Bool
+    ) {
+        self.tag = tag
+        facts = Facts(
+            name: name,
+            title: title,
+            asksAtAll: asksAtAll,
+            asksAgainAfterSeconds: asksAgainAfterSeconds,
+            confirmsChoosing: confirmsChoosing
+        )
+    }
+
+    static let eachTime = CredentialAuthentication(
+        tag: 0,
+        name: "eachTime",
+        title: LocalizedStringResource("Ask Each Time"),
+        asksAtAll: true,
+        asksAgainAfterSeconds: 0,
+        confirmsChoosing: false
+    )
+    static let every15Minutes = CredentialAuthentication(
+        tag: 1,
+        name: "every15Minutes",
+        title: LocalizedStringResource("Ask Every 15 Minutes"),
+        asksAtAll: true,
+        asksAgainAfterSeconds: 900,
+        confirmsChoosing: false
+    )
+    static let never = CredentialAuthentication(
+        tag: 2,
+        name: "never",
+        title: LocalizedStringResource("Don’t Ask"),
+        asksAtAll: false,
+        asksAgainAfterSeconds: 0,
+        confirmsChoosing: true
+    )
+
+    static let all: [CredentialAuthentication] = [eachTime, every15Minutes, never]
+
+    static func named(_ name: String?) -> CredentialAuthentication? {
+        all.first { $0.name == name }
+    }
+
+    static func == (lhs: CredentialAuthentication, rhs: CredentialAuthentication) -> Bool {
+        lhs.tag == rhs.tag
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(tag)
+    }
+
+    private final class Facts: Sendable {
+        let name: String
+        let title: LocalizedStringResource
+        let asksAtAll: Bool
+        let asksAgainAfterSeconds: Double
+        let confirmsChoosing: Bool
+
+        init(
+            name: String,
+            title: LocalizedStringResource,
+            asksAtAll: Bool,
+            asksAgainAfterSeconds: Double,
+            confirmsChoosing: Bool
+        ) {
+            self.name = name
+            self.title = title
+            self.asksAtAll = asksAtAll
+            self.asksAgainAfterSeconds = asksAgainAfterSeconds
+            self.confirmsChoosing = confirmsChoosing
         }
     }
 }
@@ -16296,6 +16467,12 @@ struct PaletteActivation: Hashable, Sendable {
         closesPalette: true,
         opensWhereKeysChoose: false
     )
+    static let stepsIntoChoice = PaletteActivation(
+        tag: 11,
+        name: "stepsIntoChoice",
+        closesPalette: false,
+        opensWhereKeysChoose: false
+    )
 
     static let all: [PaletteActivation] = [
         switchesToTab,
@@ -16308,7 +16485,8 @@ struct PaletteActivation: Hashable, Sendable {
         copiesAnswer,
         entersScope,
         appliesTheme,
-        runsChoice
+        runsChoice,
+        stepsIntoChoice
     ]
 
     static func named(_ name: String?) -> PaletteActivation? {
@@ -16669,6 +16847,16 @@ struct PaletteRowKind: Hashable, Sendable {
         activation: PaletteActivation.runsChoice,
         forgetsFromHistory: false
     )
+    static let choiceStep = PaletteRowKind(
+        tag: 17,
+        name: "choiceStep",
+        symbol: "chevron.right",
+        action: LocalizedStringResource("Show"),
+        label: LocalizedStringResource("Choice"),
+        isPrimary: false,
+        activation: PaletteActivation.stepsIntoChoice,
+        forgetsFromHistory: false
+    )
 
     static let all: [PaletteRowKind] = [
         openAddress,
@@ -16687,7 +16875,8 @@ struct PaletteRowKind: Hashable, Sendable {
         pasteAndGo,
         scope,
         theme,
-        choice
+        choice,
+        choiceStep
     ]
 
     static func named(_ name: String?) -> PaletteRowKind? {
@@ -16841,6 +17030,14 @@ struct PaletteScope: Hashable, Sendable {
         symbol: "arrow.down.circle",
         source: PaletteSource.update
     )
+    static let passwords = PaletteScope(
+        tag: 11,
+        name: "passwords",
+        keyword: "@passwords",
+        title: LocalizedStringResource("Passwords"),
+        symbol: "key",
+        source: PaletteSource.passwords
+    )
 
     static let all: [PaletteScope] = [
         tabs,
@@ -16853,7 +17050,8 @@ struct PaletteScope: Hashable, Sendable {
         engine,
         developer,
         commandLine,
-        update
+        update,
+        passwords
     ]
 
     static func named(_ name: String?) -> PaletteScope? {
@@ -17029,6 +17227,14 @@ struct PaletteSection: Hashable, Sendable {
         restingLimit: 0,
         scopedLimit: 30
     )
+    static let passwords = PaletteSection(
+        tag: 17,
+        name: "passwords",
+        title: LocalizedStringResource("Passwords"),
+        limit: 0,
+        restingLimit: 0,
+        scopedLimit: 50
+    )
 
     static let all: [PaletteSection] = [
         intent,
@@ -17047,7 +17253,8 @@ struct PaletteSection: Hashable, Sendable {
         engine,
         developer,
         commandLine,
-        update
+        update,
+        passwords
     ]
 
     static func named(_ name: String?) -> PaletteSection? {
@@ -17219,7 +17426,7 @@ struct PaletteSource: Hashable, Sendable {
         tag: 9,
         name: "scopes",
         title: LocalizedStringResource("@ Filters"),
-        detail: LocalizedStringResource("Type @tabs, @saved, @history, @actions, @spaces, @themes, @extensions, @engine, @developer, @cli or @update, then a space or Tab, to show only that kind."),
+        detail: LocalizedStringResource("Type @tabs, @saved, @history, @actions, @spaces, @themes, @extensions, @engine, @developer, @cli, @update or @passwords, then a space or Tab, to show only that kind."),
         section: PaletteSection.intent,
         isSection: false,
         isEnabledByDefault: true,
@@ -17314,6 +17521,17 @@ struct PaletteSource: Hashable, Sendable {
         restingSection: nil,
         defaultLimit: 0
     )
+    static let passwords = PaletteSource(
+        tag: 18,
+        name: "passwords",
+        title: LocalizedStringResource("Passwords"),
+        detail: LocalizedStringResource("Type @passwords to find a saved login and copy or fill it."),
+        section: PaletteSection.passwords,
+        isSection: false,
+        isEnabledByDefault: true,
+        restingSection: nil,
+        defaultLimit: 0
+    )
 
     static let all: [PaletteSource] = [
         recentTabs,
@@ -17333,7 +17551,8 @@ struct PaletteSource: Hashable, Sendable {
         engine,
         developer,
         commandLine,
-        update
+        update,
+        passwords
     ]
 
     static func named(_ name: String?) -> PaletteSource? {
