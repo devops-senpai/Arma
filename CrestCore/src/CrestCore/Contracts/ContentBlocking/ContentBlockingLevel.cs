@@ -13,7 +13,7 @@ public sealed class ContentBlockingLevel {
     #region Static Variables
 
     public static readonly ContentBlockingLevel Off = new(name: "off", title: "Off",
-        summary: "Crest doesn’t block ads or trackers.", blocksContent: false, includesStrictLists: false);
+        summary: "Arma doesn’t block ads or trackers.", blocksContent: false, includesStrictLists: false);
     public static readonly ContentBlockingLevel Balanced = new(name: "balanced", title: "Balanced",
         summary: "Blocks ads and trackers while keeping sites working.", blocksContent: true, includesStrictLists: false);
     public static readonly ContentBlockingLevel Strict = new(name: "strict", title: "Strict",

@@ -33,7 +33,7 @@ struct BrowserSpaceAccessPolicySection: View {
             } header: {
                 Text("Lock")
             } footer: {
-                CrestFormFootnote("Locks again when Crest goes to the background.")
+                CrestFormFootnote("Locks again when Arma goes to the background.")
             }
         }
     }

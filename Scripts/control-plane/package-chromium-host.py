@@ -117,24 +117,42 @@ def remove_engine_alerts_helper(frameworks):
             shutil.rmtree(helper)
 
 
-def name_engine_helpers(frameworks, product_name):
+def name_engine_helpers(frameworks, product_name, icon):
     """Show the engine's helpers as the product's wherever macOS names one
     from its bundle, the way Chromium names its own alert helper: a localized
     display name. Bundle and executable names, identifiers and paths keep the
     engine's built names, which the engine resolves at run time. The name is
-    localized for the helper's development region, the one localization
-    Launch Services falls back to for every language, so the helper process
-    keeps the language it runs in today."""
+    written in every localization the helper carries, Base included, and in
+    its development region, the one Launch Services falls back to for every
+    language, so the helper process keeps the language it runs in today.
+
+    An alerts helper, such as the Aperitif variant's, posts the notifications
+    and asks for their permission, so Notification Center shows its name and
+    icon. It is named the product itself and given the product's icon."""
     for helper in engine_helpers(frameworks):
         if not helper.stem.startswith(ENGINE_HELPER_NAME):
             continue
         suffix = helper.stem.removeprefix(ENGINE_HELPER_NAME)
-        with (helper / "Contents/Info.plist").open("rb") as stream:
-            region = plistlib.load(stream)["CFBundleDevelopmentRegion"]
-        strings = helper / f"Contents/Resources/{region}.lproj/InfoPlist.strings"
-        strings.parent.mkdir(parents=True, exist_ok=True)
-        strings.write_bytes(plistlib.dumps(
-            {"CFBundleDisplayName": f"{product_name} Helper{suffix}"}, fmt=plistlib.FMT_BINARY))
+        alerts = suffix.endswith("Alerts)")
+        name = product_name if alerts else f"{product_name} Helper{suffix}"
+        info_path = helper / "Contents/Info.plist"
+        with info_path.open("rb") as stream:
+            info = plistlib.load(stream)
+        resources = helper / "Contents/Resources"
+        regions = {path.parent for path in resources.glob("*.lproj/InfoPlist.strings")}
+        regions.add(resources / f"{info['CFBundleDevelopmentRegion']}.lproj")
+        for region in regions:
+            region.mkdir(parents=True, exist_ok=True)
+            (region / "InfoPlist.strings").write_bytes(
+                plistlib.dumps({"CFBundleDisplayName": name}, fmt=plistlib.FMT_BINARY))
+        if alerts and icon.is_file():
+            # The helper's asset catalog holds Chromium's icon under its icon
+            # name, which macOS prefers to the icon file.
+            shutil.copy2(icon, resources / "app.icns")
+            info["CFBundleIconFile"] = "app.icns"
+            info.pop("CFBundleIconName", None)
+            with info_path.open("wb") as stream:
+                plistlib.dump(info, stream)
 
 
 def name_product_in_localized_info(resources, product_name):
@@ -263,9 +281,9 @@ def main():
         if not args.product and is_product_framework:
             parser.error("Build CrestChromiumUI for a review package; this framework is the normal product composition")
     identity = (
-        "com.pauldavis.crest" if args.product
-        else "com.pauldavis.crest.chromium-baseline" if args.baseline
-        else "com.pauldavis.crest.control-plane.chromium")
+        "com.senpaimedia.arma" if args.product
+        else "com.senpaimedia.arma.chromium-baseline" if args.baseline
+        else "com.senpaimedia.arma.control-plane.chromium")
     product_entitlements = None
     if args.entitlements:
         with args.entitlements.open("rb") as stream:
@@ -340,20 +358,20 @@ def main():
         if not sparkle.is_dir():
             parser.error("The native UI build must supply Sparkle.framework beside the host framework")
         subprocess.run(["ditto", str(sparkle), str(frameworks / "Sparkle.framework")], check=True)
-        icon = resources / "Crest.icns"
+        icon = resources / "Arma.icns"
         dock_plugin = ui.parent / "CrestDockTilePlugin.docktileplugin"
         if not icon.is_file() or not dock_plugin.is_dir():
-            parser.error("The native UI build must supply Crest.icns and CrestDockTilePlugin.docktileplugin")
+            parser.error("The native UI build must supply Arma.icns and CrestDockTilePlugin.docktileplugin")
         plugins = output / "Contents/PlugIns"
         plugins.mkdir(exist_ok=True)
         subprocess.run(["ditto", str(dock_plugin), str(plugins / dock_plugin.name)], check=True)
-        # The helper agents run, crest-browser, which reaches Crest over its
+        # The helper agents run, arma, which reaches Crest over its
         # agent socket. It lives in Contents/Helpers, where signing treats it
         # as loose code with the hardened runtime; its embedded Info.plist
         # names its signing identifier.
-        agent_helper = ui.parent / "crest-browser"
+        agent_helper = ui.parent / "arma"
         if not agent_helper.is_file():
-            parser.error("The native UI build must supply crest-browser beside the host framework")
+            parser.error("The native UI build must supply arma beside the host framework")
         helpers = output / "Contents/Helpers"
         helpers.mkdir(exist_ok=True)
         shutil.copy2(agent_helper, helpers / agent_helper.name)
@@ -374,7 +392,7 @@ def main():
         info = plistlib.load(stream)
     info["CFBundleIdentifier"] = identity
     info["CFBundleDisplayName"] = (
-        "Crest" if args.product
+        "Arma" if args.product
         else "Crest Chromium Baseline" if args.baseline
         else "Crest Chromium Experiment")
     info["CFBundleName"] = info["CFBundleDisplayName"]
@@ -385,8 +403,8 @@ def main():
         info["CFBundleShortVersionString"] = ui_info["CFBundleShortVersionString"]
         info["CFBundleVersion"] = ui_info["CFBundleVersion"]
         info["LSMinimumSystemVersion"] = minimum_system_version(info, ui_info)
-        info["CFBundleIconFile"] = "Crest"
-        info["CFBundleIconName"] = "Crest"
+        info["CFBundleIconFile"] = "Arma"
+        info["CFBundleIconName"] = "Arma"
         info["NSDockTilePlugIn"] = "CrestDockTilePlugin.docktileplugin"
         info["CrestAppIconPreferenceDomain"] = info["CFBundleIdentifier"]
         # Chromium's scripting dictionary names Chromium's application class,
@@ -425,12 +443,12 @@ def main():
         # engine's: in Notifications, privacy prompts and process lists.
         require_known_engine_helpers(frameworks)
         remove_engine_alerts_helper(frameworks)
-        name_engine_helpers(frameworks, info["CFBundleDisplayName"])
+        name_engine_helpers(frameworks, info["CFBundleDisplayName"], resources / "Arma.icns")
         name_product_in_localized_info(resources, info["CFBundleDisplayName"])
     targets = [] if args.baseline else [frameworks / "CrestCore.Native.dylib", frameworks / ui.name,
                                       *([frameworks / "libarma_servo.dylib"] if args.servo else []),
                                       output / "Contents/PlugIns/CrestDockTilePlugin.docktileplugin",
-                                      output / "Contents/Helpers/crest-browser"]
+                                      output / "Contents/Helpers/arma"]
     targets += sorted((p for p in frameworks.rglob("*.app") if not p.is_symlink()), key=lambda p: len(p.parts), reverse=True)
     targets += sorted((p for p in frameworks.glob("*.framework") if p.name != ui.name), key=lambda p: len(p.parts), reverse=True)
     if cloud_entitlements:
