@@ -1,4 +1,34 @@
+import CryptoKit
 import Foundation
+
+// MARK: - Types
+
+/// Something the shell can do from one of the palette's tool scopes, such as
+/// @engine: the scope, what its row says and wears, and what it does. Its
+/// identity comes from the scope and `key`, so the row the core ranked finds
+/// the same choice when it is picked.
+struct BrowserPaletteChoice {
+    let scope: PaletteScope
+    let key: String
+    let name: String
+    let detail: String
+    let symbol: String
+    let run: @MainActor () -> Void
+
+    var id: UUID {
+        let digest = Array(SHA256.hash(data: Data("\(scope.name)/\(key)".utf8)))
+        return UUID(
+            uuid: (
+                digest[0], digest[1], digest[2], digest[3], digest[4], digest[5], digest[6], digest[7],
+                digest[8], digest[9], digest[10], digest[11], digest[12], digest[13], digest[14], digest[15]
+            ))
+    }
+
+    /// The choice as the core ranks it.
+    var paletteChoice: PaletteChoice {
+        PaletteChoice(id: id, scope: scope, name: name, detail: detail, symbol: symbol)
+    }
+}
 
 /// Commands, settings pages and the window's own actions, supplied by the
 /// presenting platform shell, which palette rows other than addresses and
@@ -17,6 +47,7 @@ struct BrowserCommandPaletteCommandRegistry {
     private let archiveReopener: (UUID) -> Void
     private let copier: (String) -> Void
     private let themeApplier: (UUID) -> Void
+    private let choiceProvider: (PaletteScope) -> [BrowserPaletteChoice]
 
     init(
         commands: [ShortcutCommand],
@@ -28,7 +59,8 @@ struct BrowserCommandPaletteCommandRegistry {
         reopenArchivedTab: @escaping (UUID) -> Void = { _ in },
         copy: @escaping (String) -> Void = { _ in },
         themes: @escaping () -> [PaletteTheme] = { [] },
-        applyTheme: @escaping (UUID) -> Void = { _ in }
+        applyTheme: @escaping (UUID) -> Void = { _ in },
+        choices: @escaping (PaletteScope) -> [BrowserPaletteChoice] = { _ in [] }
     ) {
         self.commands = commands
         self.settingsPages = settingsPages
@@ -40,6 +72,7 @@ struct BrowserCommandPaletteCommandRegistry {
         copier = copy
         self.themes = themes
         themeApplier = applyTheme
+        choiceProvider = choices
     }
 
     /// The commands as the palette ranks them, with the titles this device
@@ -75,6 +108,18 @@ struct BrowserCommandPaletteCommandRegistry {
     /// Puts the saved theme `id` on the Space the window shows.
     func applyTheme(_ id: UUID) {
         themeApplier(id)
+    }
+
+    /// What the shell can do from tool scope `scope`, as the core ranks it.
+    func choices(in scope: PaletteScope) -> [PaletteChoice] {
+        choiceProvider(scope).map(\.paletteChoice)
+    }
+
+    /// Does the choice `id` of tool scope `scope`, answering whether it was there.
+    func runChoice(_ id: UUID, in scope: PaletteScope) -> Bool {
+        guard let choice = choiceProvider(scope).first(where: { $0.id == id }) else { return false }
+        choice.run()
+        return true
     }
 
     /// Copies `text` and says so in the window's notice.
