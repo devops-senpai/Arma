@@ -6,6 +6,28 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.133</title>
+            <pubDate>Sun, 15 Nov 2026 12:32:39 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>900133</sparkle:version>
+            <sparkle:shortVersionString>0.9.133</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### From Crest
+- The address bar can sit on top of the page: Settings › Appearance › Address bar › Top. Sidebar stays the default.
+- Each page in Split View carries its own bar with back, forward, its address, Site Controls and pinned extensions, side by side or stacked.
+- Pinned extensions keep the order you drag them into, in every Space that uses the profile.
+- Command-E opens extension popups one at a time. Archive Tab moves to Shift-Command-E.
+- With several sidebar tabs selected, Command-W closes them all and Command-D duplicates them again.
+- An import that can't be prepared shows an error instead of quitting, and Arc imports keep the names you gave tabs.
+- A folder's "…" button no longer covers the end of its name.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.133/Arma-0.9.133.dmg" length="196428294" type="application/octet-stream" sparkle:edSignature="C4Z38OOBFN43KlJ0FgUu7AWnbc2gOCn/4IMOX+Vgv4k/cvRQVAYC/otq5BXvHOtfh0XQxaKAOZJufiJx8vsUDg=="/>
+        </item>
+        <item>
             <title>0.9.117</title>
             <pubDate>Sat, 14 Nov 2026 21:36:56 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -725,6 +747,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: R2KJvpNlhagyc7d0onCZRh7SpEbYNq3b/fvsxN7rWJc+s1NEBxiIFJNaJTuR+hsfFU2POnhD6/AAm56QLxSdAQ==
-length: 52482
+edSignature: w0SvcMgdZpbSqSj9YutX2lC7X9DbdvNYqHLUA8fg/vqm1MY/CK3f0q4Tsl72Oz+UwZ5UA4zFS2zGDMPY6ArBDg==
+length: 54130
 -->
