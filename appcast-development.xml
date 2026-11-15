@@ -6,6 +6,27 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.117</title>
+            <pubDate>Sat, 14 Nov 2026 21:36:56 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>900117</sparkle:version>
+            <sparkle:shortVersionString>0.9.117</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### From Crest
+- Groups: single-level folders of open tabs at the top of a Space. Add a tab from its menu, move a selection into one, and turn a folder of open tabs into a Group or back.
+- Folder and Group headers have a "…" button for their menu, with Archive Tabs and Convert to Group.
+- A folder of open tabs, or a Group, goes away once its last tab leaves. Saved folders stay.
+- A new tab opens at the end of the Group or folder of the tab you are on.
+- Remove from Folder and Remove from Group leave the tab just below its folder or Group.
+- A tab filed into a folder that another device deletes moves to the top level instead of being lost.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.117/Arma-0.9.117.dmg" length="196160718" type="application/octet-stream" sparkle:edSignature="E2OuskZ3NWqRFarm0tJctQI3UXggTDP7uo5yPa8x//76OJCIFgKUqf07llb6Me2CyJ9Bsk3+oKmy2eXd0PL6Dg=="/>
+        </item>
+        <item>
             <title>0.9.114</title>
             <pubDate>Sat, 14 Nov 2026 17:08:44 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -704,6 +725,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: bHQ1Gea0I43YAiwyELNuwhQZILGskTQA2oRM8prYxKOe7QKCkPxff6yxDfPRZvOhkQAMFEnor8vVyVU3oPH/Ag==
-length: 50926
+edSignature: R2KJvpNlhagyc7d0onCZRh7SpEbYNq3b/fvsxN7rWJc+s1NEBxiIFJNaJTuR+hsfFU2POnhD6/AAm56QLxSdAQ==
+length: 52482
 -->
