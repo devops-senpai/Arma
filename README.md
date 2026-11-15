@@ -27,6 +27,7 @@ change; the commit of the same name has the detail.
 - **Servo engine** (not in releases yet, while it is made stable). Pages can run on Servo, the independent engine written in Rust, as a third engine beside Chromium and WebKit: pick it as the default engine, set it for a website, or move a page with Open Page in Servo. Install Firefox add-ons whose page scripts and styles Servo can run from Settings › Engines.
 - **Palette tool scopes.** Type `@extensions` to open Chromium's or Servo's extensions, `@engine` to move the page, or always open its site, in another engine, `@developer` for the page's developer tools, and `@cli` to install the `arma` command in `~/.local/bin` or `~/bin`, or copy the line to run yourself, and `@update` to check for a new version.
 - **Arc-style window dragging.** Press and drag anywhere in the top 120 points of a page where nothing takes a click to move the window, as Arc does; links, buttons, fields and text you can select there still work, and a click without moving still reaches the page.
+- **Show the background tab.** The Opened in Background Tab notice stays up longer, waits while your pointer rests on it, and offers Show Tab, which takes you to the tab it opened, switching Space if you moved on. A click anywhere on a notice with a button now reaches the notice, never the page under it.
 - **Light by default.** New installs start in Light mode, and unloaded tabs aren't dimmed unless you turn that on.
 
 ### Performance
