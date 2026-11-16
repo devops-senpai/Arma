@@ -7,13 +7,13 @@ keywords: [download, install, update, macOS, GitHub Releases, Sparkle]
 
 # Install and update Arma for Mac
 
-Arma for Mac requires Apple silicon and macOS 26.1 or later. It runs Chromium and WebKit; see [Chromium and WebKit on Mac](../browsing/engines.md). Arma is a fork of Crest and is not affiliated with Crest or Paul Davis.
+Arma for Mac requires Apple silicon and macOS 15.2 or later. It runs Chromium and WebKit; see [Chromium and WebKit on Mac](../browsing/engines.md). Arma is a fork of Crest and is not affiliated with Crest or Paul Davis.
 
 ## Install the latest Mac release
 
 Download the latest **Installer** disk image from
 [Releases](https://github.com/devops-senpai/Arma/releases/latest), open it, and drag
-Arma onto **Applications**. Arma for Mac needs Apple silicon and macOS 26.1 or
+Arma onto **Applications**. Arma for Mac needs Apple silicon and macOS 15.2 or
 later.
 
 Arma is signed with a Developer ID and notarized by Apple, so it opens
