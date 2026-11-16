@@ -3,7 +3,8 @@ import Foundation
 /// What the palette's tool scopes offer in this window: @extensions opens an
 /// engine's extensions, @engine moves the shown page or its site to another
 /// engine, @developer opens the page's developer tools, @cli sets up the
-/// `arma` command, and @update checks for a new version.
+/// `arma` command, @update checks for a new version, and @passwords finds a
+/// saved login of the Space on screen to copy, fill or open.
 extension BrowserCommandActions {
     // MARK: - Actions - Choices
 
@@ -15,6 +16,7 @@ extension BrowserCommandActions {
             PaletteScope.developer.name: developerChoices,
             PaletteScope.commandLine.name: commandLineChoices,
             PaletteScope.update.name: updateChoices,
+            PaletteScope.passwords.name: { passwordChoices(openSettings: openSettings) },
         ]
         return builders[scope.name]?() ?? []
     }
@@ -125,6 +127,107 @@ extension BrowserCommandActions {
                 detail: String(localized: "Look for a new version and show it in the sidebar"),
                 symbol: "arrow.down.circle", run: { [windows] in windows?.checkForUpdates() })
         ]
+    }
+
+    // MARK: - Actions - Passwords
+
+    /// The Space's Passwords settings, then each saved login of the Space on
+    /// screen, by site and username; inside a login, what the palette can do
+    /// with it. A locked Space, one with passwords off and a private window
+    /// list no logins.
+    private func passwordChoices(openSettings: @escaping (String) -> Void) -> [BrowserPaletteChoice] {
+        guard let space = browser.shownSpace else { return [] }
+        let settings = BrowserPaletteChoice(
+            scope: .passwords, key: "settings", name: String(localized: "Passwords Settings"),
+            detail: String(localized: "\(space.settings.name) › Passwords"), symbol: "gearshape",
+            run: { openSettings("passwords") })
+        guard !browser.isPrivateBrowsing, !spaceAccess.isLocked(space), space.settings.credentialPreferences.isEnabled,
+            let logins = chrome.palettePasswords.logins(in: space.id, from: browser)
+        else { return [settings] }
+        if let id = chrome.palettePasswords.steppedInto, let login = chrome.palettePasswords.login(id) {
+            return loginChoices(login, in: space)
+        }
+        return [settings]
+            + logins.map { login in
+                BrowserPaletteChoice(
+                    scope: .passwords, key: "login-\(login.id)", name: login.origin.host, detail: login.username,
+                    symbol: "key.fill", run: { [chrome] in chrome.palettePasswords.stepInto(login.id) }, stepsInto: true
+                )
+            }
+    }
+
+    /// What the palette can do with the saved login `login`: copy its
+    /// username, password or site, fill it into the page when the page is
+    /// that site, or open the site.
+    private func loginChoices(_ login: CredentialDescriptor, in space: SpaceModel) -> [BrowserPaletteChoice] {
+        let site = login.origin.description
+        var choices = [
+            BrowserPaletteChoice(
+                scope: .passwords, key: "username", name: login.username, detail: String(localized: "Copy Username"),
+                symbol: "person", run: { copy(login.username) }),
+            BrowserPaletteChoice(
+                scope: .passwords, key: "password", name: "••••••••", detail: String(localized: "Copy Password"),
+                symbol: "key", run: { copyPassword(login, in: space) }),
+            BrowserPaletteChoice(
+                scope: .passwords, key: "website", name: site, detail: String(localized: "Copy Website"),
+                symbol: "link", run: { copy(site) }),
+        ]
+        if let page = shownPage, page.live.displayURL.flatMap(CredentialOrigin.init(url:)) == login.origin {
+            choices.append(
+                BrowserPaletteChoice(
+                    scope: .passwords, key: "fill", name: String(localized: "Fill on This Page"),
+                    detail: login.origin.host, symbol: "rectangle.and.pencil.and.ellipsis",
+                    run: { fill(login, into: page, in: space) }))
+        }
+        choices.append(
+            BrowserPaletteChoice(
+                scope: .passwords, key: "open", name: String(localized: "Open Website"), detail: site,
+                symbol: "arrow.up.forward.square", run: { openWebsite(site) }))
+        return choices
+    }
+
+    /// Copies the saved password of `login` once the person authenticates,
+    /// as the Space asks, for 60 seconds, as Settings copies one.
+    private func copyPassword(_ login: CredentialDescriptor, in space: SpaceModel) {
+        let assignment = BrowserSpaceRuntimeAssignment(space: space)
+        Task { @MainActor [browser, chrome] in
+            do {
+                let credential = try await BrowserCredentialSensitiveAccess(browser: browser).revealCredential(
+                    id: login.id, matching: assignment,
+                    reason: String(localized: "Authenticate to copy the password for \(login.origin.host)."))
+                guard BrowserCredentialClipboard.write(.clipboard(password: credential.password)) else {
+                    chrome.showNotice(.failure(String(localized: "Couldn’t copy the password")))
+                    return
+                }
+                chrome.showNotice(
+                    BrowserNotice(
+                        message: String(localized: "Password Copied, Clears in 60 Seconds"), systemImage: "key.fill"))
+            } catch BrowserCredentialSensitiveAccessError.authenticationDenied {
+                return
+            } catch {
+                chrome.showNotice(.failure(String(localized: "Couldn’t copy the password")))
+            }
+        }
+    }
+
+    /// Fills `login` into `page`'s login form, as Arma's fill prompt does,
+    /// without asking to authenticate.
+    private func fill(_ login: CredentialDescriptor, into page: BrowserPage, in space: SpaceModel) {
+        Task { @MainActor [browser, chrome] in
+            guard let credential = try? await browser.credential(id: login.id, in: space.id),
+                await page.fillFirstLoginForm(credential)
+            else {
+                chrome.showNotice(.failure(String(localized: "No login form on this page to fill")))
+                return
+            }
+            chrome.showNotice(BrowserNotice(message: String(localized: "Filled"), systemImage: "checkmark.circle.fill"))
+        }
+    }
+
+    /// Opens `address` in a new tab of the Space on screen.
+    private func openWebsite(_ address: String) {
+        guard let url = URL(string: address), browser.openNewTab(url: url) != nil else { return }
+        pages.select()
     }
 
     // MARK: - Actions - Command Line
