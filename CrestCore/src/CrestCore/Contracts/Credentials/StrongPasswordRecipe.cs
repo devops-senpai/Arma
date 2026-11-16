@@ -25,10 +25,11 @@ public sealed record StrongPasswordRecipe(int Length, IReadOnlyList<string> Grou
     #region Actions - Generation
 
     /// The recipe for a password of `length` characters, or the default length.
-    internal static StrongPasswordRecipe For(int? length) {
+    /// It draws from the groups `generation` includes, or all four.
+    internal static StrongPasswordRecipe For(int? length, PasswordGeneration? generation = null) {
         int resolved = length ?? DefaultLength;
         if (resolved is < MinimumLength or > MaximumLength) throw new Rejected(new InvalidPasswordLength(MinimumLength, MaximumLength));
-        return new(resolved, CharacterGroups);
+        return new(resolved, generation?.Including(CharacterGroups) ?? CharacterGroups);
     }
 
     #endregion
