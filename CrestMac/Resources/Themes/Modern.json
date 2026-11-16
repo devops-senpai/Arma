@@ -1,0 +1,56 @@
+{
+ "background": {
+  "angle": 86.86431145808439,
+  "colors": [
+   "#1e2833",
+   "#3e4e5e",
+   "#86adc4"
+  ],
+  "intensity": 1,
+  "pattern": "diagonal",
+  "readabilityFade": 0.34,
+  "sidebarSecondaryText": "default",
+  "sidebarText": "default",
+  "style": "gradient",
+  "textColor": "automatic",
+  "texture": false
+ },
+ "commandPalette": {
+  "dark": {
+   "opacity": 0,
+   "text": "default",
+   "tint": "default"
+  },
+  "light": {
+   "opacity": 0,
+   "text": "default",
+   "tint": "default"
+  }
+ },
+ "controls": {
+  "fill": "#2c3a48",
+  "fillOpacity": 0.9,
+  "secondaryText": "#9fb3c4",
+  "text": "#e6edf3"
+ },
+ "folders": {
+  "backColor": "default",
+  "color": "default",
+  "highlightColor": "#adc1da",
+  "highlightOpacity": 0.3007254464285714,
+  "outlineColor": "default"
+ },
+ "icon": {
+  "color": "default"
+ },
+ "name": "Modern",
+ "popovers": {
+  "accent": "#adc1da",
+  "accentOpacity": 1,
+  "background": "#1e2833",
+  "button": "#2c3a48",
+  "buttonOutline": "#4f6375",
+  "secondaryText": "#9fb3c4",
+  "text": "#e6edf3"
+ }
+}

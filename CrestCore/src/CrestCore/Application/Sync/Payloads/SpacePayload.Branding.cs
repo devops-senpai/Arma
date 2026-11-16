@@ -26,6 +26,7 @@ internal sealed partial record SpacePayload {
         double fade = value.OptionalNumber("readabilityFade") ?? (keepsReadable ? SpaceBranding.LegacyReadabilityFade : 0);
         int version = Whole(value.OptionalInteger("renderingVersion") ?? FirstRenderingVersion);
         var colors = value.Array("colors").Select(Color).ToArray();
+        double intensity = value.TolerantNumber("folderColorIntensity") ?? 0;
         var branding = new SpaceBranding(new(colors),
             SpaceBannerPattern.Named(value.TolerantText("bannerPattern")) ?? SpaceBannerPattern.Solid,
             value.Number("bannerStrength"), fade, fade > 0,
@@ -34,10 +35,45 @@ internal sealed partial record SpacePayload {
             StoredSessionCodec.Texture(value.OptionalFlag("showsTexture"), value.TolerantNumber("textureStrength")),
             SpaceIconStyle.Named(value.TolerantText("iconStyle")) ?? SpaceIconStyle.SimpleSymbol,
             value.Value["symbolColor"] is { } symbolColor ? Color(symbolColor) : null,
-            ReadCrest(value.Nested("crest")), version, value.TolerantNumber("folderColorIntensity") ?? 0,
+            ReadCrest(value.Nested("crest")), version, intensity,
             SpaceTextColorMode.Named(value.TolerantText("textColorMode")) ?? SpaceTextColorMode.Automatic,
-            value.OptionalFlag("hasCustomAppearance"));
+            value.OptionalFlag("hasCustomAppearance"), OptionalColor(value.Value["folderColor"]),
+            OptionalColor(value.Value["folderBackColor"]), PaletteLook(value.Value["commandPalette"]),
+            OptionalColor(value.Value["sidebarTextColor"]), OptionalColor(value.Value["folderOutlineColor"]),
+            StoredSessionCodec.DecodeFolderOverrides(value.Value["folderOverrides"]),
+            OptionalColor(value.Value["sidebarSecondaryTextColor"]), OptionalColor(value.Value["folderHighlightColor"]),
+            value.TolerantNumber("folderHighlightOpacity") ?? SpaceBranding.HighlightOpacity(intensity),
+            OptionalColor(value.Value["popoverBackgroundColor"]), OptionalColor(value.Value["popoverTextColor"]),
+            OptionalColor(value.Value["popoverSecondaryTextColor"]), OptionalColor(value.Value["popoverAccentColor"]),
+            value.TolerantNumber("popoverAccentOpacity") ?? 1,
+            OptionalColor(value.Value["popoverButtonColor"]), OptionalColor(value.Value["popoverButtonOutlineColor"]),
+            OptionalColor(value.Value["controlsFillColor"]), value.TolerantNumber("controlsFillOpacity") ?? 1,
+            OptionalColor(value.Value["controlsTextColor"]), OptionalColor(value.Value["controlsSecondaryTextColor"]));
         return SpaceBranding.Normalized(branding);
+    }
+
+    /// A color a record may hold, or null when it holds none every client reads.
+    private static BrandColor? OptionalColor(JsonNode? node) {
+        if (node is null) return null;
+        try {
+            return Color(node);
+        } catch (UnreadableSyncPayloadException) {
+            return null;
+        }
+    }
+
+    /// The command palette's look, or null when the record holds none every
+    /// client reads. A surface a client cannot read is the system material alone.
+    private static SpacePaletteLook? PaletteLook(JsonNode? node) {
+        if (node is not JsonObject) return null;
+        var value = new SyncPayloadReader(node, SyncPayloadForm.Journal);
+        return new(PaletteSurface(value.Value["light"]), PaletteSurface(value.Value["dark"]));
+    }
+
+    private static SpacePaletteSurface PaletteSurface(JsonNode? node) {
+        if (node is not JsonObject) return SpacePaletteSurface.Neutral;
+        var value = new SyncPayloadReader(node, SyncPayloadForm.Journal);
+        return new(OptionalColor(value.Value["tint"]), value.TolerantNumber("opacity") ?? 0, OptionalColor(value.Value["textColor"]));
     }
 
     /// A crest as every client reads it: each member it cannot read takes its

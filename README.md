@@ -1,18 +1,155 @@
 <div align="center">
+  <img src="Brand/Arma.png" width="160" alt="Arma's logo: a white bird on a navy guidon with a red stripe and a gold laurel">
   <h1>Arma</h1>
   <p><strong>An open source browser for Mac, iPhone, and iPad.</strong></p>
-  <p>Built with SwiftUI, running Chromium and WebKit on Mac, with separate Spaces for different parts of your life.</p>
+  <p>Built with SwiftUI, running Chromium, WebKit and Servo on Mac, with separate Spaces for different parts of your life.</p>
   <p>
-    <a href="https://github.com/devops-senpai/BetterCrest/actions/workflows/ci.yml"><img alt="Build Arma" src="https://github.com/devops-senpai/BetterCrest/actions/workflows/ci.yml/badge.svg"></a>
+    <a href="https://github.com/devops-senpai/Arma/actions/workflows/ci.yml"><img alt="Build Arma" src="https://github.com/devops-senpai/Arma/actions/workflows/ci.yml/badge.svg"></a>
     <a href="LICENSE"><img alt="MPL-2.0 license" src="https://img.shields.io/badge/license-MPL--2.0-315f93"></a>
   </p>
+  <img src="Brand/Readme/collage.jpg" alt="Arma windows fanned out: Arc Sky, Catppuccin Latte, a four-page Split View, Catppuccin Macchiato and JellyFish">
 </div>
 
 Arma is a fork of [Crest](https://github.com/pauljoda/Crest) by Paul Davis.
 It carries Crest's main branch plus fixes, speedups and features that are
 not upstream. Arma is not affiliated with or endorsed by Crest or Paul
-Davis. The repository keeps the name BetterCrest; the browser is Arma. The
+Davis. The
 user guides live in this repository under `HelpCenter/docs/`.
+
+## A quick tour
+
+### Themes
+
+Arma ships with themes for every kind of person: **Arc Sky** for anyone
+coming from Arc, and **Catppuccin** Latte / Mocha, Macchiato, Mocha and
+Frappé for coders. Any theme can also put a picture of your own behind the
+tabs; **JellyFish** ships as an example of one. Setup offers them
+beside the **Heraldic** and **Modern** looks, and Settings › Themes edits every
+color, the dark look and the background picture, with a live preview of the
+window and its command palette.
+
+| | |
+|---|---|
+| ![Arc Sky](Brand/Readme/theme-arc-sky.jpg) | ![Catppuccin Macchiato](Brand/Readme/theme-catppuccin-macchiato.jpg) |
+| **Arc Sky** | **Catppuccin Macchiato** |
+| ![Catppuccin Latte / Mocha](Brand/Readme/theme-catppuccin-latte.jpg) | ![JellyFish, with a picture behind the tabs](Brand/Readme/theme-jellyfish.jpg) |
+| **Catppuccin Latte / Mocha** | **A picture of your own** (JellyFish) |
+
+![Settings › Themes: the theme list, a live preview of the window and its command palette, and the sidebar's colors](Brand/Readme/settings-themes-arc-sky.jpg)
+
+A Space picks its theme; its crest stays its own. The Crest Studio shapes it,
+starting from Arma's own **Guidon**, its bird and the Crane.
+
+### Split View, tiled
+
+Keep up to four live pages in one view: side by side, stacked, or in a grid.
+Drop a tab on an edge of a page to tile it there, or pick an arrangement from
+the split's menu, and drag the bars between pages either way.
+
+| | |
+|---|---|
+| ![Three pages side by side](Brand/Readme/split-three.jpg) | ![Four pages in a grid](Brand/Readme/split-grid.jpg) |
+| **Three across** | **Four in a grid** |
+
+### Three engines: Chromium, WebKit and Servo
+
+Every page runs in the engine you choose: **Chromium** (the default, with
+Chrome Web Store extensions), **WebKit** (Reader, translation, FairPlay video)
+or **Servo**, the independent engine written in Rust. Set a default in
+Settings › Engines, give a website its own engine, or move one page:
+
+```sh
+arma site engine youtube.com webkit          # YouTube always opens in WebKit
+arma site engine servo.org servo             # servo.org opens in Servo
+arma tab open https://example.com --engine servo
+arma site list                               # every site with its own engine
+```
+
+To move one tab, list the tabs, take its ID from the first column, and give
+that ID to `arma tab engine`:
+
+```console
+$ arma tab list --space Work
+ID        SPACE  WHERE   FOLDER  ENGINE    TITLE
+6c1124f0  Work   open    -       webkit    Jellyfish - Wikipedia
+7194b03d  Work   open    -       servo     Servo, the embeddable web engine
+29c94624  Work   open    -       chromium  devops-senpai/Arma
+
+$ arma tab engine 6c11 chromium              # the first few characters are enough
+```
+
+### The `arma` command line
+
+`arma` lives inside the app (`/Applications/Arma.app/Contents/Helpers/arma`)
+and drives the running browser. Every command takes `--json` for scripts.
+
+![arma --help in a terminal, listing every section the command line manages](Brand/Readme/terminal-arma-help.jpg)
+
+```sh
+arma space list                              # Spaces; * marks the one shown
+arma space switch Work
+arma tab open https://news.ycombinator.com --space Work
+arma tab list --space Work                   # each tab's <tab-id>, placement, engine
+arma split create <tab-id> <tab-id> <tab-id> # three tabs in one Split View
+arma split arrange <tab-id> grid             # two-across, three-across, grid …
+arma archive search invoice --since 2w        # closed tabs, ready to restore
+arma archive restore <entry>
+arma theme list                              # saved themes; * the shown Space's
+arma theme use "Arc Sky" --space Personal
+arma theme edit "Catppuccin Macchiato" --folder-color "#a581ff"
+arma crest set --shape guidon --band pale --emblem sparrow --border laurel
+arma window tile left
+arma settings set appearance.mode dark
+arma page <tab-id> text                      # read a page (Settings › Agents)
+```
+
+A `<tab-id>` is the start of an ID from `arma tab list`, four characters or
+more, such as `6c11`; `current` names the tab the front window shows.
+
+Run `arma help`, or `arma <section> help`, for every section: space, tab,
+window, folder, split, command, page, extension, history, download,
+settings, site, automation, theme and crest.
+
+### Testing frameworks
+
+Settings › Automation (or `arma automation`) lets Playwright, Puppeteer,
+Selenium, WebdriverIO, Katalon and TestCafe drive Arma's Chromium tabs over a
+local DevTools port, limited to one Space's profile or an empty Ephemeral one,
+and to the tabs they open or existing tabs too. The page shows the setup for
+each tool.
+
+![Settings › Automation: allow testing frameworks, the profile and tabs they reach, the port, and setup for Playwright, Puppeteer, Selenium, WebdriverIO, Katalon and TestCafe](Brand/Readme/settings-automation-arc-sky.jpg)
+
+```sh
+arma automation on --profile Work --tabs opened --port 9222
+arma automation restart
+```
+
+```js
+// Playwright
+import { chromium } from "playwright-core";
+const browser = await chromium.connectOverCDP("http://127.0.0.1:9222");
+const page = await browser.contexts()[0].newPage();
+await page.goto("https://example.com");
+```
+
+```js
+// Puppeteer
+import puppeteer from "puppeteer-core";
+const browser = await puppeteer.connect({ browserURL: "http://127.0.0.1:9222", defaultViewport: null });
+const page = await browser.newPage();
+await page.goto("https://example.com");
+await browser.disconnect(); // browser.close() would quit Arma
+```
+
+```python
+# Selenium, with ChromeDriver matching Arma's Chromium
+from selenium import webdriver
+options = webdriver.ChromeOptions()
+options.debugger_address = "127.0.0.1:9222"
+driver = webdriver.Chrome(options=options)
+driver.get("https://example.com")
+```
 
 ## What Arma adds
 
@@ -21,8 +158,8 @@ change; the commit of the same name has the detail.
 
 ### Features
 
-- **Extended theming.** Each Space's Appearance page goes further than upstream: pick the colors of folders and their backs, the sidebar text color, and the command palette's tint, opacity and text color, with a separate look for dark windows. Export a Space's theme as a JSON file and load one back from the page or the Space's menu; four Catppuccin themes ship as examples.
-- **Theme CLI tools.** `arma theme` sets any part of a Space's look, applies or exports theme files, and pairs a light file with a dark one from the terminal. Changes show in the running app right away, so a theme can be tuned without reopening Settings.
+- **Themes.** Settings › Themes keeps a library of themes: make, duplicate, rename, delete, import and export them, and edit each one's colors, dark look and background picture, with a live preview of the window and command palette, and ⌘Z undoes an edit; a change updates every Space wearing it. Themes go further than upstream's Appearance page: folder colors, backs, outlines and a highlight color and opacity for open folders, sidebar text and a secondary text color, the command palette's tint, opacity and text, the background, text, secondary text, accent and button colors of popovers such as Site Controls, and the fill and two text colors of the address field and pins, each with its own dark look. A background picture sits behind the sidebar and window, placed, sized, repeated, tinted and blurred as you like, with a translucent backing behind tabs so they stay legible. Arma ships Arc Sky, Arc Blush, Catppuccin Latte / Mocha, Macchiato, Mocha and Frappé, JellyFish and Textured, offered beside Heraldic and Modern on setup's Pick your look page, and Heraldic and Modern as themes too. A Space picks its theme beside its crest, from the Themes list, or with `@themes` in the command palette, and its crest keeps its own colors. New Spaces start with Arma's own gold and red Guidon crest, and the Crest Studio offers the Guidon, its bird and the Crane first.
+- **Extensive CLI.** `arma` controls the running browser from the terminal: Spaces, tabs (open in a chosen engine, pinned, saved, in a folder or at a place in the list, with a title of your own; move, pin, save, rename), windows (move, resize, tile), folders (create, move, file tabs, each at a chosen place), Split View, any menu command, extensions, history, the archive of closed tabs (search, restore, delete, clear), downloads, settings (get, set, export, import), site rules, themes and crests, and saved passwords (`arma passwords`, after a Touch ID unlock that lasts an hour at most), with `--json` for scripts. Theme and crest changes show in the running app right away. `arma page` reads and drives a page (text, snapshot, screenshot, click, type, JavaScript) once Settings › Agents › Command-line page control is on.
 - **Tiled Split View.** Drop a tab on the top or bottom edge of a page to stack it there, on the outer edge of the split to give it the full height or width, or on the middle of a page to swap the two; make quadrants from any of these. The split's menu has ready-made arrangements for two, three and four pages, a tab's menu can pick its card up to move with the pointer (⇧⌘-drag does the same), and the bars between pages drag either way; each window keeps the sizes.
 - **Servo engine** (not in releases yet, while it is made stable). Pages can run on Servo, the independent engine written in Rust, as a third engine beside Chromium and WebKit: pick it as the default engine, set it for a website, or move a page with Open Page in Servo. Install Firefox add-ons whose page scripts and styles Servo can run from Settings › Engines.
 
@@ -141,11 +278,18 @@ Read the [Space isolation guide](HelpCenter/docs/spaces/spaces-and-isolation.md)
 
 ## Get Arma
 
-_Placeholder: no screenshots of Arma yet._
+Download the latest **Installer** disk image from
+[Releases](https://github.com/devops-senpai/Arma/releases), open it, and drag
+Arma onto **Applications**. Arma for Mac needs Apple silicon and macOS 26.1 or
+later.
 
-Arma has no signed releases yet. Build it from source as described
-below; the Mac app runs Chromium when a prebuilt engine is packaged in, and
-WebKit alone otherwise.
+These preview builds are signed but not yet notarized by Apple, so the first
+time you open Arma, macOS stops it. Open **System Settings › Privacy &
+Security**, scroll to the message about Arma, and choose **Open Anyway**; after
+that it opens normally.
+
+You can also build it from source as described below; the Mac app runs
+Chromium when a prebuilt engine is packaged in, and WebKit alone otherwise.
 
 ## Built as an Apple-platform app
 
@@ -172,7 +316,7 @@ Requirements:
 - .NET SDK pinned by `CrestCore/global.json`, installable with `Scripts/control-plane/install-dotnet.sh`
 
 ```bash
-git clone https://github.com/devops-senpai/BetterCrest.git
+git clone https://github.com/devops-senpai/Arma.git
 cd Arma
 Scripts/bootstrap.sh
 open Crest.xcodeproj
@@ -196,7 +340,7 @@ Run the relevant behavioral tests and repository checks. Review visual, layout, 
 
 Arma tracks Crest's `main` and merges it in regularly; its own
 changes stay here. Use
-[GitHub Issues](https://github.com/devops-senpai/BetterCrest/issues) for bugs.
+[GitHub Issues](https://github.com/devops-senpai/Arma/issues) for bugs.
 
 ## AI usage
 
