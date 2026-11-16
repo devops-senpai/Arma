@@ -5,8 +5,8 @@ using CrestCore.Domain;
 
 namespace CrestCore.Application;
 
-/// One split's synced metadata: its name, emoji icon, tint and collapse, each
-/// with the clock of its last edit, so edits on different devices merge per
+/// One split's synced metadata: its name, emoji icon, tint, collapse and layout,
+/// each with the clock of its last edit, so edits on different devices merge per
 /// field.
 internal sealed record SplitGroupPayload(
     Guid Id,
@@ -17,7 +17,9 @@ internal sealed record SplitGroupPayload(
     BrandColor? Tint,
     SyncTime? TintModifiedAt,
     bool IsCollapsed,
-    SyncTime? CollapseModifiedAt) {
+    SyncTime? CollapseModifiedAt,
+    SplitLayoutNode? Layout,
+    SyncTime? LayoutModifiedAt) {
     #region Static Variables
 
     /// The members a split's metadata carries; a record keeps what a newer
@@ -25,7 +27,8 @@ internal sealed record SplitGroupPayload(
     public static IReadOnlyList<string> Members { get; } = [
         StoredSessionCodec.Key.Id, StoredSessionCodec.Key.CustomTitle, StoredSessionCodec.Key.TitleModifiedAt,
         StoredSessionCodec.Key.CustomIconSymbol, StoredSessionCodec.Key.IconModifiedAt, StoredSessionCodec.Key.Tint,
-        StoredSessionCodec.Key.TintModifiedAt, StoredSessionCodec.Key.IsCollapsed, StoredSessionCodec.Key.CollapseModifiedAt
+        StoredSessionCodec.Key.TintModifiedAt, StoredSessionCodec.Key.IsCollapsed, StoredSessionCodec.Key.CollapseModifiedAt,
+        StoredSessionCodec.Key.SplitLayout, StoredSessionCodec.Key.SplitLayoutModifiedAt
     ];
 
     #endregion
@@ -61,7 +64,19 @@ internal sealed record SplitGroupPayload(
             value.Value[StoredSessionCodec.Key.Tint] is { } tint ? SpacePayload.Color(tint) : null,
             value.OptionalTime(StoredSessionCodec.Key.TintModifiedAt)?.ToWholeMilliseconds(),
             value.OptionalFlag(StoredSessionCodec.Key.IsCollapsed) ?? false,
-            value.OptionalTime(StoredSessionCodec.Key.CollapseModifiedAt)?.ToWholeMilliseconds());
+            value.OptionalTime(StoredSessionCodec.Key.CollapseModifiedAt)?.ToWholeMilliseconds(),
+            value.Value[StoredSessionCodec.Key.SplitLayout] is JsonObject layout ? ReadLayout(layout) : null,
+            value.OptionalTime(StoredSessionCodec.Key.SplitLayoutModifiedAt)?.ToWholeMilliseconds());
+    }
+
+    /// A layout as every client reads it, or none for one no client would keep.
+    private static SplitLayoutNode? ReadLayout(JsonObject value) {
+        try {
+            var layout = StoredSessionCodec.DecodeSplitLayout(value);
+            return layout.Count <= SplitLayoutNode.MaximumNodes ? layout : throw new UnreadableSyncPayloadException();
+        } catch (Exception error) when (StoredSession.IsUndecodable(error)) {
+            throw new UnreadableSyncPayloadException();
+        }
     }
 
     public JsonObject Encode(SyncPayloadForm form) {
@@ -74,6 +89,8 @@ internal sealed record SplitGroupPayload(
         if (TintModifiedAt is { } tinted) value[StoredSessionCodec.Key.TintModifiedAt] = form.Seconds(tinted);
         if (IsCollapsed) value[StoredSessionCodec.Key.IsCollapsed] = true;
         if (CollapseModifiedAt is { } collapsedAt) value[StoredSessionCodec.Key.CollapseModifiedAt] = form.Seconds(collapsedAt);
+        if (Layout is { } layout) value[StoredSessionCodec.Key.SplitLayout] = StoredSessionCodec.Encode(layout);
+        if (LayoutModifiedAt is { } laidOut) value[StoredSessionCodec.Key.SplitLayoutModifiedAt] = form.Seconds(laidOut);
         return value;
     }
 
@@ -82,6 +99,7 @@ internal sealed record SplitGroupPayload(
         var titled = Later(TitleModifiedAt, older.TitleModifiedAt) ? older : this;
         var iconed = Later(IconModifiedAt, older.IconModifiedAt) ? older : this;
         var tinted = Later(TintModifiedAt, older.TintModifiedAt) ? older : this;
+        var laidOut = Later(LayoutModifiedAt, older.LayoutModifiedAt) ? older : this;
         var collapsed = Later(CollapseModifiedAt, older.CollapseModifiedAt) ? older : this;
         return this with {
             CustomTitle = titled.CustomTitle,
@@ -91,7 +109,9 @@ internal sealed record SplitGroupPayload(
             Tint = tinted.Tint,
             TintModifiedAt = tinted.TintModifiedAt,
             IsCollapsed = collapsed.IsCollapsed,
-            CollapseModifiedAt = collapsed.CollapseModifiedAt
+            CollapseModifiedAt = collapsed.CollapseModifiedAt,
+            Layout = laidOut.Layout,
+            LayoutModifiedAt = laidOut.LayoutModifiedAt
         };
     }
 

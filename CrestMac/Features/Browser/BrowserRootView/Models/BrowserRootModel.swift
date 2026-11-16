@@ -92,10 +92,8 @@ final class BrowserRootModel {
         !isWindowFocused || isAddressEditing || chrome.isCommandPalettePresented
     }
     var sidebarWidthTransaction: BrowserSidebarWidthTransaction
-    /// Live widths stay local until the divider drag commits.
-    var splitWidthTransaction = BrowserSplitWidthTransaction(
-        persistedFractions: [1]
-    )
+    /// Live shares stay local until the divider drag commits.
+    var splitWidthTransaction = BrowserSplitLayoutTransaction()
     /// The window owns the lift so its preview can outlive the source surface.
     let splitCardLift = BrowserSplitCardLiftState()
     /// The window owns a carried extension tile for the same reason.
@@ -576,7 +574,7 @@ extension BrowserRootModel {
         browser.shownSpace.flatMap(browser.shownSplitGroupID(in:))
     }
 
-    var splitWidthTransactionBinding: Binding<BrowserSplitWidthTransaction> {
+    var splitWidthTransactionBinding: Binding<BrowserSplitLayoutTransaction> {
         Binding(
             get: { self.splitWidthTransaction },
             set: { self.splitWidthTransaction = $0 }
@@ -584,14 +582,11 @@ extension BrowserRootModel {
     }
 
     func seedSplitColumnFractions() {
-        layoutPersistence.seedSplitLayout(
-            groupID: presentedSplitGroupID, memberCount: presentedSplitMembers.count,
-            transaction: &splitWidthTransaction
-        )
+        layoutPersistence.seedSplitLayout(groupID: presentedSplitGroupID, transaction: &splitWidthTransaction)
     }
 
-    func commitSplitColumnFractions(_ fractions: [Double]) {
-        layoutPersistence.commitSplitLayout(fractions, groupID: presentedSplitGroupID)
+    func commitSplitColumnFractions(_ fractions: [Double], branchID: UUID) {
+        layoutPersistence.commitSplitLayout(fractions, branchID: branchID, groupID: presentedSplitGroupID)
     }
 
     func focusSplitCard(_ tabID: UUID) {

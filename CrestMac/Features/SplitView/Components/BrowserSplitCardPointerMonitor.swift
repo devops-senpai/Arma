@@ -16,6 +16,12 @@ struct BrowserSplitCardPointerMonitor: NSViewRepresentable {
     /// What the monitor may do to a carry. Unlike the focus notification, a
     /// pickup *is* a veto: the events that carry a card belong to the carry.
     let lift: BrowserSplitCardLiftGesture
+    /// The card a menu asked to have picked up where the pointer is, if any.
+    /// The monitor answers each request once, where it alone can read the
+    /// pointer in the cards' own space.
+    let carryRequest: BrowserSplitCardCarryRequest?
+    /// Takes a request up, once for the window.
+    let claimCarryRequest: @MainActor (BrowserSplitCardCarryRequest) -> Bool
     /// Whether chrome is drawn over a point in the card-frame space.
     let isCovered: @MainActor @Sendable (CGPoint) -> Bool
 
@@ -35,6 +41,7 @@ struct BrowserSplitCardPointerMonitor: NSViewRepresentable {
         nsView.cardFrames = cardFrames
         nsView.handleMouseDown = handleMouseDown
         nsView.lift = lift
+        nsView.answer(carryRequest, claim: claimCarryRequest)
         nsView.isCovered = isCovered
     }
 
