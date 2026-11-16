@@ -29,6 +29,7 @@ intent that needs it applies the same rule.
 | `Identity/` | `IClock`, `IIdSource` and their system sources, edit timestamps, the runtime identity registry |
 | `Errors/` | `BrowserRule` and `BrowserRuleException`, for stored or synced data that breaks a rule |
 | `Csv/` | RFC 4180 reading and writing, used by password files |
+| `Links/` | Link tracking rules and `SiteDomain`, whose `SiteDomain.PublicSuffixList.cs` reads the Public Suffix List built into the core (`public_suffix_list.dat`, MPL 2.0) for registrable domains and the subdomains no saved password may reach |
 
 ## Depends on
 
