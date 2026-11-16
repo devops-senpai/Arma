@@ -22,7 +22,7 @@ the core once, typed, so no model is written twice by hand.
 | `Engines/` | Engine kinds, capabilities, roster and preferences, engine commands and events; `Presentations/`, `Requests/`, `SiteEngines/` |
 | `Sync/` | Sync record kinds, versions, flaws and staging failures; `Control/` and `Transport/` for the cloud controller and transport |
 | `Downloads/` | Download phases, failures, risk facts and assessment, telemetry |
-| `Credentials/` | Credential records, capture and save plans, password recipes; `Files/` for password-file import and export |
+| `Credentials/` | Credential records, capture and save plans, password recipes and generation, never-saved sites; `Files/` for password-file import and export |
 | `Passkeys/` | Passkey access and authorization state |
 | `Authentication/` | HTTP authentication challenges and how they are answered |
 | `Prompts/` | Prompt messages and the credential an authentication prompt returns |

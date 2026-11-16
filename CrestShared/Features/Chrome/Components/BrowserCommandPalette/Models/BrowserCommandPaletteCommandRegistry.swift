@@ -14,6 +14,9 @@ struct BrowserPaletteChoice {
     let detail: String
     let symbol: String
     let run: @MainActor () -> Void
+    /// Whether running it leads to more choices, which the palette shows in
+    /// its place, rather than closing the palette.
+    var stepsInto = false
 
     var id: UUID {
         let digest = Array(SHA256.hash(data: Data("\(scope.name)/\(key)".utf8)))
@@ -26,7 +29,7 @@ struct BrowserPaletteChoice {
 
     /// The choice as the core ranks it.
     var paletteChoice: PaletteChoice {
-        PaletteChoice(id: id, scope: scope, name: name, detail: detail, symbol: symbol)
+        PaletteChoice(id: id, scope: scope, name: name, detail: detail, symbol: symbol, stepsInto: stepsInto)
     }
 }
 
@@ -48,6 +51,7 @@ struct BrowserCommandPaletteCommandRegistry {
     private let copier: (String) -> Void
     private let themeApplier: (UUID) -> Void
     private let choiceProvider: (PaletteScope) -> [BrowserPaletteChoice]
+    private let choiceStepBack: (PaletteScope) -> Bool
 
     init(
         commands: [ShortcutCommand],
@@ -60,7 +64,8 @@ struct BrowserCommandPaletteCommandRegistry {
         copy: @escaping (String) -> Void = { _ in },
         themes: @escaping () -> [PaletteTheme] = { [] },
         applyTheme: @escaping (UUID) -> Void = { _ in },
-        choices: @escaping (PaletteScope) -> [BrowserPaletteChoice] = { _ in [] }
+        choices: @escaping (PaletteScope) -> [BrowserPaletteChoice] = { _ in [] },
+        stepBack: @escaping (PaletteScope) -> Bool = { _ in false }
     ) {
         self.commands = commands
         self.settingsPages = settingsPages
@@ -73,6 +78,7 @@ struct BrowserCommandPaletteCommandRegistry {
         self.themes = themes
         themeApplier = applyTheme
         choiceProvider = choices
+        choiceStepBack = stepBack
     }
 
     /// The commands as the palette ranks them, with the titles this device
@@ -120,6 +126,12 @@ struct BrowserCommandPaletteCommandRegistry {
         guard let choice = choiceProvider(scope).first(where: { $0.id == id }) else { return false }
         choice.run()
         return true
+    }
+
+    /// Steps back out of a choice tool scope `scope` stepped into, such as a
+    /// saved login, answering whether there was one to leave.
+    func stepBack(in scope: PaletteScope) -> Bool {
+        choiceStepBack(scope)
     }
 
     /// Copies `text` and says so in the window's notice.

@@ -7,6 +7,7 @@ struct BrowserStrongPasswordPromptContent: View {
     let model: BrowserStrongPasswordOperationModel
     let metrics: BrowserCredentialPromptMetrics
     let dismiss: () -> Void
+    @Binding var generation: PasswordGeneration
     let generateAndFill: () -> Void
 
     var body: some View {
@@ -30,6 +31,7 @@ struct BrowserStrongPasswordPromptContent: View {
             BrowserStrongPasswordExplanation(
                 spaceName: space?.name ?? "this Space"
             )
+            BrowserStrongPasswordOptions(generation: $generation)
             BrowserStrongPasswordActionButton(
                 isWorking: model.isWorking,
                 tint: space?.accent.tint.color ?? .accentColor,
