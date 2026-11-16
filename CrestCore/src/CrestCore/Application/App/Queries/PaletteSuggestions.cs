@@ -17,13 +17,15 @@ namespace CrestCore.Contracts;
 /// `Pasteboard` is the text the platform's pasteboard held when the palette
 /// opened, while the person has not yet changed the text it opened with and
 /// it may offer it, or null. `Themes` are the saved themes the platform keeps,
-/// which the palette offers to put on the Space. The palette speaks for the Space
+/// which the palette offers to put on the Space. `Choices` are what the platform
+/// can do from the tool scopes, such as @engine, offered only inside them. The palette speaks for the Space
 /// the window shows and leaves out the tab it shows, or for `SpaceId` when a
 /// page outside the window's tabs asks, such as a Quick Window's, leaving out
 /// no tab; a locked Space offers none of its tabs or history.
 public sealed record PaletteSuggestions(Guid WindowId, string Text, IReadOnlyList<PaletteCommand> Commands,
     IReadOnlyList<PaletteSettingsPage> SettingsPages, IReadOnlyList<string> Remote, SearchProvider? Provider, PaletteScope? Scope,
-    bool AllowsCompletion, string? Pasteboard, IReadOnlyList<PaletteTheme> Themes, Guid? SpaceId = null) : Query<PaletteAnswer> {
+    bool AllowsCompletion, string? Pasteboard, IReadOnlyList<PaletteTheme> Themes,
+    IReadOnlyList<PaletteChoice> Choices, Guid? SpaceId = null) : Query<PaletteAnswer> {
     #region Variables
 
     /// Only reading what the window shows holds the lock; ranking reads immutable records outside it.
