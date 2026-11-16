@@ -15,7 +15,7 @@ internal static partial class StoredSessionCodec {
         new(DataRetention.Forever, DataRetention.Forever, DataRetention.Forever));
 
     /// What a Space that stored no credential preferences offers.
-    internal static CredentialPreferences DefaultCredentialPreferences { get; } = new(true, true, false);
+    internal static CredentialPreferences DefaultCredentialPreferences { get; } = new(true, true, false, []);
 
     #endregion
 
@@ -102,6 +102,7 @@ internal static partial class StoredSessionCodec {
         return new CredentialPreferences(Flag(value[Key.IsEnabled]) ?? DefaultCredentialPreferences.IsEnabled,
             Flag(value[Key.SyncsCrestPasswordsWithICloud]) ?? DefaultCredentialPreferences.SyncsCrestPasswordsWithICloud,
             Flag(value[Key.AlsoOffersSaveToSystemPasswords]) ?? DefaultCredentialPreferences.AlsoOffersSaveToSystemPasswords,
+            DecodeNeverSavedSites(value),
             Integer(value[Key.SavePromptSeconds]) ?? DefaultCredentialPreferences.SavePromptSeconds).Kept();
     }
 

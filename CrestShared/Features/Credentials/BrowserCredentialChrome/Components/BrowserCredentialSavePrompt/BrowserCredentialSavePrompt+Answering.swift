@@ -17,6 +17,12 @@ extension BrowserCredentialSavePrompt {
         Countdown(candidateID: candidate.id, isPointerResting: isPointerResting, closes: model.closesOnItsOwn)
     }
 
+    /// Never for This Site, offered only while the prompt asks.
+    var neverSaveAction: (() -> Void)? {
+        guard model.asksForAnswer else { return nil }
+        return { neverSaveOnSite() }
+    }
+
     /// The ✕ at the prompt's corner, which puts it away as Not Now does.
     var closeButton: some View {
         Button(action: port.dismiss) {
@@ -49,6 +55,19 @@ extension BrowserCredentialSavePrompt {
         guard !Task.isCancelled, model.closesOnItsOwn, !isPointerResting,
             port.presentedCandidateID() == candidate.id
         else { return }
+        port.dismiss()
+    }
+
+    /// Stops this Space offering to save on the page's site and everything
+    /// under it, then puts the prompt away. A site whose subdomains belong to
+    /// others is kept alone. Saved passwords still fill there.
+    func neverSaveOnSite() {
+        let host = candidate.topLevelOrigin.host
+        do {
+            try browser.neverSaveSite(host, includesSubdomains: true, in: port.spaceID)
+        } catch {
+            try? browser.neverSaveSite(host, includesSubdomains: false, in: port.spaceID)
+        }
         port.dismiss()
     }
 }
