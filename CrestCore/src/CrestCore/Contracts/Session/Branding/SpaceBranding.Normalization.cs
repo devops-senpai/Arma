@@ -46,6 +46,7 @@ public sealed partial record SpaceBranding {
             TextureStrength = Unit(branding.TextureStrength),
             FolderColorIntensity = Unit(branding.FolderColorIntensity),
             SymbolColor = branding.SymbolColor is { } symbol ? NormalizedColor(symbol) : null,
+            Dress = branding.Dress?.Normalized(),
             Crest = crest with {
                 Palette = palette is null ? null : new(palette),
                 BackplateColorIndex = LayerIndex(crest.BackplateColorIndex, layers),

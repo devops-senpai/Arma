@@ -5,7 +5,8 @@ namespace CrestCore.Contracts;
 /// vocabulary the branding uses, which older readers need to read it faithfully.
 /// <see cref="HasCustomAppearance"/> is null for branding stored before it was recorded.
 /// <see cref="TextureStrength"/> is how strongly a grain lies over the sidebar, whatever its
-/// mode, from none at 0 to full at 1.
+/// mode, from none at 0 to full at 1. <see cref="Dress"/> is what the look sets beyond these,
+/// such as its folders' and sidebar text's colors, or null for none.
 /// </summary>
 public sealed partial record SpaceBranding(
     ColorPalette Colors,
@@ -22,7 +23,8 @@ public sealed partial record SpaceBranding(
     int RenderingVersion,
     double FolderColorIntensity,
     SpaceTextColorMode TextColorMode,
-    bool? HasCustomAppearance) {
+    bool? HasCustomAppearance,
+    SpaceDress? Dress = null) {
     #region Static Variables
 
     /// The rendering vocabulary every shipped build draws. A banner strength stored

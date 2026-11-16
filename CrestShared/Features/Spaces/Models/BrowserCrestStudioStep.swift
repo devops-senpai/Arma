@@ -16,6 +16,7 @@ struct BrowserCrestStudioStep: Hashable, Identifiable, Sendable {
         case border
         case finish
         case sidebar
+        case other
     }
 
     // MARK: - Static Variables
@@ -53,7 +54,7 @@ struct BrowserCrestStudioStep: Hashable, Identifiable, Sendable {
         summary: { $0.themeMode == .gradient ? "Gradient" : $0.bannerPattern.title })
 
     /// Every step, in the step bar's order.
-    static let all: [BrowserCrestStudioStep] = [start, shape, field, band, emblem, border, finish, sidebar]
+    static let all: [BrowserCrestStudioStep] = [start, shape, field, band, emblem, border, finish, sidebar, other]
 
     // MARK: - Variables
 
@@ -72,7 +73,7 @@ struct BrowserCrestStudioStep: Hashable, Identifiable, Sendable {
 
     // MARK: - Initializers
 
-    private init(
+    init(
         kind: Kinds, name: String, title: LocalizedStringResource, symbol: String, isCrestOnly: Bool,
         summary: @escaping @Sendable (SpaceBranding) -> LocalizedStringResource
     ) {

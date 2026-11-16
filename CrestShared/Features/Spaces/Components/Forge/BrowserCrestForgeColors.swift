@@ -205,11 +205,10 @@ struct BrowserCrestForgePalette: View {
                     }
                 }
             }
-            ColorPicker(
-                "Custom",
-                selection: Binding(get: { color.color }, set: { select(BrandColor(color: $0)) }),
-                supportsOpacity: false
-            )
+            // Arma's own wheel, always shown in this popover, rather than the
+            // system color panel: the popover closes when the panel takes
+            // focus, and a color picked there would go nowhere.
+            BrowserColorWheelPicker(color: Binding(get: { color }, set: { select($0) }), title: "Custom Color")
         }
         .padding(14)
         .fixedSize()

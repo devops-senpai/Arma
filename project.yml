@@ -439,6 +439,8 @@ targets:
           - "**/CONTEXT.md"
           - Resources/CrestIcon/Sources
           - Resources/CrestIcon/Validation
+      # A theme's colors read the way the Mac's theme files spell them.
+      - path: CrestAgents/CrestThemeHex.swift
       - path: CrestMobile
         excludes:
           - "**/CONTEXT.md"
@@ -499,6 +501,8 @@ targets:
           - "**/CONTEXT.md"
           - Resources/CrestIcon/Sources
           - Resources/CrestIcon/Validation
+      # A theme's colors read the way the Mac's theme files spell them.
+      - path: CrestAgents/CrestThemeHex.swift
       - path: CrestMobile
         excludes:
           - "**/CONTEXT.md"

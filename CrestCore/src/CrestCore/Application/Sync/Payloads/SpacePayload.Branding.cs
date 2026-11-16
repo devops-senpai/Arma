@@ -36,7 +36,7 @@ internal sealed partial record SpacePayload {
             value.Value["symbolColor"] is { } symbolColor ? Color(symbolColor) : null,
             ReadCrest(value.Nested("crest")), version, value.TolerantNumber("folderColorIntensity") ?? 0,
             SpaceTextColorMode.Named(value.TolerantText("textColorMode")) ?? SpaceTextColorMode.Automatic,
-            value.OptionalFlag("hasCustomAppearance"));
+            value.OptionalFlag("hasCustomAppearance"), ReadDress(value.Value));
         return SpaceBranding.Normalized(branding);
     }
 

@@ -4,7 +4,7 @@ namespace CrestCore.Contracts;
 /// the device, under the Space's own icon, with no arms.
 /// Choosing one copies its look into the Space, so a Space keeps the look it
 /// was given when a scheme changes.
-public sealed class SpaceScheme {
+public sealed partial class SpaceScheme {
     #region Static Variables
 
     /// A neutral gray laid thinly over the window's own background, which
@@ -13,7 +13,7 @@ public sealed class SpaceScheme {
     public static readonly SpaceScheme Neutral = new("neutral", "Neutral", SchemeLook(
         [Tincture.NeutralSmoke], Tincture.NeutralGray, strength: 0.15, textureStrength: 1));
 
-    public static IReadOnlyList<SpaceScheme> All { get; } = [Neutral];
+    public static IReadOnlyList<SpaceScheme> All => [Neutral, .. Themes];
 
     #endregion
 

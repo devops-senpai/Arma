@@ -124,12 +124,15 @@ struct BrowserFolderGroup: View {
         .environment(\.browserInteractionCapabilities, context.capabilities)
         .modifier(
             BrowserFolderSectionSurface(
-                color: folder.displayColor,
+                color: configuration.displayBranding?.folderColor(of: folder, in: context.space) ?? folder.displayColor,
                 kind: folder.kind,
                 intensity: configuration.displayBranding?.folderColorIntensity ?? 0,
+                highlightColor: configuration.displayBranding?.folderHighlightColor(of: folder, in: context.space),
+                highlightOpacity: configuration.displayBranding?.folderHighlightOpacity,
                 textColorMode: configuration.displayBranding?.shownTextColorMode ?? .automatic,
                 depth: depth,
                 isSelected: BrowserSidebarSelection.showsSelected(.folder(folder.id), in: context),
+                isOpen: showsAllContents, spaceID: configuration.spaceID,
                 folderID: folder.id, reorder: sidebarInteraction.sidebarReorderState)
         )
         .modifier(BrowserFolderReorderContainer(configuration: configuration))

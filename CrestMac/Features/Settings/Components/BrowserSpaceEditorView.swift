@@ -25,6 +25,8 @@ struct BrowserSpaceEditorView: View {
                 appearanceEditor
             }
         }
+        // The theme the Space wears heads the page, over the editor.
+        .safeAreaInset(edge: .top, spacing: 0) { BrowserSpaceThemePicker(browser: browser, space: space) }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .accessibilityIdentifier("space-customization-controls")
     }

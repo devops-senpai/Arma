@@ -15,7 +15,8 @@ extension BrowserStore {
     func addSpace(appearance: BrowserDeviceAppearanceStore = .shared) throws(Rejection) {
         let spaceID = UUID()
         try family.commit(
-            CreateSpace(workspaceID: family.workspaceID, windowID: windowID, spaceID: spaceID), from: self)
+            themedCreateSpace(workspaceID: family.workspaceID, windowID: windowID, spaceID: spaceID), from: self)
+        guard !madeInDefaultTheme(spaceID) else { return }
         // The core dresses a new Space in a template's heraldic look.
         if let space = availableSpaces.first(where: { $0.id == spaceID }) {
             restyle(space, from: .heraldic, to: appearance.customizationStyle, appearance: appearance)
@@ -274,7 +275,7 @@ extension BrowserStore {
 
     @discardableResult
     func renameFolder(_ folderID: UUID, in spaceID: UUID, title: String) -> Bool {
-        guard renameSessionFolder(folderID, in: spaceID, title: title) else { return false }
+        guard renameSessionFolderKeepingOverrides(folderID, in: spaceID, title: title) else { return false }
         return true
     }
 
@@ -413,7 +414,7 @@ extension BrowserStore {
         before siblingID: UUID? = nil
     ) -> Bool {
         guard
-            moveSessionFolder(
+            moveSessionFolderKeepingOverrides(
                 folderID,
                 in: spaceID,
                 into: parentID,

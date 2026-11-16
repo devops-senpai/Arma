@@ -95,6 +95,7 @@ struct BrowserCrestStudioGroup<Content: View>: View {
     var preview: SpaceBranding? = nil
     var symbol: String = "sparkles"
     @ViewBuilder var content: Content
+    @Environment(\.browserCrestStudioResets) private var resets
 
     init(
         title: LocalizedStringResource, systemImage: String, preview: SpaceBranding? = nil, symbol: String = "sparkles",
@@ -123,6 +124,7 @@ struct BrowserCrestStudioGroup<Content: View>: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityAddTraits(.isHeader)
                 Spacer()
+                BrowserCrestStudioResetButton(title: title, settings: resets)
                 if let preview {
                     BrowserCrestStudioMark(branding: preview, symbol: symbol, size: 56)
                         .frame(width: 72, height: 64)

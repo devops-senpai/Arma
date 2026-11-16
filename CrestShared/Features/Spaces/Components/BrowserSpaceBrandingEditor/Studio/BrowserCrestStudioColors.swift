@@ -140,11 +140,12 @@ struct BrowserCrestStudioBackground: View {
             slider("Folder color intensity", \.folderColorIntensity)
             slider("Texture", \.textureStrength, readout: .percent(zero: "None", full: "Full"))
             let text = context.setting(\.textColorMode)
-            CrestSettingRow("Text color", setting: text.resettable("Text color")) {
-                Picker("Text color", selection: text.binding) {
+            CrestSettingRow("Text", setting: text.resettable("Text")) {
+                Picker("Text", selection: text.binding) {
                     ForEach(SpaceTextColorMode.all, id: \.self) { Text($0.title).tag($0) }
                 }.labelsHidden()
             }
+            BrowserCrestStudioSidebarTextColors(context: context)
         }
     }
 

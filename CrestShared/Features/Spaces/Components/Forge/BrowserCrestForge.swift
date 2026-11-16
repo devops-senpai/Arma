@@ -77,6 +77,9 @@ struct BrowserCrestForge: View {
     /// The Forge's history, on one of the step pages it opens; the Forge
     /// itself keeps its own.
     var sharedHistory: Binding<BrowserCrestForgeHistory>? = nil
+    /// The steps a person may open, every one unless the page edits only
+    /// part of a look, as a theme's.
+    var offeredSteps: [BrowserCrestStudioStep] = BrowserCrestStudioStep.all
     /// The Space whose customization style the studio shows, or nil for the
     /// whole studio alone.
     var spaceID: UUID? = nil
@@ -84,13 +87,16 @@ struct BrowserCrestForge: View {
     @State private var initialAppearance: SpaceBranding?
     @State private var ownHistory = BrowserCrestForgeHistory()
     @State private var choosesEmoji = false
+    @Environment(\.browserSpaceThemeFiles) var themeFiles
+    /// Why the last theme file could not be written or read, until the next try.
+    @State var themeFileProblem: String?
 
     private var history: Binding<BrowserCrestForgeHistory> { sharedHistory ?? $ownHistory }
 
     private var editingStart: SpaceBranding? { history.wrappedValue.editingStart }
     @State private var showsAdvanced = false
 
-    private var context: BrowserCrestStudioContext {
+    var context: BrowserCrestStudioContext {
         BrowserCrestStudioContext(
             branding: $branding,
             defaults: branding.startingLook ?? initialAppearance ?? branding,
@@ -101,7 +107,8 @@ struct BrowserCrestForge: View {
 
     /// The step shown: the one chosen, unless an icon has no use for it.
     private var shownStep: BrowserCrestStudioStep {
-        isIcon && step.isCrestOnly ? .emblem : step
+        guard offeredSteps.contains(step) else { return offeredSteps.first ?? .sidebar }
+        return isIcon && step.isCrestOnly ? .emblem : step
     }
 
     /// The style the studio shows the Space's look in.
@@ -218,6 +225,8 @@ struct BrowserCrestForge: View {
             finishSections
         case .sidebar:
             sidebarSections
+        case .other:
+            otherSections
         }
     }
 
@@ -315,6 +324,7 @@ struct BrowserCrestForge: View {
     private var sidebarSections: some View {
         sidebarGallery
         sidebarSection
+        BrowserCrestForgeThemeSidebarSections(context: context)
     }
 
     private var identityRow: some View {
@@ -406,6 +416,7 @@ struct BrowserCrestForge: View {
                 title: "Texture", value: context.setting(\.textureStrength),
                 readout: .percent(zero: "None", full: "Full"))
             segmentedText
+            BrowserCrestStudioSidebarTextColors(context: context)
         }
     }
 
@@ -465,15 +476,16 @@ struct BrowserCrestForge: View {
 
     /// The stage and the steps head the page's first section, outside the
     /// grouped boxes, so the crest sits on the Space's field alone.
-    private var stageHeader: some View {
+    var stageHeader: some View {
         VStack(spacing: 16) {
             BrowserCrestForgeStage(
                 branding: $branding, symbol: symbol, name: name, canUndo: history.wrappedValue.canUndo,
+                showsCrest: offersCrest, showsSidebar: offersSidebar,
                 shuffle: shuffle, undo: undo, openStep: { step = $0 })
             if showsStepBar && !listsSteps {
                 BrowserPlatformCrestForgeStepBar(
                     step: Binding(get: { shownStep }, set: { step = $0 }),
-                    disabledSteps: isIcon ? Set(BrowserCrestStudioStep.all.filter(\.isCrestOnly)) : [])
+                    disabledSteps: disabledSteps, steps: offeredSteps)
             }
         }
         .textCase(nil)
@@ -508,7 +520,7 @@ struct BrowserCrestForge: View {
     }
 
     private func shuffle() {
-        branding = Self.shuffled(branding)
+        branding = shuffledInOffer()
     }
 
     // MARK: - Looks

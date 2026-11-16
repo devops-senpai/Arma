@@ -62,6 +62,8 @@ final class BrowserOnboardingFlow {
     /// The look the Spaces setup makes wear, which the stage and every
     /// preview follow.
     var look: SetupLook { state?.look ?? .heraldic }
+    /// A theme the Spaces setup makes wear, kept by the flow as this Mac's choice.
+    var theme: BrowserBundledTheme?
     var failure: SetupFailure? { state?.failure }
     var review: SetupImportReview? { state?.review }
     var selectedImportApplications: Set<ImportSource> { Set(state?.selected ?? []) }
@@ -233,6 +235,7 @@ final class BrowserOnboardingFlow {
     /// Gives the Spaces setup makes from here on `look`.
     func chooseLook(_ look: SetupLook) {
         guard !isImportSelectionLocked else { return }
+        theme = nil
         send(ChooseSetupLook(look: look))
     }
 
@@ -396,6 +399,7 @@ final class BrowserOnboardingFlow {
                     extensions: extensionInstaller == nil ? [] : output.extensions,
                     leftOut: output.leftOut,
                     title: offeredSource(application)?.title))
+            if application == .arc { shuffleReviewedCrestsSoon() }
         } catch {
             send(FailImport(source: application, reason: .read, detail: error.personFacingDescription))
         }
