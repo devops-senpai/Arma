@@ -106,7 +106,8 @@ internal static partial class StoredSessionCodec {
             DecodeNeverSavedSites(value),
             CredentialAuthentication.Named(TolerantText(value[Key.Authentication])) ?? DefaultCredentialPreferences.Authentication,
             Integer(value[Key.SavePromptSeconds]) ?? DefaultCredentialPreferences.SavePromptSeconds,
-            TolerantFlag(value[Key.SuggestsInPrivateWindows]) ?? DefaultCredentialPreferences.SuggestsInPrivateWindows).Kept();
+            TolerantFlag(value[Key.SuggestsInPrivateWindows]) ?? DefaultCredentialPreferences.SuggestsInPrivateWindows,
+            TolerantFlag(value[Key.AllowsCommandLine]) ?? DefaultCredentialPreferences.AllowsCommandLine).Kept();
     }
 
     internal static JsonObject Encode(CredentialPreferences preferences) => WithCredentialChoices(new() {
