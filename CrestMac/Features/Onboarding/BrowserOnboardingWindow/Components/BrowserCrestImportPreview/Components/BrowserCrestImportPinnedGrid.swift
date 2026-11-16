@@ -44,7 +44,7 @@ struct BrowserCrestImportPinnedGrid: View {
                     }
                 }
                 .accessibilityLabel(tab.shownTitle)
-                .accessibilityValue(isMatched ? "Matched in source browser" : "In Crest")
+                .accessibilityValue(isMatched ? "Matched in source browser" : "In Arma")
             }
         }
     }
