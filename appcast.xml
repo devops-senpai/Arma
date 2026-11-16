@@ -6,6 +6,28 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.9.152</title>
+            <pubDate>Sun, 15 Nov 2026 23:20:20 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>900152</sparkle:version>
+            <sparkle:shortVersionString>0.9.152</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview.
+
+### From Crest
+- Settings › Tabs › Open new tabs at chooses whether new tabs open at the top or the bottom of your open tabs, and can file them into the folder or Group you're in.
+- Back on the first page of a tab another tab opened closes it and returns to the tab that opened it. Open Link in New Tab now leads a link's menu.
+- Moving the pointer off the window's sidebar edge opens the hidden sidebar at once.
+- Notices fit their words at the top right of the page, and notices, previews and the element picker draw on one readable surface.
+- Pages run faster with ad blocking on, on both engines.
+- Arma keeps running when the disk is nearly full and a site saves data.
+- Save Tab and Unsave Tab in tab menus, Recent Tabs lists only loaded tabs, and Split View keeps focus on the right card under the floating sidebar and Peek.
+- Sparkle 2.9.6, with two installer security fixes, plus several smaller fixes.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.152/Arma-0.9.152.dmg" length="196181813" type="application/octet-stream" sparkle:edSignature="NIIBdkIvawimcTYBbjXFbaammvaomHuiXve6zbcvW9vMcRsTfNouLYWr3BgWLPuWsxOKcXGrbUif2zN4hITdBA=="/>
+        </item>
+        <item>
             <title>0.9.134</title>
             <pubDate>Sun, 15 Nov 2026 16:49:06 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -726,6 +748,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: KiFOvcddaE3G9J2/XokuSweHxm54FOfv9/+ui2KhAKF00EvBYEx/X5L+WK17v5EmRhd+KRGX6wd1lPcLkC7YDQ==
-length: 52940
+edSignature: aKpQmmHz+gNc4JyxTbaOb4kn5HxxSlv6weCTLh7BP8CUDmsMN2GoZ0g0ZeM/FYxtzlWIcIagflY/FrYKv7N9Ag==
+length: 54704
 -->
