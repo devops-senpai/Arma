@@ -31,10 +31,11 @@ struct BrowserOnboardingWelcomePage: View {
                     .padding(.leading, 80)
                 Spacer(minLength: 60)
                 BrowserOnboardingWindowPreview(
-                    branding: SpaceHouse.winter.look, symbol: "house.fill", name: String(localized: "Personal")
+                    branding: .armaWelcome, symbol: "house.fill", name: String(localized: "Personal")
                 ) {
-                    BrowserSpaceCrestIcon(branding: SpaceHouse.winter.look, size: 160)
+                    CrestStartPageMark()
                         .frame(width: 160, height: 160)
+                        .accessibilityHidden(true)
                 }
                 .frame(width: 680, height: 460)
                 .padding(.trailing, 100)

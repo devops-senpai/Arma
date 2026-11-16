@@ -15,10 +15,10 @@ struct MobileOnboardingWelcomePage: View {
                 VStack(alignment: .leading, spacing: 24) {
                     HStack(spacing: 10) {
                         CrestStartPageMark().frame(width: 28, height: 32)
-                        Text("Crest").font(.headline)
+                        Text("Arma").font(.headline)
                     }
                     HStack(spacing: 16) {
-                        ForEach(Array(SpaceHouse.all.prefix(3).enumerated()), id: \.element.name) {
+                        ForEach(Array(SpaceHouse.offered.prefix(3).enumerated()), id: \.element.name) {
                             index, preset in
                             BrowserSpaceCrestIcon(
                                 branding: preset.look,

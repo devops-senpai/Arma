@@ -15,22 +15,12 @@ struct CrestStartPageMark: View {
                 )
                 .fill(palette.background)
 
-                ZStack {
-                    CrestBannerShape()
-                        .fill(palette.coral)
-
-                    CrestButterPlaneShape()
-                        .fill(palette.butter)
-
-                    CrestSkyPlaneShape()
-                        .fill(palette.sky)
-
-                    Rectangle()
-                        .fill(palette.rail)
-                        .frame(width: side * CrestStartPageMarkMetrics.railWidthRatio)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .clipShape(CrestBannerShape())
+                // Arma's banner stands where Crest's drawn one did. The image
+                // is a tight crop of the banner, so it keeps a margin.
+                Image("ArmaMark")
+                    .resizable()
+                    .scaledToFit()
+                    .padding(side * 0.1)
             }
             .frame(width: side, height: side)
             .position(x: proxy.size.width / 2, y: proxy.size.height / 2)

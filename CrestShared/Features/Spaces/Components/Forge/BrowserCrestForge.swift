@@ -233,7 +233,7 @@ struct BrowserCrestForge: View {
     // MARK: - Step sections
 
     private var startSections: some View {
-        gallery(SpaceHouse.all, id: \.self) { house in
+        gallery(SpaceHouse.offered, id: \.self) { house in
             BrowserCrestStudioChoice(title: house.title, selected: house.isWorn(by: branding)) {
                 branding = house.applying(to: branding)
             } artwork: {
@@ -248,7 +248,7 @@ struct BrowserCrestForge: View {
 
     @ViewBuilder
     private var shapeSections: some View {
-        crestGallery(\.backplate, CrestBackplate.all)
+        crestGallery(\.backplate, CrestBackplate.offered)
         Section {
             context.slider("Edge", \.edgeWidth, range: CrestMeasure.edgeWidth.range)
             context.slider("Size", \.plateScale, range: CrestMeasure.plateScale.range)
