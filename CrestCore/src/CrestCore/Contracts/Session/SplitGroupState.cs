@@ -6,7 +6,8 @@ namespace CrestCore.Contracts;
 /// <summary>
 /// What a person chose for a split: its name, icon, tint and whether the sidebar
 /// shows it collapsed, each with the time it last changed so devices merge the fields
-/// independently. Membership stays on the tabs, whose <see cref="TabState.SplitGroupId"/>
+/// independently, and the <see cref="Shape"/> its cards tile in, over the order the
+/// members keep. Membership stays on the tabs, whose <see cref="TabState.SplitGroupId"/>
 /// names this group.
 /// </summary>
 public sealed record SplitGroupState(
@@ -18,7 +19,9 @@ public sealed record SplitGroupState(
     BrandColor? Tint = null,
     DateTimeOffset? TintModifiedAt = null,
     bool IsCollapsed = false,
-    DateTimeOffset? CollapseModifiedAt = null) {
+    DateTimeOffset? CollapseModifiedAt = null,
+    SplitShape? Shape = null,
+    DateTimeOffset? ShapeModifiedAt = null) {
     #region Static Variables
 
     /// The fewest tabs of one split a sidebar or a window shows as a split. A shorter
@@ -47,6 +50,24 @@ public sealed record SplitGroupState(
 
     #endregion
 
+    #region Actions - Shape
+
+    /// The record with `shape` chosen at `now`; one row of columns is kept as
+    /// no shape at all.
+    internal SplitGroupState WithShape(SplitShape? shape, DateTimeOffset now) {
+        var chosen = shape is null || shape.IsColumns ? null : shape.Normalized();
+        return Equals(chosen, Shape) ? this : this with { Shape = chosen, ShapeModifiedAt = BrowserEditTimestamp.Normalize(now) };
+    }
+
+    /// How many children the branch a window keeps shares for as `branchId`
+    /// lays out for a run of `members` cards: as the shape lays them out when
+    /// its leaves count them, else as one row of columns under the split's
+    /// own id. Zero for no such branch.
+    internal int RenderedChildren(Guid branchId, int members) =>
+        Shape is { } shape && shape.LeafCount == members ? shape.ChildCount(Id, branchId) ?? 0 : branchId == Id ? members : 0;
+
+    #endregion
+
     #region Actions - Repair
 
     /// One metadata record per split. Repeated records merge field by field, the
@@ -59,7 +80,8 @@ public sealed record SplitGroupState(
                 TitleModifiedAt = Normalized(group.TitleModifiedAt),
                 IconModifiedAt = Normalized(group.IconModifiedAt),
                 TintModifiedAt = Normalized(group.TintModifiedAt),
-                CollapseModifiedAt = Normalized(group.CollapseModifiedAt)
+                CollapseModifiedAt = Normalized(group.CollapseModifiedAt),
+                ShapeModifiedAt = Normalized(group.ShapeModifiedAt)
             };
             int index = groups.FindIndex(candidate => candidate.Id == group.Id);
             if (index < 0) { groups.Add(normalized); continue; }
@@ -72,6 +94,8 @@ public sealed record SplitGroupState(
                 normalized = normalized with { Tint = previous.Tint, TintModifiedAt = previous.TintModifiedAt };
             if (PreviousWins(previous.CollapseModifiedAt, normalized.CollapseModifiedAt))
                 normalized = normalized with { IsCollapsed = previous.IsCollapsed, CollapseModifiedAt = previous.CollapseModifiedAt };
+            if (PreviousWins(previous.ShapeModifiedAt, normalized.ShapeModifiedAt))
+                normalized = normalized with { Shape = previous.Shape, ShapeModifiedAt = previous.ShapeModifiedAt };
             groups[index] = normalized;
         }
         return [.. groups];

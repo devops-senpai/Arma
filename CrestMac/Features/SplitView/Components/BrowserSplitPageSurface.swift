@@ -36,6 +36,8 @@ struct BrowserSplitPageSurface: View {
     /// resolved. `BrowserRootPageSurface` owns the decision; the row only draws
     /// it.
     let placeholderIndex: Int?
+    /// The shape the cards and that slot tile in, or `nil` for columns.
+    var placeholderShape: SplitShape? = nil
     let tabPromotionNamespace: Namespace.ID
     /// The chords the window's commands show in a Start Page card's palette.
     let shortcuts: BrowserShortcutStore?
@@ -54,7 +56,7 @@ struct BrowserSplitPageSurface: View {
     @State private var surfaceOrigin = CGPoint.zero
     @State private var panelFrame: CGRect?
 
-    private var isSelectedSpace: Bool {
+    var isSelectedSpace: Bool {
         model.browser.selectedSpaceID == space.id && !model.spaceAccess.isLocked(space)
     }
 
@@ -130,13 +132,16 @@ struct BrowserSplitPageSurface: View {
         // A lone card moves down below the window's top section, where the
         // window's own address bar rests.
         .environment(\.browserSplitLoneCardTopSection, bandsLoneCard ? BrowserPageBarMetrics.topSectionHeight : 0)
+        .environment(\.browserSplitShaping, shaping)
         .background {
             if isSelectedSpace {
                 BrowserSplitCardPointerMonitor(
                     cardFrames: cardFrames,
                     handleMouseDown: handleMouseDown,
                     lift: liftGesture,
-                    isCovered: isCoveredByChrome
+                    isCovered: isCoveredByChrome,
+                    carryRequest: model.sidebarInteraction.cardCarryRequest,
+                    claimCarryRequest: model.sidebarInteraction.claimCardCarry
                 )
             }
         }
@@ -183,6 +188,9 @@ struct BrowserSplitPageSurface: View {
         guard isSelectedSpace, let lift = model.splitCardLift.lift, !lift.isSettling else {
             return members
         }
+        if let other = lift.swapsWith {
+            return BrowserSplitCardLift.displayMembers(members, lifted: lift.tabID, swappingWith: other)
+        }
         return BrowserSplitCardLift.displayMembers(
             members,
             lifted: lift.tabID,
@@ -196,7 +204,9 @@ struct BrowserSplitPageSurface: View {
             update: updateLift,
             drop: dropLift,
             cancel: { model.splitCardLift.cancel() },
-            isCarrying: { model.splitCardLift.isCarrying }
+            isCarrying: { model.splitCardLift.isCarrying },
+            place: { placeLift($0, at: $1, surfaceOrigin: surfaceOrigin) },
+            isPlaced: { model.splitCardLift.isPlaced }
         )
     }
 
@@ -206,7 +216,7 @@ struct BrowserSplitPageSurface: View {
     /// row is animating out keeps its frame until SwiftUI runs its disappearance
     /// — so every geometric question the carry asks is asked of the members
     /// rather than of the registry alone.
-    private var memberCardFrames: [UUID: CGRect] {
+    var memberCardFrames: [UUID: CGRect] {
         let frames = cardFrames.frames
         return members.reduce(into: [:]) { result, member in
             result[member.id] = frames[member.id]
@@ -244,16 +254,18 @@ struct BrowserSplitPageSurface: View {
             BrowserSplitCardLift.picksUp(
                 modifiers: modifiers,
                 isInsideCard: card != nil,
-                isOverDivider: BrowserSplitCardLift.isOverDivider(
-                    point,
-                    orderedCardFrames:
-                        BrowserSplitCardLift
-                        .orderedMemberFrames(
-                            members: members,
-                            cardFrames: frames
-                        ),
-                    panelFrame: panelFrame
-                ),
+                // A shape's dividers run both ways; see `+Shape`.
+                isOverDivider: isOverShapeDivider(point, frames: frames)
+                    ?? BrowserSplitCardLift.isOverDivider(
+                        point,
+                        orderedCardFrames:
+                            BrowserSplitCardLift
+                            .orderedMemberFrames(
+                                members: members,
+                                cardFrames: frames
+                            ),
+                        panelFrame: panelFrame
+                    ),
                 memberCount: members.count,
                 isDraggingSidebarItem:
                     model.sidebarInteraction.sidebarReorderState.isDragging,
@@ -287,6 +299,15 @@ struct BrowserSplitPageSurface: View {
 
     private func updateLift(to point: CGPoint) {
         guard let carried = model.splitCardLift.carriedTabID else { return }
+        // The carry aims in two dimensions, a row of columns included, so a
+        // card can stack out of columns; Paul's row aim below is the fallback
+        // while the cards are not all measured.
+        if let aim = shapedLiftAim(at: point, lifted: carried, rightToLeft: layoutDirection == .rightToLeft) {
+            model.splitCardLift.update(
+                pointer: point, gapIndex: aim.memberIndex, gapShape: aim.shape, swapsWith: aim.swapsWith,
+                aimFrames: aim.frames, surfaceOrigin: surfaceOrigin)
+            return
+        }
         model.splitCardLift.update(
             pointer: point,
             gapIndex: BrowserSplitCardLift.gapIndex(
@@ -303,6 +324,19 @@ struct BrowserSplitPageSurface: View {
     /// whatever slot the gap ended on without checking the ends first.
     private func dropLift() {
         guard let move = model.splitCardLift.drop() else { return }
+        // A card put down on another card's middle trades places with it.
+        if let other = move.swapsWith {
+            model.browser.swapSplitMembers(
+                move.tabID, with: other, matching: BrowserSpaceRuntimeAssignment(space: space))
+            return
+        }
+        // A carry to another tile of a shape is the move and that tile's shape.
+        if let shape = move.shape, let groupID = model.browser.shownSplitGroupID(in: space) {
+            model.browser.arrangeSplit(
+                groupID, in: shape, moving: move.tabID, to: move.memberIndex,
+                matching: BrowserSpaceRuntimeAssignment(space: space))
+            return
+        }
         model.browser.moveSplitMember(
             move.tabID,
             toMemberIndex: move.memberIndex,
@@ -334,7 +368,7 @@ struct BrowserSplitPageSurface: View {
     /// nor the tab it belongs to. The card's own presentation is the authority
     /// on what it is drawing, and it is resolved here by the same policy the card
     /// resolves it with, so the picture and the card cannot disagree.
-    private func loadSnapshot(for member: TabStateModel, token: BrowserSplitCardLiftToken) {
+    func loadSnapshot(for member: TabStateModel, token: BrowserSplitCardLiftToken) {
         let page = model.pages.presentedPage(
             matching: BrowserTabRuntimeAssignment(tabID: member.id, spaceID: space.id, profileID: space.profileID))
         guard PagePresentation.of(member.surface, page: page).picturesLivePage, let page else { return }
