@@ -10,6 +10,9 @@ struct BrowserCredentialSavePromptHeader: View {
     let route: BrowserCredentialPromptRoute
     let space: BrowserSpaceIdentity?
     let metrics: BrowserCredentialPromptMetrics
+    /// Whether the subtitle names the account; it leaves that to the fields
+    /// while the person can still correct it.
+    var showsAccount = true
     let dismiss: () -> Void
     /// Stops the Space offering to save on this site, while the prompt asks.
     var neverSave: (() -> Void)? = nil
@@ -31,7 +34,7 @@ struct BrowserCredentialSavePromptHeader: View {
             ) {
                 Text(route.title(spaceName: space?.name))
                     .font(.headline)
-                Text("\(candidate.username) · \(candidate.origin.description)")
+                Text(showsAccount ? "\(candidate.username) · \(candidate.origin.description)" : candidate.origin.host)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)

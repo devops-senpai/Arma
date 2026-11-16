@@ -31,4 +31,5 @@ enum BrowserCredentialChromePresentation: Equatable {
             request
         }
     }
+
 }
