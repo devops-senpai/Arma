@@ -176,6 +176,7 @@ internal static partial class StoredSessionCodec {
         public const string SuccessorSpaceId = "successorSpaceID";
         public const string SuggestionsFollowDefault = "suggestionsFollowDefault";
         public const string SuggestionUrlTemplate = "suggestionURLTemplate";
+        public const string SuggestsInPrivateWindows = "suggestsInPrivateWindows";
         public const string Symbol = "symbol";
         public const string SymbolColor = "symbolColor";
         public const string SymbolColorIndex = "symbolColorIndex";
