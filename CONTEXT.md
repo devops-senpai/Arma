@@ -34,6 +34,7 @@ whose engines are interchangeable behind one adapter boundary.
 | `HelpCenter/` | Crest Help, the Docusaurus user guides ([CONTEXT](HelpCenter/CONTEXT.md)) |
 | `Website/` | The static product site; `guides/` is the built Help Center ([CONTEXT](Website/CONTEXT.md)) |
 | `Marketing/` | App Store material |
+| `skills/` | Agent skills for using Arma, not for changing it: setup, basics, the `arma` command, themes, acting inside pages, and power-user recipes ([index](skills/README.md)) |
 | `ThirdParty/` | Retained license notices for redistributed dependencies ([CONTEXT](ThirdParty/CONTEXT.md)) |
 | `ci_scripts/` | Xcode Cloud archive guard hooks ([CONTEXT](ci_scripts/CONTEXT.md)) |
 
