@@ -31,7 +31,65 @@ final class BrowserSplitCardLiftTests: XCTestCase {
 
     // MARK: - Divider proximity
 
+    /// In a shape, the row divider between two stacked cards belongs to the
+    /// resize, across the run where both cards stand, and the middle of the
+    /// column they share does not, though the two are neighbours left to
+    /// right.
+    func testARowDividerInAShapeBelongsToTheResize() {
+        let stacked = [
+            CGRect(x: 0, y: 0, width: 300, height: 296),
+            CGRect(x: 0, y: 304, width: 300, height: 296),
+            CGRect(x: 308, y: 0, width: 300, height: 600),
+        ]
+        XCTAssertTrue(BrowserSplitCardLift.isOverTileDivider(CGPoint(x: 150, y: 300), cardFrames: stacked))
+        XCTAssertTrue(BrowserSplitCardLift.isOverTileDivider(CGPoint(x: 304, y: 450), cardFrames: stacked))
+        XCTAssertFalse(BrowserSplitCardLift.isOverTileDivider(CGPoint(x: 150, y: 150), cardFrames: stacked))
+        XCTAssertFalse(BrowserSplitCardLift.isOverTileDivider(CGPoint(x: 450, y: 300), cardFrames: stacked))
+    }
+
     // MARK: - The gap the carried card leaves
+
+    // MARK: - The gap in two dimensions
+
+    /// A row of columns aims as `SplitShape.columns`: onto a card's top edge
+    /// stacks the carried card above it, beside a card keeps the row (no shape
+    /// to store, so the release is Paul's member move), and onto a card's
+    /// middle swaps the two.
+    func testACarryOutOfColumnsStacksMovesOrSwaps() {
+        let members = BrowserSplitCardTestFixture.members.map(\.id)
+        let frames = Self.registeredFrames(count: 3)
+        let leaf = SplitShape.leaf
+        func gap(atX x: CGFloat, y: CGFloat) -> (memberIndex: Int, shape: SplitShape?, swapsWith: UUID?)? {
+            BrowserSplitCardLift.shapedGap(
+                at: CGPoint(x: x, y: y), members: members, lifted: members[0], shape: .columns(3),
+                cardFrames: frames, rightToLeft: false)
+        }
+
+        let stacked = gap(atX: 458, y: 100)
+        XCTAssertEqual(stacked?.memberIndex, 0)
+        XCTAssertEqual(stacked?.shape, .along(.horizontal, [.along(.vertical, [leaf, leaf]), leaf]))
+        XCTAssertNil(stacked?.swapsWith)
+
+        let moved = gap(atX: 850, y: 300)
+        XCTAssertEqual(moved?.memberIndex, 2)
+        XCTAssertNil(moved?.shape)
+        XCTAssertNil(moved?.swapsWith)
+
+        let swapped = gap(atX: 766, y: 300)
+        XCTAssertEqual(swapped?.memberIndex, 2)
+        XCTAssertNil(swapped?.shape)
+        XCTAssertEqual(swapped?.swapsWith, BrowserSplitCardTestFixture.trailingTabID)
+
+        // The row drops the carried card's frame while it draws the gap, and
+        // the aim must not fall back to the row's slot for that.
+        var unregistered = frames
+        unregistered[members[0]] = nil
+        let aimed = BrowserSplitCardLift.shapedGap(
+            at: CGPoint(x: 458, y: 100), members: members, lifted: members[0], shape: .columns(3),
+            cardFrames: unregistered, rightToLeft: false)
+        XCTAssertEqual(aimed?.memberIndex, stacked?.memberIndex)
+        XCTAssertEqual(aimed?.shape, stacked?.shape)
+    }
 
     // MARK: - The row as it is drawn
 

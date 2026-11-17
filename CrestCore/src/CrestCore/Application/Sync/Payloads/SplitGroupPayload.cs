@@ -5,9 +5,9 @@ using CrestCore.Domain;
 
 namespace CrestCore.Application;
 
-/// One split's synced metadata: its name, emoji icon, tint and collapse, each
-/// with the clock of its last edit, so edits on different devices merge per
-/// field.
+/// One split's synced metadata: its name, emoji icon, tint, collapse and shape,
+/// each with the clock of its last edit, so edits on different devices merge
+/// per field.
 internal sealed record SplitGroupPayload(
     Guid Id,
     string? CustomTitle,
@@ -17,7 +17,9 @@ internal sealed record SplitGroupPayload(
     BrandColor? Tint,
     SyncTime? TintModifiedAt,
     bool IsCollapsed,
-    SyncTime? CollapseModifiedAt) {
+    SyncTime? CollapseModifiedAt,
+    SplitShape? Shape,
+    SyncTime? ShapeModifiedAt) {
     #region Static Variables
 
     /// The members a split's metadata carries; a record keeps what a newer
@@ -25,7 +27,8 @@ internal sealed record SplitGroupPayload(
     public static IReadOnlyList<string> Members { get; } = [
         StoredSessionCodec.Key.Id, StoredSessionCodec.Key.CustomTitle, StoredSessionCodec.Key.TitleModifiedAt,
         StoredSessionCodec.Key.CustomIconSymbol, StoredSessionCodec.Key.IconModifiedAt, StoredSessionCodec.Key.Tint,
-        StoredSessionCodec.Key.TintModifiedAt, StoredSessionCodec.Key.IsCollapsed, StoredSessionCodec.Key.CollapseModifiedAt
+        StoredSessionCodec.Key.TintModifiedAt, StoredSessionCodec.Key.IsCollapsed, StoredSessionCodec.Key.CollapseModifiedAt,
+        StoredSessionCodec.Key.SplitShape, StoredSessionCodec.Key.SplitShapeModifiedAt
     ];
 
     #endregion
@@ -61,7 +64,20 @@ internal sealed record SplitGroupPayload(
             value.Value[StoredSessionCodec.Key.Tint] is { } tint ? SpacePayload.Color(tint) : null,
             value.OptionalTime(StoredSessionCodec.Key.TintModifiedAt)?.ToWholeMilliseconds(),
             value.OptionalFlag(StoredSessionCodec.Key.IsCollapsed) ?? false,
-            value.OptionalTime(StoredSessionCodec.Key.CollapseModifiedAt)?.ToWholeMilliseconds());
+            value.OptionalTime(StoredSessionCodec.Key.CollapseModifiedAt)?.ToWholeMilliseconds(),
+            ReadShape(value),
+            (value.OptionalTime(StoredSessionCodec.Key.SplitShapeModifiedAt)
+                ?? value.OptionalTime(StoredSessionCodec.Key.LegacySplitLayoutModifiedAt))?.ToWholeMilliseconds());
+    }
+
+    /// The shape as every client reads it, from `shape` or an earlier Arma
+    /// build's `layout`; see `StoredSessionCodec.DecodeSplitShape`.
+    private static SplitShape? ReadShape(SyncPayloadReader value) {
+        try {
+            return StoredSessionCodec.DecodeSplitShape(value.Value);
+        } catch (Exception error) when (StoredSession.IsUndecodable(error)) {
+            throw new UnreadableSyncPayloadException();
+        }
     }
 
     public JsonObject Encode(SyncPayloadForm form) {
@@ -74,6 +90,8 @@ internal sealed record SplitGroupPayload(
         if (TintModifiedAt is { } tinted) value[StoredSessionCodec.Key.TintModifiedAt] = form.Seconds(tinted);
         if (IsCollapsed) value[StoredSessionCodec.Key.IsCollapsed] = true;
         if (CollapseModifiedAt is { } collapsedAt) value[StoredSessionCodec.Key.CollapseModifiedAt] = form.Seconds(collapsedAt);
+        if (Shape is { } shape) value[StoredSessionCodec.Key.SplitShape] = StoredSessionCodec.Encode(shape);
+        if (ShapeModifiedAt is { } shapedAt) value[StoredSessionCodec.Key.SplitShapeModifiedAt] = form.Seconds(shapedAt);
         return value;
     }
 
@@ -83,6 +101,7 @@ internal sealed record SplitGroupPayload(
         var iconed = Later(IconModifiedAt, older.IconModifiedAt) ? older : this;
         var tinted = Later(TintModifiedAt, older.TintModifiedAt) ? older : this;
         var collapsed = Later(CollapseModifiedAt, older.CollapseModifiedAt) ? older : this;
+        var shaped = Later(ShapeModifiedAt, older.ShapeModifiedAt) ? older : this;
         return this with {
             CustomTitle = titled.CustomTitle,
             TitleModifiedAt = titled.TitleModifiedAt,
@@ -91,7 +110,9 @@ internal sealed record SplitGroupPayload(
             Tint = tinted.Tint,
             TintModifiedAt = tinted.TintModifiedAt,
             IsCollapsed = collapsed.IsCollapsed,
-            CollapseModifiedAt = collapsed.CollapseModifiedAt
+            CollapseModifiedAt = collapsed.CollapseModifiedAt,
+            Shape = shaped.Shape,
+            ShapeModifiedAt = shaped.ShapeModifiedAt
         };
     }
 
