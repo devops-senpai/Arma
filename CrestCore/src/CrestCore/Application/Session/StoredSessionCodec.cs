@@ -76,10 +76,12 @@ internal static partial class StoredSessionCodec {
         public const string Green = "green";
         public const string HasCustomAppearance = "hasCustomAppearance";
         public const string History = "history";
+        public const string Host = "host";
         public const string IconAccent = "iconAccent";
         public const string IconModifiedAt = "iconModifiedAt";
         public const string IconStyle = "iconStyle";
         public const string Id = "id";
+        public const string IncludesSubdomains = "includesSubdomains";
         public const string IsCollapsed = "isCollapsed";
         public const string IsEnabled = "isEnabled";
         public const string IsGroup = "isGroup";
@@ -100,6 +102,7 @@ internal static partial class StoredSessionCodec {
         public const string MembershipModifiedAt = "membershipModifiedAt";
         public const string Name = "name";
         public const string NativeContent = "nativeContent";
+        public const string NeverSavedSites = "neverSavedSites";
         public const string NewTabPosition = "newTabPosition";
         public const string NewTabsJoinFolder = "newTabsJoinFolder";
         public const string OffersTranslation = "offersTranslation";
