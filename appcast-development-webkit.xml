@@ -6,6 +6,38 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.98</title>
+            <pubDate>Tue, 17 Nov 2026 17:18:51 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>1000098</sparkle:version>
+            <sparkle:shortVersionString>0.10.98</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Brings in Crest's latest: folders, Clear, local network and HTTP fixes, and a smoother Chromium engine.
+
+### New
+- Collapse All Folders closes every open folder in a Space at once, nested folders included, without closing any tabs. Find it in the Space's menu, in the sidebar's menu and the View menu, and in the command palette.
+
+### Improved
+- Clear now keeps the tab you're on and archives your other open tabs. Hold Option to turn it into Clear All. Clear All Tabs, Option-Shift-Command-K, is also in the Tabs menu, the command palette and the Space's ••• menu.
+- Large folders open about twice as fast, with the folders inside them filling in just after, and a folder's preview appears without a pause even when it holds hundreds of tabs.
+- Folders brought in from another browser now arrive closed, nested ones included, so a large import opens to a tidy sidebar. Folders from a backup keep how you left them.
+- With the address bar in the sidebar, pages in Split View no longer each carry their own bar along the top: the sidebar's serves the page you're on. With the address bar on top, each page keeps its own.
+- Settings › Tabs now lets you choose separately what pinned tabs and saved tabs do after you close them. Your current choice carries over to both.
+
+### Fixed
+- Pages in Chromium Spaces no longer flash blank or white while the next page loads after you follow a link: the page you're on stays until the next one draws.
+- Arma no longer quits when you clear or close the last open pages of a Chromium Space with Chromium's Contextual Tasks flag turned on.
+- Folder icons wider than a folder, such as a computer or a group of people, now show whole in the sidebar instead of cut off at their edge.
+- Chromium Spaces can open devices on your local network, such as routers, NAS drives and home servers, once you turn on Arma Helper under System Settings › Privacy & Security › Local Network, now Arma's own setting rather than one shared with other apps. A page that can't reach a local address says how to allow it.
+- In Chromium Spaces, an http:// address you type or open now stays on HTTP, including when you reload it. Links on pages still try HTTPS first and fall back to HTTP when a site doesn't offer it.
+- Files downloaded over plain HTTP in Chromium Spaces are no longer blocked outright: Arma asks whether to keep them.
+- When you type a site without http:// or https://, Arma tries HTTPS first and opens it over HTTP if HTTPS can't reach it. Local addresses open over HTTP right away, and an address you type with https:// never falls back.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.98/Arma-0.10.98.dmg" length="194931900" type="application/octet-stream" sparkle:edSignature="2lCuBfaL6EgCs+E+TIKEBOTz3lbEKepzpzWkiMlyOXZYK8CPWaJ1VsV5abFDJfyftHIL7l1w6/bmNsIBYUh4Dg=="/>
+        </item>
+        <item>
             <title>0.10.85</title>
             <pubDate>Tue, 17 Nov 2026 09:58:20 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -858,6 +890,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: Tqoscifn05qIZKiVh6uHy+8Wxu7G7ngbiRMUwBh0/QmDUYVdj8tI189irNSEvlUzRMAiaeRzm7JH//+IjAXsCQ==
-length: 62534
+edSignature: TJC+RH2bjKbqDqA8mnhRl5DeGX/bBkBwxb3MjnqgoVZmaPGeGw9yE3hU1eUp2Q4u34VaTsgogNoOsw8hQSCtAw==
+length: 66023
 -->
