@@ -6,6 +6,46 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.83</title>
+            <pubDate>Tue, 17 Nov 2026 00:06:05 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>1000083</sparkle:version>
+            <sparkle:shortVersionString>0.10.83</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Brings in Crest 0.10, and every Arma feature rebuilt on top of Paul's code.
+
+### New
+- Crest 0.10: three styles set how much Arma shows, the address bar can sit above the page, and the sidebar gains spacing, tab size, hover previews and groups.
+- Settings › Appearance has a Default theme for new Spaces, or None for Crest's own look. Spaces you never gave a theme keep their look.
+- Choose how long a generated password is and which kinds of character it uses, in the strong password prompt and in Settings.
+- A saved password can also fill the subdomains of its site when you choose Include subdomains while saving or editing it.
+- Pause Arma's password prompts on a tab, for a while or until you resume them, so another password manager can fill it.
+- The Save password? prompt has a close button and closes on its own after the number of seconds you choose in each Space's Passwords settings.
+- A Space can let private windows suggest its saved passwords; a private window still never saves one.
+
+### Improved
+- Chromium is updated to 157.0.8103.80, with 83 upstream security fixes, five of them critical.
+- Showing or copying a saved password asks you to authenticate each time again by default; choose Ask Every 15 Minutes or Don't Ask in each Space's Passwords settings.
+- New installs follow the system's Light or Dark appearance again.
+- A Space's Appearance page edits its colors, sidebar and crest again under the theme it wears, with Reset Appearance back in its menu.
+- A closed folder shows only its loaded tabs, and a folder's header can close or unload everything in it.
+- The recent tabs switcher also lists the loaded tabs of the other Spaces in a Sub-Space group.
+- Closing a Peek shrinks it back into the link it grew out of, and a quick swipe between Spaces finishes as fast as the keyboard shortcut.
+
+### Fixed
+- Settings and Getting Started show at once when Arma opens on them, instead of an empty page until you switch tabs.
+- The command palette no longer hangs Arma at launch or quit in a themed Space.
+- When the palette can't rank what you typed, Return, Tab and clicks act on the rows shown instead of waiting.
+- The password bubble appears only when you have a password for the site or are signing up, and closes once you move on.
+- With the address bar on top, clicking in the address field places the cursor and dragging selects text, instead of moving the window.
+- In the sidebar, a folder's icon, title and … button line up with the tabs beside it.
+- Choosing Modern or Simple during setup restyles your Spaces as choosing it in Settings does.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.83/Arma-0.10.83.dmg" length="195231956" type="application/octet-stream" sparkle:edSignature="FTZIzSghL6VdDarN+2doZw1S+3fAXeRkl9j//FrKTFDiKIVDu+QAiTh9OL5uA5463BfI4eyogJZWCXYf6djMCg=="/>
+        </item>
+        <item>
             <title>0.9.152</title>
             <pubDate>Sun, 15 Nov 2026 23:20:31 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -786,6 +826,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: bdfaH63cuXXu8IFGh7iaEroPanO9/6Pi5emxdyue1V19SE+5yxmaSONIRKY71cPv8SkVqeHjixn5DyDD6k+3AA==
-length: 56946
+edSignature: W9HDQGf4s0qDrz258rC6tgAv1L0LLIXBSUsD2zAgxt1rL+YBfA76T5j4DTVp9HT/LrLTAvM2YFPp/dLA7TEsBA==
+length: 60437
 -->
