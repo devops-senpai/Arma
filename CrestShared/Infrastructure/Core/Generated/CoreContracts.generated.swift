@@ -2253,6 +2253,12 @@ struct CredentialStoredComparison: Equatable, Sendable, Identifiable {
     var passwordMatches: Bool
 }
 
+struct CredentialSubdomainReach: Query, Equatable, Sendable {
+    typealias Answer = CredentialFillDecision
+
+    let origin: CredentialOrigin
+}
+
 struct CredentialUsernameHint: Equatable, Sendable {
     var origin: CredentialOrigin
     var topLevelOrigin: CredentialOrigin
@@ -2264,6 +2270,7 @@ struct CredentialsFillingPage: Query, Equatable, Sendable {
 
     let page: CredentialOrigin
     let saved: [CredentialOrigin]
+    let reachingSubdomains: [Int]?
 }
 
 struct CrestCharge: Equatable, Sendable {

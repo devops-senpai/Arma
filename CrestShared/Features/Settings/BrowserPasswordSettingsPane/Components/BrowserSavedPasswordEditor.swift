@@ -10,10 +10,11 @@ struct BrowserSavedPasswordEditorRequest: Identifiable {
     var website: String?
 }
 
-/// One saved password, to add or change: the website, the category it is
-/// filed under, its email, username and password, which the Space's generator
-/// can make, and notes such as recovery codes, kept as secret as the password.
-/// Changing a saved password authenticates first, as viewing it does.
+/// One saved password, to add or change: the website and whether it also
+/// fills the addresses under it, the category it is filed under, its email,
+/// username and password, which the generator can make, and notes such as
+/// recovery codes, kept as secret as the password. Changing a saved password
+/// authenticates first, as viewing it does.
 struct BrowserSavedPasswordEditor: View {
     // MARK: - Variables
 
@@ -29,6 +30,7 @@ struct BrowserSavedPasswordEditor: View {
 
     @Environment(\.dismiss) private var dismiss
     @State private var typedWebsite = ""
+    @State private var includesSubdomains = true
     @State private var category: String?
     @State private var email = ""
     @State private var username = ""
@@ -70,6 +72,8 @@ struct BrowserSavedPasswordEditor: View {
                             .autocorrectionDisabled()
                             .accessibilityIdentifier("saved-password-website")
                     }
+                    Toggle("Include subdomains", isOn: $includesSubdomains)
+                        .accessibilityIdentifier("saved-password-subdomains")
                     BrowserPasswordCategoryPicker(category: $category, categories: categories)
                 }
 
@@ -170,6 +174,7 @@ struct BrowserSavedPasswordEditor: View {
             isUnlocked = true
             return
         }
+        includesSubdomains = account.includesSubdomains
         category = account.category
         do {
             let credential = try await BrowserCredentialSensitiveAccess(browser: browser).revealCredential(
@@ -194,7 +199,8 @@ struct BrowserSavedPasswordEditor: View {
             do {
                 let descriptor = try await browser.saveCredential(
                     username: username, password: password, for: address, in: account?.spaceID ?? space.id,
-                    replacing: account, email: email, category: category ?? "")
+                    replacing: account, email: email, category: category ?? "",
+                    includesSubdomains: includesSubdomains)
                 try await browser.setCredentialNotes(notes, for: descriptor)
                 forget()
                 saved()
