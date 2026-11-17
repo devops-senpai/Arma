@@ -90,7 +90,7 @@ extension BrowserCredentialSavePrompt {
 
     /// The ✕ at the prompt's corner, which puts it away as Not Now does.
     var closeButton: some View {
-        Button(action: port.dismiss) {
+        Button(action: port.close ?? port.dismiss) {
             Image(systemName: "xmark")
                 .font(.system(size: BrowserCredentialPromptMetrics.closeGlyphSize, weight: .bold))
         }
