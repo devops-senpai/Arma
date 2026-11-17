@@ -46,7 +46,10 @@ struct BrowserFolderArtwork: View {
 /// Holds the symbol in its column, which is the tab rows' favicon box, so
 /// the folder's icon and title line up with the favicons and titles beside
 /// it, and sizes it where the shell reads the row from further away than a
-/// desk.
+/// desk. Without a size of its own the symbol takes the sidebar's text size,
+/// at which the folder symbol is as wide as the column; at a larger size it
+/// hangs past the column's leading edge, which at the top level is the
+/// sidebar's own edge, where the scroll view clips it.
 private struct BrowserFolderIconColumn: ViewModifier {
     let metrics: BrowserFolderHeaderMetrics
     let isExpanded: Bool
@@ -56,7 +59,8 @@ private struct BrowserFolderIconColumn: ViewModifier {
         content
             .font(
                 .system(
-                    size: (metrics.iconGlyphSize ?? 16) * BrowserSidebarDensity(iconScale).contentScale,
+                    size: (metrics.iconGlyphSize ?? BrowserSidebarDensity.bodySize(touch: false))
+                        * BrowserSidebarDensity(iconScale).contentScale,
                     weight: metrics.iconGlyphWeight)
             )
             // The bottom hinge lowers its optical center.
