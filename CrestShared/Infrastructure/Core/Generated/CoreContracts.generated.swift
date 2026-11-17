@@ -2166,9 +2166,14 @@ struct CredentialPendingCandidate: Equatable, Sendable {
 }
 
 struct CredentialPreferences: Equatable, Sendable {
+    static let defaultSavePromptSeconds: Int = 10
+    static let minimumSavePromptSeconds: Int = 3
+    static let maximumSavePromptSeconds: Int = 60
+
     var isEnabled: Bool
     var syncsCrestPasswordsWithICloud: Bool
     var alsoOffersSaveToSystemPasswords: Bool
+    var savePromptSeconds: Int
 }
 
 struct CredentialRecord: Equatable, Sendable, Identifiable {
