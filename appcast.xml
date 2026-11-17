@@ -6,6 +6,21 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.85</title>
+            <pubDate>Tue, 17 Nov 2026 09:58:08 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>1000085</sparkle:version>
+            <sparkle:shortVersionString>0.10.85</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. One fix for the sidebar.
+
+### Fixed
+- On Mac, a folder's icon in the sidebar is no longer cut off along its left edge.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.85/Arma-0.10.85.dmg" length="195286248" type="application/octet-stream" sparkle:edSignature="SenLrdaL2G8Khjsd8+iBb4DPhsNO21Hi9wXwUQKDpJA5kjBSFDDRb6nrHcMnCiQJ3vE/+UJUAK+ymMviVD4cCA=="/>
+        </item>
+        <item>
             <title>0.10.84</title>
             <pubDate>Tue, 17 Nov 2026 09:04:24 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -802,6 +817,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: HLWPLoSUN5FiuykTWJ4eKuR/FzzOJncRvevIfy2zvNHqcjue0Vu63Yn2GOYG4ZmqpPm1GXPFpwLbJFK/VjjGCA==
-length: 59148
+edSignature: vxrij7owaIrzZR1TZYEY6HIJViHtVdlVF9h26RXR6fV6kEnRt0YV9N3IHd+QIhjYQdsUYEOB1R2GWcN5Hp7PAw==
+length: 60115
 -->
