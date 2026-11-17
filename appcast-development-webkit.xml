@@ -6,6 +6,22 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.84</title>
+            <pubDate>Tue, 17 Nov 2026 09:04:37 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>1000084</sparkle:version>
+            <sparkle:shortVersionString>0.10.84</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. One fix for the terminal.
+
+### Fixed
+- `arma tab unpin`, `save` and `move`, and `arma folder add`, work on a tab in any Space, not only the Space the window shows.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.84/Arma-0.10.84.dmg" length="195292783" type="application/octet-stream" sparkle:edSignature="1Ruv1le2c6EF0IqWTWx1nTHGx2I14hGfzUAsmTkNmQMAIvJggCgS6mnOI4V/US0FqR9TN4wQC7Hk3MbHKhDLDQ=="/>
+        </item>
+        <item>
             <title>0.10.83</title>
             <pubDate>Tue, 17 Nov 2026 00:06:07 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -826,6 +842,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: 3fQS4VHryvhZgkd8gidrFLssb9FyY5P0kcHEQU7Nqbaqf3u/CYedj4HaqgrSjQ23j13HNNJAfooHCxUzLUnTDQ==
-length: 60437
+edSignature: RthNMBKgCqHed1z66OBDoPyvABc9VrftdAse1qrixhVLsmQ6nX5jRAYy/ez7YUPhPB6mpNRZ4ZB7FjgWyngzAA==
+length: 61508
 -->
