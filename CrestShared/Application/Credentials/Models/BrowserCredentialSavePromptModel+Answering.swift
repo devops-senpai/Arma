@@ -23,4 +23,10 @@ extension BrowserCredentialSavePromptModel {
         case .alreadyStored, .saving, .saved, .failed(.commit): false
         }
     }
+
+    /// Whether a save is under way.
+    var isSaving: Bool {
+        if case .saving = phase { return true }
+        return false
+    }
 }

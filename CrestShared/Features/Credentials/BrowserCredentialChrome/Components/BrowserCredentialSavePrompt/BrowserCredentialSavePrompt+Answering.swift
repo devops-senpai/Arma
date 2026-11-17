@@ -5,6 +5,65 @@ import SwiftUI
 /// on its own after the Space's time while it only asks, held while the pointer
 /// rests on it and once the person starts answering.
 extension BrowserCredentialSavePrompt {
+    /// What a save would keep now.
+    var current: BrowserCredentialSaveCandidate {
+        draft ?? candidate
+    }
+
+    /// What the person may change before saving, which changes what a save
+    /// means: a new account, an update, or nothing to do.
+    struct Correction: Hashable {
+        let username: String
+        let password: String
+    }
+
+    var correction: Correction? {
+        guard isEngaged, let draft else { return nil }
+        return Correction(username: draft.username, password: draft.password)
+    }
+
+    /// The fields, while the prompt asks and nothing is being saved.
+    var fields: BrowserCredentialSaveFields? {
+        guard draft != nil, model.asksForAnswer else { return nil }
+        return BrowserCredentialSaveFields(
+            email: draftBinding(\.email),
+            username: draftBinding(\.username),
+            password: draftBinding(\.password),
+            category: draftBinding(\.category),
+            notes: draftBinding(\.notes),
+            categories: categories,
+            isEditable: !model.isSaving,
+            engage: { isEngaged = true }
+        )
+    }
+
+    func draftBinding<Value>(
+        _ keyPath: WritableKeyPath<BrowserCredentialSaveCandidate, Value>
+    ) -> Binding<Value> {
+        Binding(
+            get: { current[keyPath: keyPath] },
+            set: { draft?[keyPath: keyPath] = $0 }
+        )
+    }
+
+    /// Starts asking about a new candidate.
+    func begin() {
+        var fresh = candidate
+        // A username that is an email address is the account's email too.
+        if fresh.username.contains("@") { fresh.email = fresh.username }
+        draft = fresh
+        isEngaged = false
+    }
+
+    /// Plans the save again once the person stops typing, so the prompt says
+    /// whether it saves a new account or updates one already kept.
+    func replanAfterCorrection() async {
+        guard correction != nil else { return }
+        try? await Task.sleep(for: .milliseconds(350))
+        guard !Task.isCancelled, model.asksForAnswer else { return }
+        await prepare(dismissesWhenStored: false)
+    }
+
     /// What restarts the prompt's countdown: another candidate, the pointer
     /// arriving or leaving, or the prompt starting or stopping asking.
     struct Countdown: Hashable {
@@ -14,7 +73,8 @@ extension BrowserCredentialSavePrompt {
     }
 
     var countdown: Countdown {
-        Countdown(candidateID: candidate.id, isPointerResting: isPointerResting, closes: model.closesOnItsOwn)
+        Countdown(
+            candidateID: candidate.id, isPointerResting: isPointerResting, closes: model.closesOnItsOwn && !isEngaged)
     }
 
     /// Never for This Site, offered only while the prompt asks.
@@ -47,12 +107,13 @@ extension BrowserCredentialSavePrompt {
     /// Puts the prompt away once its time is up, as long as it is only
     /// asking: the Space's time from when it starts asking, starting over
     /// whenever the pointer leaves it, since the pointer often crosses the
-    /// corner it sits in. Never while the pointer rests on it, a save is
-    /// under way or something failed.
+    /// corner it sits in. Never while the pointer rests on it, the person is
+    /// answering it, a save is under way or something failed.
     func closeWhenTimeIsUp() async {
-        guard model.closesOnItsOwn, !isPointerResting else { return }
-        try? await Task.sleep(for: .seconds(preferences.savePromptSeconds))
-        guard !Task.isCancelled, model.closesOnItsOwn, !isPointerResting,
+        guard model.closesOnItsOwn, !isEngaged, !isPointerResting else { return }
+        let wait: Duration = .seconds(preferences.savePromptSeconds)
+        try? await Task.sleep(for: wait)
+        guard !Task.isCancelled, model.closesOnItsOwn, !isEngaged, !isPointerResting,
             port.presentedCandidateID() == candidate.id
         else { return }
         port.dismiss()
