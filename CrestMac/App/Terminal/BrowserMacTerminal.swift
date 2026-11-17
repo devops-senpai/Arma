@@ -247,21 +247,25 @@ final class BrowserMacTerminal {
     }
 
     /// Puts `tabs` of `space` in `placement`'s section, in folder `folderID`
-    /// there, where `anchor` says, as a drop in the sidebar would: the core
-    /// files them together in a section that holds folders, and moves them
-    /// one by one into the pinned tabs, which hold none.
+    /// there, where `anchor` says, as a drop in the sidebar would. Each tab
+    /// moves on its own: a drop files the sidebar's selection in one intent,
+    /// which the core takes only from the window that made the selection,
+    /// and the terminal's store is the app's own window's, which may show
+    /// another Space than the tab's. Only a place before a folder's row
+    /// needs that intent, which names the folder.
     func file(
         _ tabs: [UUID], in space: SpaceModel, placement: TabPlacement, folderID: UUID?, anchor: RowAnchor
     ) -> Bool {
-        guard placement.holdsFolders else {
-            return tabs.allSatisfy {
-                browser.moveSessionTab($0, in: space.id, to: placement, before: anchor.beforeTabID)
-            }
+        guard anchor.beforeFolderID == nil else {
+            return browser.fileTabs(
+                tabs, matching: BrowserSpaceRuntimeAssignment(spaceID: space.id, profileID: space.profileID),
+                into: folderID, location: placement == .saved ? .saved : .current, before: anchor.beforeTabID,
+                beforeFolderID: anchor.beforeFolderID)
         }
-        return browser.fileTabs(
-            tabs, matching: BrowserSpaceRuntimeAssignment(spaceID: space.id, profileID: space.profileID),
-            into: folderID, location: placement == .saved ? .saved : .current, before: anchor.beforeTabID,
-            beforeFolderID: anchor.beforeFolderID)
+        return tabs.allSatisfy {
+            browser.moveSessionTab(
+                $0, in: space.id, to: placement, folderID: folderID, before: anchor.beforeTabID)
+        }
     }
 
     // MARK: - Actions - Windows
