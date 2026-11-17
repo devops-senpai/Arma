@@ -84,7 +84,10 @@ public sealed class ShortcutCommand {
         ShowBlockedElements,
         OpenNextExtension,
         ClearAllTabs,
-        CollapseAllFolders
+        CollapseAllFolders,
+        SaveSpaceTheme,
+        ImportTheme,
+        ExportTheme
     }
 
     #endregion
@@ -349,6 +352,16 @@ public sealed class ShortcutCommand {
         ShortcutSection.View, title: "Collapse All Folders", symbol: "rectangle.compress.vertical",
         searchTerms: "close fold folders sidebar tidy", availableWhen: facts => facts.HasOpenFolder);
 
+    public static readonly ShortcutCommand SaveSpaceTheme = new(Kinds.SaveSpaceTheme, name: "saveSpaceTheme",
+        ShortcutSection.Spaces, title: "Save Look as Theme", symbol: "paintpalette",
+        searchTerms: "theme save colors look appearance");
+    public static readonly ShortcutCommand ImportTheme = new(Kinds.ImportTheme, name: "importTheme", ShortcutSection.Spaces,
+        title: "Import Theme", symbol: "square.and.arrow.down", menuTitle: "Import Theme…",
+        searchTerms: "theme load file colors look appearance");
+    public static readonly ShortcutCommand ExportTheme = new(Kinds.ExportTheme, name: "exportTheme", ShortcutSection.Spaces,
+        title: "Export Theme", symbol: "square.and.arrow.up", menuTitle: "Export Theme…",
+        searchTerms: "theme save file share colors look appearance");
+
     public static IReadOnlyList<ShortcutCommand> All { get; } = [
         NewWindow, NewBlankWindow, NewTab, NewQuickWindow, NewPrivateWindow, CloseTabOrWindow, CloseWindow, OpenLocation, Back,
         Forward, ReloadPage, StopLoading, ReloadFromOrigin, ToggleSelectedTabPinned, DuplicateTab, ReopenClosedTab,
@@ -360,7 +373,7 @@ public sealed class ShortcutCommand {
         SplitWithNextTab, FocusNextSplitCard, FocusPreviousSplitCard, RemoveTabFromSplit, SeparateSplitTabs,
         MoveSplitCardLeft, MoveSplitCardRight, ToggleDeveloperToolbar, ToggleTranslationToolbar, OpenFile, FindNext,
         FindPrevious, CapturePage, MostRecentTabBackward, ClearSiteCookies, ClearSiteCache, ToggleSelectedTabSaved,
-        OpenNextExtension, ClearAllTabs, CollapseAllFolders
+        OpenNextExtension, ClearAllTabs, CollapseAllFolders, SaveSpaceTheme, ImportTheme, ExportTheme
     ];
 
     public Kinds Kind { get; }

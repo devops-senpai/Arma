@@ -49,6 +49,7 @@ struct BrowserLookAndFeelSettingsPane: View {
         let style = appearance.customizationStyle
         return BrowserSettingsPane(.lookAndFeel) {
             BrowserCustomizationStyleGroup(browser: browser)
+            BrowserPlatformDefaultThemeSettingsGroup(browser: browser)
             BrowserPlatformAddressBarSettingsSection()
             Group {
                 BrowserSpaceIconsAppearanceGroup()
