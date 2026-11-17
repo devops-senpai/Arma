@@ -66,7 +66,7 @@ final class BrowserMacWindows {
 
     // MARK: - Variables
 
-    private unowned let application: BrowserMacApplication
+    unowned let application: BrowserMacApplication
     /// The engine that owns the process, which the commands only it can run
     /// ask.
     unowned let engineHost: any BrowserMacEngineHost

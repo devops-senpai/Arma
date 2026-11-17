@@ -16,6 +16,7 @@ struct BrowserPageContextMenuAction {
         case split
         case space(UUID)
         case quickWindow
+        case window
         case blockElement
     }
 
@@ -85,6 +86,17 @@ struct BrowserPageContextMenuAction {
             symbolName: "macwindow.badge.plus", linkURL: linkURL, selectionText: nil
         ) { page, _, _ in
             page.openInQuickWindow(linkURL)
+        }
+    }
+
+    /// Opens `linkURL` in a window of its own over the page's Space, as a
+    /// tab dragged out of the window gets.
+    static func window(_ linkURL: URL) -> BrowserPageContextMenuAction {
+        BrowserPageContextMenuAction(
+            kind: .window, title: String(localized: "Open Link in New Window"), symbolName: "macwindow.badge.plus",
+            linkURL: linkURL, selectionText: nil
+        ) { page, _, _ in
+            page.openInNewWindow(linkURL)
         }
     }
 
@@ -201,12 +213,14 @@ struct BrowserPageContextMenu {
     /// Puts the rows ahead of what `menu` holds, with a separator between,
     /// after `newTab`, the engine's own row that opens the link in a new tab
     /// of the page's Space, which leads the menu wherever the engine put it.
+    /// The row that opens the link in a new window follows it.
     func insert(into menu: NSMenu, leading newTab: NSMenuItem? = nil) {
         var items: [NSMenuItem] = []
         if let newTab, host.opensLinksInCurrentSpace, menu.index(of: newTab) >= 0 {
             menu.removeItem(newTab)
             items.append(newTab)
         }
+        items.append(contentsOf: actions.filter { $0.kind == .window }.map(item(for:)))
         let spaceActions = actions.filter(\.isSpaceDestination)
         if !spaceActions.isEmpty {
             let group = NSMenuItem(title: String(localized: "Open Link in"), action: nil, keyEquivalent: "")
@@ -223,7 +237,9 @@ struct BrowserPageContextMenu {
             group.submenu = submenu
             items.append(group)
         }
-        items.append(contentsOf: actions.filter { !$0.isSpaceDestination && !$0.isTrailing }.map(item(for:)))
+        items.append(
+            contentsOf: actions.filter { !$0.isSpaceDestination && !$0.isTrailing && $0.kind != .window }
+                .map(item(for:)))
         for (index, item) in items.enumerated() { menu.insertItem(item, at: index) }
         if !items.isEmpty, menu.items.count > items.count { menu.insertItem(.separator(), at: items.count) }
         let trailing = actions.filter(\.isTrailing).map(item(for:))
@@ -276,6 +292,7 @@ extension BrowserPage: BrowserPageContextMenuHost {
             for space in linkDestinationHost.otherSpaces(from: source) {
                 actions.append(.space(space, opening: linkURL))
             }
+            if opensLinksInNewWindow { actions.append(.window(linkURL)) }
             actions.append(.peek(linkURL))
             if splitLinkHost.canOpenLink(context.tabID, context.assignment) {
                 actions.append(.split(linkURL))
