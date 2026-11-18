@@ -8,6 +8,8 @@ struct BrowserCredentialSavePromptContent: View {
     let namesSystemPasswordsDestination: Bool
     let metrics: BrowserCredentialPromptMetrics
     let dismiss: () -> Void
+    /// Stops the Space offering to save on this site, while the prompt asks.
+    var neverSave: (() -> Void)? = nil
     let perform: (BrowserCredentialPromptPrimaryAction) -> Void
 
     var body: some View {
@@ -21,6 +23,7 @@ struct BrowserCredentialSavePromptContent: View {
                 space: space,
                 metrics: metrics,
                 dismiss: dismiss,
+                neverSave: neverSave,
                 perform: perform
             )
 
@@ -54,6 +57,7 @@ struct BrowserCredentialSavePromptContent: View {
                     space: space,
                     metrics: metrics,
                     dismiss: dismiss,
+                    neverSave: neverSave,
                     perform: perform
                 )
             }

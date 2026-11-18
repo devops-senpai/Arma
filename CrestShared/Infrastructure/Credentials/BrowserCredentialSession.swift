@@ -20,9 +20,10 @@ final class BrowserCredentialSession {
         core: CrestCore,
         supportsAccess: Bool,
         isEnabled: Bool,
-        httpAuthentication: BrowserHTTPAuthenticationSession
+        httpAuthentication: BrowserHTTPAuthenticationSession,
+        neverSavedSites: @escaping @MainActor () -> [NeverSavedSite] = { [] }
     ) {
-        state = BrowserCredentialPageState(spaceID: spaceID, core: core)
+        state = BrowserCredentialPageState(spaceID: spaceID, core: core, neverSavedSites: neverSavedSites)
         self.supportsAccess = supportsAccess
         self.isEnabled = supportsAccess && isEnabled
         self.httpAuthentication = httpAuthentication

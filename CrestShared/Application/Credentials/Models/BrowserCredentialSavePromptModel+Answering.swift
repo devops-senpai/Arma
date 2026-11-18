@@ -12,4 +12,15 @@ extension BrowserCredentialSavePromptModel {
             false
         }
     }
+
+    /// Whether the prompt still waits for the person's answer: planning it,
+    /// asking to save or update, or after a plan that failed. Never once a
+    /// save is under way or done.
+    var asksForAnswer: Bool {
+        guard systemPasswordOfferPhase == .notRequested else { return false }
+        return switch phase {
+        case .preparing, .create, .update, .failed(.preparation): true
+        case .alreadyStored, .saving, .saved, .failed(.commit): false
+        }
+    }
 }
