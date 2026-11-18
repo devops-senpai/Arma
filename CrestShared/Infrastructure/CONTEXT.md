@@ -21,7 +21,7 @@ read model.
 | `WebKit/` | WebKit's binding, shared by Mac, iPhone and iPad ([CONTEXT](WebKit/CONTEXT.md)) |
 | `ControlPlane/` | Platform answers to core questions and URL, identifier and capacity translations on core contract types |
 | `Authentication/` | Foundation's HTTP authentication challenges translated to and from the core's |
-| `Credentials/` | The credential session and content bridge for both engines, Keychain storage (`Keychain/`) and passkeys (`Passkeys/`) |
+| `Credentials/` | The credential session and content bridge for both engines, Keychain storage (`Keychain/`), passkeys (`Passkeys/`) and when each Space last authenticated to show a password |
 | `Diagnostics/` | `DiagnosticLog`, the unified-log categories |
 | `Downloads/` | The download center, destinations, quarantine, risk facts and transfers |
 | `Favicons/` | Favicon stores and public fallback loading |

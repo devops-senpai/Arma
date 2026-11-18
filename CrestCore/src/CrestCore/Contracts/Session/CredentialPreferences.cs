@@ -1,17 +1,20 @@
 namespace CrestCore.Contracts;
 
 /// <summary>
-/// Whether a Space offers to save and fill passwords, and where it keeps them.
-/// The offer to save closes after <see cref="SavePromptSeconds"/>, and is never
-/// made on the websites in <see cref="NeverSavedSites"/>, where saved
-/// passwords still fill. Older releases stored only the first three, and a
-/// Space that stored none of the rest takes their defaults.
+/// Whether a Space offers to save and fill passwords, where it keeps them,
+/// and how often it asks to authenticate before showing or copying one
+/// (<see cref="Authentication"/>). The offer to save closes after
+/// <see cref="SavePromptSeconds"/>, and is never made on the websites in
+/// <see cref="NeverSavedSites"/>, where saved passwords still fill. Older
+/// releases stored only the first three, and a Space that stored none of the
+/// rest takes their defaults.
 /// </summary>
 public sealed record CredentialPreferences(
     bool IsEnabled,
     bool SyncsCrestPasswordsWithICloud,
     bool AlsoOffersSaveToSystemPasswords,
     IReadOnlyList<NeverSavedSite> NeverSavedSites,
+    CredentialAuthentication Authentication,
     int SavePromptSeconds = CredentialPreferences.DefaultSavePromptSeconds) {
     #region Static Variables
 
@@ -47,10 +50,11 @@ public sealed record CredentialPreferences(
         && SyncsCrestPasswordsWithICloud == other.SyncsCrestPasswordsWithICloud
         && AlsoOffersSaveToSystemPasswords == other.AlsoOffersSaveToSystemPasswords
         && NeverSavedSites.SequenceEqual(other.NeverSavedSites)
+        && Authentication == other.Authentication
         && SavePromptSeconds == other.SavePromptSeconds;
 
     public override int GetHashCode() => HashCode.Combine(IsEnabled, SyncsCrestPasswordsWithICloud, AlsoOffersSaveToSystemPasswords,
-        NeverSavedSites.Count, SavePromptSeconds);
+        NeverSavedSites.Count, Authentication, SavePromptSeconds);
 
     #endregion
 
