@@ -6,6 +6,24 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.100</title>
+            <pubDate>Wed, 18 Nov 2026 15:26:46 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>1000100</sparkle:version>
+            <sparkle:shortVersionString>0.10.100</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Setup starts from Arma's themes and shows your crest as you shape it.
+
+### Improved
+- Setup's Pick your look page now offers every theme Arma ships under Arma Themes, with Crest's Heraldic, Modern and Simple looks under Crest Themes. Every card fits on one screen.
+- Make it yours shows a heraldic Space's crest large, on the sidebar the Space will wear, and again at the sidebar's sizes. Its sheet runs through the Crest Studio's steps: Start from, Colors, Shape, Field, Band, Emblem, Border and Finish. A chosen theme keeps the sidebar, so Start from and Shuffle change the crest alone.
+- Every new Space, and every preview in setup, starts with Arma's own crest.
+- Arma's skills for coding agents now live in .agents/skills, where Codex, GitHub Copilot, Cursor, Gemini CLI, Windsurf, OpenCode and Amp find them in a checkout, with links for Claude Code and Kiro.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.100/Arma-0.10.100.dmg" length="195005561" type="application/octet-stream" sparkle:edSignature="L4hhSAVlZIySZsCnt7b8F9XgKssg+qgMoIDuTsLSc347LHCdPQ2Q8Xfm4QdoK+iTB/cKCDNbnpu7rmv02ZFBBg=="/>
+        </item>
+        <item>
             <title>0.10.98</title>
             <pubDate>Tue, 17 Nov 2026 17:18:39 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -848,6 +866,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: cE7W92vHMWAOjLiE7l/XyS1Tl57UxpFFQPnyYItVBILB8Jjl+niB8Zfv5nqFqR8lK8gzAMw46zbOBDGf50DEBw==
-length: 63545
+edSignature: j+mKQb/boizCo0qnMzwpWSuP+W62B/5Gy3VSB6m3RnZ/TFkcnTQB9TuY4vRrNUYc5cA+SWrT41mHA0gw5+NhAg==
+length: 65263
 -->
