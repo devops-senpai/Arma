@@ -17,6 +17,9 @@ final class BrowserPalettePasswords {
     /// The login a person stepped into, whose username, password and site
     /// the palette offers.
     private(set) var steppedInto: UUID?
+    /// Whether the person stepped into how long to pause passwords on the
+    /// tab on screen.
+    private(set) var isChoosingPause = false
     private var listedSpaceID: UUID?
     private var listed: [CredentialDescriptor] = []
     private var listedAt: Date?
@@ -62,9 +65,18 @@ final class BrowserPalettePasswords {
         steppedInto = id
     }
 
-    /// Steps back out of the login the palette shows, answering whether it
-    /// showed one.
+    /// Steps into how long to pause passwords on the tab on screen.
+    func stepIntoPause() {
+        isChoosingPause = true
+    }
+
+    /// Steps back out of the login, or the pause lengths, the palette shows,
+    /// answering whether it showed either.
     func stepBack() -> Bool {
+        if isChoosingPause {
+            isChoosingPause = false
+            return true
+        }
         guard steppedInto != nil else { return false }
         steppedInto = nil
         return true
@@ -72,6 +84,7 @@ final class BrowserPalettePasswords {
 
     /// Forgets the login stepped into, as the palette closes.
     func reset() {
+        isChoosingPause = false
         steppedInto = nil
     }
 }

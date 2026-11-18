@@ -141,14 +141,40 @@ extension BrowserCommandActions {
             scope: .passwords, key: "settings", name: String(localized: "Passwords Settings"),
             detail: String(localized: "\(space.settings.name) › Passwords"), symbol: "gearshape",
             run: { openSettings("passwords") })
+        // Pausing Arma's prompts on the tab on screen, for another password manager, or resuming them.
+        var settingsAndPause = [settings]
+        if let page = shownPage {
+            let site = page.live.displayURL?.host() ?? String(localized: "This tab")
+            // Inside the pause row: how long to pause, one row per length.
+            if chrome.palettePasswords.isChoosingPause, !page.areCredentialPromptsPaused {
+                return BrowserCredentialPauseLength.all.map { length in
+                    BrowserPaletteChoice(
+                        scope: .passwords, key: "pause-tab-\(length.id)", name: length.title,
+                        detail: String(localized: "Pause passwords on \(site)"), symbol: length.systemImage,
+                        run: { page.pauseCredentialPrompts(for: length) })
+                }
+            }
+            if page.areCredentialPromptsPaused {
+                settingsAndPause.append(
+                    BrowserPaletteChoice(
+                        scope: .passwords, key: "resume-tab", name: String(localized: "Resume Passwords on This Tab"),
+                        detail: site, symbol: "play.circle", run: { page.resumeCredentialPrompts() }))
+            } else {
+                settingsAndPause.append(
+                    BrowserPaletteChoice(
+                        scope: .passwords, key: "pause-tab", name: String(localized: "Pause Passwords on This Tab…"),
+                        detail: site, symbol: "pause.circle",
+                        run: { [chrome] in chrome.palettePasswords.stepIntoPause() }, stepsInto: true))
+            }
+        }
         guard !browser.isPrivateBrowsing, !spaceAccess.isLocked(space), space.settings.credentialPreferences.isEnabled,
             let logins = chrome.palettePasswords.logins(in: space.id, from: browser)
-        else { return [settings] }
+        else { return settingsAndPause }
         if let id = chrome.palettePasswords.steppedInto, let login = chrome.palettePasswords.login(id) {
             return loginChoices(login, in: space)
         }
         // A login's category rides in its detail, so "@passwords work" finds every Work login.
-        return [settings]
+        return settingsAndPause
             + logins.map { login in
                 BrowserPaletteChoice(
                     scope: .passwords, key: "login-\(login.id)", name: login.origin.host,
