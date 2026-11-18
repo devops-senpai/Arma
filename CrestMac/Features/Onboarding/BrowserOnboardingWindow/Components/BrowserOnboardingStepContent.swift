@@ -46,6 +46,9 @@ struct BrowserOnboardingStepContent: View, BrowserOnboardingPages {
             continueSetup: {
                 flow.chooseLookStyle()
                 continueSetup()
+            },
+            themes: BrowserOnboardingThemeRow(theme: flow.theme) { theme in
+                withAnimation(motion(CrestMotion.onboardingProgress)) { flow.chooseTheme(theme) }
             }
         )
     }

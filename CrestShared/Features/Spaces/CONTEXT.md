@@ -16,10 +16,12 @@ on every shell.
 | --- | --- |
 | `Components/BrowserSpaceBranding/` | Banner background and the banner, crest, identity and shape views |
 | `Components/BrowserSpaceBrandingEditor/` | The branding editor: field, pattern and preview sections, and the Crest Studio pickers (`Studio/`) |
-| `Components/Forge/` | `BrowserCrestForge`, the Crest Studio stage beside the live sidebar, and `BrowserSpaceThemeFileActions` (a theme file in and out of the studio) |
+| `Components/Forge/` | `BrowserCrestForge` and the Crest Studio stage beside the live sidebar |
+| `Components/BrowserSpaceThemes/` | What the Forge shows for a theme: `BrowserThemeForgeSubject` and `BrowserSpaceThemeFileActions`, the theme stage preview and the background image section |
+| `Components/BrowserSpaceBackdrop/` | A Space's background image on this device: `BrowserSpaceBackdropStore` and `BrowserSpaceBackdropLayer` |
 | `Components/CrestSpaceSelector/` | Space menu picker, chip rail and icon picker |
 | `Components/` (files) | Inline Space name, the customization picker, the touch appearance workspace for setup |
-| `Models/` | Studio steps and branding values such as gradient-angle direction |
+| `Models/` | Studio steps, branding values such as gradient-angle direction, and `BrowserDefaultSpaceLook` (the theme new Spaces wear) |
 | `Services/BrowserSpaceBranding/` | Rendering a Space symbol to artwork |
 | `Support/` | Heraldry and branding presentation, tab icon accent colors, `SpaceModel` tab lists, the branding preview fixture |
 

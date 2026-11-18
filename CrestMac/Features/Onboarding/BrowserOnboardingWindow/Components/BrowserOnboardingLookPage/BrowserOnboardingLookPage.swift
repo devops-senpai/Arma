@@ -9,6 +9,8 @@ struct BrowserOnboardingLookPage: View {
     let choose: (SetupLook) -> Void
     let back: BrowserOnboardingBackAction
     let continueSetup: () -> Void
+    /// The themes offered under the looks, or nil for the looks alone.
+    var themes: BrowserOnboardingThemeRow? = nil
 
     /// The size each window takes: an equal share of the stage less the gaps,
     /// no taller than the stage leaves under the name.
@@ -29,7 +31,7 @@ struct BrowserOnboardingLookPage: View {
                 let size = cardSize(in: geometry.size)
                 HStack(alignment: .top, spacing: BrowserOnboardingLookMetrics.spacing) {
                     ForEach(SetupLook.all, id: \.self) { offered in
-                        BrowserOnboardingLookCard(look: offered, isSelected: offered == look, size: size) {
+                        BrowserOnboardingLookCard(look: offered, isSelected: offered == selectedLook, size: size) {
                             choose(offered)
                         }
                     }
@@ -38,6 +40,7 @@ struct BrowserOnboardingLookPage: View {
             }
             .padding(.horizontal, BrowserOnboardingStageMetrics.pageInset)
             .padding(.vertical, 16)
+            themes
             BrowserOnboardingFooter(back: back) {
                 BrowserOnboardingContinueButton(action: continueSetup)
                     .accessibilityIdentifier("onboarding-look-continue")

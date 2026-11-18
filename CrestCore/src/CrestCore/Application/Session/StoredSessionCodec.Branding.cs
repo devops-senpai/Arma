@@ -34,7 +34,7 @@ internal static partial class StoredSessionCodec {
             Integer(value[Key.RenderingVersion]) ?? FirstRenderingVersion,
             OptionalNumber(value[Key.FolderColorIntensity]) ?? 0,
             SpaceTextColorMode.Named(Text(value[Key.TextColorMode])) ?? SpaceTextColorMode.Automatic,
-            Flag(value[Key.HasCustomAppearance]));
+            Flag(value[Key.HasCustomAppearance]), DecodeDress(value));
     }
 
     /// The texture strength a branding stored by any build lies under. A build
@@ -70,6 +70,7 @@ internal static partial class StoredSessionCodec {
         value[Key.FolderColorIntensity] = branding.FolderColorIntensity;
         value[Key.TextColorMode] = branding.TextColorMode.Name;
         if (branding.HasCustomAppearance is { } custom) value[Key.HasCustomAppearance] = custom;
+        if (branding.Dress is { } dress) value[DressKey.Dress] = Encode(dress);
         return value;
     }
 
