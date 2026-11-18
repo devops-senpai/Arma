@@ -9,6 +9,7 @@ import SwiftUI
 struct SpaceSidebarBrowsingContent: View {
     @Environment(BrowserSidebarInteractionState.self) private var sidebarInteraction
     @Environment(\.spaceSidebarBands) private var sidebarBands
+    @Environment(\.browserMacWindows) private var windows
 
     let space: SpaceModel
     let browser: BrowserStore
@@ -74,6 +75,14 @@ struct SpaceSidebarBrowsingContent: View {
             )
         )
 
+        // A window on its own shows only its own tabs; this is the way back
+        // to the window that shows the rest.
+        if browser.isTemporaryWorkspace, let windows {
+            BrowserReturnToMainWindowRow(capabilities: capabilities) { [windowID = browser.windowID] in
+                windows.returnTabsToMainWindow(from: windowID)
+            }
+        }
+
         SpaceSidebarTabListScroll(browser: browser) {
             BrowserSidebarBackgroundInteractionView(
                 editSpace: editSpace,
@@ -133,7 +142,15 @@ struct SpaceSidebarBrowsingContent: View {
             space: space, window: window, favicons: browser.core.state.favicons, browser: browser,
             spaceAccess: spaceAccess, pageAccess: pageAccess, tabActions: tabActions, capabilities: capabilities,
             promotionNamespaces: [.current: tabPromotionNamespace], select: activate,
-            restoreSavedLocation: restoreSavedLocation)
+            restoreSavedLocation: restoreSavedLocation, openInNewWindow: openInNewWindow)
+    }
+
+    /// Moving a tab into a window of its own, where this window lets tabs go.
+    private var openInNewWindow: ((UUID) -> Void)? {
+        let windowID = browser.windowID
+        let spaceID = space.id
+        guard let windows, windows.opensWindows(from: windowID) else { return nil }
+        return { tabID in windows.openWindow(showing: tabID, in: spaceID, from: windowID) }
     }
 
     private var pageAccess: BrowserSidebarPageAccess {
