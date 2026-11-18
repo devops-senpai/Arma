@@ -1,10 +1,16 @@
 import SwiftUI
 
 /// What a first run changes on a heraldic Space: the template it starts
-/// from, its emblem, its colors and its sidebar.
+/// from, its crest's colors, then each of the Forge's crest steps as a strip
+/// of choices: shape, field, band, emblem, border and finish. The steps'
+/// finer measures wait in Settings. The sidebar's pattern and colors follow,
+/// unless the Space wears a theme, which owns them.
 struct BrowserOnboardingHeraldicSheet: View {
     @Binding var branding: SpaceBranding
     @Binding var symbol: String
+    /// Whether setup's theme dresses the sidebar, so the sheet shapes the
+    /// crest alone and Start from leaves the sidebar as it is.
+    var sidebarIsThemed = false
     @State private var browsesEmblems = false
     @State private var emblemSearch = ""
     @State private var showsAllEmblems = false
@@ -24,29 +30,51 @@ struct BrowserOnboardingHeraldicSheet: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 30) {
-            startFrom
-            emblem
-            colors
-            sidebar
-            Spacer(minLength: 0)
-            Text("Shape, field, band, border and finish: Settings › Spaces.")
+        ScrollView {
+            VStack(alignment: .leading, spacing: 26) {
+                startFrom
+                if !isIcon {
+                    colors
+                    crestRow("Shape", \.backplate, CrestBackplate.offered)
+                    crestRow("Field", \.fieldDivision, CrestFieldDivision.all)
+                    crestRow("Band", \.ordinary, CrestOrdinary.all)
+                }
+                emblem
+                if !isIcon {
+                    crestRow("Border", \.trim, CrestTrim.all)
+                    crestRow("Finish", \.finish, CrestFinish.all)
+                }
+                if !sidebarIsThemed {
+                    sidebar
+                }
+                Text(
+                    sidebarIsThemed
+                        ? "Sizes, widths and shadows: Settings › Spaces. Sidebar colors: Settings › Themes."
+                        : "Sizes, widths and shadows: Settings › Spaces."
+                )
                 .font(CrestTypography.sans(12, weight: .medium))
                 .foregroundStyle(CrestBrandTheme.textSecondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .topLeading)
         }
+        .scrollIndicators(.hidden)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 
     // MARK: - Sections
 
+    /// The templates to start from: the whole look, or only the crest where
+    /// a theme dresses the sidebar.
     private var startFrom: some View {
         BrowserOnboardingMakeSection("Start from") {
             BrowserOnboardingMakeStrip {
                 ForEach(SpaceHouse.offered, id: \.self) { house in
-                    BrowserOnboardingMakeTile(title: house.title, isSelected: house.isWorn(by: branding)) {
-                        branding = house.applying(to: branding)
+                    let worn = sidebarIsThemed ? branding.wearingCrest(of: house) : house.applying(to: branding)
+                    let isWorn = sidebarIsThemed ? worn.crest == branding.crest : house.isWorn(by: branding)
+                    BrowserOnboardingMakeTile(title: house.title, isSelected: isWorn) {
+                        branding = worn
                     } artwork: {
-                        crest(house.applying(to: branding))
+                        crest(worn)
                     }
                 }
             }
@@ -125,6 +153,29 @@ struct BrowserOnboardingHeraldicSheet: View {
         return figures
     }
 
+    /// One of the Forge's crest steps as a strip: each choice drawn on the
+    /// crest as it stands, and chosen with a click.
+    private func crestRow<Option: Hashable & BrowserSpaceHeraldicTerm>(
+        _ title: LocalizedStringKey, _ path: WritableKeyPath<SpaceCrest, Option>, _ options: [Option]
+    ) -> some View {
+        BrowserOnboardingMakeSection(title) {
+            BrowserOnboardingMakeStrip(selection: AnyHashable(branding.crest[keyPath: path])) {
+                ForEach(options, id: \.self) { option in
+                    BrowserOnboardingMakeTile(title: option.title, isSelected: branding.crest[keyPath: path] == option)
+                    {
+                        context.branding.editorUpdate {
+                            $0.crest[keyPath: path] = option
+                            $0.hasCustomAppearance = true
+                        }
+                    } artwork: {
+                        crest(context.preview { $0.crest[keyPath: path] = option })
+                    }
+                    .id(AnyHashable(option))
+                }
+            }
+        }
+    }
+
     private var iconChoices: some View {
         HStack(spacing: 12) {
             BrowserSystemSymbolPicker(
@@ -152,6 +203,7 @@ struct BrowserOnboardingHeraldicSheet: View {
         .frame(maxWidth: 520)
     }
 
+    /// The crest's colors, and the sidebar's where the Space wears no theme.
     private var colors: some View {
         BrowserOnboardingMakeSection("Colors") {
             HStack(spacing: 0) {
@@ -163,10 +215,12 @@ struct BrowserOnboardingHeraldicSheet: View {
                         branding = branding.normalized()
                     }
                 }
-                Divider()
-                    .frame(height: BrowserOnboardingMakeMetrics.swatchSize)
-                    .padding(.horizontal, 10)
-                BrowserOnboardingSidebarSwatches(branding: $branding)
+                if !sidebarIsThemed {
+                    Divider()
+                        .frame(height: BrowserOnboardingMakeMetrics.swatchSize)
+                        .padding(.horizontal, 10)
+                    BrowserOnboardingSidebarSwatches(branding: $branding)
+                }
             }
         }
     }

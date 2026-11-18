@@ -32,4 +32,16 @@ extension SpaceBranding {
         updated.hasCustomAppearance = true
         return updated.normalized()
     }
+
+    /// This look wearing `house`'s crest, its shape, emblem and border in
+    /// the house's colors as the crest's own, with the sidebar left as it is.
+    func wearingCrest(of house: SpaceHouse) -> SpaceBranding {
+        var dressed = house.applying(to: self)
+        dressed.keepIdentityColors()
+        var updated = self
+        updated.iconStyle = .layeredCrest
+        updated.crest = dressed.crest
+        updated.hasCustomAppearance = true
+        return updated.normalized()
+    }
 }

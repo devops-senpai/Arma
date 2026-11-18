@@ -51,9 +51,10 @@ starting from Arma's own **Guidon**, its bird and the Crane.
 
 ![A Space's Appearance settings: its theme, its crest large with its colors, and the Crest Studio's shapes](Brand/Readme/crest-studio.jpg)
 
-Setup starts with the look: the Heraldic and Modern looks, or any theme Arma
-ships. Then each Space gets its crest, from a starting house through its
-shape, field, band, emblem, border and finish.
+Setup starts with the look: every theme Arma ships under Arma Themes, or
+Crest's Heraldic, Modern and Simple looks under Crest Themes. Then each Space
+gets its crest, shown large as it changes, from a starting house through its
+shape, field, band, emblem, border and finish; a theme keeps the sidebar.
 
 | | |
 |---|---|
