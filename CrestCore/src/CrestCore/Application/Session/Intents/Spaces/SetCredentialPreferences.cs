@@ -13,9 +13,10 @@ public sealed record SetCredentialPreferences(Guid WorkspaceId, Guid SpaceId, Cr
     internal override SessionEdit? Edit(NativeSessionAuthority workspace, SessionTurn turn) {
         workspace.RequireOwnedSpaces();
         var space = workspace.Editable(turn.Basis, SpaceId);
+        var preferences = Preferences.Kept();
         var edited = space.Configured(space.Settings with {
-            CredentialPreferences = Preferences,
-            CredentialsEnabledModifiedAt = Preferences.IsEnabled == space.Settings.CredentialPreferences.IsEnabled
+            CredentialPreferences = preferences,
+            CredentialsEnabledModifiedAt = preferences.IsEnabled == space.Settings.CredentialPreferences.IsEnabled
                 ? space.Settings.CredentialsEnabledModifiedAt
                 : SpaceSettings.Chosen(space.Settings.CredentialsEnabledModifiedAt, turn.Now)
         });

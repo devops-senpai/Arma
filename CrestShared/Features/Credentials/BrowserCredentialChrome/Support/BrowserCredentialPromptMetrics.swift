@@ -315,4 +315,5 @@ struct BrowserCredentialPromptMetrics: Equatable, Sendable {
     static let shadowOpacity = CrestOpacity.controlShadow
     static let shadowRadius: CGFloat = 14
     static let shadowOffset: CGFloat = 6
+
 }
