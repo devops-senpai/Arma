@@ -85,7 +85,11 @@ final class BrowserCredentialPageState<FillTarget> {
         fillTarget: FillTarget?
     ) {
         guard let event = message.event.captureEvent else {
-            followField(message, frameOrigin: frameOrigin, isMainFrame: isMainFrame)
+            if message.event.closesFillOfItsForm {
+                if message.formID != nil, message.formID == fillFormID { dismissFillRequest() }
+            } else {
+                followField(message, frameOrigin: frameOrigin, isMainFrame: isMainFrame)
+            }
             return
         }
         let now = Date.now
