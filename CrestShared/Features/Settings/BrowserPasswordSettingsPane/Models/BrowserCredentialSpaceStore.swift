@@ -27,7 +27,7 @@ final class BrowserCredentialSpaceStore {
     private(set) var deletingCredentialIDs: Set<UUID> = []
     var errorMessage: String?
     var exportDocument: BrowserCredentialCSVDocument?
-    var exportFilename = "Crest Passwords.csv"
+    var exportFilename = "Arma Passwords.csv"
     var importReview: BrowserCredentialImportReview?
 
     @ObservationIgnored private let browser: BrowserStore
@@ -89,7 +89,7 @@ final class BrowserCredentialSpaceStore {
             }
             descriptors = []
             unreadableCount = 0
-            errorMessage = "Crest couldn’t read this Space’s saved-password metadata."
+            errorMessage = "Arma couldn’t read this Space’s saved-password metadata."
         }
     }
 
@@ -119,7 +119,7 @@ final class BrowserCredentialSpaceStore {
                 )
                 await load(in: spaceID, accessController: accessController)
             } catch {
-                errorMessage = "Crest couldn’t delete that password from this Space."
+                errorMessage = "Arma couldn’t delete that password from this Space."
             }
         }
     }
@@ -159,7 +159,7 @@ final class BrowserCredentialSpaceStore {
                 try await browser.setCrestPasswordSynchronization(enabled, in: spaceID)
                 await load(in: spaceID, accessController: accessController)
             } catch {
-                errorMessage = "Crest couldn’t update iCloud synchronization."
+                errorMessage = "Arma couldn’t update iCloud synchronization."
             }
         }
     }
@@ -201,13 +201,13 @@ final class BrowserCredentialSpaceStore {
             exportFilename = export.fileName
             return true
         } catch {
-            errorMessage = "Crest couldn’t authenticate and export this Space’s passwords."
+            errorMessage = "Arma couldn’t authenticate and export this Space’s passwords."
             return false
         }
     }
 
     func reportExportFailure() {
-        errorMessage = "Crest couldn’t export those passwords."
+        errorMessage = "Arma couldn’t export those passwords."
     }
 
     func prepareImport(
@@ -401,11 +401,11 @@ final class BrowserCredentialSpaceStore {
             return true
         } catch CredentialVaultError.atomicReplacementRestoreFailed {
             errorMessage =
-                "Crest couldn’t restore the original Keychain inventory after deletion failed. Review this Space before trying again."
+                "Arma couldn’t restore the original Keychain inventory after deletion failed. Review this Space before trying again."
             return false
         } catch {
             errorMessage =
-                "Crest couldn’t delete the selected passwords. The original passwords were restored."
+                "Arma couldn’t delete the selected passwords. The original passwords were restored."
             return false
         }
     }

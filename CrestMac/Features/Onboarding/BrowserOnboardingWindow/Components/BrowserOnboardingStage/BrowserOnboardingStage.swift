@@ -12,11 +12,9 @@ struct BrowserOnboardingStage<Content: View>: View {
 
     var body: some View {
         ZStack {
-            // The welcome drifts slowly from one template's field to the
-            // next; a field the person's choice changes follows quickly.
-            BrowserOnboardingBackdrop(
-                branding: branding,
-                fade: step == .welcome ? CrestMotion.onboardingBackdrop : CrestMotion.onboardingBackdropChange)
+            // Arma plays every step on its own Macchiato backdrop; a chosen
+            // look shows in the page's previews instead.
+            BrowserOnboardingArmaBackdrop()
             VStack(spacing: 0) {
                 BrowserOnboardingStageHeader(step: step)
                 content
