@@ -10,6 +10,9 @@ struct BrowserCredentialSavePromptContent: View {
     let dismiss: () -> Void
     /// Stops the Space offering to save on this site, while the prompt asks.
     var neverSave: (() -> Void)? = nil
+    /// The account and password to correct before saving, while the prompt
+    /// asks.
+    var fields: BrowserCredentialSaveFields? = nil
     let perform: (BrowserCredentialPromptPrimaryAction) -> Void
 
     var body: some View {
@@ -22,10 +25,15 @@ struct BrowserCredentialSavePromptContent: View {
                 route: route,
                 space: space,
                 metrics: metrics,
+                showsAccount: fields == nil,
                 dismiss: dismiss,
                 neverSave: neverSave,
                 perform: perform
             )
+
+            if let fields {
+                fields
+            }
 
             BrowserCredentialSaveDestination(
                 destination: destination,
