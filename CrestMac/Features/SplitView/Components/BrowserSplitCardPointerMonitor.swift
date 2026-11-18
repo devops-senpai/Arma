@@ -18,6 +18,11 @@ struct BrowserSplitCardPointerMonitor: NSViewRepresentable {
     let lift: BrowserSplitCardLiftGesture
     /// Whether chrome is drawn over a point in the card-frame space.
     let isCovered: @MainActor @Sendable (CGPoint) -> Bool
+    /// The card a tab menu asked to have picked up, which the monitor answers
+    /// once, where it alone reads the pointer in the cards' own space.
+    var carryRequest: BrowserSplitCardCarryRequest? = nil
+    /// Takes a request up, once for the window.
+    var claimCarryRequest: @MainActor (BrowserSplitCardCarryRequest) -> Bool = { _ in false }
 
     func makeNSView(context: Context) -> BrowserSplitCardPointerObserverView {
         BrowserSplitCardPointerObserverView(
@@ -36,6 +41,7 @@ struct BrowserSplitCardPointerMonitor: NSViewRepresentable {
         nsView.handleMouseDown = handleMouseDown
         nsView.lift = lift
         nsView.isCovered = isCovered
+        nsView.answer(carryRequest, claim: claimCarryRequest)
     }
 
     static func dismantleNSView(

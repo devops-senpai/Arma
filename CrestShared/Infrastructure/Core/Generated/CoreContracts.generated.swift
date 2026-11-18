@@ -301,6 +301,7 @@ enum Rejection: Equatable, Error, Sendable {
     case noStoredSession(NoStoredSession)
     case notAnArchive(NotAnArchive)
     case notPrivateWorkspace(NotPrivateWorkspace)
+    case notSplitPartners(NotSplitPartners)
     case pageNotLoadable(PageNotLoadable)
     case pageProfileMismatch(PageProfileMismatch)
     case persistentWorkspaceRequired(PersistentWorkspaceRequired)
@@ -339,6 +340,7 @@ enum Rejection: Equatable, Error, Sendable {
     case splitBoundary(SplitBoundary)
     case splitLimitReached(SplitLimitReached)
     case splitNeedsTwoTabs(SplitNeedsTwoTabs)
+    case splitShapeMismatch(SplitShapeMismatch)
     case stagedLinkElsewhere(StagedLinkElsewhere)
     case staleCredentialComparison(StaleCredentialComparison)
     case staleUnlockRequest(StaleUnlockRequest)
@@ -1267,6 +1269,15 @@ struct ArchivedTabState: Equatable, Sendable {
     var seed: Seed {
         Seed(tab: tab.seed, archivedAt: archivedAt, reason: reason)
     }
+}
+
+struct ArrangeSplit: Intent, SessionIntent, Equatable, Sendable {
+    let workspaceID: UUID
+    let spaceID: UUID
+    let groupID: UUID
+    let shape: SplitShape
+    let tabID: UUID?
+    let memberIndex: Int?
 }
 
 struct AssessDownloadRisk: Intent, DownloadIntent, Equatable, Sendable {
@@ -2574,6 +2585,7 @@ struct DropIntoSplit: Intent, SessionIntent, SidebarDrop, Equatable, Sendable {
     let selection: TabSelection
     let targetTabID: UUID
     let index: Int?
+    let shape: SplitShape?
 }
 
 struct DropOnSpace: Intent, SessionIntent, SidebarDrop, Equatable, Sendable {
@@ -2582,6 +2594,14 @@ struct DropOnSpace: Intent, SessionIntent, SidebarDrop, Equatable, Sendable {
     let spaceID: UUID
     let selection: TabSelection
     let destinationSpaceID: UUID
+}
+
+struct DropOntoSplitCard: Intent, SessionIntent, SidebarDrop, Equatable, Sendable {
+    let workspaceID: UUID
+    let windowID: UUID
+    let spaceID: UUID
+    let selection: TabSelection
+    let tabID: UUID
 }
 
 struct DropStagedLink: Equatable, Sendable {
@@ -3802,6 +3822,7 @@ struct JoinSplit: Intent, SessionIntent, Equatable, Sendable {
     let tabID: UUID
     let targetTabID: UUID
     let index: Int?
+    let shape: SplitShape?
 }
 
 struct KeepPageLoaded: Intent, SessionIntent, Equatable, Sendable {
@@ -4405,6 +4426,11 @@ struct NotAnArchive: Equatable, Sendable {
 
 struct NotPrivateWorkspace: Equatable, Sendable {
     let workspaceID: UUID
+}
+
+struct NotSplitPartners: Equatable, Sendable {
+    let tabID: UUID
+    let otherTabID: UUID
 }
 
 struct NoteAgentActivity: Intent, AgentIntent, Equatable, Sendable {
@@ -7041,6 +7067,8 @@ struct SplitGroupState: Equatable, Sendable, Identifiable {
     let tintModifiedAt: Date?
     let isCollapsed: Bool
     let collapseModifiedAt: Date?
+    let shape: SplitShape?
+    let shapeModifiedAt: Date?
     let displayTitle: String?
     let displayEmojiIcon: String?
 
@@ -7060,6 +7088,8 @@ struct SplitGroupState: Equatable, Sendable, Identifiable {
         var tintModifiedAt: Date?
         var isCollapsed: Bool
         var collapseModifiedAt: Date?
+        var shape: SplitShape?
+        var shapeModifiedAt: Date?
     }
 
     /// The record's fields alone, as a platform sends it back.
@@ -7073,7 +7103,9 @@ struct SplitGroupState: Equatable, Sendable, Identifiable {
             tint: tint,
             tintModifiedAt: tintModifiedAt,
             isCollapsed: isCollapsed,
-            collapseModifiedAt: collapseModifiedAt
+            collapseModifiedAt: collapseModifiedAt,
+            shape: shape,
+            shapeModifiedAt: shapeModifiedAt
         )
     }
 }
@@ -7110,6 +7142,16 @@ struct SplitNeedsTwoTabs: Equatable, Sendable {
     }
 }
 
+struct SplitShape: Equatable, Sendable {
+    var axis: SplitAxis?
+    var children: [SplitShape]
+}
+
+struct SplitShapeMismatch: Equatable, Sendable {
+    let groupID: UUID
+    let leafCount: Int
+}
+
 struct SplitTabs: Intent, SessionIntent, Equatable, Sendable {
     let workspaceID: UUID
     let windowID: UUID
@@ -7117,6 +7159,7 @@ struct SplitTabs: Intent, SessionIntent, Equatable, Sendable {
     let selection: TabSelection
     let targetTabID: UUID?
     let index: Int?
+    let shape: SplitShape?
 }
 
 struct StageLink: Intent, PageIntent, Equatable, Sendable {
@@ -7249,6 +7292,13 @@ struct StrongPassword: Query, Equatable, Sendable {
 struct StrongPasswordRecipe: Equatable, Sendable {
     let length: Int
     let groups: [String]
+}
+
+struct SwapSplitMembers: Intent, SessionIntent, Equatable, Sendable {
+    let workspaceID: UUID
+    let spaceID: UUID
+    let tabID: UUID
+    let otherTabID: UUID
 }
 
 struct SweepExpiredRecords: Intent, SessionIntent, Equatable, Sendable {
@@ -24024,6 +24074,91 @@ struct SpaceThemeMode: Hashable, Sendable {
             self.kind = kind
             self.name = name
             self.title = title
+        }
+    }
+}
+
+/// The members of the core's `SplitAxis`. A member's wire tag is its index in `all`.
+struct SplitAxis: Hashable, Sendable {
+    let tag: Int
+    var name: String { facts.name }
+    var isHorizontal: Bool { facts.isHorizontal }
+    private let facts: Facts
+
+    private init(tag: Int, name: String, isHorizontal: Bool) {
+        self.tag = tag
+        facts = Facts(name: name, isHorizontal: isHorizontal)
+    }
+
+    static let horizontal = SplitAxis(tag: 0, name: "horizontal", isHorizontal: true)
+    static let vertical = SplitAxis(tag: 1, name: "vertical", isHorizontal: false)
+
+    static let all: [SplitAxis] = [horizontal, vertical]
+
+    static func named(_ name: String?) -> SplitAxis? {
+        all.first { $0.name == name }
+    }
+
+    static func == (lhs: SplitAxis, rhs: SplitAxis) -> Bool {
+        lhs.tag == rhs.tag
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(tag)
+    }
+
+    private final class Facts: Sendable {
+        let name: String
+        let isHorizontal: Bool
+
+        init(name: String, isHorizontal: Bool) {
+            self.name = name
+            self.isHorizontal = isHorizontal
+        }
+    }
+}
+
+/// The members of the core's `SplitSide`. A member's wire tag is its index in `all`.
+struct SplitSide: Hashable, Sendable {
+    let tag: Int
+    var name: String { facts.name }
+    var axis: SplitAxis { facts.axis }
+    var isAfter: Bool { facts.isAfter }
+    private let facts: Facts
+
+    private init(tag: Int, name: String, axis: SplitAxis, isAfter: Bool) {
+        self.tag = tag
+        facts = Facts(name: name, axis: axis, isAfter: isAfter)
+    }
+
+    static let leading = SplitSide(tag: 0, name: "leading", axis: SplitAxis.horizontal, isAfter: false)
+    static let trailing = SplitSide(tag: 1, name: "trailing", axis: SplitAxis.horizontal, isAfter: true)
+    static let above = SplitSide(tag: 2, name: "above", axis: SplitAxis.vertical, isAfter: false)
+    static let below = SplitSide(tag: 3, name: "below", axis: SplitAxis.vertical, isAfter: true)
+
+    static let all: [SplitSide] = [leading, trailing, above, below]
+
+    static func named(_ name: String?) -> SplitSide? {
+        all.first { $0.name == name }
+    }
+
+    static func == (lhs: SplitSide, rhs: SplitSide) -> Bool {
+        lhs.tag == rhs.tag
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(tag)
+    }
+
+    private final class Facts: Sendable {
+        let name: String
+        let axis: SplitAxis
+        let isAfter: Bool
+
+        init(name: String, axis: SplitAxis, isAfter: Bool) {
+            self.name = name
+            self.axis = axis
+            self.isAfter = isAfter
         }
     }
 }
