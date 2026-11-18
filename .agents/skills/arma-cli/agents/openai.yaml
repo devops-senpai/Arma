@@ -1,0 +1,3 @@
+interface:
+  display_name: "Arma command"
+  short_description: "Drive the running Arma browser with the arma command"
