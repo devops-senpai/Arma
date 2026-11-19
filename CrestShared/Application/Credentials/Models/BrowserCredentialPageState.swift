@@ -30,7 +30,7 @@ struct BrowserCredentialObservation<FillTarget> {
 @MainActor
 final class BrowserCredentialPageState<FillTarget> {
     let spaceID: UUID
-    @ObservationIgnored private let core: CrestCore
+    @ObservationIgnored let core: CrestCore
 
     private(set) var fillRequest: BrowserCredentialFillRequest?
     private(set) var saveCandidate: BrowserCredentialSaveCandidate?
