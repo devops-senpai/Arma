@@ -90,6 +90,7 @@ public sealed partial class BrowserTabCollection {
     public void LeaveSplit(Guid id, DateTimeOffset now) {
         var tab = Tab(id);
         if (tab.SplitGroupId is null) return;
+        ShapeLeaving(tab, now);
         var members = SplitMembers(id);
         if (members.Count > 2 && members[^1] != tab) {
             tabs.Remove(tab);
