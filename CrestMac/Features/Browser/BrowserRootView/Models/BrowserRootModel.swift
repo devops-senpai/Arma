@@ -64,9 +64,6 @@ final class BrowserRootModel {
     /// Whether the floating sidebar came out because the pointer reached the
     /// window edge, rather than from a click, command or page request.
     private(set) var isFloatingSidebarRevealedByPointer = false
-    /// Watches for the click outside the sidebar that puts away a sidebar
-    /// the chrome holds out, while it holds one.
-    @ObservationIgnored var floatingSidebarHoldMonitor: Any?
     private var sidebarMorphRevision = 0
     /// Cancels or awaits the current sidebar transition.
     @ObservationIgnored private(set) var sidebarMorphTask: Task<Void, Never>?
@@ -181,9 +178,17 @@ extension BrowserRootModel {
         pages.setWindowFocused(isFocused)
     }
 
+    func reconcileTabIcons() {
+        pages.reconcileTabIcons()
+    }
+
     func reconcileContentBlocking() {
         guard isPrepared else { return }
         Task { await pages.reconcileContentBlocking() }
+    }
+
+    func reconcileCredentialAccess() {
+        pages.reconcileCredentialAccess()
     }
 
     func reloadContentBlocking() {
@@ -511,7 +516,6 @@ extension BrowserRootModel {
     func floatingSidebarPresentationChanged() {
         guard !isFloatingSidebarPresented else { return }
         isFloatingSidebarRevealedByPointer = false
-        chrome.holdsFloatingSidebar = false
     }
 
     func columnVisibilityChanged(reduceMotion: Bool) {
@@ -541,7 +545,6 @@ extension BrowserRootModel {
         // sidebar out as it would once it does.
         guard !isSidebarMorphing,
             !isSidebarSurfaceHovered,
-            !chrome.holdsFloatingSidebar,
             !chrome.utilityPresentation.isSidebarInteractionActive,
             !sidebarInteraction.tabPreview.isPointerOnShownCard
         else { return }
@@ -723,13 +726,6 @@ extension BrowserRootModel {
         return opening.open(url, from: source, with: BrowserMacPaletteOpener(model: self, mode: mode, windows: windows))
     }
 
-    /// Presents the tab that just took `url`, whose page opens loading it,
-    /// and shows `url` in the address field.
-    fileprivate func showOpened(_ url: URL) {
-        pages.select()
-        address = url.absoluteString
-    }
-
     /// Loads `url` in the page the window shows and shows it in the address field.
     fileprivate func showLoading(_ url: URL) {
         pages.select()
@@ -750,14 +746,8 @@ private struct BrowserMacPaletteOpener: BrowserCommandPaletteOpener {
 
     func openHere(_ url: URL, from source: BrowserTabRuntimeAssignment) -> Bool {
         if mode == .newTab { return openTab(url, from: source, selecting: true) }
-        // As submitAddress does: a Start Page or native tab has no page, so
-        // the core gives it the address and its page opens loading it.
-        if model.browser.shownTab?.surface.showsPage == false {
-            guard model.browser.navigateSelectedTab(to: url.absoluteString) else { return false }
-            model.showOpened(url)
-        } else {
-            model.showLoading(url)
-        }
+        model.browser.navigateSelectedTab(to: url.absoluteString)
+        model.showLoading(url)
         return true
     }
 
@@ -766,7 +756,7 @@ private struct BrowserMacPaletteOpener: BrowserCommandPaletteOpener {
             return model.browser.openBackgroundTab(url: url, in: source.spaceID, savesInSavedFolder: true) != nil
         }
         guard model.browser.openAddress(url, in: source.spaceID, placesAsNewTab: true) else { return false }
-        model.showOpened(url)
+        model.showLoading(url)
         return true
     }
 
