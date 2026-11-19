@@ -11,6 +11,8 @@ final class BrowserCredentialSavePromptModel {
     private(set) var systemPasswordOfferPhase = BrowserSystemPasswordOfferPhase.notRequested
 
     @ObservationIgnored private var candidateID: UUID?
+    /// The saved password a commit wrote, once it has.
+    private(set) var savedDescriptor: CredentialDescriptor?
 
     var confirmationAction: BrowserCredentialSavePromptAction? {
         switch phase {
@@ -93,6 +95,7 @@ final class BrowserCredentialSavePromptModel {
                 now: now
             )
             guard !Task.isCancelled, candidateID == candidate.id else { return }
+            savedDescriptor = result.descriptor
             phase = .saved(result.disposition)
         } catch {
             guard !Task.isCancelled, candidateID == candidate.id else { return }

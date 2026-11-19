@@ -147,10 +147,12 @@ extension BrowserCommandActions {
         if let id = chrome.palettePasswords.steppedInto, let login = chrome.palettePasswords.login(id) {
             return loginChoices(login, in: space)
         }
+        // A login's category rides in its detail, so "@passwords work" finds every Work login.
         return [settings]
             + logins.map { login in
                 BrowserPaletteChoice(
-                    scope: .passwords, key: "login-\(login.id)", name: login.origin.host, detail: login.username,
+                    scope: .passwords, key: "login-\(login.id)", name: login.origin.host,
+                    detail: login.category.map { "\(login.username) · \($0)" } ?? login.username,
                     symbol: "key.fill", run: { [chrome] in chrome.palettePasswords.stepInto(login.id) }, stepsInto: true
                 )
             }
