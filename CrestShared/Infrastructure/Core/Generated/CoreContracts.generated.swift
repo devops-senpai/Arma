@@ -25466,8 +25466,105 @@ struct SpaceScheme: Hashable, Sendable {
         ),
         darkLook: nil
     )
-    static let arcSky = SpaceScheme(
+    static let crestDefault = SpaceScheme(
         tag: 1,
+        name: "crestDefault",
+        title: LocalizedStringResource("Crest Default"),
+        look: SpaceBranding(
+            colors: ColorPalette(
+                colors: [
+                    BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    BrandColor(red: 0.18, green: 0.294, blue: 0.408, alpha: 1),
+                    BrandColor(red: 0.353, green: 0.608, blue: 0.784, alpha: 1)
+                ]
+            ),
+            bannerPattern: SpaceBannerPattern.solid,
+            bannerStrength: 1,
+            readabilityFade: 0,
+            keepsControlsReadable: false,
+            themeMode: SpaceThemeMode.gradient,
+            gradientAngle: 75,
+            textureStrength: 0,
+            iconStyle: SpaceIconStyle.simpleSymbol,
+            symbolColor: BrandColor(red: 0.949, green: 0.757, blue: 0.306, alpha: 1),
+            crest: SpaceCrest(
+                backplate: CrestBackplate.shield,
+                fieldDivision: CrestFieldDivision.plain,
+                ordinary: CrestOrdinary.none,
+                trim: CrestTrim.none,
+                symbol: CrestSymbol.mountain,
+                chargeLayout: CrestChargeLayout.single,
+                backplateColorIndex: 1,
+                secondaryFieldColorIndex: 1,
+                ordinaryColorIndex: 2,
+                trimColorIndex: 1,
+                symbolColorIndex: 2,
+                startingPresetID: nil,
+                edgeColorIndex: 1,
+                palette: nil,
+                charge: nil,
+                plateScale: 1,
+                edgeWidth: 0,
+                divisionCount: 4,
+                finish: CrestFinish.flat,
+                ordinaryWidth: 1,
+                trimWeight: 1,
+                trimDetail: 12,
+                chargeScale: 1,
+                chargeOffset: 0,
+                chargeWeight: CrestChargeWeight.bold,
+                sheenAngle: 45,
+                sealTeeth: 12,
+                showsOutline: false,
+                depth: CrestDepth.none,
+                paletteGradients: nil
+            ),
+            renderingVersion: 4,
+            folderColorIntensity: 0,
+            textColorMode: SpaceTextColorMode.light,
+            hasCustomAppearance: false,
+            gradientKind: nil,
+            symbolGradient: nil,
+            colorGradients: nil,
+            dress: SpaceDress(
+                text: SidebarTextDress(
+                    color: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryColor: BrandColor(red: 0.636, green: 0.648, blue: 0.669, alpha: 1)
+                ),
+                folders: nil,
+                commandPalette: SpacePaletteLook(
+                    light: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    ),
+                    dark: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    )
+                ),
+                popovers: PopoverDress(
+                    backgroundColor: BrandColor(red: 0.169, green: 0.227, blue: 0.361, alpha: 1),
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.636, green: 0.648, blue: 0.669, alpha: 1),
+                    accentColor: BrandColor(red: 0.949, green: 0.757, blue: 0.306, alpha: 1),
+                    accentOpacity: 1,
+                    buttonColor: BrandColor(red: 0.18, green: 0.294, blue: 0.408, alpha: 1),
+                    buttonOutlineColor: BrandColor(red: 0.353, green: 0.608, blue: 0.784, alpha: 1)
+                ),
+                controls: ControlsDress(
+                    fillColor: BrandColor(red: 0.18, green: 0.294, blue: 0.408, alpha: 1),
+                    fillOpacity: 0.9,
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.636, green: 0.648, blue: 0.669, alpha: 1)
+                )
+            )
+        ),
+        darkLook: nil
+    )
+    static let arcSky = SpaceScheme(
+        tag: 2,
         name: "arcSky",
         title: LocalizedStringResource("Arc Sky"),
         look: SpaceBranding(
@@ -25668,7 +25765,7 @@ struct SpaceScheme: Hashable, Sendable {
         )
     )
     static let arcBlush = SpaceScheme(
-        tag: 2,
+        tag: 3,
         name: "arcBlush",
         title: LocalizedStringResource("Arc Blush"),
         look: SpaceBranding(
@@ -25866,7 +25963,7 @@ struct SpaceScheme: Hashable, Sendable {
         )
     )
     static let latte = SpaceScheme(
-        tag: 3,
+        tag: 4,
         name: "catppuccinLatte",
         title: LocalizedStringResource("Catppuccin Latte"),
         look: SpaceBranding(
@@ -25970,7 +26067,7 @@ struct SpaceScheme: Hashable, Sendable {
         darkLook: nil
     )
     static let latteMocha = SpaceScheme(
-        tag: 4,
+        tag: 5,
         name: "catppuccinLatteMocha",
         title: LocalizedStringResource("Catppuccin Latte / Mocha"),
         look: SpaceBranding(
@@ -26171,7 +26268,7 @@ struct SpaceScheme: Hashable, Sendable {
         )
     )
     static let frappe = SpaceScheme(
-        tag: 5,
+        tag: 6,
         name: "catppuccinFrappe",
         title: LocalizedStringResource("Catppuccin Frappé"),
         look: SpaceBranding(
@@ -26275,7 +26372,7 @@ struct SpaceScheme: Hashable, Sendable {
         darkLook: nil
     )
     static let macchiato = SpaceScheme(
-        tag: 6,
+        tag: 7,
         name: "catppuccinMacchiato",
         title: LocalizedStringResource("Catppuccin Macchiato"),
         look: SpaceBranding(
@@ -26379,7 +26476,7 @@ struct SpaceScheme: Hashable, Sendable {
         darkLook: nil
     )
     static let mocha = SpaceScheme(
-        tag: 7,
+        tag: 8,
         name: "catppuccinMocha",
         title: LocalizedStringResource("Catppuccin Mocha"),
         look: SpaceBranding(
@@ -26483,7 +26580,17 @@ struct SpaceScheme: Hashable, Sendable {
         darkLook: nil
     )
 
-    static let all: [SpaceScheme] = [neutral, arcSky, arcBlush, latte, latteMocha, frappe, macchiato, mocha]
+    static let all: [SpaceScheme] = [
+        neutral,
+        crestDefault,
+        arcSky,
+        arcBlush,
+        latte,
+        latteMocha,
+        frappe,
+        macchiato,
+        mocha
+    ]
 
     static func named(_ name: String?) -> SpaceScheme? {
         all.first { $0.name == name }

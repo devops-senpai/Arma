@@ -6,6 +6,19 @@ namespace CrestCore.Contracts;
 public sealed partial class SpaceScheme {
     #region Static Variables
 
+    /// Crest's own look as a theme: ink washing down through dusk into sky,
+    /// the colors of Crest's mark, with the Space's icon in butter, its text in
+    /// paper and its palette, popovers and controls on ink.
+    public static readonly SpaceScheme CrestDefault = new("crestDefault", "Crest Default", WashLook(
+        [Tincture.CrestInk, Tincture.CrestDusk, Tincture.CrestSky], angle: 75, symbol: Tincture.CrestButter, new(
+            Text: new(new(1, 0.992, 0.969), new(0.636, 0.648, 0.669)),
+            Folders: null,
+            CommandPalette: new(new(new(0.090, 0.133, 0.220), 0.94, new(1, 0.992, 0.969)),
+                new(new(0.090, 0.133, 0.220), 0.94, new(1, 0.992, 0.969))),
+            Popovers: new(new(0.169, 0.227, 0.361), new(1, 0.992, 0.969), new(0.636, 0.648, 0.669),
+                new(0.949, 0.757, 0.306), 1, new(0.180, 0.294, 0.408), new(0.353, 0.608, 0.784)),
+            Controls: new(new(0.180, 0.294, 0.408), 0.9, new(1, 0.992, 0.969), new(0.636, 0.648, 0.669)))));
+
     // Themes Arma ships with, after Arc's sidebar and the Catppuccin palettes
     // (catppuccin.com/palette); Latte / Mocha pairs the light and darkest flavors.
     public static readonly SpaceScheme ArcSky = new("arcSky", "Arc Sky", ThemeLook(
@@ -136,7 +149,7 @@ public sealed partial class SpaceScheme {
                 Controls: new(new(0.192, 0.196, 0.267), 0.9, new(0.804, 0.839, 0.957), new(0.651, 0.678, 0.784)))));
 
     /// The themes, in the order the gallery lists them after Crest's own schemes.
-    private static IReadOnlyList<SpaceScheme> Themes => [ArcSky, ArcBlush, Latte, LatteMocha, Frappe, Macchiato, Mocha];
+    private static IReadOnlyList<SpaceScheme> Themes => [CrestDefault, ArcSky, ArcBlush, Latte, LatteMocha, Frappe, Macchiato, Mocha];
 
     #endregion
 
@@ -166,6 +179,16 @@ public sealed partial class SpaceScheme {
         new(new(colors), SpaceBannerPattern.Solid, strength, ReadabilityFade: 0, KeepsControlsReadable: false, SpaceThemeMode.Banner,
             GradientAngle: 45, textureStrength, SpaceIconStyle.SimpleSymbol, symbol, SpaceBranding.Neutral.Crest,
             CrestVocabulary.Customization.Version, FolderColorIntensity: 0, text, HasCustomAppearance: false, Dress: dress);
+
+
+    /// A theme's look that draws its colors as one gradient, `colors` running
+    /// toward `angle`, with light text, and the Space's icon in place of a
+    /// crest, drawn in `symbol`, dressed in `dress`.
+    private static SpaceBranding WashLook(Tincture[] colors, double angle, Tincture symbol, SpaceDress dress) =>
+        new(new([.. colors.Select(tincture => tincture.Color)]), SpaceBannerPattern.Solid, BannerStrength: 1, ReadabilityFade: 0,
+            KeepsControlsReadable: false, SpaceThemeMode.Gradient, angle, TextureStrength: 0, SpaceIconStyle.SimpleSymbol, symbol.Color,
+            SpaceBranding.Neutral.Crest, CrestVocabulary.Customization.Version, FolderColorIntensity: 0, SpaceTextColorMode.Light,
+            HasCustomAppearance: false, Dress: dress);
 
     #endregion
 }

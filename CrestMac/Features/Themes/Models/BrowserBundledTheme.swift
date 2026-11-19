@@ -2,8 +2,8 @@ import Foundation
 
 /// A theme Arma ships with, which the theme library offers beside the themes
 /// a person saved and setup offers on its look page: each made to welcome
-/// someone, Arc's people, coders, or those who want to make a browser their
-/// own. Most are the core's schemes, whose looks every device knows; a theme
+/// someone, Crest's people, Arc's, coders, or those who want to make a
+/// browser their own. Most are the core's schemes, whose looks every device knows; a theme
 /// with a picture is a theme file in the app's resources.
 ///
 /// Each keeps the identity a library saved its copy under before the themes
@@ -11,6 +11,9 @@ import Foundation
 struct BrowserBundledTheme: Identifiable, Sendable {
     // MARK: - Static Variables
 
+    static let crestDefault = BrowserBundledTheme(
+        id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E0A", scheme: .crestDefault,
+        pitch: "Crest's own look: ink washing down into sky")
     static let arcSky = BrowserBundledTheme(
         id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E01", scheme: .arcSky,
         pitch: "Light and airy, for anyone coming from Arc")
@@ -40,7 +43,7 @@ struct BrowserBundledTheme: Identifiable, Sendable {
         pitch: "Macchiato's glow and a fine hatch behind your tabs")
 
     /// Every bundled theme, in the order setup offers them.
-    static let all = [arcSky, arcBlush, latte, catppuccin, macchiato, mocha, frappe, jellyFish, textured]
+    static let all = [crestDefault, arcSky, arcBlush, latte, catppuccin, macchiato, mocha, frappe, jellyFish, textured]
 
     // MARK: - Variables
 

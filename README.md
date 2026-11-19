@@ -21,7 +21,8 @@ user guides live in this repository under `HelpCenter/docs/`.
 
 ### Themes
 
-Arma ships with themes for every kind of person: **Arc Sky** and **Arc Blush** for anyone
+Arma ships with themes for every kind of person: **Crest Default**, Crest's own look of
+ink washing down into sky, **Arc Sky** and **Arc Blush** for anyone
 coming from Arc, and **Catppuccin** Latte, Latte / Mocha, Macchiato, Mocha
 and Frappé for coders. Arma starts in Catppuccin Latte. Any theme can also put a picture of your own behind the
 tabs; **JellyFish** ships as an example of one. Setup offers them
