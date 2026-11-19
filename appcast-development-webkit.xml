@@ -6,6 +6,31 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.128</title>
+            <pubDate>Thu, 19 Nov 2026 15:53:54 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>1000128</sparkle:version>
+            <sparkle:shortVersionString>0.10.128</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Setup opens on a full welcome with its steps as chips and ends with Make It Home; crests gain a Simple set; Crest's own look ships as the Crest Default theme.
+
+### New
+- Crest Default, Crest's own look of ink washing down into sky, is a theme beside Arc Sky and the Catppuccin flavors in setup and Settings › Themes.
+- Crests gain a Simple set, Crest, Moon, Summit, Lens, Spark and Grove, beside the Heraldic houses: a bold rounded figure raised off a soft shape.
+
+### Improved
+- Setup opens on a full welcome with the steps as colored chips, each opening its step, then lays the steps beside Arma's live preview, and ends with Make It Home: the default browser, search and ad blocking.
+- Spaces brought in from another browser keep their own icon on a round crest in their color.
+- The Space picker draws a well with a neutral selector, a lighter mark for Sub-Spaces, and corners that follow the Corner radius setting; Settings shows solid glyphs in the brand colors; search engine icons in pickers are sized to their name.
+
+### Fixed
+- Finishing setup no longer stalls: Arma comes up behind setup, which fades once Getting Started has drawn, and a window opening on one of Arma's own pages shows it without waiting for the content-blocking rules.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.128/Arma-0.10.128.dmg" length="195117358" type="application/octet-stream" sparkle:edSignature="OylH7e3StmwOu3uy6AuML7G1Ef15P9he2IaIs818d/VCZdxWsssfBP2tErWd+lFTnw97gWhsvpL8jo1ugoWvBw=="/>
+        </item>
+        <item>
             <title>0.10.109</title>
             <pubDate>Thu, 19 Nov 2026 10:31:01 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -959,6 +984,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: RSDdsVaurS8goFAoR/VElXeTDOM+kvTNdrhP/ayFMuDEaFP8svNi4GqUvZBVYBYCIIy8v1uGoao08glwUD2WDg==
-length: 72477
+edSignature: qWFOtW+etBGgQhVj5kzavh+UMqh0bFfb1ctFHfn0dMhlLP0TucAUq9+yUTdRPAjSCvHvL1I/XbpMPUeuVo0wAw==
+length: 74639
 -->
