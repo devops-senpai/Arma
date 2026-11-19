@@ -17,7 +17,7 @@ namespace CrestCore.Contracts;
 /// wears the look its accent and symbol give it; <see cref="Look"/> is what it wears.
 /// </summary>
 [Observed]
-public sealed record SpaceSettings(
+public sealed partial record SpaceSettings(
     string Name,
     string Symbol,
     SpaceAccent Accent,
@@ -31,7 +31,8 @@ public sealed record SpaceSettings(
     DateTimeOffset? AccessPolicyModifiedAt = null,
     bool SeparatesPinnedTabs = false,
     DateTimeOffset? SeparatesPinnedTabsModifiedAt = null,
-    DateTimeOffset? ProtectionModifiedAt = null) {
+    DateTimeOffset? ProtectionModifiedAt = null,
+    SpaceBranding? DarkBranding = null) {
     #region Variables
 
     /// <summary>The branding the Space wears: its own, with a banner strength stored

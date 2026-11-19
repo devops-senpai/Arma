@@ -34,6 +34,8 @@ extension SpaceBranding {
     /// the text color mode names one or follows the device, whose appearance
     /// reads in `system`.
     func foregroundTone(system: BrowserSpaceForegroundTone) -> BrowserSpaceForegroundTone {
+        // A text color the Space chose sets the tone by its brightness.
+        if let chosen = sidebarTextColor { return chosen.luminance > 0.5 ? .light : .dark }
         if let override = textColorMode.foregroundTone(system: system) { return override }
         let painted = paintedColors
         return ColorPalette(colors: painted.isEmpty ? [.indigo] : painted).foregroundTone(

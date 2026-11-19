@@ -34,16 +34,19 @@ struct CrestFlyoutStyle: ViewModifier {
     /// flyout that has none.
     var outline: AnyShape?
 
+    @Environment(\.crestFlyoutTheme) private var theme
+
     @ViewBuilder
     func body(content: Content) -> some View {
         let labels =
             content
+            .modifier(CrestFlyoutThemeLabels(theme: theme, standardScheme: Self.colorScheme))
             .foregroundStyle(.primary)
             .tint(CrestBrandTheme.accent(Self.colorScheme))
             .environment(\.colorScheme, Self.colorScheme)
         if let inWindowShape {
             labels
-                .background { Self.surface(in: inWindowShape) }
+                .background { Self.surface(in: inWindowShape, theme: theme) }
                 .overlay {
                     if let outline {
                         outline
@@ -54,17 +57,18 @@ struct CrestFlyoutStyle: ViewModifier {
                 }
         } else {
             labels
-                .presentationBackground { Self.surface(in: Rectangle()) }
+                .presentationBackground { Self.surface(in: Rectangle(), theme: theme) }
                 .preferredColorScheme(Self.colorScheme)
         }
     }
 
     // MARK: - Actions - Drawing
 
-    private static func surface(in shape: some Shape) -> some View {
+    private static func surface(in shape: some Shape, theme: CrestFlyoutTheme?) -> some View {
         shape
             .fill(CrestColor.windowBackground)
             .overlay { shape.fill(material.material) }
+            .overlay { CrestFlyoutThemeFill(theme: theme, shape: shape) }
             .environment(\.colorScheme, colorScheme)
     }
 }

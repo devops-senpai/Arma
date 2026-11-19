@@ -38,7 +38,8 @@ internal sealed partial record SpacePayload {
             SpaceTextColorMode.Named(value.TolerantText("textColorMode")) ?? SpaceTextColorMode.Automatic,
             value.OptionalFlag("hasCustomAppearance"),
             SpaceGradientKind.Named(value.TolerantText("gradientKind")),
-            Gradient(value.Value["symbolGradient"]), Gradients(value.Value["colorGradients"]));
+            Gradient(value.Value["symbolGradient"]), Gradients(value.Value["colorGradients"]),
+            ReadDress(value.Value));
         return SpaceBranding.Normalized(branding);
     }
 
