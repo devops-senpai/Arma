@@ -6,6 +6,29 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.109</title>
+            <pubDate>Thu, 19 Nov 2026 10:31:00 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>1000109</sparkle:version>
+            <sparkle:shortVersionString>0.10.109</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Setup starts every Space with a Favorites folder, and the command palette keeps typed #sections, searches words first and shows site icons on history.
+
+### Improved
+- Every Space setup sets up starts with an empty Favorites folder, shown in the live preview and kept when you start browsing; file tabs into it, rename it or delete it there or later.
+- Return in the command palette now searches anything that isn't an address, such as a single word, with matching tabs, sites and history still listed below. An address such as github.com or localhost:3000 still opens, and the field completes one as you type it.
+- History results in the command palette show their site's icon with a small clock badge, so results from different sites are easy to tell apart.
+- Starting a crest from the Arma arms in the Crest Studio paints them in the Space's own colors, as every other house does: a red bird on a navy guidon with a gold pale and laurel on Arma's colors.
+
+### Fixed
+- An address you type or paste in the command palette opens at the #section you gave it, even on a page you've visited before, and changing only the #section of the page you're on moves within that page.
+- A Space added in setup after you chose a theme now wears that theme in the preview too, instead of its accent's own colors.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.109/Arma-0.10.109.dmg" length="194552191" type="application/octet-stream" sparkle:edSignature="DzgpztsLVAG0A8f6mUm4JrTNxgn2d8jrXGoIV1mgE8C7s78Tivmd20e9fRmNJYldCPudRB8uDPJ1BhgO3wRYDA=="/>
+        </item>
+        <item>
             <title>0.10.105</title>
             <pubDate>Wed, 18 Nov 2026 23:30:19 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -936,6 +959,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: dmFaH4/bp5qME48rNqEDeOjFE0GiXMzriDiZvQX2SemgoZSmv2IRRWdCM6noQsmrKSo2dKnHZsdBxmpMnGsoCg==
-length: 70268
+edSignature: zmh62zb7sqCo2e7UAd6Jc4umtzOOmsVV2smYOu8ZkByT4xz02XbVNwDmsOwIREDtCIwOoN151uiKuorIf0NJCA==
+length: 72477
 -->
