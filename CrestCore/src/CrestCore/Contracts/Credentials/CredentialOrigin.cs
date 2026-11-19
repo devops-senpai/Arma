@@ -9,7 +9,7 @@ namespace CrestCore.Contracts;
 /// canonicalizes scheme, host and default port before it reaches the core, so
 /// equality is exact member equality. The credential rules refuse an origin
 /// that is not `IsValid`.
-public sealed record CredentialOrigin(string Scheme, string Host, int Port) {
+public sealed partial record CredentialOrigin(string Scheme, string Host, int Port) {
     #region Variables
 
     public const int MaximumHostLength = 1_024;

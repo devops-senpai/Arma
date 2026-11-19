@@ -70,4 +70,24 @@ extension BrowserStore {
             notes?.nilIfEmpty, for: descriptor.id, isSynchronizable: descriptor.isSynchronizable,
             in: descriptor.spaceID)
     }
+
+    /// Whether a password saved for `saved`, reaching its subdomains, fills a
+    /// page at `page`, as the core answers.
+    func reaches(_ saved: CredentialOrigin, _ page: CredentialOrigin) -> Bool {
+        (try? core.fills(page, from: [saved], reaching: [0]))?.first ?? false
+    }
+
+    /// Whether a password saved for `origin` may also fill the hosts under it,
+    /// as the core answers; never for a public suffix such as `github.io`.
+    func allowsSubdomainReach(from origin: CredentialOrigin) -> Bool {
+        (try? core.query(CredentialSubdomainReach(origin: origin)))?.isAllowed ?? false
+    }
+
+    /// `includes`, once the core agrees a password saved for `origin` may
+    /// reach the hosts under it. Throws the core's refusal, such as
+    /// `SubdomainsOfPublicSuffix`.
+    func subdomainReach(_ includes: Bool, from origin: CredentialOrigin) throws -> Bool {
+        guard includes else { return false }
+        return try core.query(CredentialSubdomainReach(origin: origin)).isAllowed
+    }
 }
