@@ -6,10 +6,6 @@ extension SpaceHouse {
     /// The houses the galleries offer, Arma's own first.
     static let offered: [SpaceHouse] = [.arma] + all.filter { $0 != .arma }
 
-    /// The houses that bring an app icon of their own; Arma's is the app's
-    /// own icon, which the picker offers first already.
-    static let withAppIcons: [SpaceHouse] = all.filter { $0 != .arma }
-
     /// The crest a new Space wears, as the core's `SpaceHouse.NewSpaceCrest`
     /// composes it: Arma's arms, the guidon with a gold pale and a red bird
     /// in a double gold line, embossed and lifted on Arma navy, in the
