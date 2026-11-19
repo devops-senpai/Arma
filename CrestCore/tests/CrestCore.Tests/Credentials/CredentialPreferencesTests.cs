@@ -20,14 +20,14 @@ public sealed class CredentialPreferencesTests {
     [Fact]
     public void PreferencesAnOlderReleaseStoredTakeTheDefaultsAndWriteBackUnchanged() {
         var decoded = StoredSessionCodec.DecodeCredentialPreferences(Older.DeepClone());
-        Assert.Equal(new CredentialPreferences(true, false, true), decoded);
+        Assert.Equal(new CredentialPreferences(true, false, true, []), decoded);
         Assert.Equal(CredentialPreferences.DefaultSavePromptSeconds, decoded.SavePromptSeconds);
         Assert.True(JsonNode.DeepEquals(Older, StoredSessionCodec.Encode(decoded)));
     }
 
     [Fact]
     public void TheSavePromptTimeIsStoredAndKeptWithinItsRange() {
-        var chosen = new CredentialPreferences(true, true, false, SavePromptSeconds: 25);
+        var chosen = new CredentialPreferences(true, true, false, [], SavePromptSeconds: 25);
         Assert.Equal(chosen, StoredSessionCodec.DecodeCredentialPreferences(StoredSessionCodec.Encode(chosen)));
 
         var stored = (JsonObject)Older.DeepClone();
@@ -35,5 +35,19 @@ public sealed class CredentialPreferencesTests {
         Assert.Equal(CredentialPreferences.MaximumSavePromptSeconds,
             StoredSessionCodec.DecodeCredentialPreferences(stored).SavePromptSeconds);
         Assert.Equal(CredentialPreferences.MinimumSavePromptSeconds, (chosen with { SavePromptSeconds = 1 }).Kept().SavePromptSeconds);
+    }
+
+    [Fact]
+    public void NeverSavedSitesAreStoredAndAnUnreadableOneIsLeftOut() {
+        var chosen = new CredentialPreferences(true, true, false,
+            [new NeverSavedSite("google.com", true), new NeverSavedSite("foo.this.com", false)]);
+        Assert.Equal(chosen, StoredSessionCodec.DecodeCredentialPreferences(StoredSessionCodec.Encode(chosen)));
+
+        var stored = (JsonObject)Older.DeepClone();
+        stored["neverSavedSites"] = new JsonArray(
+            new JsonObject { ["host"] = "Example.com", ["includesSubdomains"] = false },
+            new JsonObject { ["host"] = "not a site" },
+            new JsonObject { ["host"] = "co.uk", ["includesSubdomains"] = true });
+        Assert.Equal([new NeverSavedSite("example.com", false)], StoredSessionCodec.DecodeCredentialPreferences(stored).NeverSavedSites);
     }
 }
