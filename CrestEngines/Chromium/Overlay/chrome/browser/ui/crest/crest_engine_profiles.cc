@@ -15,6 +15,7 @@
 #include "chrome/browser/browser_process.h"
 #include "chrome/browser/browsing_data/chrome_browsing_data_model_delegate.h"
 #include "chrome/browser/browsing_data/chrome_browsing_data_remover_constants.h"
+#include "chrome/browser/prefs/session_startup_pref.h"
 #include "chrome/browser/profiles/delete_profile_helper.h"
 #include "chrome/browser/profiles/keep_alive/profile_keep_alive_types.h"
 #include "chrome/browser/profiles/keep_alive/scoped_profile_keep_alive.h"
@@ -39,6 +40,21 @@
 namespace crest {
 
 namespace {
+
+// A Space's profile continues where it left off, as Chrome's setting of that
+// name does: Arma reopens every tab, so the session cookies a site signs in
+// with come back with it. Chromium writes them to disk at every quit and
+// reads them back at launch only for a profile set so; set once, it holds
+// from the next launch on. The host never restores Chrome's own windows, so
+// the setting brings back nothing else.
+void ContinueWhereLeftOff(Profile* profile) {
+  if (!profile || profile->IsOffTheRecord()) {
+    return;
+  }
+  if (!SessionStartupPref::GetStartupPref(profile).ShouldRestoreLastSession()) {
+    SessionStartupPref::SetStartupPref(profile, SessionStartupPref(SessionStartupPref::LAST));
+  }
+}
 
 // The directory of the regular profile a Space's profile `id` browses in.
 base::FilePath ProfilePath(ProfileManager* manager, const std::string& id) {
@@ -310,6 +326,9 @@ void EngineProfiles::Loaded(const std::string& id,
     profiles_[id] = is_private ? profile->GetOffTheRecordProfile(
                                      Profile::OTRProfileID::CreateUnique("Crest::Private::" + id), true)
                                : profile;
+  }
+  if (!is_private) {
+    ContinueWhereLeftOff(profile);
   }
   std::move(done).Run(profiles_[id]);
 }
