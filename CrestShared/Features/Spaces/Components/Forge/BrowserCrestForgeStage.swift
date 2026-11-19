@@ -31,17 +31,16 @@ struct BrowserCrestForgeStage: View {
             .accessibilityIdentifier("space-forge-stage")
     }
 
-    /// The crest beside its colors on the Mac; on iPhone and iPad, beside them
-    /// where there's room for both and above them where there isn't.
-    @ViewBuilder private var stage: some View {
-        #if os(macOS)
+    /// The crest beside its colors where there's room for both, and above
+    /// them where there isn't: beside Settings › Themes' list of themes, the
+    /// page offers the stage less than the wide layout needs at the window's
+    /// usual width, and a column of rows runs past the page's edge rather
+    /// than shrink.
+    private var stage: some View {
+        ViewThatFits(in: .horizontal) {
             wideStage
-        #else
-            ViewThatFits(in: .horizontal) {
-                wideStage
-                compactStage
-            }
-        #endif
+            compactStage
+        }
     }
 
     private var wideStage: some View {
