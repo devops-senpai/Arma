@@ -70,6 +70,7 @@ private struct BrowserFolderFaces: View {
     let color: BrandColor
     let isExpanded: Bool
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.browserFolderFaceDress) private var dress
 
     var body: some View {
         Image(systemName: "folder").hidden().overlay {
@@ -105,8 +106,7 @@ private struct BrowserFolderFaces: View {
                             center: CGPoint(x: radius, y: radius), radius: radius,
                             startAngle: .degrees(180), endAngle: .degrees(270), clockwise: false)
                         path.closeSubpath()
-                        context.fill(path, with: .color(faceColor))
-                        context.fill(path, with: .color(.black.opacity(0.22)))
+                        dress.drawBack(path, color: color, in: context, width: size.width)
                     }
                     .modifier(
                         BrowserFolderFaceProjection(front: false, openness: isExpanded ? 1 : 0)
@@ -120,6 +120,7 @@ private struct BrowserFolderFaces: View {
                         var tint = context
                         tint.opacity = BrandColor.folderFrontHighlightOpacity
                         tint.fill(path, with: .color(.white))
+                        dress.drawFrontOutline(in: context, size: size, radius: radius)
                         if let glyph {
                             context.draw(
                                 glyph.font(.system(size: size.height * 0.5, weight: .semibold)),

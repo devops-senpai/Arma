@@ -24,6 +24,7 @@ struct SpaceColorScheme: ViewModifier {
 
     func body(content: Content) -> some View {
         content
+            .modifier(SpaceDressAppearance(branding: branding))
             .environment(\.colorScheme, branding?.shown.colorScheme(over: colorScheme) ?? .dark)
             .environment(\.deviceColorScheme, deviceColorScheme ?? colorScheme)
     }
@@ -39,6 +40,7 @@ struct SurfaceToneAppearance: ViewModifier {
 
     func body(content: Content) -> some View {
         content
+            .modifier(SpaceControlsAppearance())
             // The label color itself, not the Space ink a hierarchical style
             // would take its levels from.
             .foregroundStyle(Color.primary)

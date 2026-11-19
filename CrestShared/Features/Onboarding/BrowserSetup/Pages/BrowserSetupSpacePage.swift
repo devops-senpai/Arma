@@ -5,7 +5,7 @@ import SwiftUI
 /// its icon, a crest started from a house or a plain symbol or emoji. The
 /// preview shows every change as it is made. Your Space, the person's first
 /// Space, is this page under the step's name.
-struct BrowserSetupSpacePage: View {
+struct BrowserSetupSpacePage<Themes: View>: View {
     // MARK: - Variables
 
     /// Where the page's edits go, or nil when setup holds no such Space.
@@ -13,6 +13,9 @@ struct BrowserSetupSpacePage: View {
     let spaceID: UUID
     /// The page's name, or nil to name it after the Space.
     var title: LocalizedStringResource?
+    /// The themes the Space may wear whole, over its colors, where the app
+    /// offers them.
+    @ViewBuilder let themes: () -> Themes
 
     // MARK: - Actions - Drawing
 
@@ -25,6 +28,7 @@ struct BrowserSetupSpacePage: View {
                 } header: {
                     heading(editor)
                 }
+                themes()
                 Section("Colors") {
                     BrowserSpaceColorWells(branding: editor.branding)
                         .padding(.vertical, CrestSpacing.small)
@@ -50,5 +54,12 @@ struct BrowserSetupSpacePage: View {
                 verbatim: editor.name.wrappedValue.isEmpty
                     ? String(localized: "Untitled Space") : editor.name.wrappedValue)
         }
+    }
+}
+
+extension BrowserSetupSpacePage where Themes == EmptyView {
+    /// A page of the Space's colors and icon alone.
+    init(editor: BrowserSetupSpaceEditor?, spaceID: UUID, title: LocalizedStringResource? = nil) {
+        self.init(editor: editor, spaceID: spaceID, title: title) { EmptyView() }
     }
 }
