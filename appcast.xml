@@ -6,6 +6,32 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.105</title>
+            <pubDate>Wed, 18 Nov 2026 23:30:07 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>1000105</sparkle:version>
+            <sparkle:shortVersionString>0.10.105</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Setup is a walkthrough beside a live preview, and Spaces wear a Background and an Accent.
+
+### New
+- Setting up Arma is now a short walkthrough beside a live preview of the window you're building: bring tabs from another browser, choose your first Space's name, colors and icon, then add more Spaces. Close, move or file tabs in the preview and those changes carry into Arma when you start browsing.
+- A Space's look is now a Background and an Accent, each one color or a gradient of up to three, chosen on a color wheel with brightness and texture or taken from a palette. Crests and sidebar patterns sit under More Customization.
+- Setup lists each Space with its Sub-Spaces and lets you add a Sub-Space to any Space before you start browsing.
+
+### Improved
+- Setup offers every theme Arma ships over each Space's colors, beside the live preview; the theme you choose dresses every Space setup makes and new Spaces after it.
+- Search provider chips in the command palette show their text in white or black, whichever reads better on the chip's color.
+- Dragging a Space's colors stays smooth while the window redraws to show them, in setup and in Settings.
+
+### Fixed
+- A new Space made while a theme with a picture, such as JellyFish, is the default for new Spaces now gets the picture behind its tabs, not only the theme's colors.
+- Saved, pinned, reopened and imported tabs whose address holds characters such as { or [ return to the exact page they were saved at, instead of a broken search, and no longer show as moved away from their saved address.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.105/Arma-0.10.105.dmg" length="194689790" type="application/octet-stream" sparkle:edSignature="QfY2u2tJKyyeRK2WrG69d5rpqmBu03HhluIdXf3D3Sn5jItpOlnm19BX3XamdDzxoyaBpBj4eyltWZ5UdmZZAg=="/>
+        </item>
+        <item>
             <title>0.10.100</title>
             <pubDate>Wed, 18 Nov 2026 15:26:46 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -866,6 +892,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: j+mKQb/boizCo0qnMzwpWSuP+W62B/5Gy3VSB6m3RnZ/TFkcnTQB9TuY4vRrNUYc5cA+SWrT41mHA0gw5+NhAg==
-length: 65263
+edSignature: LjXHQORV0g5c+jOeWyTb8j/kJpe2BR9oHItIxIVBO6SWS0dk4wat+EJQQnga34JvvfvzADlAtsuXDHi6pLa2BA==
+length: 67672
 -->
