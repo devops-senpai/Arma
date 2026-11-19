@@ -19,6 +19,8 @@ struct BrowserCredentialSavePrompt: View {
     /// The candidate as the person corrects it, from the moment the prompt
     /// starts asking.
     @State var draft: BrowserCredentialSaveCandidate?
+    /// Whether the site may reach its subdomains at all.
+    @State var offersSubdomains = false
     /// The categories the Space's saved passwords are filed under.
     @State var categories: [String] = []
     /// Whether the person has started answering: touched a field or a choice.
