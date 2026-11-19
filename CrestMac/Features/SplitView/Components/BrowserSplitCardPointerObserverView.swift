@@ -49,6 +49,9 @@ final class BrowserSplitCardPointerObserverView: NSView {
     private static let escapeKeyCode: UInt16 = 53
 
     private var eventMonitor: Any?
+    /// The card a menu asked for while chrome covered the pointer, picked up
+    /// once the pointer leaves that chrome.
+    private var pendingPlacement: UUID?
     private var observers: [NSObjectProtocol] = []
 
     init(
@@ -94,6 +97,24 @@ final class BrowserSplitCardPointerObserverView: NSView {
         removeEventMonitor()
     }
 
+    /// Picks up the card a menu asked for, once per request across the
+    /// window's content areas: `claim` says whether the request still waits.
+    /// A pointer on chrome drawn over the cards, such as the floating sidebar
+    /// the menu opened from, picks nothing up until it leaves that chrome.
+    func answer(_ request: BrowserSplitCardCarryRequest?, claim: (BrowserSplitCardCarryRequest) -> Bool) {
+        guard let request, claim(request) else { return }
+        pendingPlacement = request.tabID
+        placePending()
+    }
+
+    private func placePending() {
+        guard let tabID = pendingPlacement, !lift.isCarrying(), let location = pointerLocation(),
+            !isCovered(location)
+        else { return }
+        pendingPlacement = nil
+        _ = lift.place(tabID, location)
+    }
+
     private func removeEventMonitor() {
         guard let eventMonitor else { return }
         NSEvent.removeMonitor(eventMonitor)
@@ -110,6 +131,7 @@ final class BrowserSplitCardPointerObserverView: NSView {
                 .rightMouseDown,
                 .otherMouseDown,
                 .leftMouseDragged,
+                .mouseMoved,
                 .leftMouseUp,
                 .keyDown,
             ]
@@ -123,7 +145,12 @@ final class BrowserSplitCardPointerObserverView: NSView {
         guard event.window === window else { return event }
 
         switch event.type {
+        case .mouseMoved:
+            placePending()
+            return event
         case .leftMouseDown:
+            // A click before a menu's card reached the pointer calls it off.
+            pendingPlacement = nil
             let location = convert(event.locationInWindow, from: nil)
             if isCovered(location) { return event }
             if lift.begin(location, BrowserKeyboardModifierFlags(event.modifierFlags)) {
@@ -131,6 +158,7 @@ final class BrowserSplitCardPointerObserverView: NSView {
             }
             return notifyMouseDown(at: location, event)
         case .rightMouseDown, .otherMouseDown:
+            pendingPlacement = nil
             return notifyMouseDown(
                 at: convert(event.locationInWindow, from: nil),
                 event
@@ -154,16 +182,23 @@ final class BrowserSplitCardPointerObserverView: NSView {
     ///
     /// A key-down is the exception that proves it: Escape ends the carry and is
     /// swallowed, and everything else passes so that a menu key equivalent still
-    /// reaches the menu rather than disappearing into a drag.
+    /// reaches the menu rather than disappearing into a drag. A card a menu
+    /// placed follows the pointer with no button held, and the click that
+    /// would cancel a pressed carry puts it down, unless chrome drawn over
+    /// the cards is under that click: then the card goes back.
     private func handleCarried(_ event: NSEvent) -> NSEvent? {
         switch event.type {
-        case .leftMouseDragged:
+        case .leftMouseDragged, .mouseMoved:
             if let location = pointerLocation() {
                 lift.update(location)
             }
             return nil
         case .leftMouseUp:
-            endCarry(cancelled: false)
+            if !lift.isPlaced() { endCarry(cancelled: false) }
+            return nil
+        case .leftMouseDown where lift.isPlaced():
+            let covered = event.window !== window || isCovered(convert(event.locationInWindow, from: nil))
+            endCarry(cancelled: covered)
             return nil
         case .rightMouseDown, .otherMouseDown, .leftMouseDown:
             endCarry(cancelled: true)
@@ -177,6 +212,7 @@ final class BrowserSplitCardPointerObserverView: NSView {
     }
 
     private func endCarry(cancelled: Bool) {
+        if cancelled { pendingPlacement = nil }
         guard lift.isCarrying() else { return }
         if cancelled {
             lift.cancel()

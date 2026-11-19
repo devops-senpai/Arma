@@ -67,7 +67,7 @@ struct MobileRegularPageSurface: View {
     private func surface(
         _ presentation: BrowserPageSurfacePresentation
     ) -> some View {
-        if case .columns(let space, let members, let placeholderIndex) =
+        if case .columns(let space, let members, let placeholderIndex, let placeholderShape) =
             presentation
         {
             MobileSplitColumnsPageSurface(
@@ -75,7 +75,8 @@ struct MobileRegularPageSurface: View {
                 space: space,
                 members: members,
                 adjoinsSidebar: adjoinsSidebar,
-                placeholderIndex: placeholderIndex
+                placeholderIndex: placeholderIndex,
+                placeholderShape: placeholderShape
             )
         } else {
             BrowserRootDetailSurface(
