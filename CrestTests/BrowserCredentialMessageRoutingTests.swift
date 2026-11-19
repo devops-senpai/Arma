@@ -102,7 +102,8 @@ final class BrowserCredentialMessageRoutingTests: XCTestCase {
             try await page.webView.evaluateJavaScript(
                 "document.querySelector('input[type=password]').value"
             ) as? String
-        XCTAssertEqual(password, "generated-secret")
+        // Focusing cleared the field; the revoked fill must not have written it.
+        XCTAssertEqual(password, "")
     }
 
     private func focusPassword(in page: BrowserPage) async throws -> BrowserCredentialFillRequest {
@@ -110,6 +111,8 @@ final class BrowserCredentialMessageRoutingTests: XCTestCase {
         let focused = try await page.webView.callAsyncJavaScript(
             """
             const input = document.querySelector(selector);
+            // A field already holding a password raises no prompt.
+            input.value = "";
             input.blur();
             input.focus();
             return document.activeElement === input;
@@ -130,7 +133,7 @@ final class BrowserCredentialMessageRoutingTests: XCTestCase {
         <style>input { display: block; width: 220px; height: 32px; }</style>
         <form id="popup-login">
           <input autocomplete="username" value="person@example.com">
-          <input type="password" autocomplete="current-password" value="popup-secret">
+          <input type="password" autocomplete="current-password">
           <button type="button">Sign In</button>
         </form>
         """
