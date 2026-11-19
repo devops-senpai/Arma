@@ -32,6 +32,24 @@ public sealed class OrganizationContractsTests {
     }
 
     [Fact]
+    public void FilingIntoAnEmptyFolderKeepsTheFolderWhereItStands() {
+        var first = Tab("first"); var second = Tab("second"); var opened = Tab("opened");
+        var space = Space(first, second, opened);
+        space.FileTabs([first.Id, second.Id], TabPlacement.Saved, null, Now);
+        var folder = NewFolderId(); space.AddFolder(folder, "Top", TabPlacement.Saved);
+        space.MoveFolder(folder, TabPlacement.Saved, null, Now, beforeTab: first.Id);
+        space.FileTabs([opened.Id], TabPlacement.Saved, folder, Now.AddMinutes(1));
+        Assert.Equal(new[] { opened.Id, first.Id, second.Id }, space.Tabs.Select(t => t.Id));
+        Assert.Equal(folder, space.Tab(opened.Id).FolderId);
+        var another = Tab("another"); var again = Space(first, second, another);
+        again.FileTabs([first.Id, second.Id], TabPlacement.Saved, null, Now);
+        again.AddFolder(folder, "Top", TabPlacement.Saved);
+        again.MoveFolder(folder, TabPlacement.Saved, null, Now, beforeTab: first.Id);
+        again.MoveTab(another.Id, TabPlacement.Saved, folder, null, false, Now.AddMinutes(1));
+        Assert.Equal(new[] { another.Id, first.Id, second.Id }, again.Tabs.Select(t => t.Id));
+    }
+
+    [Fact]
     public void RemovingFolderPromotesContentsAndPreservesCollapseClock() {
         var tab = Tab("page"); var space = Space(tab); var root = NewFolderId(); var folder = NewFolderId(); var child = NewFolderId();
         space.AddFolder(root, "Root"); space.AddFolder(folder, "Folder", parent: root); space.AddFolder(child, "Child", parent: folder);
