@@ -128,6 +128,7 @@ internal static partial class StoredSessionCodec {
         public const string Red = "red";
         public const string RenderingVersion = "renderingVersion";
         public const string ResourceId = "resourceID";
+        public const string SavePromptSeconds = "savePromptSeconds";
         public const string SavedTabFaviconReturnsToSavedUrl = "savedTabFaviconReturnsToSavedURL";
         public const string SavedTabsAfterClosing = "savedTabsAfterClosing";
         public const string SavedTabsExpansionModifiedAt = "savedTabsExpansionModifiedAt";

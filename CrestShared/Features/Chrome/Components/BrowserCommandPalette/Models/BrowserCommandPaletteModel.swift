@@ -332,7 +332,7 @@ final class BrowserCommandPaletteModel {
 
     /// Asks once for the narrowed palette: a changed text asks as it is set,
     /// the same text asks here.
-    private func narrowed(keeping text: String = "") {
+    func narrowed(keeping text: String = "") {
         invalidateURLCompletion()
         let changed = query != text
         query = text
@@ -513,7 +513,7 @@ final class BrowserCommandPaletteModel {
     /// for the search suggestions the answer allows, and shows each only while
     /// no later keystroke has asked again. An answer the core refuses leaves
     /// the rows as they are and lets the keys act on them, as a long wait does.
-    private func requestAnswer() {
+    func requestAnswer() {
         sequence &+= 1
         let asked = sequence
         let question = question(for: query)
