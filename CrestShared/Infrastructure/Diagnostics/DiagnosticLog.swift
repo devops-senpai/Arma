@@ -22,6 +22,7 @@ struct DiagnosticLog: Sendable {
     static let servo = DiagnosticLog(category: "Servo")
     static let shortcuts = DiagnosticLog(category: "Shortcuts")
     static let sitePermissions = DiagnosticLog(category: "SitePermissions")
+    static let themes = DiagnosticLog(category: "Themes")
     static let windows = DiagnosticLog(category: "Windows")
 
     // MARK: - Variables

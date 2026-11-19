@@ -32,6 +32,7 @@ never a second copy of its behavior.
 | `Spaces/` | Space name dismissal, palette color well and symbol artwork |
 | `SplitView/` | Split cards: hover, pointer, lift and focus |
 | `Tabs/` | Tab equalizer, pinned-tab middle click, Getting Started icon |
+| `Themes/` | The theme library (`BrowserThemeLibrary`: theme files, which theme each Space wears, the default theme), the bundled themes over the core's `SpaceScheme`s and `Resources/Themes`, the theme file translator (`CrestTheme+SpaceBranding`), Settings › Themes, the Space theme picker, the Default theme group and the screen eyedropper |
 | `TransientBrowsing/` | The Peek overlay, its keyboard monitor and model |
 | `Utilities/` | The utility filter's menu style |
 | `Window/` | Window title and accessibility |

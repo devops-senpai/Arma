@@ -55,7 +55,10 @@ struct BrowserSetupStepsPanel: View {
                 if let spaceID = firstSpaceID {
                     BrowserSetupSpacePage(
                         editor: BrowserSetupSpaceEditor(flow: flow, spaceID: spaceID), spaceID: spaceID,
-                        title: "Your Space")
+                        title: "Your Space"
+                    ) {
+                        BrowserSetupThemeSection(flow: flow)
+                    }
                 }
             case .spaces:
                 BrowserSetupSpacesPage(
@@ -67,7 +70,10 @@ struct BrowserSetupStepsPanel: View {
             case .space:
                 if let spaceID = destination.spaceID {
                     BrowserSetupSpacePage(
-                        editor: BrowserSetupSpaceEditor(flow: flow, spaceID: spaceID), spaceID: spaceID)
+                        editor: BrowserSetupSpaceEditor(flow: flow, spaceID: spaceID), spaceID: spaceID
+                    ) {
+                        BrowserSetupThemeSection(flow: flow)
+                    }
                 }
             }
         } else {

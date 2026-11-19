@@ -168,7 +168,7 @@ struct MobileBrowserSidebarTopChrome: View {
             spaceID: selectedSpaceID,
             spaceHasAddress: spaceHasAddress,
             commandPaletteHandoff: configuration.commandPaletteHandoff,
-            branding: configuration.context.browser.shownSpace.map(\.settings.look)
+            branding: configuration.context.browser.shownSpace.map { $0.settings.shownLook }
         )
     }
 

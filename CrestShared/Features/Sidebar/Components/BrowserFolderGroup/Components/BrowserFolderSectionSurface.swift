@@ -8,10 +8,16 @@ struct BrowserFolderSectionSurface: ViewModifier {
     let color: BrandColor
     var kind = BrowserFolderKind.folder
     var intensity: Double = 0
+    var highlightColor: BrandColor? = nil
+    var highlightOpacity: Double? = nil
     var textColorMode: SpaceTextColorMode = .automatic
     /// How many folders hold this one.
     var depth = 0
     var isSelected = false
+    /// Whether the folder shows its contents, in the Space whose backdrop
+    /// says whether its rows lie on plates.
+    var isOpen = false
+    var spaceID: UUID?
     /// The folder a drop can file into, or nil for a container that takes
     /// none, such as a Split View.
     let folderID: UUID?
@@ -31,11 +37,12 @@ struct BrowserFolderSectionSurface: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding(.top, BrowserSidebarMetrics.containerPadding)
-            .padding(.bottom, BrowserSidebarMetrics.containerBottomPadding)
+            .padding(.bottom, bottomPadding)
             .contentShape(.rect)
             .modifier(
                 BrowserFolderHighlightSurface(
-                    color: color, intensity: intensity,
+                    color: color, intensity: intensity, highlightColor: highlightColor,
+                    highlightOpacity: highlightOpacity,
                     textColorMode: textColorMode,
                     showsFill: alwaysVisible || previewShowsHighlight || isHovered || isSelected || isTargeted,
                     showsBorders: showsBorders, depth: depth, insetsSurface: insetsSurface,

@@ -64,6 +64,8 @@ final class BrowserOnboardingFlow {
     var state: SetupFlowState? { browser.core.state.setupFlow }
 
     var step: SetupStep { state?.step ?? request.entryPoint.firstStep }
+    /// A theme the Spaces setup makes wear, kept by the flow as this Mac's choice.
+    var theme: BrowserBundledTheme?
     var failure: SetupFailure? { state?.failure }
     var review: SetupImportReview? { state?.review }
     var selectedImportApplications: Set<ImportSource> { Set(state?.selected ?? []) }
@@ -381,6 +383,7 @@ final class BrowserOnboardingFlow {
                     extensions: extensionInstaller == nil ? [] : output.extensions,
                     leftOut: output.leftOut,
                     title: offeredSource(application)?.title))
+            if application == .arc { shuffleReviewedCrestsSoon() }
         } catch {
             send(FailImport(source: application, reason: .read, detail: error.personFacingDescription))
         }

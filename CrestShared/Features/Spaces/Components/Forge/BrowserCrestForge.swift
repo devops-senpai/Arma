@@ -92,7 +92,7 @@ struct BrowserCrestForge: View {
 
     private var editingStart: SpaceBranding? { history.wrappedValue.editingStart }
 
-    private var context: BrowserCrestStudioContext {
+    var context: BrowserCrestStudioContext {
         BrowserCrestStudioContext(
             branding: $branding,
             defaults: branding.startingLook ?? initialAppearance ?? branding,
@@ -379,7 +379,7 @@ struct BrowserCrestForge: View {
     }
 
     private func shuffle() {
-        branding = Self.shuffled(branding)
+        branding = shuffledInOffer()
     }
 
     // MARK: - Looks
