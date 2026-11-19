@@ -6,6 +6,21 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.131</title>
+            <pubDate>Thu, 19 Nov 2026 17:53:12 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>1000131</sparkle:version>
+            <sparkle:shortVersionString>0.10.131</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Settings › Themes fits the window again.
+
+### Fixed
+- Settings › Themes fits the window at its usual width: where the page is narrow, the theme's preview stands above its colors instead of running past the edge.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.131/Arma-0.10.131.dmg" length="195144063" type="application/octet-stream" sparkle:edSignature="H0E3dO9EI5WkY2aqIPyeKHe84Q6oL+CzZMIFnz+0aIKyZ/WsZxWqPwNGD6/FhulvJhODpjomj+Jc1sod4gYeBA=="/>
+        </item>
+        <item>
             <title>0.10.128</title>
             <pubDate>Thu, 19 Nov 2026 15:53:42 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -938,6 +953,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: V2HvI0e3gWa+yvAppID0oqcZ0PPUa2x13m+4esJN4Zg+uiNretqq0waxhmn8xP5o73cEuLpPGWX/M3XZGaTzBQ==
-length: 71925
+edSignature: DWxNgSXbq7k7lgOyCrk10+HWNKeVj3lVmyx+3k3yL9PcS/mvzpfKAjbgjzOzbqCAisnWVLFZeppfl0P5iwvbDg==
+length: 72993
 -->
