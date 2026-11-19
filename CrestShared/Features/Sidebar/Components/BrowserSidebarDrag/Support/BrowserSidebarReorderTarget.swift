@@ -34,8 +34,13 @@ struct BrowserSidebarReorderTarget: Equatable, Sendable {
         /// Join the cards the content area is presenting, as the card at
         /// `index` among them. The index counts presented cards only — the drop
         /// placeholder is not one of them — so it stays put as the row of cards
-        /// shifts to make room.
-        case splitInsert(assignment: BrowserSpaceRuntimeAssignment, index: Int)
+        /// shifts to make room. `shape` is the shape the cards tile in once
+        /// it has landed, or nil for a row of columns. `swapping` names a
+        /// split member lifted alone and the card it is over the middle of,
+        /// which trade places instead.
+        case splitInsert(
+            assignment: BrowserSpaceRuntimeAssignment, index: Int, shape: SplitShape? = nil,
+            swapping: BrowserSplitCardSwap? = nil)
 
         // MARK: - Actions - Verdicts
 
@@ -52,7 +57,10 @@ struct BrowserSidebarReorderTarget: Equatable, Sendable {
             case .space(let assignment):
                 guard targets.spaceIDs.contains(assignment.spaceID) else { return .unavailable }
                 return plan.verdict(onSpace: assignment.spaceID)
-            case .splitInsert:
+            case .splitInsert(_, _, _, let swapping):
+                // The core lists a join, which a member of the split is not; a
+                // swap trades two cards on show, and the core checks it as it commits.
+                if swapping != nil { return .allowed }
                 return BrowserSidebarDropVerdict(targets.split.map { $0.refusal })
             case .createCurrentFolder(let tabID):
                 return targets.folderAroundTabIDs.contains(tabID) ? .allowed : .unavailable
@@ -98,14 +106,20 @@ struct BrowserSidebarReorderTarget: Equatable, Sendable {
                     destination: destinationSpace,
                     leavesSpace: true
                 )
-            case .splitInsert(let assignment, let index):
+            case .splitInsert(let assignment, let index, let shape, let swapping):
                 // The cards on show are the shown tab's split, so the shown tab is
                 // the one the lift joins, and a window showing one tab makes a split.
                 guard assignment.spaceID == spaceID, let shown = browser.selectedTabID(in: spaceID) else { return nil }
+                if let swapping {
+                    return BrowserSidebarDrop(
+                        intent: DropOntoSplitCard(
+                            workspaceID: workspaceID, windowID: windowID, spaceID: spaceID, selection: selection,
+                            tabID: swapping.other))
+                }
                 return BrowserSidebarDrop(
                     intent: DropIntoSplit(
                         workspaceID: workspaceID, windowID: windowID, spaceID: spaceID, selection: selection,
-                        targetTabID: shown, index: index)
+                        targetTabID: shown, index: index, shape: shape)
                 )
             case .createCurrentFolder(let tabID):
                 return BrowserSidebarDrop(

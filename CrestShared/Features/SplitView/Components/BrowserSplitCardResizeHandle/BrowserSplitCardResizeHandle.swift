@@ -1,6 +1,8 @@
 import SwiftUI
 
-/// The affordance that moves one boundary between two split cards.
+/// The affordance that moves one boundary between two split cards: a bar up
+/// the gap between two columns, or, in a split's shape, along the gap between
+/// two rows.
 ///
 /// It lives in the gap between the cards and overhangs each of them slightly,
 /// so the pointer target is comfortable without the control ever covering
@@ -22,8 +24,11 @@ import SwiftUI
 struct BrowserSplitCardResizeHandle: View {
     /// The gap this handle sits in: the one after the card at this index.
     let dividerIndex: Int
+    /// The axis the cards on either side run along; the handle stands across
+    /// it.
+    var axis: SplitAxis = .horizontal
     /// The drag's travel since it began, measured toward the trailing edge in
-    /// the reading direction.
+    /// the reading direction, or downward between rows.
     let resize: (CGFloat) -> Void
     let commit: () -> Void
     var accessibilityTitle: LocalizedStringKey = "Resize Split View Columns"
@@ -35,9 +40,12 @@ struct BrowserSplitCardResizeHandle: View {
 
     var body: some View {
         Color.clear
-            .frame(width: BrowserSplitLayoutMetrics.resizeHandleHitWidth)
+            .frame(
+                width: axis.isHorizontal ? BrowserSplitLayoutMetrics.resizeHandleHitWidth : nil,
+                height: axis.isHorizontal ? nil : BrowserSplitLayoutMetrics.resizeHandleHitWidth
+            )
             .contentShape(.rect)
-            .modifier(BrowserPlatformColumnResizePointerModifier())
+            .modifier(BrowserPlatformColumnResizePointerModifier(axis: axis))
             .overlay {
                 Capsule()
                     .fill(
@@ -48,8 +56,12 @@ struct BrowserSplitCardResizeHandle: View {
                         )
                     )
                     .frame(
-                        width: BrowserSplitCardResizeHandleMetrics.indicatorWidth,
-                        height: BrowserSplitCardResizeHandleMetrics.indicatorHeight
+                        width: axis.isHorizontal
+                            ? BrowserSplitCardResizeHandleMetrics.indicatorWidth
+                            : BrowserSplitCardResizeHandleMetrics.indicatorHeight,
+                        height: axis.isHorizontal
+                            ? BrowserSplitCardResizeHandleMetrics.indicatorHeight
+                            : BrowserSplitCardResizeHandleMetrics.indicatorWidth
                     )
                     .accessibilityHidden(true)
             }
@@ -73,12 +85,12 @@ struct BrowserSplitCardResizeHandle: View {
 
     private func dragChanged(_ value: DragGesture.Value) {
         isDragging = true
-        resize(semanticTranslation(value.translation.width))
+        resize(semanticTranslation(value.translation))
     }
 
     private func dragEnded(_ value: DragGesture.Value) {
         isDragging = false
-        resize(semanticTranslation(value.translation.width))
+        resize(semanticTranslation(value.translation))
         commit()
     }
 
@@ -100,7 +112,7 @@ struct BrowserSplitCardResizeHandle: View {
         commit()
     }
 
-    private func semanticTranslation(_ translation: CGFloat) -> CGFloat {
-        layoutDirection.semanticHorizontalTranslation(translation)
+    private func semanticTranslation(_ translation: CGSize) -> CGFloat {
+        axis.isHorizontal ? layoutDirection.semanticHorizontalTranslation(translation.width) : translation.height
     }
 }

@@ -88,8 +88,11 @@ struct BrowserSplitColumnsView<Member: Identifiable, Content: View, Panel: View>
     @Environment(\.browserSplitInterCardGap) private var interCardGap
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.layoutDirection) private var layoutDirection
+    @Environment(\.browserSplitShaping) var shaping
     @State private var panelWidthTransaction = BrowserSplitPanelWidthTransaction()
     @State private var cardIdentities = BrowserSplitCardIdentities()
+    /// The shares of each branch of a shape, by branch; see `+Shape`.
+    @State var branchWidthTransactions: [UUID: BrowserSplitWidthTransaction] = [:]
 
     private var appearance: BrowserChromeAppearance { .device(windowCornerRadius: windowCornerRadius) }
 
@@ -127,6 +130,9 @@ struct BrowserSplitColumnsView<Member: Identifiable, Content: View, Panel: View>
         return ZStack(alignment: .leading) {
             cardRow(widths: widths, cards: cards)
             dividers(cardWidths: widths, containerWidth: memberWidth)
+            if resolvedPlaceholderIndex == nil, liftedTabID == nil, let shape = displayedShape(placeholderIndex: nil) {
+                shapeDividers(shape, memberWidth: memberWidth, gap: interCardGap, direction: layoutDirection)
+            }
             if panel != nil, resolvedPlaceholderIndex == nil, liftedTabID == nil,
                 let panelWidth = widths.last, panelWidth > 0
             {
@@ -137,11 +143,20 @@ struct BrowserSplitColumnsView<Member: Identifiable, Content: View, Panel: View>
     }
 
     private func cardRow(widths: [CGFloat], cards: [UUID: UUID]) -> some View {
-        HStack(spacing: interCardGap) {
+        // A split in a shape tiles the same slots with `BrowserSplitShapeLayout`.
+        // `AnyLayout` swaps the container under one `ForEach`, so every card
+        // keeps its identity, and its host its live web view, as the split
+        // changes between columns and a shape.
+        let shape = displayedShape(placeholderIndex: resolvedPlaceholderIndex)
+        let layout =
+            shape.map { AnyLayout(shapeLayout($0, gap: interCardGap, panelWidth: panel == nil ? nil : widths.last)) }
+            ?? AnyLayout(HStackLayout(spacing: interCardGap))
+        return layout {
             ForEach(columns(cards: cards)) { column in
                 columnSlot(
                     column.slot,
-                    width: width(at: column.index, in: widths)
+                    // The shape's layout proposes each card its tile.
+                    width: shape == nil ? width(at: column.index, in: widths) : nil
                 )
                 .zIndex(cardZIndex(for: column.slot))
             }
@@ -162,7 +177,7 @@ struct BrowserSplitColumnsView<Member: Identifiable, Content: View, Panel: View>
     @ViewBuilder
     private func columnSlot(
         _ slot: BrowserSplitColumnSlot<Member>,
-        width: CGFloat
+        width: CGFloat?
     ) -> some View {
         let surface = slotSurface(slot).frame(width: width)
 
@@ -324,7 +339,8 @@ struct BrowserSplitColumnsView<Member: Identifiable, Content: View, Panel: View>
     private var dividerIndices: [Int] {
         guard resolvedPlaceholderIndex == nil,
             liftedTabID == nil,
-            members.count > 1
+            members.count > 1,
+            displayedShape(placeholderIndex: nil) == nil
         else { return [] }
         return Array(0..<(members.count - 1))
     }
