@@ -159,6 +159,13 @@ extension BrowserRootModel {
             browser.presentStartPageForLaunch()
             address = ""
         }
+        // A native tab, such as Settings or Getting Started, draws only once
+        // selection loads it, and it opens no page for the rule lists below
+        // to protect. Present it now, or its card stays empty while they
+        // compile.
+        if browser.shownTab?.surface == .nativeView, browser.shownCards.count < 2 {
+            pages.select()
+        }
         await pages.prepareContentBlocking()
         isPrepared = true
         // Pages opened while the rules compiled were built without them.
