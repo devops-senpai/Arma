@@ -35,6 +35,20 @@ extension BrowserStore {
 // MARK: - Accounts
 
 extension BrowserStore {
+    /// The vaults whose passwords a private window suggests: those of every
+    /// Space that keeps passwords and chose to be suggested in private
+    /// windows, with the rest of its group.
+    func spacesSuggestingPasswordsInPrivateWindows() -> [UUID] {
+        guard !isPrivateBrowsing else { return [] }
+        var vaults: [UUID] = []
+        for space in spaceModels {
+            let preferences = space.settings.credentialPreferences
+            guard preferences.isEnabled, preferences.suggestsInPrivateWindows else { continue }
+            for vault in credentialSpaceIDs(of: space.id) where !vaults.contains(vault) { vaults.append(vault) }
+        }
+        return vaults
+    }
+
     /// The longest category name a saved password keeps.
     static let credentialCategoryLength = 64
 
