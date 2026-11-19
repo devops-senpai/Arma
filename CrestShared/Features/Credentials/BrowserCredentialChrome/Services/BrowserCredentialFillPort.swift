@@ -44,4 +44,8 @@ struct BrowserCredentialFillPort {
 
     /// Closes the prompt without filling anything.
     let dismiss: () -> Void
+
+    /// Closes the prompt because the person chose to, keeping prompts away
+    /// for a moment where the shell can; otherwise as `dismiss` does.
+    var close: (() -> Void)? = nil
 }
