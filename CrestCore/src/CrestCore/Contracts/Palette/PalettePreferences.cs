@@ -172,7 +172,7 @@ public sealed class PaletteSource {
         section: PaletteSection.SearchSuggestions, isSection: true, isEnabledByDefault: true, restingSection: null, finders: []);
     public static readonly PaletteSource SettingsPages = new(name: "settingsPages", title: "Settings Pages", detail: "Finds Settings pages by name.",
         section: PaletteSection.Actions, isSection: false, isEnabledByDefault: true, restingSection: null, finders: [new SettingsPageFinder()]);
-    public static readonly PaletteSource Scopes = new(name: "scopes", title: "@ Filters", detail: "Type @tabs, @saved, @history, @actions, @spaces or @themes, then a space or Tab, to show only that kind.", section: PaletteSection.Intent,
+    public static readonly PaletteSource Scopes = new(name: "scopes", title: "@ Filters", detail: "Type @tabs, @saved, @history, @actions, @spaces, @themes, @extensions, @engine, @developer, @cli or @update, then a space or Tab, to show only that kind.", section: PaletteSection.Intent,
         isSection: false, isEnabledByDefault: true, restingSection: null, finders: [new ScopeFinder()]);
     public static readonly PaletteSource Calculator = new(name: "calculator", title: "Calculator", detail: "Answers arithmetic such as 24 * 7. Return copies the answer.", section: PaletteSection.TopHit,
         isSection: false, isEnabledByDefault: true, restingSection: null, finders: []);
@@ -181,9 +181,26 @@ public sealed class PaletteSource {
     public static readonly PaletteSource Themes = new(name: "themes", title: "Themes", detail: null, section: PaletteSection.Themes,
         isSection: true, isEnabledByDefault: true, restingSection: null, finders: [new ThemeFinder()]);
 
+    public static readonly PaletteSource Extensions = new(name: "extensions", title: "Extensions",
+        detail: "Type @extensions to open an engine's extensions.", section: PaletteSection.Extensions, isSection: false,
+        isEnabledByDefault: true, restingSection: null, finders: [new ChoiceFinder()]);
+    public static readonly PaletteSource Engine = new(name: "engine", title: "Engine",
+        detail: "Type @engine to move the page, or its site, to another engine.", section: PaletteSection.Engine, isSection: false,
+        isEnabledByDefault: true, restingSection: null, finders: [new ChoiceFinder()]);
+    public static readonly PaletteSource Developer = new(name: "developer", title: "Developer Tools",
+        detail: "Type @developer to open the page's developer tools.", section: PaletteSection.Developer, isSection: false,
+        isEnabledByDefault: true, restingSection: null, finders: [new ChoiceFinder()]);
+    public static readonly PaletteSource CommandLine = new(name: "commandLine", title: "Command Line",
+        detail: "Type @cli to set up the arma command for your terminal.", section: PaletteSection.CommandLine, isSection: false,
+        isEnabledByDefault: true, restingSection: null, finders: [new ChoiceFinder()]);
+    public static readonly PaletteSource Update = new(name: "update", title: "Software Update",
+        detail: "Type @update to check for a new version.", section: PaletteSection.Update, isSection: false,
+        isEnabledByDefault: true, restingSection: null, finders: [new ChoiceFinder()]);
+
     /// The kinds, sections first in their default order.
     public static IReadOnlyList<PaletteSource> All { get; } =
-        [RecentTabs, OpenTabs, Saved, History, Actions, Spaces, ArchivedTabs, Suggestions, SettingsPages, Scopes, Calculator, PasteAndGo, Themes];
+        [RecentTabs, OpenTabs, Saved, History, Actions, Spaces, ArchivedTabs, Suggestions, SettingsPages, Scopes, Calculator, PasteAndGo, Themes,
+            Extensions, Engine, Developer, CommandLine, Update];
 
     #endregion
 
