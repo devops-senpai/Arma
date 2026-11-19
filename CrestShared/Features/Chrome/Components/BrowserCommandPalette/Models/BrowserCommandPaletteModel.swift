@@ -6,8 +6,9 @@ import SwiftUI
 /// scope a person narrowed it to. The core ranks what the palette offers for each
 /// query, off the main thread; an answer that arrives after a newer keystroke
 /// is dropped, so the latest query always wins, and a key pressed before the
-/// first answer for its text waits for it. The query text, the selection, the
-/// completion editing and the modifier keys held stay here.
+/// first answer for its text waits for it, while a click acts on the row it
+/// landed on. The query text, the selection, the completion editing and the
+/// modifier keys held stay here.
 @MainActor
 @Observable
 final class BrowserCommandPaletteModel {
@@ -245,8 +246,8 @@ final class BrowserCommandPaletteModel {
         }
     }
 
-    /// Shift-Tab moves to the row before.
-    func pressBacktab() { moveSelection(by: -1) }
+    /// Shift-Tab moves to the row before, as Up does.
+    func pressBacktab() { pressUp() }
 
     /// Return runs the selected row, once the answer to what was typed arrived.
     func pressReturn() {
@@ -256,6 +257,11 @@ final class BrowserCommandPaletteModel {
     /// Down moves to the next row, once the answer to what was typed arrived.
     func pressDown() {
         waitForAnswer { [weak self] in self?.moveSelection(by: 1) }
+    }
+
+    /// Up moves to the row before, once the answer to what was typed arrived.
+    func pressUp() {
+        waitForAnswer { [weak self] in self?.moveSelection(by: -1) }
     }
 
     /// Notes the modifier keys the person holds.
@@ -333,24 +339,34 @@ final class BrowserCommandPaletteModel {
 
     // MARK: - Actions - Selection
 
+    /// Moves the selection by `offset` rows, on the rows shown: the keys that
+    /// call it waited for the answer to what was typed, or chose the rows
+    /// already shown.
     func moveSelection(by offset: Int) {
         rejectURLCompletion()
-        guard shownSequence == sequence, !items.isEmpty else { return }
+        guard !items.isEmpty else { return }
         selectedResultIndex = (selectedResultIndex + offset + items.count) % items.count
         keyboardSelectionRevision &+= 1
     }
 
-    /// Moves to the first row of the next or previous section.
+    /// Moves to the first row of the next or previous section, once the answer
+    /// to what was typed arrived.
     func moveSection(by offset: Int) {
-        rejectURLCompletion()
-        guard shownSequence == sequence, !groups.isEmpty,
-            let current = groups.firstIndex(where: { $0.items.contains { $0.index == selectedResultIndex } }),
-            let first = groups[(current + offset + groups.count) % groups.count].items.first
-        else { return }
-        selectedResultIndex = first.index
-        keyboardSelectionRevision &+= 1
+        waitForAnswer { [weak self] in
+            guard let self else { return }
+            rejectURLCompletion()
+            guard !groups.isEmpty,
+                let current = groups.firstIndex(where: { $0.items.contains { $0.index == selectedResultIndex } }),
+                let first = groups[(current + offset + groups.count) % groups.count].items.first
+            else { return }
+            selectedResultIndex = first.index
+            keyboardSelectionRevision &+= 1
+        }
     }
 
+    /// Selects the row the pointer is over. A hover while an answer is pending
+    /// is dropped: the answer may reflow the rows under the pointer, and the
+    /// pointer's next move selects again.
     func selectResult(at index: Int) {
         rejectURLCompletion()
         guard shownSequence == sequence, items.indices.contains(index) else { return }
@@ -382,9 +398,10 @@ final class BrowserCommandPaletteModel {
 
     /// Runs `row` as its kind's activation does. One that closes the palette
     /// has it remember the pick for what was typed and close; one that
-    /// narrows it, to a provider or a scope, leaves it open.
+    /// narrows it, to a provider or a scope, leaves it open. A row is run as
+    /// shown, so a click lands on the row the person saw even while a newer
+    /// answer is pending; Return waits for that answer before it comes here.
     func activate(_ row: PaletteRow) {
-        guard shownSequence == sequence else { return }
         let activation = row.kind.activation
         let typed = query
         guard BrowserCommandPaletteActivation.of(activation)?.run(row, self) == true, activation.closesPalette else {
