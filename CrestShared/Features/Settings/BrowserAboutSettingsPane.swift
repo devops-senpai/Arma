@@ -54,8 +54,8 @@ struct BrowserAboutSettingsPane: View {
 
             Section {
                 BrowserAboutLink(
-                    title: "Share Feedback on r/CrestBrowser",
-                    imageName: "AboutReddit",
+                    title: "Share Feedback on GitHub",
+                    imageName: "AboutGitHub",
                     destination: BrowserAboutLinks.feedback,
                     identifier: "about-feedback-link"
                 )
