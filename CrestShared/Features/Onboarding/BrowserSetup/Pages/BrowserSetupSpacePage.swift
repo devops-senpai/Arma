@@ -90,8 +90,11 @@ struct BrowserSetupSpacePage<Themes: View>: View {
 
 extension BrowserSetupSpacePage where Themes == EmptyView {
     /// A page of the Space's colors and icon alone.
-    init(editor: BrowserSetupSpaceEditor?, spaceID: UUID, title: LocalizedStringResource? = nil) {
-        self.init(editor: editor, spaceID: spaceID, title: title) { EmptyView() }
+    init(
+        editor: BrowserSetupSpaceEditor?, spaceID: UUID, title: LocalizedStringResource? = nil,
+        icon: BrowserSpaceIdentity? = nil, preview: (() -> Void)? = nil
+    ) {
+        self.init(editor: editor, spaceID: spaceID, title: title, icon: icon, preview: preview) { EmptyView() }
     }
 }
 
