@@ -266,6 +266,7 @@ enum Rejection: Equatable, Error, Sendable {
     case invalidLinkRouteEdit(InvalidLinkRouteEdit)
     case invalidMediaSessionCount(InvalidMediaSessionCount)
     case invalidName(InvalidName)
+    case invalidNeverSavedSite(InvalidNeverSavedSite)
     case invalidNewPrimary(InvalidNewPrimary)
     case invalidPasswordLength(InvalidPasswordLength)
     case invalidRetentionLifetime(InvalidRetentionLifetime)
@@ -349,6 +350,7 @@ enum Rejection: Equatable, Error, Sendable {
     case storageRestoreInterrupted(StorageRestoreInterrupted)
     case storageUnreadable(StorageUnreadable)
     case storedSessionClosed(StoredSessionClosed)
+    case subdomainsOfPublicSuffix(SubdomainsOfPublicSuffix)
     case syncStagingRefused(SyncStagingRefused)
     case tabAlreadyExists(TabAlreadyExists)
     case tabAlreadyHasPage(TabAlreadyHasPage)
@@ -409,6 +411,7 @@ enum Rejection: Equatable, Error, Sendable {
         case .incompleteSplit(let value): value.message
         case .invalidAgent(let value): value.message
         case .invalidImport(let value): value.message
+        case .invalidNeverSavedSite(let value): value.message
         case .invalidSearchShortcut(let value): value.message
         case .invalidSyncRecords(let value): value.message
         case .legacyCloudStateUnreadable(let value): value.message
@@ -446,6 +449,7 @@ enum Rejection: Equatable, Error, Sendable {
         case .spaceProfileChanged(let value): value.message
         case .splitLimitReached(let value): value.message
         case .splitNeedsTwoTabs(let value): value.message
+        case .subdomainsOfPublicSuffix(let value): value.message
         case .unknownAgentSession(let value): value.message
         case .unknownCloudMerge(let value): value.message
         case .unknownExtension(let value): value.message
@@ -2069,6 +2073,7 @@ struct CredentialCapture: Query, Equatable, Sendable {
     let hint: CredentialUsernameHint?
     let pending: CredentialPendingCandidate?
     let now: Double
+    let neverSavedSites: [NeverSavedSite]?
 }
 
 struct CredentialCaptureDecision: Equatable, Sendable {
@@ -2180,6 +2185,7 @@ struct CredentialPreferences: Equatable, Sendable {
     var isEnabled: Bool
     var syncsCrestPasswordsWithICloud: Bool
     var alsoOffersSaveToSystemPasswords: Bool
+    var neverSavedSites: [NeverSavedSite]
     var savePromptSeconds: Int
 }
 
@@ -3396,6 +3402,12 @@ struct ForgetEngineRule: Intent, Equatable, Sendable {
     let origin: SiteOrigin
 }
 
+struct ForgetNeverSavedSite: Intent, SessionIntent, Equatable, Sendable {
+    let workspaceID: UUID
+    let spaceID: UUID
+    let site: NeverSavedSite
+}
+
 struct ForgetPaletteChoices: Intent, PaletteIntent, Equatable, Sendable {
     let windowID: UUID
     let row: PaletteRow.Seed
@@ -3797,6 +3809,12 @@ struct InvalidMediaSessionCount: Equatable, Sendable {
 
 struct InvalidName: Equatable, Sendable {
     let limit: Int
+}
+
+struct InvalidNeverSavedSite: Equatable, Sendable {
+    var message: LocalizedStringResource {
+        LocalizedStringResource("Enter a website, such as example.com or *.example.com.")
+    }
 }
 
 struct InvalidNewPrimary: Equatable, Sendable {
@@ -4427,6 +4445,19 @@ struct NavigationStarted: EngineEvent, PageEvent, Equatable, Sendable {
     let pageID: UUID
     let url: String
     let sameDocument: Bool
+}
+
+struct NeverSaveSite: Intent, SessionIntent, Equatable, Sendable {
+    let workspaceID: UUID
+    let spaceID: UUID
+    let site: String
+    let includesSubdomains: Bool
+    let replacing: NeverSavedSite?
+}
+
+struct NeverSavedSite: Equatable, Sendable {
+    var host: String
+    var includesSubdomains: Bool
 }
 
 struct NoArchivedTabs: Equatable, Sendable {
@@ -7449,6 +7480,14 @@ struct StrongPassword: Query, Equatable, Sendable {
 struct StrongPasswordRecipe: Equatable, Sendable {
     let length: Int
     let groups: [String]
+}
+
+struct SubdomainsOfPublicSuffix: Equatable, Sendable {
+    let host: String
+
+    var message: LocalizedStringResource {
+        LocalizedStringResource("This website's subdomains belong to different owners, so they can't be included.")
+    }
 }
 
 struct SwapSplitMembers: Intent, SessionIntent, Equatable, Sendable {

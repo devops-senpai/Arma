@@ -1008,6 +1008,7 @@ final class BrowserPagePool:
             allowsCredentialAccess: !browsingMode.isPrivate,
             isCredentialAccessEnabled:
                 space.settings.credentialPreferences.isEnabled,
+            neverSavedSites: browser.neverSavedSites(of: space.id),
             defaultPageZoom: pageZoomPreferences.defaultZoom,
             loadHTTPAuthenticationCredential: { [weak routing] protectionSpace in
                 try await routing?.pool?.loadHTTPAuthenticationCredential(protectionSpace, space.id)
