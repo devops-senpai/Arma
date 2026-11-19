@@ -32,7 +32,8 @@ extension TerminalCrestCommand {
             var look = space.settings.look
             if let style = changes.style { look.iconStyle = style == "icon" ? .simpleSymbol : .layeredCrest }
             if let shape = changes.shape {
-                look.crest.backplate = try Self.pick(shape, CrestBackplate.all, \.name, "--shape")
+                look.crest.backplate = try Self.pick(
+                    shape == "guidon" ? CrestBackplate.flag.name : shape, CrestBackplate.offered, \.name, "--shape")
             }
             if let field = changes.field {
                 look.crest.fieldDivision = try Self.pick(field, CrestFieldDivision.all, \.name, "--field")
@@ -89,7 +90,7 @@ extension TerminalCrestCommand {
         let crest = look.crest
         let colors = Dictionary(
             uniqueKeysWithValues: zip(layerWords, BrowserCrestForgeLayer.all).map {
-                ($0, CrestTheme.text(look.forgeColor(of: $1)))
+                ($0, CrestTheme.text(look.forgeFill(of: $1).colors[0]))
             })
         let shown = Shown(
             space: space.settings.name, style: look.iconStyle == .simpleSymbol ? "icon" : "crest",
@@ -97,6 +98,7 @@ extension TerminalCrestCommand {
             emblem: crest.symbol.name, border: crest.trim.name, finish: crest.finish.name,
             symbol: BrowserIconSymbol.emoji(from: space.settings.symbol) ?? space.settings.symbol, colors: colors,
             iconColor: CrestTheme.text(look.resolvedSymbolColor))
+        let colorLine = layerWords.map { "\($0) \(colors[$0] ?? "")" }.joined(separator: "  ")
         let lines = [
             "Space    \(shown.space)",
             "Style    \(shown.style)",
@@ -107,9 +109,9 @@ extension TerminalCrestCommand {
             "Border   \(shown.border)",
             "Finish   \(shown.finish)",
             "Icon     \(shown.symbol)  \(shown.iconColor)",
-            "Colors   " + layerWords.map { "\($0) \(colors[$0] ?? "")" }.joined(separator: "  "),
+            "Colors   " + colorLine,
             "",
-            "Shapes   " + CrestBackplate.all.map(\.name).joined(separator: ", "),
+            "Shapes   " + CrestBackplate.offered.map(\.name).joined(separator: ", "),
             "Fields   " + CrestFieldDivision.all.map(\.name).joined(separator: ", "),
             "Bands    " + CrestOrdinary.all.map(\.name).joined(separator: ", "),
             "Emblems  " + CrestSymbol.selectable.map(\.name).joined(separator: ", "),
