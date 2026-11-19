@@ -1,5 +1,9 @@
 import Foundation
 
+/// A saved password's account, without the password: where it was saved, the
+/// username and email it signs in with, the category it is filed under, and
+/// when it was saved and used. Its notes are kept apart, as secret as the
+/// password.
 struct CredentialDescriptor: Codable, Equatable, Identifiable, Sendable {
     let id: UUID
     let spaceID: UUID
@@ -7,6 +11,8 @@ struct CredentialDescriptor: Codable, Equatable, Identifiable, Sendable {
     var scope: BrowserCredentialScope
     var username: String
     var displayName: String?
+    var email: String?
+    var category: String?
     let createdAt: Date
     var updatedAt: Date
     var lastUsedAt: Date?
@@ -19,6 +25,8 @@ struct CredentialDescriptor: Codable, Equatable, Identifiable, Sendable {
         scope: BrowserCredentialScope = .webForm,
         username: String,
         displayName: String? = nil,
+        email: String? = nil,
+        category: String? = nil,
         createdAt: Date = Date(),
         updatedAt: Date? = nil,
         lastUsedAt: Date? = nil,
@@ -30,6 +38,8 @@ struct CredentialDescriptor: Codable, Equatable, Identifiable, Sendable {
         self.scope = scope
         self.username = username
         self.displayName = displayName
+        self.email = email
+        self.category = category
         self.createdAt = createdAt
         self.updatedAt = updatedAt ?? createdAt
         self.lastUsedAt = lastUsedAt
@@ -43,6 +53,8 @@ struct CredentialDescriptor: Codable, Equatable, Identifiable, Sendable {
         case scope
         case username
         case displayName
+        case email
+        case category
         case createdAt
         case updatedAt
         case lastUsedAt
@@ -59,6 +71,8 @@ struct CredentialDescriptor: Codable, Equatable, Identifiable, Sendable {
             ?? .webForm
         username = try container.decode(String.self, forKey: .username)
         displayName = try container.decodeIfPresent(String.self, forKey: .displayName)
+        email = try container.decodeIfPresent(String.self, forKey: .email)
+        category = try container.decodeIfPresent(String.self, forKey: .category)
         createdAt = try container.decode(Date.self, forKey: .createdAt)
         updatedAt = try container.decode(Date.self, forKey: .updatedAt)
         lastUsedAt = try container.decodeIfPresent(Date.self, forKey: .lastUsedAt)
@@ -76,6 +90,9 @@ struct CredentialDescriptor: Codable, Equatable, Identifiable, Sendable {
         try container.encode(scope, forKey: .scope)
         try container.encode(username, forKey: .username)
         try container.encodeIfPresent(displayName, forKey: .displayName)
+        // An older build reads neither.
+        try container.encodeIfPresent(email, forKey: .email)
+        try container.encodeIfPresent(category, forKey: .category)
         try container.encode(createdAt, forKey: .createdAt)
         try container.encode(updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(lastUsedAt, forKey: .lastUsedAt)
