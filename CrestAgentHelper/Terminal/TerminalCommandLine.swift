@@ -30,7 +30,7 @@ enum TerminalCommandLine {
         TerminalDownloadCommandLine.self,
         TerminalPageCommandLine.self, TerminalAutomationCommandLine.self,
         TerminalSettingsCommandLine.self, TerminalSiteCommandLine.self, TerminalThemeCommandLine.self,
-        TerminalCrestCommandLine.self,
+        TerminalCrestCommandLine.self, TerminalPasswordsCommandLine.self,
     ]
 
     /// The words every section accepts.
