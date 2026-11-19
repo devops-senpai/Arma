@@ -21,10 +21,12 @@ namespace CrestCore.Contracts;
 /// page outside the window's tabs asks, such as a Quick Window's, leaving out
 /// no tab; a locked Space offers none of its tabs or history. `Themes` are
 /// the saved themes the platform keeps, which the palette offers to put on the
-/// Space, or null for none.
+/// Space, or null for none. `Choices` are what the platform can do from the
+/// tool scopes, such as @engine, offered only inside them, or null for none.
 public sealed record PaletteSuggestions(Guid WindowId, string Text, IReadOnlyList<PaletteCommand> Commands,
     IReadOnlyList<PaletteSettingsPage> SettingsPages, IReadOnlyList<string> Remote, SearchProvider? Provider, PaletteScope? Scope,
-    bool AllowsCompletion, string? Pasteboard, Guid? SpaceId = null, IReadOnlyList<PaletteTheme>? Themes = null) : Query<PaletteAnswer> {
+    bool AllowsCompletion, string? Pasteboard, Guid? SpaceId = null, IReadOnlyList<PaletteTheme>? Themes = null,
+    IReadOnlyList<PaletteChoice>? Choices = null) : Query<PaletteAnswer> {
     #region Variables
 
     /// Only reading what the window shows holds the lock; ranking reads immutable records outside it.

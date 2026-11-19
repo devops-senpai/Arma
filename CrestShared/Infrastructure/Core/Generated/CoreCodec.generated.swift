@@ -7,7 +7,7 @@ import Foundation
 enum CoreCodec {
     /// SHA-256 of the canonical contract schema. The core refuses any other.
     static let fingerprint: [UInt8] = [
-        0x14, 0x42, 0x45, 0x94, 0x9c, 0x9d, 0xab, 0x02, 0x04, 0x96, 0x43, 0x4a, 0x64, 0x54, 0xa7, 0xde, 0xa3, 0xfe, 0xc4, 0x5c, 0x97, 0x73, 0x08, 0xb7, 0x9a, 0x95, 0xce, 0x45, 0x7f, 0xc2, 0x63, 0xbb
+        0xc8, 0x3f, 0x6c, 0x73, 0xfa, 0xed, 0xbe, 0x0d, 0x3d, 0xdf, 0xf0, 0x88, 0xce, 0xc1, 0x9f, 0x30, 0xeb, 0x8c, 0xb8, 0x73, 0xfa, 0xde, 0xe3, 0x67, 0xf5, 0xf1, 0x43, 0x0e, 0x23, 0x0c, 0x26, 0x85
     ]
     /// SHA-256 of the engine contract alone, which an engine binding registers with.
     static let engineFingerprint: [UInt8] = [
@@ -17657,6 +17657,25 @@ extension PaletteAnswer {
     }
 }
 
+extension PaletteChoice {
+    init(from reader: inout WireReader) throws(WireError) {
+        let id = try reader.readUUID()
+        let scope = try PaletteScope(from: &reader)
+        let name = try reader.readString()
+        let detail = try reader.readString()
+        let symbol = try reader.readString()
+        self.init(id: id, scope: scope, name: name, detail: detail, symbol: symbol)
+    }
+
+    func encode(into writer: inout WireWriter) {
+        writer.writeUUID(id)
+        scope.encode(into: &writer)
+        writer.writeString(name)
+        writer.writeString(detail)
+        writer.writeString(symbol)
+    }
+}
+
 extension PaletteCommand {
     init(from reader: inout WireReader) throws(WireError) {
         let command = try ShortcutCommand(from: &reader)
@@ -18185,7 +18204,20 @@ extension PaletteSuggestions {
         } else {
             themes = nil
         }
-        self.init(windowID: windowID, text: text, commands: commands, settingsPages: settingsPages, remote: remote, provider: provider, scope: scope, allowsCompletion: allowsCompletion, pasteboard: pasteboard, spaceID: spaceID, themes: themes)
+        let choices: [PaletteChoice]?
+        if try reader.readPresence() {
+            let choicesValueCount = try reader.readCount()
+            var choicesValue: [PaletteChoice] = []
+            choicesValue.reserveCapacity(choicesValueCount)
+            for _ in 0..<choicesValueCount {
+                let choicesValueElement = try PaletteChoice(from: &reader)
+                choicesValue.append(choicesValueElement)
+            }
+            choices = choicesValue
+        } else {
+            choices = nil
+        }
+        self.init(windowID: windowID, text: text, commands: commands, settingsPages: settingsPages, remote: remote, provider: provider, scope: scope, allowsCompletion: allowsCompletion, pasteboard: pasteboard, spaceID: spaceID, themes: themes, choices: choices)
     }
 
     func encode(into writer: inout WireWriter) {
@@ -18229,6 +18261,15 @@ extension PaletteSuggestions {
             writer.writePresence(false)
         }
         if let present0 = themes {
+            writer.writePresence(true)
+            writer.writeCount(present0.count)
+            for element1 in present0 {
+                element1.encode(into: &writer)
+            }
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = choices {
             writer.writePresence(true)
             writer.writeCount(present0.count)
             for element1 in present0 {
