@@ -140,6 +140,10 @@ private actor GatedCredentialVault: CredentialVault {
         await inner.deleteAll(in: spaceID)
     }
 
+    func notes(for id: UUID, in spaceID: UUID) async throws -> String? { nil }
+
+    func setNotes(_ notes: String?, for id: UUID, isSynchronizable: Bool, in spaceID: UUID) async throws {}
+
     func deleteUnreadableCredentials(in spaceID: UUID) async throws {
         await inner.deleteUnreadableCredentials(in: spaceID)
     }
