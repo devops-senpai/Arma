@@ -14,6 +14,28 @@ namespace CrestCore.Tests;
 /// completed setup, which the device store adopts once and keeps.
 public sealed partial class BrowserContractsTests {
     [Fact]
+    public void AFirstLaunchsSpaceAndANewSpaceOfASetupStartWithAFavoritesFolderEveryPreviewAndTheAppliedSetupHold() {
+        var session = SavedSession().Document["session"]!;
+        using var device = new TestDevice(session);
+        device.Send(new StartSetup(device.Workspace, SetupEntry.ManualSetup));
+        device.Send(new AddSetupSpace());
+        var setup = new ApplyManualSetup(device.Workspace, Guid.NewGuid());
+        // The first launch's Space keeps the folders it had; the one setup gives it comes after them.
+        static FolderState[] Folders(IReadOnlyList<SpaceState> spaces) =>
+            [.. spaces.Select(space => Assert.Single(space.Folders, folder => folder.Title == SetupDraft.NewSpaceFolderTitle))];
+        var folders = Folders(device.Query(new ImportPreview(setup)).Session.Spaces);
+        Assert.Equal(2, folders.Length);
+        Assert.All(folders, folder => Assert.Equal((TabPlacement.Saved, SetupDraft.NewSpaceFolderTitle, (Guid?)null),
+            (folder.Location, folder.Title, folder.ParentId)));
+        Assert.NotEqual(folders[0].Id, folders[1].Id);
+        // Each folder keeps its identity from one preview to the next, as the Space does, so setup's
+        // live copy of the browser goes on showing it instead of opening again on every change.
+        Assert.Equal(folders, Folders(device.Query(new ImportPreview(setup)).Session.Spaces));
+        device.Send(setup);
+        Assert.Equal(folders, Folders(device.Authority.Current.Spaces));
+    }
+
+    [Fact]
     public void CompletionIsAdoptedOnceAndKeptInTheDeviceStore() {
         using var directory = new StorageDirectory();
         var document = SavedSession().Document["session"]!.AsObject();
