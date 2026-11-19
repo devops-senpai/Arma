@@ -1176,7 +1176,8 @@ struct AppPreferences: Equatable, Sendable {
                 PaletteSourceChoice(source: PaletteSource.engine, isEnabled: true, limit: nil),
                 PaletteSourceChoice(source: PaletteSource.developer, isEnabled: true, limit: nil),
                 PaletteSourceChoice(source: PaletteSource.commandLine, isEnabled: true, limit: nil),
-                PaletteSourceChoice(source: PaletteSource.update, isEnabled: true, limit: nil)
+                PaletteSourceChoice(source: PaletteSource.update, isEnabled: true, limit: nil),
+                PaletteSourceChoice(source: PaletteSource.passwords, isEnabled: true, limit: nil)
             ],
             showsTopHit: true,
             prefersOpenTabs: true,
@@ -5146,6 +5147,7 @@ struct PaletteChoice: Equatable, Sendable, Identifiable {
     var name: String
     var detail: String
     var symbol: String
+    var stepsInto: Bool
 }
 
 struct PaletteCommand: Equatable, Sendable {
@@ -5191,7 +5193,8 @@ struct PalettePreferences: Equatable, Sendable {
             PaletteSourceChoice(source: PaletteSource.engine, isEnabled: true, limit: nil),
             PaletteSourceChoice(source: PaletteSource.developer, isEnabled: true, limit: nil),
             PaletteSourceChoice(source: PaletteSource.commandLine, isEnabled: true, limit: nil),
-            PaletteSourceChoice(source: PaletteSource.update, isEnabled: true, limit: nil)
+            PaletteSourceChoice(source: PaletteSource.update, isEnabled: true, limit: nil),
+            PaletteSourceChoice(source: PaletteSource.passwords, isEnabled: true, limit: nil)
         ],
         showsTopHit: true,
         prefersOpenTabs: true,
@@ -16661,6 +16664,12 @@ struct PaletteActivation: Hashable, Sendable {
         closesPalette: true,
         opensWhereKeysChoose: false
     )
+    static let stepsIntoChoice = PaletteActivation(
+        tag: 11,
+        name: "stepsIntoChoice",
+        closesPalette: false,
+        opensWhereKeysChoose: false
+    )
 
     static let all: [PaletteActivation] = [
         switchesToTab,
@@ -16673,7 +16682,8 @@ struct PaletteActivation: Hashable, Sendable {
         copiesAnswer,
         entersScope,
         appliesTheme,
-        runsChoice
+        runsChoice,
+        stepsIntoChoice
     ]
 
     static func named(_ name: String?) -> PaletteActivation? {
@@ -17034,6 +17044,16 @@ struct PaletteRowKind: Hashable, Sendable {
         activation: PaletteActivation.runsChoice,
         forgetsFromHistory: false
     )
+    static let choiceStep = PaletteRowKind(
+        tag: 17,
+        name: "choiceStep",
+        symbol: "chevron.right",
+        action: LocalizedStringResource("Show"),
+        label: LocalizedStringResource("Choice"),
+        isPrimary: false,
+        activation: PaletteActivation.stepsIntoChoice,
+        forgetsFromHistory: false
+    )
 
     static let all: [PaletteRowKind] = [
         openAddress,
@@ -17052,7 +17072,8 @@ struct PaletteRowKind: Hashable, Sendable {
         pasteAndGo,
         scope,
         theme,
-        choice
+        choice,
+        choiceStep
     ]
 
     static func named(_ name: String?) -> PaletteRowKind? {
@@ -17206,6 +17227,14 @@ struct PaletteScope: Hashable, Sendable {
         symbol: "arrow.down.circle",
         source: PaletteSource.update
     )
+    static let passwords = PaletteScope(
+        tag: 11,
+        name: "passwords",
+        keyword: "@passwords",
+        title: LocalizedStringResource("Passwords"),
+        symbol: "key",
+        source: PaletteSource.passwords
+    )
 
     static let all: [PaletteScope] = [
         tabs,
@@ -17218,7 +17247,8 @@ struct PaletteScope: Hashable, Sendable {
         engine,
         developer,
         commandLine,
-        update
+        update,
+        passwords
     ]
 
     static func named(_ name: String?) -> PaletteScope? {
@@ -17394,6 +17424,14 @@ struct PaletteSection: Hashable, Sendable {
         restingLimit: 0,
         scopedLimit: 30
     )
+    static let passwords = PaletteSection(
+        tag: 17,
+        name: "passwords",
+        title: LocalizedStringResource("Passwords"),
+        limit: 0,
+        restingLimit: 0,
+        scopedLimit: 50
+    )
 
     static let all: [PaletteSection] = [
         intent,
@@ -17412,7 +17450,8 @@ struct PaletteSection: Hashable, Sendable {
         engine,
         developer,
         commandLine,
-        update
+        update,
+        passwords
     ]
 
     static func named(_ name: String?) -> PaletteSection? {
@@ -17584,7 +17623,7 @@ struct PaletteSource: Hashable, Sendable {
         tag: 9,
         name: "scopes",
         title: LocalizedStringResource("@ Filters"),
-        detail: LocalizedStringResource("Type @tabs, @saved, @history, @actions, @spaces, @themes, @extensions, @engine, @developer, @cli or @update, then a space or Tab, to show only that kind."),
+        detail: LocalizedStringResource("Type @tabs, @saved, @history, @actions, @spaces, @themes, @extensions, @engine, @developer, @cli, @update or @passwords, then a space or Tab, to show only that kind."),
         section: PaletteSection.intent,
         isSection: false,
         isEnabledByDefault: true,
@@ -17679,6 +17718,17 @@ struct PaletteSource: Hashable, Sendable {
         restingSection: nil,
         defaultLimit: 0
     )
+    static let passwords = PaletteSource(
+        tag: 18,
+        name: "passwords",
+        title: LocalizedStringResource("Passwords"),
+        detail: LocalizedStringResource("Type @passwords to find a saved login and copy or fill it."),
+        section: PaletteSection.passwords,
+        isSection: false,
+        isEnabledByDefault: true,
+        restingSection: nil,
+        defaultLimit: 0
+    )
 
     static let all: [PaletteSource] = [
         recentTabs,
@@ -17698,7 +17748,8 @@ struct PaletteSource: Hashable, Sendable {
         engine,
         developer,
         commandLine,
-        update
+        update,
+        passwords
     ]
 
     static func named(_ name: String?) -> PaletteSource? {

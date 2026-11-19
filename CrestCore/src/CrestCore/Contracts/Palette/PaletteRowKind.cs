@@ -68,9 +68,15 @@ public sealed class PaletteRowKind {
         symbol: "sparkles", action: "Open", label: "Choice", isPrimary: false, forgetsFromHistory: false,
         destination: (_, _) => null);
 
+    /// A tool scope's choice that leads to more choices, which the palette
+    /// shows in its place; like every choice, never remembered as a pick.
+    public static readonly PaletteRowKind ChoiceStep = new(name: "choiceStep", PaletteActivation.StepsIntoChoice,
+        symbol: "chevron.right", action: "Show", label: "Choice", isPrimary: false, forgetsFromHistory: false,
+        destination: (_, _) => null);
+
     public static IReadOnlyList<PaletteRowKind> All { get; } =
         [OpenAddress, Search, SearchSuggestion, Tab, PinnedTab, SavedTab, Folder, Command, History, Space, ArchivedTab,
-            SettingsPage, Calculation, PasteAndGo, Scope, Theme, Choice];
+            SettingsPage, Calculation, PasteAndGo, Scope, Theme, Choice, ChoiceStep];
 
     #endregion
 
