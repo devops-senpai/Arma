@@ -6,6 +6,34 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.154</title>
+            <pubDate>Fri, 20 Nov 2026 18:12:03 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>1000154</sparkle:version>
+            <sparkle:shortVersionString>0.10.154</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Crest's chrome moves onto paper with its new Allo typeface, six audit fixes, and a WebKit crash fix.
+
+### Improved
+- Headings, buttons and labels across setup, Settings, the Start Page and Getting Started use Allo, Crest's new rounded typeface; empty lists and pages, the page error title, a locked Space's name and the Settings sidebar heading use its rounded display type.
+- Site Controls, color pickers, permission and password prompts, hover previews and notices sit on paper in light mode instead of always being dark, and on a warm charcoal in dark mode. A Space's theme still tints them.
+- The command palette and the recent tabs panel sit on the same material as the address field and pinned tabs; the selected tab, the selected pin and the palette's selected row look like a sheet of light paper on every Space.
+- The sidebar's scroll button, widget cards, sound and sharing badges on tabs, the palette's search engine chips, the element picker, the History, Downloads and Archive buttons and the Space buttons in Settings use Crest's own surfaces and buttons instead of glass.
+- The page area, the error screen, the locked Space screen and empty Peek and Quick Window pages use Crest's warm canvas; password prompts, the error screen and the locked Space screen use Crest blue buttons on every Space.
+- Importing another browser's passwords brings those for sites without HTTPS too, and setup says Arma won't fill them in.
+
+### Fixed
+- Fixed a crash when a page using the WebKit engine closed while it was loading another site.
+- Scrolling down a sidebar with long open folders no longer jumps back up, and folders inside them no longer shrink to their title and grow again as they scroll into view.
+- A selected tab you pick up and drag keeps its light paper look instead of turning glassy.
+- Making a Split View from a single tab now asks you to select at least 2 tabs, instead of asking for fewer.
+- When Arma can't save your session, Sync settings says why in plain words instead of showing an internal code.
+- A folder or Space without a name is called Untitled Folder or Untitled Space wherever it comes from, including storage and sync.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.154/Arma-0.10.154.dmg" length="196081686" type="application/octet-stream" sparkle:edSignature="L2W40OD/tMJFcYgoDKzQQiGHxLWnnC9TPqBU77mdvEu37K4b1dSRONSR3j0M4C5p6yR/19A5SRWaDvVcrjc9Dg=="/>
+        </item>
+        <item>
             <title>0.10.132</title>
             <pubDate>Thu, 19 Nov 2026 21:52:21 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -974,6 +1002,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: fx0zdGzyMvRY9OadHD6r9Aton61GARKL73Ic64p341CbWQrTsumcdSSlCtI8J1Jr8GrE9JHDGyhbR/ZJmx7eCg==
-length: 74537
+edSignature: IJurh/6DUs1JxlUMAwuCVVDwR+WERA9rIr4jhsKqWuOeUpW3wVkF6g6jSnmUfh/k6/uR+EJag6bIj3g5MYCfBg==
+length: 77543
 -->
