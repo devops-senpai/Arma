@@ -48,8 +48,14 @@ public sealed record InvalidSplitIcon(Guid GroupId) : Rejection;
 /// Stepping the tab `Offset` members along its split would move nothing.
 public sealed record NoSplitStep(Guid TabId, int Offset) : Rejection;
 
+/// The two tabs are not two members of one split.
+public sealed record NotSplitPartners(Guid TabId, Guid OtherTabId) : Rejection;
+
 /// The tabs would land between two members of a split they do not belong to.
 public sealed record SplitBoundary : Rejection;
+
+/// The shape lays out `LeafCount` cards, which is not how many the split holds.
+public sealed record SplitShapeMismatch(Guid GroupId, int LeafCount) : Rejection;
 
 /// The split already holds `Limit` tabs.
 public sealed record SplitLimitReached(int Limit) : Rejection {

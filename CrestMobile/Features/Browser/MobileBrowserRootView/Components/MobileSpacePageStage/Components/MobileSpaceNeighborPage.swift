@@ -35,7 +35,7 @@ struct MobileSpaceNeighborPage: View {
             let presentation = BrowserPageSurfacePresentation(
                 space: space, isLocked: isLocked, cards: browser.cards(in: space), hasEnteredSplitContent: false,
                 resolvedTarget: nil)
-            if case .columns(_, let members, _) = presentation {
+            if case .columns(_, let members, _, _) = presentation {
                 row(of: members)
             } else {
                 lone(shownTab)
