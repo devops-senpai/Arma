@@ -11,7 +11,7 @@ namespace CrestCore.Application;
 /// without the workspace, which a launch draws anew. The store keeps it as one
 /// JSON document, `Document`, whose Spaces spell their identities bare, their
 /// accent by `Name` and their look as the stored session does; a Sub-Space
-/// also names its group's primary.
+/// also names its group's primary, and a new Space the folder it starts with.
 internal sealed record KeptSetupDraft(IReadOnlyList<SetupDraftSpace> Spaces, bool OrderWasEdited) {
     #region Static Variables
 
@@ -25,6 +25,7 @@ internal sealed record KeptSetupDraft(IReadOnlyList<SetupDraftSpace> Spaces, boo
     private const string AccentKey = "accent";
     private const string BrandingKey = "branding";
     private const string PrimaryKey = "primary";
+    private const string FolderKey = "folder";
 
     private static readonly JsonDocumentOptions Options = new() { MaxDepth = 32 };
 
@@ -53,6 +54,7 @@ internal sealed record KeptSetupDraft(IReadOnlyList<SetupDraftSpace> Spaces, boo
             [BrandingKey] = StoredSessionCodec.Encode(space.Customization.Branding)
         };
         if (space.PrimaryId is { } primaryId) spelled[PrimaryKey] = StoredSessionCodec.BareIdentity(primaryId);
+        if (space.FolderId is { } folderId) spelled[FolderKey] = StoredSessionCodec.BareIdentity(folderId);
         return spelled;
     }
 
@@ -85,7 +87,7 @@ internal sealed record KeptSetupDraft(IReadOnlyList<SetupDraftSpace> Spaces, boo
                     || Text(space[SymbolKey]) is not { } symbol || SpaceAccent.Named(Text(space[AccentKey])) is not { } accent) return null;
                 read.Add(new(StoredSessionCodec.Identity(space[IdKey]), StoredSessionCodec.Identity(space[ProfileKey]), isNew,
                     new(name, symbol, accent, SpaceBranding.Normalized(StoredSessionCodec.DecodeBranding(space[BrandingKey]))),
-                    StoredSessionCodec.OptionalIdentity(space[PrimaryKey])));
+                    StoredSessionCodec.OptionalIdentity(space[PrimaryKey]), StoredSessionCodec.OptionalIdentity(space[FolderKey])));
             }
             return new(read, Flag(root[OrderWasEditedKey]) ?? false);
         } catch (Exception error) when (error is JsonException or InvalidOperationException or BrowserRuleException) {
