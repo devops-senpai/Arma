@@ -31,7 +31,9 @@ extension BrowserCredentialSavePrompt {
             password: draftBinding(\.password),
             category: draftBinding(\.category),
             notes: draftBinding(\.notes),
+            includesSubdomains: draftBinding(\.includesSubdomains),
             categories: categories,
+            offersSubdomains: offersSubdomains,
             isEditable: !model.isSaving,
             engage: { isEngaged = true }
         )
@@ -46,9 +48,12 @@ extension BrowserCredentialSavePrompt {
         )
     }
 
-    /// Starts asking about a new candidate.
+    /// Starts asking about a new candidate: its subdomains included where the
+    /// site allows it, as the person most often wants.
     func begin() {
+        offersSubdomains = browser.allowsSubdomainReach(from: candidate.origin)
         var fresh = candidate
+        fresh.includesSubdomains = offersSubdomains
         // A username that is an email address is the account's email too.
         if fresh.username.contains("@") { fresh.email = fresh.username }
         draft = fresh
@@ -119,13 +124,14 @@ extension BrowserCredentialSavePrompt {
         port.dismiss()
     }
 
-    /// Stops this Space offering to save on the page's site and everything
-    /// under it, then puts the prompt away. A site whose subdomains belong to
-    /// others is kept alone. Saved passwords still fill there.
+    /// Stops this Space offering to save on the page's site, and everything
+    /// under it when the person keeps Include subdomains, then puts the prompt
+    /// away. A site whose subdomains belong to others is kept alone. Saved
+    /// passwords still fill there.
     func neverSaveOnSite() {
         let host = candidate.topLevelOrigin.host
         do {
-            try browser.neverSaveSite(host, includesSubdomains: true, in: port.spaceID)
+            try browser.neverSaveSite(host, includesSubdomains: current.includesSubdomains, in: port.spaceID)
         } catch {
             try? browser.neverSaveSite(host, includesSubdomains: false, in: port.spaceID)
         }
