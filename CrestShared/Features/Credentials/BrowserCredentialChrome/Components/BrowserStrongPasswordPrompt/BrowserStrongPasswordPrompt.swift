@@ -14,6 +14,8 @@ struct BrowserStrongPasswordPrompt: View {
     let metrics: BrowserCredentialPromptMetrics
 
     @State private var model = BrowserStrongPasswordOperationModel()
+    /// The generator's options for this password.
+    @State private var generation = PasswordGeneration.standard
 
     var body: some View {
         BrowserCredentialPromptSurface(
@@ -29,6 +31,7 @@ struct BrowserStrongPasswordPrompt: View {
                 model: model,
                 metrics: metrics,
                 dismiss: port.dismiss,
+                generation: $generation,
                 generateAndFill: generateAndFill
             )
         }
@@ -45,7 +48,9 @@ struct BrowserStrongPasswordPrompt: View {
     private func generateAndFill() {
         Task { @MainActor in
             await model.generateSaveAndFill(
-                generate: { try BrowserStrongPasswordGenerator.generate(from: browser.strongPasswordRecipe()) },
+                generate: {
+                    try BrowserStrongPasswordGenerator.generate(from: browser.strongPasswordRecipe(generation))
+                },
                 save: { password in
                     let candidate = BrowserCredentialSaveCandidate(
                         id: UUID(),
