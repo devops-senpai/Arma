@@ -718,6 +718,13 @@ extension BrowserRootModel {
         return opening.open(url, from: source, with: BrowserMacPaletteOpener(model: self, mode: mode, windows: windows))
     }
 
+    /// Presents the tab that just took `url`, whose page opens loading it,
+    /// and shows `url` in the address field.
+    fileprivate func showOpened(_ url: URL) {
+        pages.select()
+        address = url.absoluteString
+    }
+
     /// Loads `url` in the page the window shows and shows it in the address field.
     fileprivate func showLoading(_ url: URL) {
         pages.select()
@@ -738,8 +745,14 @@ private struct BrowserMacPaletteOpener: BrowserCommandPaletteOpener {
 
     func openHere(_ url: URL, from source: BrowserTabRuntimeAssignment) -> Bool {
         if mode == .newTab { return openTab(url, from: source, selecting: true) }
-        model.browser.navigateSelectedTab(to: url.absoluteString)
-        model.showLoading(url)
+        // As submitAddress does: a Start Page or native tab has no page, so
+        // the core gives it the address and its page opens loading it.
+        if model.browser.shownTab?.surface.showsPage == false {
+            guard model.browser.navigateSelectedTab(to: url.absoluteString) else { return false }
+            model.showOpened(url)
+        } else {
+            model.showLoading(url)
+        }
         return true
     }
 
@@ -748,7 +761,7 @@ private struct BrowserMacPaletteOpener: BrowserCommandPaletteOpener {
             return model.browser.openBackgroundTab(url: url, in: source.spaceID, savesInSavedFolder: true) != nil
         }
         guard model.browser.openAddress(url, in: source.spaceID, placesAsNewTab: true) else { return false }
-        model.showLoading(url)
+        model.showOpened(url)
         return true
     }
 
