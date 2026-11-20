@@ -152,6 +152,7 @@ final class BrowserMacApplication {
         let transientBrowsing = BrowserTransientBrowsingCoordinator()
         let privateTransientBrowsing = BrowserTransientBrowsingCoordinator()
         let spaceAccess = BrowserSpaceAccessController()
+        BrowserMacDeviceLock.announce()
         spaceAccess.announce = { message in
             BrowserNoticeCenter.shared.post(BrowserNotice(message: message, systemImage: "lock.fill"))
         }
