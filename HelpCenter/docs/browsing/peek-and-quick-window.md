@@ -49,7 +49,13 @@ When two windows show the same tab, the focused window holds the live page and t
 
 Use **Option-Command-N** for a **New Blank Window**: a disposable workspace using the current Space's cookies, passwords, extensions, and settings. Its tabs, folders, history, and archive are temporary, stay out of iCloud sync, and are discarded when the window closes. It shares the Space's signed-in website session; use a Private Space when you need temporary website storage too.
 
-Drag a tab outside the window to move it into a blank window at the drop location. Move a tab back into a normal window to keep it in the shared workspace.
+### A window of its own
+
+To give one tab a window of its own, drag it outside the window, where it opens at the drop location, or right-click it and choose **Open in New Window**. To open a link that way, right-click it on the page and choose **Open Link in New Window**. A dragged tab leaves the main window and keeps its page. **Open in New Window** leaves the tab in the main window, unloaded, and opens a copy of it, with its page and back history, in the new window, so closing that window by mistake loses nothing. The new window uses the same Space, with its cookies, passwords and extensions. A private window offers neither command.
+
+Such a window lists only its own tabs. Your folders and other tabs are still in the main window. Click **Return to Main Window**, under the Space's name at the top of its sidebar, to move every tab of the window back into the Space's main window and close it. A tab that was pinned, saved or in a folder goes back to where it was; a tab opened with **Open in New Window** replaces the unloaded tab it came from, keeping the page you moved on to. If its folder was deleted meanwhile, it comes back as an open tab. If no main window is open, Arma opens one first.
+
+You can also drag a single tab from that window onto a normal window; it lands where you drop it. Closing the window instead discards the tabs still in it, as closing a Blank Window does.
 
 ## Cleanup and remembered destinations
 

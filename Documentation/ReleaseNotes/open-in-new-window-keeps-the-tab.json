@@ -1,0 +1,1 @@
+{"category": "improved", "message": "Open in New Window keeps the tab in the main window, unloaded, and opens a copy in the new window, so closing that window loses nothing; Return to Main Window puts the copy back in the tab's place."}
