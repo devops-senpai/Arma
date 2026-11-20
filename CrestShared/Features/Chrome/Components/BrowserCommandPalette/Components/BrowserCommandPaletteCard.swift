@@ -53,7 +53,7 @@ struct BrowserCommandPaletteCard: View {
         if let morphNamespace, let morph, let restingWidth,
             BrowserCommandSurfaceMorph.animatesCommandPalette(reduceMotion: reduceMotion)
         {
-            contents
+            contents.modifier(BrowserCommandPaletteSpaceText(space: model.space))
                 .frame(width: restingWidth)
                 .animation(contentsAnimation) {
                     $0.opacity(isSettled ? 1 : 0)
@@ -65,6 +65,7 @@ struct BrowserCommandPaletteCard: View {
                 // Takes whatever frame the morph proposes. The resting
                 // contents overflow it from the query row's edge.
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: queryAlignment)
+                .background { BrowserCommandPaletteSpaceTint(shape: morphingShape, space: model.space) }
                 .modifier(
                     BrowserCommandPaletteShellMaterial(
                         shape: morphingShape,
@@ -87,8 +88,9 @@ struct BrowserCommandPaletteCard: View {
                 // morph proposes another.
                 .fixedSize()
         } else {
-            contents
+            contents.modifier(BrowserCommandPaletteSpaceText(space: model.space))
                 .frame(maxWidth: BrowserCommandPaletteMetrics.maximumCardWidth)
+                .background { BrowserCommandPaletteSpaceTint(shape: restingShape, space: model.space) }
                 .modifier(
                     BrowserCommandPaletteShellMaterial(
                         shape: restingShape,
