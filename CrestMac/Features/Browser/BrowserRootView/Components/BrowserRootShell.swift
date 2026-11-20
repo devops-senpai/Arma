@@ -166,6 +166,7 @@ struct BrowserRootShell: View, BrowserChromeAnimating {
         .onChange(of: transientBrowsing.peekRequests, initial: true) {
             model.pages.retainPeekPages(for: transientBrowsing.peekRequests)
         }
+        .environment(\.openSitePasswords, sitePasswordsAction)
     }
 
     private var standardContent: some View {
