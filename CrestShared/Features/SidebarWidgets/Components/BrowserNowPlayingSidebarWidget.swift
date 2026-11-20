@@ -12,6 +12,11 @@ struct BrowserNowPlayingSidebarWidget: View {
         BrowserSidebarWidgetDeckStyle.artworkSize
     @ScaledMetric(relativeTo: .footnote) private var faviconSize =
         BrowserSidebarWidgetDeckStyle.faviconSize
+    /// Decoded once per payload. Decoding in `body` hands SwiftUI a new
+    /// `CGImage` on every pass, and the card redraws each one in full; a deck
+    /// drag re-evaluates this body every frame.
+    @State private var artworkImage: Image?
+    @State private var faviconImage: Image?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -33,6 +38,16 @@ struct BrowserNowPlayingSidebarWidget: View {
         }
         .padding(.top, -CrestSpacing.extraSmall)
         .accessibilityLabel("Now Playing")
+        .task(id: session.artworkData) {
+            artworkImage = session.artworkData.flatMap(
+                BrowserSidebarWidgetArtwork.image(from:)
+            )
+        }
+        .task(id: faviconData) {
+            faviconImage = faviconData.flatMap(
+                BrowserSidebarWidgetArtwork.image(from:)
+            )
+        }
     }
 
     /// Keeps tab activation and dismissal in separate hit targets.
@@ -106,10 +121,8 @@ struct BrowserNowPlayingSidebarWidget: View {
 
     @ViewBuilder
     private var artwork: some View {
-        if let artworkData = session.artworkData,
-            let image = BrowserSidebarWidgetArtwork.image(from: artworkData)
-        {
-            image
+        if let artworkImage {
+            artworkImage
                 .resizable()
                 .interpolation(.high)
                 .scaledToFit()
@@ -210,10 +223,8 @@ struct BrowserNowPlayingSidebarWidget: View {
 
     @ViewBuilder
     private var faviconContent: some View {
-        if let faviconData,
-            let image = BrowserSidebarWidgetArtwork.image(from: faviconData)
-        {
-            image
+        if let faviconImage {
+            faviconImage
                 .resizable()
                 .interpolation(.high)
                 .scaledToFit()
