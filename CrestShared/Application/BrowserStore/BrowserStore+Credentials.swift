@@ -57,7 +57,8 @@ extension BrowserStore {
         guard let space = spaceModel(spaceID) else {
             throw CredentialVaultError.missingSpace
         }
-        guard space.settings.credentialPreferences.isEnabled else { return [] }
+        // A private window's vault holds only what other Spaces chose to suggest there.
+        guard space.settings.credentialPreferences.isEnabled || isPrivateBrowsing else { return [] }
         guard let origin = CredentialOrigin(url: url) else {
             throw CredentialVaultError.invalidOrigin
         }

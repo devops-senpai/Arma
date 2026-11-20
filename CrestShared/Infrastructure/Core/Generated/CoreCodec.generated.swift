@@ -7,7 +7,7 @@ import Foundation
 enum CoreCodec {
     /// SHA-256 of the canonical contract schema. The core refuses any other.
     static let fingerprint: [UInt8] = [
-        0x32, 0x16, 0xc5, 0x93, 0x39, 0x0e, 0x62, 0x38, 0x0f, 0xfb, 0x1b, 0x02, 0x1f, 0x6c, 0x8a, 0x9c, 0x15, 0x16, 0x54, 0x13, 0x3a, 0xb3, 0x5b, 0xfd, 0x01, 0x45, 0x62, 0x46, 0xb5, 0x5c, 0xe6, 0x30
+        0x63, 0x7c, 0xe9, 0x09, 0xe5, 0xc3, 0x68, 0x95, 0xa5, 0x76, 0x7a, 0x4a, 0xa3, 0xbb, 0xdf, 0x21, 0xfc, 0xe2, 0x06, 0xc2, 0xa7, 0x8d, 0xa8, 0x2a, 0x9b, 0xfa, 0xfc, 0xe0, 0x5b, 0x4e, 0x4f, 0x38
     ]
     /// SHA-256 of the engine contract alone, which an engine binding registers with.
     static let engineFingerprint: [UInt8] = [
@@ -6860,7 +6860,8 @@ extension CredentialPreferences {
         }
         let authentication = try CredentialAuthentication(from: &reader)
         let savePromptSeconds = try reader.readInt()
-        self.init(isEnabled: isEnabled, syncsCrestPasswordsWithICloud: syncsCrestPasswordsWithICloud, alsoOffersSaveToSystemPasswords: alsoOffersSaveToSystemPasswords, neverSavedSites: neverSavedSites, authentication: authentication, savePromptSeconds: savePromptSeconds)
+        let suggestsInPrivateWindows = try reader.readBool()
+        self.init(isEnabled: isEnabled, syncsCrestPasswordsWithICloud: syncsCrestPasswordsWithICloud, alsoOffersSaveToSystemPasswords: alsoOffersSaveToSystemPasswords, neverSavedSites: neverSavedSites, authentication: authentication, savePromptSeconds: savePromptSeconds, suggestsInPrivateWindows: suggestsInPrivateWindows)
     }
 
     func encode(into writer: inout WireWriter) {
@@ -6873,6 +6874,7 @@ extension CredentialPreferences {
         }
         authentication.encode(into: &writer)
         writer.writeInt(savePromptSeconds)
+        writer.writeBool(suggestsInPrivateWindows)
     }
 }
 
