@@ -44,7 +44,6 @@ private struct BrowserThemePalettePreview: View {
     let branding: SpaceBranding
 
     @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 
     private var surface: SpacePaletteSurface? {
         branding.commandPalette?.surface(dark: colorScheme == .dark)
@@ -81,7 +80,7 @@ private struct BrowserThemePalettePreview: View {
                 shape.fill(color.color.opacity(surface.opacity))
             }
         }
-        .modifier(BrowserCommandPaletteShellMaterial(shape: shape, reduceTransparency: reduceTransparency))
+        .modifier(BrowserCommandPaletteShellMaterial(shape: shape))
         .clipShape(shape)
         .shadow(color: .black.opacity(0.25), radius: 16, y: 8)
     }
