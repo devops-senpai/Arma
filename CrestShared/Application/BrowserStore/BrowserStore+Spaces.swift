@@ -10,11 +10,14 @@ extension BrowserStore {
         controller.attach(self)
     }
 
-    /// Adds a Space and shows it in this window, in a house's look, which the
-    /// core gives it. Throws the rule that refused it, such as the Space limit.
+    /// Adds a Space and shows it in this window, in the default theme's look,
+    /// or a house's, which the core gives it. Throws the rule that refused
+    /// it, such as the Space limit.
     func addSpace() throws(Rejection) {
+        let spaceID = UUID()
         try family.commit(
-            CreateSpace(workspaceID: family.workspaceID, windowID: windowID, spaceID: UUID()), from: self)
+            themedCreateSpace(workspaceID: family.workspaceID, windowID: windowID, spaceID: spaceID), from: self)
+        keepInDefaultTheme(spaceID)
     }
 
     /// Deletes a Space in two steps the core saves before each returns: the
@@ -270,7 +273,7 @@ extension BrowserStore {
 
     @discardableResult
     func renameFolder(_ folderID: UUID, in spaceID: UUID, title: String) -> Bool {
-        guard renameSessionFolder(folderID, in: spaceID, title: title) else { return false }
+        guard renameSessionFolderKeepingOverrides(folderID, in: spaceID, title: title) else { return false }
         return true
     }
 
@@ -432,7 +435,7 @@ extension BrowserStore {
         before siblingID: UUID? = nil
     ) -> Bool {
         guard
-            moveSessionFolder(
+            moveSessionFolderKeepingOverrides(
                 folderID,
                 in: spaceID,
                 into: parentID,

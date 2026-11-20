@@ -58,6 +58,7 @@ struct BrowserPlatformCommandPaletteField: NSViewRepresentable {
     }
 
     func updateNSView(_ field: NSTextField, context: Context) {
+        Self.matchAppearance(of: field, to: context.environment.colorScheme)
         let canFocus = context.environment.isEnabled && context.environment.spaceContentIsInteractive
         field.isEditable = canFocus
         field.isSelectable = canFocus
@@ -197,10 +198,10 @@ struct BrowserPlatformCommandPaletteField: NSViewRepresentable {
         }
 
         func refreshSuffix() {
-            field?.placeholderString =
+            showPlaceholder(
                 model.activeProvider.map { "\($0.actionTitle)…" }
-                ?? model.activeScope.map { String(localized: "Search \(String(localized: $0.title))…") }
-                ?? String(localized: "Search or Enter URL…")
+                    ?? model.activeScope.map { String(localized: "Search \(String(localized: $0.title))…") }
+                    ?? String(localized: "Search or Enter URL…"))
             if model.urlCompletion == nil, let provider = model.providerOffer {
                 suffixLabel.isHidden = true
                 suffixLabel.rootView.isVisible = false
