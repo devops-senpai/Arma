@@ -14,7 +14,7 @@ namespace CrestCore.Native;
 public static class ContractCodec {
     /// <summary>SHA-256 of the canonical contract schema.</summary>
     public static ReadOnlySpan<byte> Fingerprint => [
-        0x5b, 0x96, 0x98, 0x8d, 0xf7, 0xee, 0x5d, 0xa2, 0xa9, 0xf8, 0x6c, 0x7a, 0x48, 0xa8, 0xc5, 0x65, 0x24, 0xc0, 0xa2, 0x63, 0x22, 0x8c, 0x13, 0xed, 0xcd, 0xdf, 0x2d, 0x7e, 0xab, 0xa1, 0xf2, 0xf6
+        0x84, 0x2c, 0xdc, 0x5f, 0x01, 0x57, 0xa7, 0x22, 0x37, 0x58, 0x60, 0xa7, 0x6c, 0x64, 0x0c, 0x20, 0xfe, 0x88, 0xe5, 0xc8, 0x0c, 0x89, 0xd1, 0x76, 0x74, 0xaf, 0x9f, 0xde, 0x18, 0xab, 0x2a, 0x14
     ];
 
     /// <summary>SHA-256 of the engine contract alone, which an engine binding registers with.</summary>
@@ -14903,7 +14903,8 @@ public static class ContractCodec {
             ReadPaletteScope(reader),
             reader.ReadString(),
             reader.ReadString(),
-            reader.ReadString());
+            reader.ReadString(),
+            reader.ReadBool());
     }
 
     public static void WritePaletteChoice(WireWriter writer, PaletteChoice value) {
@@ -14914,6 +14915,7 @@ public static class ContractCodec {
         writer.WriteString(value.Name);
         writer.WriteString(value.Detail);
         writer.WriteString(value.Symbol);
+        writer.WriteBool(value.StepsInto);
     }
 
     public static PaletteCommand ReadPaletteCommand(WireReader reader) {
