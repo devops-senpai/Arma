@@ -29,6 +29,8 @@ final class BrowserStoreFamily {
     /// When the person last authenticated to show or copy each Space's saved
     /// passwords, which every window of the family shares.
     @ObservationIgnored let credentialAuthenticationMemory = BrowserCredentialAuthenticationMemory()
+    /// The Spaces the person unlocked for `arma passwords`.
+    @ObservationIgnored let credentialTerminalSessions = BrowserCredentialTerminalSessions()
     /// The core that keeps this family's session in its file; nil in memory.
     @ObservationIgnored private let storage: CrestCore?
 
