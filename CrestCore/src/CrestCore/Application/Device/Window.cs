@@ -196,11 +196,29 @@ internal sealed class Window {
     public RecentTabItem? LastUsed(SpaceState space, IReadOnlySet<Guid> elsewhere, IReadOnlySet<Guid> loaded) {
         ArgumentNullException.ThrowIfNull(space);
         if (Tab(space.Id) is not { } shown) return null;
-        var shownItem = Cards(space, shown).TabIds;
+        // One pass over the sidebar finds every tab's split, where looking
+        // each tab up would walk the whole sidebar once per tab.
+        var groups = GroupRows(space);
+        var shownItem = Cards(space, shown, groups).TabIds;
         return space.Tabs.Where(tab => !tab.IsStartPage && !shownItem.Contains(tab.Id) && !departed.Contains((space.Id, tab.Id))
-                && !Cards(space, tab.Id).TabIds.Any(elsewhere.Contains) && Cards(space, tab.Id).TabIds.Any(loaded.Contains))
-            .MaxBy(tab => tab.LastActivatedAt) is { } last ? new(space.Id, Cards(space, last.Id).TabIds, last.Id) : null;
+                && !Cards(space, tab.Id, groups).TabIds.Any(elsewhere.Contains) && Cards(space, tab.Id, groups).TabIds.Any(loaded.Contains))
+            .MaxBy(tab => tab.LastActivatedAt) is { } last ? new(space.Id, Cards(space, last.Id, groups).TabIds, last.Id) : null;
     }
+
+    /// The row of the split each tab of `space` belongs to, by tab: the first
+    /// such row in the sidebar's order, as `Cards` finds it.
+    private static Dictionary<Guid, SidebarRow> GroupRows(SpaceState space) {
+        var rows = new Dictionary<Guid, SidebarRow>();
+        foreach (var list in space.Sidebar.Lists)
+            foreach (var row in list.Rows)
+                if (row.Kind.GroupsTabs)
+                    foreach (var member in row.Members) rows.TryAdd(member, row);
+        return rows;
+    }
+
+    /// The cards `Cards` names for `shown`, read from the rows `GroupRows` found.
+    private static ShownCards Cards(SpaceState space, Guid shown, Dictionary<Guid, SidebarRow> groups) =>
+        groups.TryGetValue(shown, out var row) ? new(space.Id, [.. row.Members], row.Id) : new(space.Id, [shown], null);
 
     /// Shows `space`, on the tab the window showed there while it still
     /// exists, else on the Space's fallback tab.
@@ -300,8 +318,14 @@ internal sealed class Window {
         foreach (var groupId in shares.Keys.ToArray())
             if (!session.Spaces.Any(space => RenderedColumns(space, groupId) == shares[groupId].Count)) shares.Remove(groupId);
         foreach (var (spaceId, history) in recent.ToArray()) {
-            if (!spaces.TryGetValue(spaceId, out var space)) recent.Remove(spaceId);
-            else history.RemoveAll(tabId => !Contains(space, tabId));
+            if (!spaces.TryGetValue(spaceId, out var space)) {
+                recent.Remove(spaceId);
+                continue;
+            }
+            // The history keeps every tab the window showed in the Space, so
+            // one set of the Space's tabs answers each of them.
+            var held = space.Tabs.Select(tab => tab.Id).ToHashSet();
+            history.RemoveAll(tabId => !held.Contains(tabId));
         }
         foreach (var spaceId in tabs.Keys) Remember(spaceId);
     }
@@ -358,8 +382,9 @@ internal sealed class Window {
     /// How many columns a split group renders with in `space`: the length of
     /// its first contiguous run of tabs, when that run can render.
     private static int RenderedColumns(SpaceState space, Guid groupId) {
-        int start = space.Tabs.ToList().FindIndex(tab => tab.SplitGroupId == groupId);
-        if (start < 0) return 0;
+        int start = 0;
+        while (start < space.Tabs.Count && space.Tabs[start].SplitGroupId != groupId) start++;
+        if (start == space.Tabs.Count) return 0;
         int length = space.Tabs.Skip(start).TakeWhile(tab => tab.SplitGroupId == groupId).Count();
         return length >= MinimumSplitMembers ? length : 0;
     }
