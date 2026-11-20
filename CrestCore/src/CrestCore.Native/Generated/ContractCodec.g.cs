@@ -14,7 +14,7 @@ namespace CrestCore.Native;
 public static class ContractCodec {
     /// <summary>SHA-256 of the canonical contract schema.</summary>
     public static ReadOnlySpan<byte> Fingerprint => [
-        0x84, 0x2c, 0xdc, 0x5f, 0x01, 0x57, 0xa7, 0x22, 0x37, 0x58, 0x60, 0xa7, 0x6c, 0x64, 0x0c, 0x20, 0xfe, 0x88, 0xe5, 0xc8, 0x0c, 0x89, 0xd1, 0x76, 0x74, 0xaf, 0x9f, 0xde, 0x18, 0xab, 0x2a, 0x14
+        0xff, 0x22, 0x06, 0xec, 0xbe, 0xdd, 0x1b, 0xe0, 0x3e, 0xc3, 0xa7, 0xd7, 0x77, 0x69, 0x13, 0xc7, 0xc7, 0xcf, 0x7a, 0x0e, 0x7a, 0xd8, 0x78, 0xab, 0xb7, 0x45, 0x84, 0x43, 0x82, 0x5d, 0x3a, 0x37
     ];
 
     /// <summary>SHA-256 of the engine contract alone, which an engine binding registers with.</summary>
@@ -15355,6 +15355,26 @@ public static class ContractCodec {
         WritePasskeyAccessStatus(writer, value.Status);
     }
 
+    public static PasswordGeneration ReadPasswordGeneration(WireReader reader) {
+        ArgumentNullException.ThrowIfNull(reader);
+        return new PasswordGeneration(
+            reader.ReadInt32(),
+            reader.ReadBool(),
+            reader.ReadBool(),
+            reader.ReadBool(),
+            reader.ReadBool());
+    }
+
+    public static void WritePasswordGeneration(WireWriter writer, PasswordGeneration value) {
+        ArgumentNullException.ThrowIfNull(writer);
+        ArgumentNullException.ThrowIfNull(value);
+        writer.WriteInt32(value.Length);
+        writer.WriteBool(value.Lowercase);
+        writer.WriteBool(value.Uppercase);
+        writer.WriteBool(value.Numbers);
+        writer.WriteBool(value.Symbols);
+    }
+
     public static PasswordImportPreview ReadPasswordImportPreview(WireReader reader) {
         ArgumentNullException.ThrowIfNull(reader);
         return new PasswordImportPreview(
@@ -20843,7 +20863,8 @@ public static class ContractCodec {
     public static StrongPassword ReadStrongPassword(WireReader reader) {
         ArgumentNullException.ThrowIfNull(reader);
         return new StrongPassword(
-            reader.ReadPresence() ? (int?)reader.ReadInt32() : null);
+            reader.ReadPresence() ? (int?)reader.ReadInt32() : null,
+            reader.ReadPresence() ? (PasswordGeneration?)ReadPasswordGeneration(reader) : null);
     }
 
     public static void WriteStrongPassword(WireWriter writer, StrongPassword value) {
@@ -20852,6 +20873,12 @@ public static class ContractCodec {
         if (value.Length is { } presentLength) {
             writer.WritePresence(true);
             writer.WriteInt32(presentLength);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.Generation is { } presentGeneration) {
+            writer.WritePresence(true);
+            WritePasswordGeneration(writer, presentGeneration);
         } else {
             writer.WritePresence(false);
         }
