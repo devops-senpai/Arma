@@ -25,6 +25,7 @@ struct BrowserFolderHeader: View {
             BrowserSidebarDensity.current.rowSeparation(
                 hasBorders: BrowserDeviceAppearanceStore.shared.tabs.borders == .all) / 2
         )
+        .modifier(BrowserFolderHeaderPlate(configuration: configuration, interaction: interaction))
         .modifier(
             BrowserTabSelectionTarget(
                 tabID: nil, browser: configuration.browser,

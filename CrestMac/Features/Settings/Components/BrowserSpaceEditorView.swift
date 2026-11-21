@@ -1,7 +1,8 @@
 import SwiftUI
 
-/// A Space's Appearance page: its crest or icon on the Space's own field
-/// beside its colors, its icon, and More Customization.
+/// A Space's Appearance page: its theme over the editor, then its crest or
+/// icon on the Space's own field beside its colors, its icon, and More
+/// Customization.
 struct BrowserSpaceEditorView: View {
     @Environment(\.browserSettingsTabState) private var tabState
     @State private var standaloneStep = BrowserCrestStudioStep.shape
@@ -11,6 +12,8 @@ struct BrowserSpaceEditorView: View {
 
     var body: some View {
         BrowserCrestForge(branding: branding, symbol: symbol, step: forgeStep)
+            // The theme the Space wears heads the page, over the editor.
+            .safeAreaInset(edge: .top, spacing: 0) { BrowserSpaceThemePicker(browser: browser, space: space) }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .accessibilityIdentifier("space-customization-controls")
     }

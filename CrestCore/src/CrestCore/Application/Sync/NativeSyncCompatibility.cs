@@ -8,7 +8,7 @@ namespace CrestCore.Application;
 /// Additive fields in an accepted wire record belong to that record. A local
 /// projection replaces fields this client understands and carries the rest
 /// forward. Removed known fields and removed collection members stay removed.
-internal static class NativeSyncCompatibility {
+internal static partial class NativeSyncCompatibility {
     #region Variables
 
     private sealed record Shape(string Names, Dictionary<string, Shape>? Children = null, Shape? Element = null, bool ById = false) {
@@ -36,13 +36,14 @@ internal static class NativeSyncCompatibility {
         new() { ["palette"] = List(Color), ["charge"] = Charge, ["paletteGradients"] = List(Gradient) });
 
     private static readonly Shape Branding = new(
-        "colors bannerPattern bannerStrength readabilityFade keepsControlsReadable themeMode gradientAngle showsTexture textureStrength iconStyle symbolColor crest renderingVersion folderColorIntensity textColorMode hasCustomAppearance gradientKind symbolGradient colorGradients",
+        "colors bannerPattern bannerStrength readabilityFade keepsControlsReadable themeMode gradientAngle showsTexture textureStrength iconStyle symbolColor crest renderingVersion folderColorIntensity textColorMode hasCustomAppearance gradientKind symbolGradient colorGradients " + DressKeys,
         new() {
             ["colors"] = List(Color),
             ["symbolColor"] = Color,
             ["crest"] = Crest,
             ["symbolGradient"] = Gradient,
-            ["colorGradients"] = List(Gradient)
+            ["colorGradients"] = List(Gradient),
+            ["dress"] = Dress
         });
 
     private static readonly Shape SearchProvider = new("id name searchURLTemplate suggestionURLTemplate");
@@ -66,6 +67,7 @@ internal static class NativeSyncCompatibility {
             [StoredSessionCodec.Key.Id] = Identity,
             [StoredSessionCodec.Key.PrimarySpaceId] = Identity,
             [StoredSessionCodec.Key.Branding] = Branding,
+            [StoredSessionCodec.DressKey.DarkBranding] = Branding,
             [StoredSessionCodec.Key.BrowsingPreferences] = Browsing,
             [StoredSessionCodec.Key.SplitGroups] = List(Group, true)
         }),

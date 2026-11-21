@@ -48,6 +48,8 @@ struct BrowserTabAppearanceSurface: ViewModifier {
                     )
                 }
             }
+            // The Space's tab backing lies under the row's fills, which draw over it.
+            .background { BrowserSidebarTabBackingPlate(cornerRadius: radius) }
     }
 
     /// A selected pin's edge is its accent, as is a selected row's where the
