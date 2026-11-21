@@ -40,9 +40,11 @@ struct BrowserCommandPaletteRowSurface: ViewModifier {
     // MARK: - Actions - Reading
 
     /// The selected row's text: the palette look's color for it, else the
-    /// paper's ink, which the paper's light scheme makes of the primary color.
+    /// label color, which the paper's light scheme makes ink. It is the
+    /// color, not the hierarchical primary style, which would stay relative
+    /// to the text color the card's other rows read in.
     private var selectedText: AnyShapeStyle {
-        surface?.selectedTextColor.map { AnyShapeStyle($0.color) } ?? AnyShapeStyle(.primary)
+        surface?.selectedTextColor.map { AnyShapeStyle($0.color) } ?? AnyShapeStyle(Color.primary)
     }
 
     /// The accent over the paper, where the row wears it.
