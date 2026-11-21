@@ -6,6 +6,30 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.203</title>
+            <pubDate>Sat, 21 Nov 2026 18:43:20 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>1000203</sparkle:version>
+            <sparkle:shortVersionString>0.10.203</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Crest's selected-tab look, device-kept choices and What's New on the web.
+
+### New
+- Settings › Appearance › More Customization lets you choose how the selected tab looks: translucent White with an opacity slider, or the device's Material; selected pins can carry their site's color.
+- What's New in Settings › About opens this release's page on GitHub, and the first window after an update opens the new release's page once.
+
+### Improved
+- Your page zoom, background tab activity, 120 FPS, iCloud sync and per-Space download choices now live in the device store, so they survive updates and follow the same rules everywhere.
+- A page in a language written in another script, such as Traditional Chinese for a reader of Simplified Chinese, is offered translation; a name ending in .test counts as local and opens over HTTP first.
+- Every long press waits the system's half second before its menu, and lists of Spaces indent a Sub-Space past its Space's icon.
+- iPhone and iPad confirm a finished download and offer Reload Peek, as the Mac does.
+- Arma's Settings keep the Mac's own window background in light and dark, while Crest's rework names every rule once underneath.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.203/Arma-0.10.203.dmg" length="196078306" type="application/octet-stream" sparkle:edSignature="JAEMsKSdMUrGtYOQIu9E3ahWWDqYMgx6SwPzRu6mi7rh1TsaAhtdLWmxteZVoRRafqkMy3F7bJe3W6x84zN7BA=="/>
+        </item>
+        <item>
             <title>0.10.175</title>
             <pubDate>Sat, 21 Nov 2026 07:30:57 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1112,6 +1136,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: AFiYpLg090aSz8aoRfAeN5ifBvwN4DPCJ3wamVV5WgAPe9qgyxCgczrdvaLMK29WVVfze0ENux3jK1bqGaIWCg==
-length: 85180
+edSignature: fr4LhX9fxFie8dMTBsPi1JUl4w2XkspaO3AbaFTfTTAD7mqGvqbH7M0IohKR+rtwJrYMAGJsu/eAPFkcqI7oDQ==
+length: 87272
 -->
