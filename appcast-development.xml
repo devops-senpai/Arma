@@ -6,6 +6,22 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.175</title>
+            <pubDate>Sat, 21 Nov 2026 07:30:56 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>1000175</sparkle:version>
+            <sparkle:shortVersionString>0.10.175</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Crest spells each rule, limit and key once.
+
+### Improved
+- Arma follows Crest's rework that names every limit, wait, key and web scheme in one place, so the same rules apply the same way everywhere, with the same features and no change to what you see.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.175/Arma-0.10.175.dmg" length="196374594" type="application/octet-stream" sparkle:edSignature="C82z9VTVor9QU/Cy8FhxlcARjJWdIrDkMwTmUDrnc3aY4DKNCdBTY9+2wzGsK1LSaIxC7urTPDjqk31Bn77TDA=="/>
+        </item>
+        <item>
             <title>0.10.161</title>
             <pubDate>Sat, 21 Nov 2026 06:29:42 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1096,6 +1112,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: /5xe8lM2Ihy8FBI4Gfp8xnVNgOqgGy/Yc7H0HqwjcrkBIMnWvYTlvQ8D8FHr5QAjau/aHGI6k7HdMNcf0qVJCQ==
-length: 84015
+edSignature: vb6mQG/Ugr+RtiHux0saTWc5OFG1YebNZqZC0eDVV41iceyC+VtjvjDRtJ6XD0fLqQMAACw+5eFNigj30PBLAw==
+length: 85180
 -->
