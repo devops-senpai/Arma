@@ -59,6 +59,11 @@ struct BrowserAboutReleaseNote: Equatable, Identifiable, Sendable {
     let message: String
 }
 
+/// The release-note catalog Crest ships, in the order the catalog lists it.
+///
+/// The catalog only ever appends, so its order is its chronology: the last
+/// entries are the newest. Entry ids are plain words, not dates, so sorting
+/// them says nothing about age.
 struct BrowserAboutReleaseNotes: Sendable {
     private struct Document: Decodable {
         let entries: [String: Entry]
@@ -69,33 +74,36 @@ struct BrowserAboutReleaseNotes: Sendable {
         let message: String
     }
 
-    private(set) var entries: [BrowserAboutReleaseNote]
+    /// How many of the newest public entries What's New lists.
+    static let highlightLimit = 12
 
     static let bundled = loadBundled()
 
+    /// Every entry, oldest first.
+    let entries: [BrowserAboutReleaseNote]
+
+    /// The newest public entries, newest first, capped at `highlightLimit`.
+    let currentHighlights: [BrowserAboutReleaseNote]
+
     init(data: Data) throws {
         let document = try JSONDecoder().decode(Document.self, from: data)
-        entries = document.entries.map { id, entry in
-            BrowserAboutReleaseNote(
-                id: id,
-                category: entry.category,
-                message: entry.message
-            )
+        var remaining = document.entries
+        var ordered = Self.entryOrder(in: data).compactMap { id in
+            remaining.removeValue(forKey: id).map { entry in
+                BrowserAboutReleaseNote(id: id, category: entry.category, message: entry.message)
+            }
         }
+        // Anything the scan missed still appears, after the ordered entries.
+        for (id, entry) in remaining.sorted(by: { $0.key < $1.key }) {
+            ordered.append(BrowserAboutReleaseNote(id: id, category: entry.category, message: entry.message))
+        }
+        self.init(entries: ordered)
     }
 
     init(entries: [BrowserAboutReleaseNote]) {
         self.entries = entries
-    }
-
-    func currentHighlights(limit: Int = 12) -> [BrowserAboutReleaseNote] {
-        guard limit > 0 else { return [] }
-        return Array(
-            entries
-                .filter { $0.category != .internal }
-                .sorted { $0.id > $1.id }
-                .prefix(limit)
-        )
+        let publicEntries = entries.filter { $0.category != .internal }
+        currentHighlights = publicEntries.suffix(Self.highlightLimit).reversed()
     }
 
     private static func loadBundled() -> BrowserAboutReleaseNotes {
