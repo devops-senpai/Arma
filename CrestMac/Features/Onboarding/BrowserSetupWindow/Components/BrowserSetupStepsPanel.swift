@@ -99,19 +99,26 @@ struct BrowserSetupStepsPanel: View {
                 if let spaceID = firstSpaceID {
                     BrowserSetupSpacePage(
                         editor: BrowserSetupSpaceEditor(flow: flow, spaceID: spaceID), spaceID: spaceID,
-                        title: "Your Space")
+                        title: "Your Space"
+                    ) {
+                        BrowserSetupThemeSection(flow: flow)
+                    }
                 }
             case .spaces:
                 BrowserSetupSpacesPage(
                     preview: flow.setupPreview, setup: flow.manualSetup, incomingSpaceIDs: flow.incomingSpaceIDs,
                     open: { spaceID in
+                        flow.dressAddedSpace(spaceID)
                         shownSpaceID = spaceID
                         go(to: .space(spaceID))
                     })
             case .space:
                 if let spaceID = destination.spaceID {
                     BrowserSetupSpacePage(
-                        editor: BrowserSetupSpaceEditor(flow: flow, spaceID: spaceID), spaceID: spaceID)
+                        editor: BrowserSetupSpaceEditor(flow: flow, spaceID: spaceID), spaceID: spaceID
+                    ) {
+                        BrowserSetupThemeSection(flow: flow)
+                    }
                 }
             case .home:
                 BrowserSetupHomePage(core: flow.manualSetup.core)
