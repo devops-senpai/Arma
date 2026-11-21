@@ -7936,6 +7936,7 @@ struct SetupDraftSpace: Equatable, Sendable {
     let isNew: Bool
     let customization: SpaceCustomization
     let primaryID: UUID?
+    let folderID: UUID?
     let shownName: String
 }
 

@@ -14,18 +14,25 @@ public sealed record SetupDraft(Guid WorkspaceId, IReadOnlyList<SetupDraftSpace>
     /// The symbol a new Space of a setup wears until the person picks one.
     internal const string NewSpaceSymbol = "square.grid.2x2.fill";
 
+    /// The saved folder a new Space of a setup starts with, empty, so the
+    /// Space shows where filed tabs go; the person fills, renames or deletes
+    /// it, in setup's preview or after.
+    internal const string NewSpaceFolderTitle = "Favorites";
+
     #endregion
 
     #region Actions - Starting
 
     /// A setup of the Spaces `session` keeps, in their order, with a new Space
     /// in `look` when there are none. A first launch's disposable Spaces take
-    /// `look` too, since the person has not made them theirs.
+    /// `look` too, and each starts with a folder as a new Space does, since
+    /// the person has not made them theirs.
     internal static SetupDraft Started(Guid workspaceId, SessionState session, Func<Guid> nextId, SetupLook look) {
         ArgumentNullException.ThrowIfNull(session);
         ArgumentNullException.ThrowIfNull(look);
         var existing = session.StayingSpaces.Select(SetupDraftSpace.Existing);
-        if (session.DisposableSeedMarker is not null) existing = existing.Select(space => space.Restyled(look));
+        if (session.DisposableSeedMarker is not null)
+            existing = existing.Select(space => space.Restyled(look) with { FolderId = nextId() });
         var draft = new SetupDraft(workspaceId, [.. existing], OrderWasEdited: false);
         return draft.Spaces.Count == 0 ? draft.Adding(nextId, look) : draft;
     }
@@ -48,9 +55,9 @@ public sealed record SetupDraft(Guid WorkspaceId, IReadOnlyList<SetupDraftSpace>
     #region Actions - Editing
 
     /// The setup with a new Space at its end, named for its place and wearing
-    /// the accents in turn, in `look`. Throws `Rejected` with
-    /// `SpaceLimitReached` when the setup holds as many Spaces as a workspace
-    /// may.
+    /// the accents in turn, in `look`, with a folder of its own. Throws
+    /// `Rejected` with `SpaceLimitReached` when the setup holds as many Spaces
+    /// as a workspace may.
     internal SetupDraft Adding(Func<Guid> nextId, SetupLook look) {
         ArgumentNullException.ThrowIfNull(nextId);
         ArgumentNullException.ThrowIfNull(look);
@@ -58,14 +65,15 @@ public sealed record SetupDraft(Guid WorkspaceId, IReadOnlyList<SetupDraftSpace>
         if (count >= SessionState.MaximumSpaces) throw new Rejected(new SpaceLimitReached(SessionState.MaximumSpaces));
         var accent = SpaceAccent.All[count % SpaceAccent.All.Count];
         var space = new SetupDraftSpace(nextId(), nextId(), IsNew: true,
-            new($"Space {count + 1}", NewSpaceSymbol, accent, look.NewSpaceLook(accent)));
+            new($"Space {count + 1}", NewSpaceSymbol, accent, look.NewSpaceLook(accent)), FolderId: nextId());
         return this with { Spaces = [.. Spaces, space] };
     }
 
     /// The setup with a new Sub-Space of the Space `fromId`, sharing its
     /// group's session, right after the group's last Space: named with the
-    /// next number of its Space's name, as "Work 2", and wearing that Space's
-    /// look. A setup that holds no such Space stays as it is. Throws `Rejected`
+    /// next number of its Space's name, as "Work 2", wearing that Space's
+    /// look, with a folder of its own. A setup that holds no such Space stays
+    /// as it is. Throws `Rejected`
     /// with `SpaceLimitReached` when the setup holds as many Spaces as a
     /// workspace may.
     internal SetupDraft AddingSubSpace(Guid fromId, Func<Guid> nextId) {
@@ -75,7 +83,7 @@ public sealed record SetupDraft(Guid WorkspaceId, IReadOnlyList<SetupDraftSpace>
         var primaryId = from.PrimaryId ?? from.SpaceId;
         var primary = Spaces.FirstOrDefault(space => space.SpaceId == primaryId) ?? from;
         var space = new SetupDraftSpace(nextId(), nextId(), IsNew: true,
-            from.Customization with { Name = SpaceCustomization.NextName(primary.ShownName, Spaces.Select(space => space.ShownName)) }, primaryId);
+            from.Customization with { Name = SpaceCustomization.NextName(primary.ShownName, Spaces.Select(space => space.ShownName)) }, primaryId, FolderId: nextId());
         var spaces = Spaces.ToList();
         int last = spaces.FindLastIndex(candidate => candidate.SpaceId == primaryId || candidate.PrimaryId == primaryId);
         spaces.Insert(last + 1, space);
