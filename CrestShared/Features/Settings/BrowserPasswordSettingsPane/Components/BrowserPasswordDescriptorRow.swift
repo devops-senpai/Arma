@@ -157,10 +157,11 @@ struct BrowserPasswordDescriptorRow: View {
             descriptor.username.isEmpty
             ? String(localized: "No username")
             : descriptor.username
+        let site = descriptor.includesSubdomains ? "*.\(descriptor.origin.host)" : descriptor.origin.host
         let line =
-            descriptor.displayName == nil
+            descriptor.displayName == nil && !descriptor.includesSubdomains
             ? "\(account) · \(descriptor.origin.description)"
-            : "\(account) · \(descriptor.origin.host)"
+            : "\(account) · \(site)"
         return descriptor.category.map { "\(line) · \($0)" } ?? line
     }
 
