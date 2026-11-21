@@ -137,12 +137,12 @@ extension BrowserCommandActions {
     /// screen, by site and username; inside a login, what the palette can do
     /// with it. A locked Space, one with passwords off and a private window
     /// list no logins.
-    private func passwordChoices(openSettings: @escaping (String) -> Void) -> [BrowserPaletteChoice] {
+    private func passwordChoices(openSettings: @escaping (BrowserSettingsDestination) -> Void) -> [BrowserPaletteChoice] {
         guard let space = browser.shownSpace else { return [] }
         let settings = BrowserPaletteChoice(
             scope: .passwords, key: "settings", name: String(localized: "Passwords Settings"),
             detail: String(localized: "\(space.settings.name) › Passwords"), symbol: "gearshape",
-            run: { openSettings("passwords") })
+            run: { openSettings(.passwords) })
         // Pausing Arma's prompts on the tab on screen, for another password manager, or resuming them.
         var settingsAndPause = [settings]
         if let page = shownPage {
