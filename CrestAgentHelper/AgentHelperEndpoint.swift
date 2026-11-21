@@ -62,7 +62,7 @@ actor AgentHelperEndpoint {
     init(output: AgentLineChannel, link: AgentAppLink, version: String) {
         self.output = output
         self.link = link
-        serverInfo = .object(["name": .string("crest-browser"), "title": .string("Crest"), "version": .string(version)])
+        serverInfo = .object(["name": .string("arma"), "title": .string("Arma"), "version": .string(version)])
     }
 
     // MARK: - Actions - Messages
