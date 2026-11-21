@@ -37,6 +37,7 @@ struct BrowserSavedPasswordEditor: View {
     @State private var revealsPassword = false
     @State private var isUnlocked = false
     @State private var isSaving = false
+    @State private var isGenerating = false
     @State private var errorMessage: String?
 
     private var notesBytes: Int { notes.utf8.count }
@@ -146,11 +147,15 @@ struct BrowserSavedPasswordEditor: View {
                 .accessibilityLabel(Text(revealsPassword ? "Hide Password" : "Show Password"))
 
                 Button("Generate") {
-                    if let generated = try? BrowserStrongPasswordGenerator.generate(from: browser.strongPasswordRecipe()) {
-                        password = generated
-                    }
+                    isGenerating = true
                 }
                 .accessibilityIdentifier("saved-password-generate")
+                .crestPopover(isPresented: $isGenerating, arrowEdge: .trailing) {
+                    BrowserPasswordGeneratorPopover(browser: browser) { generated in
+                        password = generated
+                        isGenerating = false
+                    }
+                }
             }
         }
     }
