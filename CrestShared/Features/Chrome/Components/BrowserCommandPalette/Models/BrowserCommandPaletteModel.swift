@@ -318,10 +318,16 @@ final class BrowserCommandPaletteModel {
         narrowed()
     }
 
-    /// Leaves the search provider or scope, keeping what was typed.
+    /// Leaves the search provider or scope, keeping what was typed. Inside a
+    /// choice a tool scope stepped into, such as a saved login, it steps back
+    /// to the scope's own choices first.
     @discardableResult
     func leaveScope() -> Bool {
         guard !isUnscoped else { return false }
+        if let activeScope, commands?.stepBack(in: activeScope) == true {
+            narrowed()
+            return true
+        }
         activeProvider = nil
         activeScope = nil
         requestAnswer()
