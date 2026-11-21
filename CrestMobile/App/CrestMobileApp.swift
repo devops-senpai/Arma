@@ -96,6 +96,7 @@ private final class BrowserMobileApplication {
             Task { await cloudSync?.localChangesDidStage() }
         }
         let spaceAccess = BrowserSpaceAccessController()
+        BrowserMobileDeviceLock.announce()
         browser.attachSpaceAccess(spaceAccess)
         // The core keeps every Space's site permission choices and decides
         // which ones the device store keeps: never a private Space's.
