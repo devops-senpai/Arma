@@ -9,7 +9,9 @@ extension BrowserCommandActions {
     // MARK: - Actions - Choices
 
     /// The choices of tool scope `scope`, built when the palette asks.
-    func paletteChoices(in scope: PaletteScope, openSettings: @escaping (String) -> Void) -> [BrowserPaletteChoice] {
+    func paletteChoices(in scope: PaletteScope, openSettings: @escaping (BrowserSettingsDestination) -> Void)
+        -> [BrowserPaletteChoice]
+    {
         let builders: [String: () -> [BrowserPaletteChoice]] = [
             PaletteScope.extensions.name: { extensionChoices(openSettings: openSettings) },
             PaletteScope.engine.name: engineChoices,
@@ -25,7 +27,7 @@ extension BrowserCommandActions {
 
     /// Each registered engine's extensions. WebKit takes none yet; when it
     /// does, its page joins here.
-    private func extensionChoices(openSettings: @escaping (String) -> Void) -> [BrowserPaletteChoice] {
+    private func extensionChoices(openSettings: @escaping (BrowserSettingsDestination) -> Void) -> [BrowserPaletteChoice] {
         let engines = browser.core.state.engines?.engines.map(\.kind) ?? []
         var choices: [BrowserPaletteChoice] = []
         if engines.contains(.chromium) {
@@ -43,14 +45,14 @@ extension BrowserCommandActions {
                 BrowserPaletteChoice(
                     scope: .extensions, key: "spaceExtensions", name: String(localized: "Extension Settings"),
                     detail: String(localized: "Which Spaces run each extension, and what it may do"),
-                    symbol: "gearshape", run: { openSettings("extensions") }))
+                    symbol: "gearshape", run: { openSettings(.extensions) }))
         }
         if engines.contains(.servo) {
             choices.append(
                 BrowserPaletteChoice(
                     scope: .extensions, key: "servo", name: String(localized: "Servo Extensions"),
                     detail: String(localized: "Firefox add-ons for Servo pages, in Settings › Engines"),
-                    symbol: "puzzlepiece", run: { openSettings("engines") }))
+                    symbol: "puzzlepiece", run: { openSettings(.engines) }))
         }
         return choices
     }
