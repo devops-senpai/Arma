@@ -12,6 +12,9 @@ final class BrowserMacWindow: NSWindow {
     /// What the window's content does with a mouse's Back and Forward buttons
     /// and with swipes, while content that knows its pages is shown.
     weak var pointerNavigation: (any BrowserMacWindowPointerNavigation)?
+    /// Moves the window from a press near its top over a spot where the page
+    /// has nothing to click.
+    var pageDrag = BrowserMacWindowPageDrag()
     private var frameBeforeZoom: NSRect?
     private(set) var wasZoomedBeforeFullScreen = false
 
@@ -63,6 +66,19 @@ final class BrowserMacWindow: NSWindow {
     /// window as part of something wider it already decided.
     func closeAfterApproval() {
         super.close()
+    }
+
+    // MARK: - Actions - Events
+
+    override func sendEvent(_ event: NSEvent) {
+        if pageDrag.take(event, in: self) { return }
+        super.sendEvent(event)
+    }
+
+    /// Sends `event` to the window's views as AppKit would, past the page
+    /// drag: a press it held and let go.
+    func deliver(_ event: NSEvent) {
+        super.sendEvent(event)
     }
 
     // MARK: - Actions - Swipes
