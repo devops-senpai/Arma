@@ -126,7 +126,8 @@ internal static partial class StoredSessionCodec {
         return new(Identity(value[Key.Id]), Text(value[Key.CustomTitle]), OptionalDate(value[Key.TitleModifiedAt]),
             Text(value[Key.CustomIconSymbol]), OptionalDate(value[Key.IconModifiedAt]),
             value[Key.Tint] is JsonObject tint ? DecodeColor(tint) : null, OptionalDate(value[Key.TintModifiedAt]),
-            Flag(value[Key.IsCollapsed]) ?? false, OptionalDate(value[Key.CollapseModifiedAt]));
+            Flag(value[Key.IsCollapsed]) ?? false, OptionalDate(value[Key.CollapseModifiedAt]),
+            DecodeSplitShape(value), OptionalDate(value[Key.SplitShapeModifiedAt] ?? value[Key.LegacySplitLayoutModifiedAt]));
     }
 
     internal static JsonObject Encode(SplitGroupState group) {
@@ -141,6 +142,8 @@ internal static partial class StoredSessionCodec {
         // collapsed writes back as it was.
         if (group.IsCollapsed) value[Key.IsCollapsed] = true;
         PutEdit(value, Key.CollapseModifiedAt, group.CollapseModifiedAt);
+        if (group.Shape is { } shape) value[Key.SplitShape] = Encode(shape);
+        PutEdit(value, Key.SplitShapeModifiedAt, group.ShapeModifiedAt);
         return value;
     }
 
