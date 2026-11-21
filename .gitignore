@@ -46,6 +46,9 @@ CrestCore/native/ContentFilter/target/
 !.agents/skills/
 .agents/skills/*
 !.agents/skills/crest-contribution/
+!.agents/skills/README.md
+!.agents/skills/arma-*/
+!.claude/skills/arma-*
 .codex/
 .codex-*/
 .cursor/
