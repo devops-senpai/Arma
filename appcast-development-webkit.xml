@@ -6,6 +6,32 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.160</title>
+            <pubDate>Fri, 20 Nov 2026 20:59:27 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>1000160</sparkle:version>
+            <sparkle:shortVersionString>0.10.160</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Arma's own welcome and installer, Crest's palettes as themes, a color for the palette's selected row, and the system background back under Settings.
+
+### New
+- Crest's twelve color palettes, Blossom, Lagoon, Lilac, Linen, Sunset, Ocean, Orchid, Citrus, Midnight, Forest, Ember and Plum, are themes beside Crest Default: a Space picks one from the Theme row in setup and on its page, where the swatch grid used to be. A theme's own page keeps the palettes for recoloring it.
+- A theme sets the color of the command palette's selected row text, light and dark, in Settings › Themes and with `arma theme` (`--palette-light-selected-text`, `--palette-dark-selected-text`). Without one the row keeps its paper's ink.
+
+### Improved
+- Setup opens on Arma's banner, large, with its name lettered in blackletter and a line on who it is for, on the room's own wash; the steps follow on paper.
+- The installer window wears Arma's ink: the banner above the app, Arma's name lettered in blackletter, and a gold arrow to Applications.
+- Settings, setup, Getting Started, the command palette and the error screens sit on the window's own background again instead of Crest's cream paper, so Arma matches the Mac around it.
+- The Start Page's title is set in Times New Roman, as the line under Arma's name on setup's welcome is.
+
+### Fixed
+- Under a theme that colors the command palette's text, the selected row's text no longer takes that color on its paper and stays readable.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.160/Arma-0.10.160.dmg" length="196230003" type="application/octet-stream" sparkle:edSignature="/OFFVPjQjGqOiBYlpiBtD8VuDh900oa6PT/9MwOGqCqone4L8COLscT7VgxbS7uojCQUsmEYW18PGJfnLRRxAg=="/>
+        </item>
+        <item>
             <title>0.10.154</title>
             <pubDate>Fri, 20 Nov 2026 18:12:15 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1051,6 +1077,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: pWBU1+W/hyck+WAr9/eFtfokHz/WCfPKB5tD3aoDPUjXhreT6ysteeFdLxMXAPBDEZaj7dc7TfDieoMY90GRAg==
-length: 80434
+edSignature: +pyr9X2gPE8iuAqUYvV0CEw8yDMxkwn/LTmIl5ZRJ69I6Ck3qsqb9xgLgIKUPx3NU5yNMKad2JvJiz1/pi0KAw==
+length: 82810
 -->
