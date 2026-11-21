@@ -15,6 +15,9 @@ struct BrowserCredentialSaveCandidate: Identifiable, Equatable, Sendable, Custom
     let passwordKind: CredentialPasswordKind
     let isCrossOriginFrame: Bool
     let submittedAt: Date
+    /// Whether the saved password should also fill the hosts under its origin,
+    /// as the person chooses in the save prompt.
+    var includesSubdomains = false
     /// What the person adds in the save prompt before saving: the account's
     /// email, the category it is filed under, and notes kept as secret as the
     /// password.

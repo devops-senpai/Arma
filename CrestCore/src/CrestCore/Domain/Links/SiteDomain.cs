@@ -5,7 +5,7 @@ namespace CrestCore.Domain;
 /// A site as a link filter names it: a domain with every subdomain of it, or,
 /// spelled `name.*`, an entity, which is `name` under any public suffix, as
 /// uBlock Origin reads `amazon.*`.
-internal sealed class SiteDomain {
+internal sealed partial class SiteDomain {
     #region Static Variables
 
     private const string AnySuffix = ".*";
