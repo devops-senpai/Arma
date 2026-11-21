@@ -47,6 +47,8 @@ enum TerminalThemeCommandLine: TerminalSection {
           --folder-highlight-opacity <0-1>
           --palette-light <hex>|default  --palette-light-opacity <0-1>  --palette-light-text <hex>|default
           --palette-dark <hex>|default   --palette-dark-opacity <0-1>   --palette-dark-text <hex>|default
+          --palette-light-selected-text <hex>|default  --palette-dark-selected-text <hex>|default
+                                        the selected row's text, which lies on paper
           --popover-background <hex>|default    the fill of popovers such as Site Controls
           --popover-text <hex>|default          the color of their text
           --popover-secondary-text <hex>|default
@@ -225,6 +227,7 @@ enum TerminalThemeCommandLine: TerminalSection {
             surface.tint = try color(prefix)
             surface.opacity = try unit(prefix + "-opacity")
             surface.textColor = try color(prefix + "-text")
+            surface.selectedTextColor = try color(prefix + "-selected-text")
             guard surface != CrestTheme.Dress.PaletteSurface() else { continue }
             if dark { palette.dark = surface } else { palette.light = surface }
         }

@@ -22,7 +22,8 @@ struct BrowserCommandPaletteSpaceTint: View {
 /// The palette's contents in the text color the Space chose for this
 /// appearance, when it chose one, and in the scheme that text reads in, so
 /// the query field, its placeholder and the secondary text read on a dark
-/// surface in a light window too.
+/// surface in a light window too. The surface goes down to the rows, whose
+/// selected one reads its own text color from it.
 struct BrowserCommandPaletteSpaceText: ViewModifier {
     let space: SpaceModel?
 
@@ -32,7 +33,14 @@ struct BrowserCommandPaletteSpaceText: ViewModifier {
         let surface = space?.paletteSurface(dark: colorScheme == .dark)
         return content.modifier(SpaceTextColor(color: surface?.textColor))
             .environment(\.colorScheme, surface?.foregroundTone?.colorScheme ?? colorScheme)
+            .environment(\.browserCommandPaletteSurface, surface)
     }
+}
+
+extension EnvironmentValues {
+    /// The palette surface the card wears in the appearance it shows in, or
+    /// nil where the Space leaves the card to the system material.
+    @Entry var browserCommandPaletteSurface: SpacePaletteSurface? = nil
 }
 
 extension SpaceModel {

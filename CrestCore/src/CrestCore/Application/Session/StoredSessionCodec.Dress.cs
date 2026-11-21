@@ -34,6 +34,7 @@ internal static partial class StoredSessionCodec {
         public const string Tint = "tint";
         public const string Opacity = "opacity";
         public const string TextColor = "textColor";
+        public const string SelectedTextColor = "selectedTextColor";
         public const string BackgroundColor = "backgroundColor";
         public const string SecondaryTextColor = "secondaryTextColor";
         public const string AccentColor = "accentColor";
@@ -197,7 +198,7 @@ internal static partial class StoredSessionCodec {
     private static SpacePaletteSurface DecodePaletteSurface(JsonObject? value) => value is null
         ? SpacePaletteSurface.Neutral
         : new(OptionalColor(value[DressKey.Tint]), OptionalNumber(value[DressKey.Opacity]) ?? 0,
-            OptionalColor(value[DressKey.TextColor]));
+            OptionalColor(value[DressKey.TextColor]), OptionalColor(value[DressKey.SelectedTextColor]));
 
     private static JsonObject Encode(SpacePaletteLook look) =>
         new() { [DressKey.Light] = Encode(look.Light), [DressKey.Dark] = Encode(look.Dark) };
@@ -206,6 +207,7 @@ internal static partial class StoredSessionCodec {
         var value = new JsonObject { [DressKey.Opacity] = surface.Opacity };
         Put(value, DressKey.Tint, surface.Tint);
         Put(value, DressKey.TextColor, surface.TextColor);
+        Put(value, DressKey.SelectedTextColor, surface.SelectedTextColor);
         return value;
     }
 

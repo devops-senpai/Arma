@@ -7117,8 +7117,8 @@ struct SpaceMembership: Equatable, Sendable {
 
 struct SpacePaletteLook: Equatable, Sendable {
     static let neutral = SpacePaletteLook(
-        light: SpacePaletteSurface(tint: nil, opacity: 0, textColor: nil),
-        dark: SpacePaletteSurface(tint: nil, opacity: 0, textColor: nil)
+        light: SpacePaletteSurface(tint: nil, opacity: 0, textColor: nil, selectedTextColor: nil),
+        dark: SpacePaletteSurface(tint: nil, opacity: 0, textColor: nil, selectedTextColor: nil)
     )
 
     var light: SpacePaletteSurface
@@ -7127,11 +7127,12 @@ struct SpacePaletteLook: Equatable, Sendable {
 
 struct SpacePaletteSurface: Equatable, Sendable {
     static let defaultOpacity: Double = 0.6
-    static let neutral = SpacePaletteSurface(tint: nil, opacity: 0, textColor: nil)
+    static let neutral = SpacePaletteSurface(tint: nil, opacity: 0, textColor: nil, selectedTextColor: nil)
 
     var tint: BrandColor?
     var opacity: Double
     var textColor: BrandColor?
+    var selectedTextColor: BrandColor?
 }
 
 struct SpaceProfileChanged: Equatable, Sendable {
@@ -25531,12 +25532,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -25628,12 +25631,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -25725,12 +25730,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -25822,12 +25829,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -25919,12 +25928,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -26016,12 +26027,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.963, green: 0.533, blue: 0.425, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.963, green: 0.533, blue: 0.425, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -26113,12 +26126,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.207, green: 0.609, blue: 0.852, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.207, green: 0.609, blue: 0.852, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -26210,12 +26225,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.648, green: 0.39, blue: 0.821, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.648, green: 0.39, blue: 0.821, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -26307,12 +26324,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -26404,12 +26423,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.092, green: 0.152, blue: 0.295, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.092, green: 0.152, blue: 0.295, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -26501,12 +26522,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.038, green: 0.215, blue: 0.138, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.038, green: 0.215, blue: 0.138, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -26598,12 +26621,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.321, green: 0.083, blue: 0.102, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.321, green: 0.083, blue: 0.102, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -26695,12 +26720,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.253, green: 0.102, blue: 0.243, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.253, green: 0.102, blue: 0.243, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -26799,12 +26826,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.988, green: 0.992, blue: 0.996, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0, green: 0.118, blue: 0.165, alpha: 1)
+                        textColor: BrandColor(red: 0, green: 0.118, blue: 0.165, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.988, green: 0.992, blue: 0.996, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0, green: 0.118, blue: 0.165, alpha: 1)
+                        textColor: BrandColor(red: 0, green: 0.118, blue: 0.165, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -26897,12 +26926,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0, green: 0.059, blue: 0.082, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.82, green: 0.902, blue: 0.925, alpha: 1)
+                        textColor: BrandColor(red: 0.82, green: 0.902, blue: 0.925, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0, green: 0.059, blue: 0.082, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.82, green: 0.902, blue: 0.925, alpha: 1)
+                        textColor: BrandColor(red: 0.82, green: 0.902, blue: 0.925, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -26997,12 +27028,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.996, green: 0.988, blue: 0.992, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.224, green: 0, blue: 0.043, alpha: 1)
+                        textColor: BrandColor(red: 0.224, green: 0, blue: 0.043, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.996, green: 0.988, blue: 0.992, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.224, green: 0, blue: 0.043, alpha: 1)
+                        textColor: BrandColor(red: 0.224, green: 0, blue: 0.043, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -27095,12 +27128,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.11, green: 0, blue: 0.024, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.961, green: 0.839, blue: 0.871, alpha: 1)
+                        textColor: BrandColor(red: 0.961, green: 0.839, blue: 0.871, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.11, green: 0, blue: 0.024, alpha: 1),
                         opacity: 0.94,
-                        textColor: BrandColor(red: 0.961, green: 0.839, blue: 0.871, alpha: 1)
+                        textColor: BrandColor(red: 0.961, green: 0.839, blue: 0.871, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -27198,12 +27233,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.937, green: 0.945, blue: 0.961, alpha: 1),
                         opacity: 0.92,
-                        textColor: BrandColor(red: 0.298, green: 0.31, blue: 0.412, alpha: 1)
+                        textColor: BrandColor(red: 0.298, green: 0.31, blue: 0.412, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.937, green: 0.945, blue: 0.961, alpha: 1),
                         opacity: 0.92,
-                        textColor: BrandColor(red: 0.298, green: 0.31, blue: 0.412, alpha: 1)
+                        textColor: BrandColor(red: 0.298, green: 0.31, blue: 0.412, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -27302,12 +27339,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.937, green: 0.945, blue: 0.961, alpha: 1),
                         opacity: 0.92,
-                        textColor: BrandColor(red: 0.298, green: 0.31, blue: 0.412, alpha: 1)
+                        textColor: BrandColor(red: 0.298, green: 0.31, blue: 0.412, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.937, green: 0.945, blue: 0.961, alpha: 1),
                         opacity: 0.92,
-                        textColor: BrandColor(red: 0.298, green: 0.31, blue: 0.412, alpha: 1)
+                        textColor: BrandColor(red: 0.298, green: 0.31, blue: 0.412, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -27400,12 +27439,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.118, green: 0.118, blue: 0.18, alpha: 1),
                         opacity: 0.92,
-                        textColor: BrandColor(red: 0.804, green: 0.839, blue: 0.957, alpha: 1)
+                        textColor: BrandColor(red: 0.804, green: 0.839, blue: 0.957, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.118, green: 0.118, blue: 0.18, alpha: 1),
                         opacity: 0.92,
-                        textColor: BrandColor(red: 0.804, green: 0.839, blue: 0.957, alpha: 1)
+                        textColor: BrandColor(red: 0.804, green: 0.839, blue: 0.957, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -27503,12 +27544,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.188, green: 0.204, blue: 0.275, alpha: 1),
                         opacity: 0.92,
-                        textColor: BrandColor(red: 0.776, green: 0.816, blue: 0.961, alpha: 1)
+                        textColor: BrandColor(red: 0.776, green: 0.816, blue: 0.961, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.188, green: 0.204, blue: 0.275, alpha: 1),
                         opacity: 0.92,
-                        textColor: BrandColor(red: 0.776, green: 0.816, blue: 0.961, alpha: 1)
+                        textColor: BrandColor(red: 0.776, green: 0.816, blue: 0.961, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -27607,12 +27650,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.141, green: 0.153, blue: 0.227, alpha: 1),
                         opacity: 0.92,
-                        textColor: BrandColor(red: 0.792, green: 0.827, blue: 0.961, alpha: 1)
+                        textColor: BrandColor(red: 0.792, green: 0.827, blue: 0.961, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.141, green: 0.153, blue: 0.227, alpha: 1),
                         opacity: 0.92,
-                        textColor: BrandColor(red: 0.792, green: 0.827, blue: 0.961, alpha: 1)
+                        textColor: BrandColor(red: 0.792, green: 0.827, blue: 0.961, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(
@@ -27711,12 +27756,14 @@ struct SpaceScheme: Hashable, Sendable {
                     light: SpacePaletteSurface(
                         tint: BrandColor(red: 0.118, green: 0.118, blue: 0.18, alpha: 1),
                         opacity: 0.92,
-                        textColor: BrandColor(red: 0.804, green: 0.839, blue: 0.957, alpha: 1)
+                        textColor: BrandColor(red: 0.804, green: 0.839, blue: 0.957, alpha: 1),
+                        selectedTextColor: nil
                     ),
                     dark: SpacePaletteSurface(
                         tint: BrandColor(red: 0.118, green: 0.118, blue: 0.18, alpha: 1),
                         opacity: 0.92,
-                        textColor: BrandColor(red: 0.804, green: 0.839, blue: 0.957, alpha: 1)
+                        textColor: BrandColor(red: 0.804, green: 0.839, blue: 0.957, alpha: 1),
+                        selectedTextColor: nil
                     )
                 ),
                 popovers: PopoverDress(

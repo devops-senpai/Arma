@@ -93,6 +93,9 @@ struct CrestTheme: Equatable, Sendable {
             var opacity: Double?
             /// The one color the card's text reads in, or `default` for the system's.
             var textColor: String?
+            /// The color the selected row's text reads in on its paper, or
+            /// `default` for the paper's ink.
+            var selectedTextColor: String?
         }
 
         struct CommandPalette: Codable, Equatable, Sendable {

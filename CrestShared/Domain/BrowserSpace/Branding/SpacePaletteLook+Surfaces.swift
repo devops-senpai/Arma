@@ -50,8 +50,8 @@ extension SpacePaletteSurface {
     // MARK: - Variables
 
     /// Whether this surface changes the card at all: a tint over the
-    /// material, or a text color of its own.
-    var isTinted: Bool { (tint != nil && opacity > 0) || textColor != nil }
+    /// material, or a text color of its own for the card or its selected row.
+    var isTinted: Bool { (tint != nil && opacity > 0) || textColor != nil || selectedTextColor != nil }
 
     /// The tone the card's text reads in over this surface: the chosen text
     /// color's brightness, else the tint's when it mostly covers the
@@ -68,6 +68,7 @@ extension SpacePaletteSurface {
     /// nothing covers the material the default way, so the pick shows.
     func tinted(_ tint: BrandColor?) -> SpacePaletteSurface {
         SpacePaletteSurface(
-            tint: tint, opacity: tint != nil && opacity == 0 ? Self.defaultOpacity : opacity, textColor: textColor)
+            tint: tint, opacity: tint != nil && opacity == 0 ? Self.defaultOpacity : opacity, textColor: textColor,
+            selectedTextColor: selectedTextColor)
     }
 }

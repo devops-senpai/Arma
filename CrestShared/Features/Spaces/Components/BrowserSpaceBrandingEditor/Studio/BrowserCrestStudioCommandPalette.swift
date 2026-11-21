@@ -14,9 +14,11 @@ struct BrowserCrestStudioCommandPalette: View {
             context.paletteTint(dark: false).resettable("Light tint"),
             context.paletteOpacity(dark: false).resettable("Light opacity"),
             context.paletteTextColor(dark: false).resettable("Light text"),
+            context.paletteSelectedTextColor(dark: false).resettable("Light selected text"),
             context.paletteTint(dark: true).resettable("Dark tint"),
             context.paletteOpacity(dark: true).resettable("Dark opacity"),
             context.paletteTextColor(dark: true).resettable("Dark text"),
+            context.paletteSelectedTextColor(dark: true).resettable("Dark selected text"),
         ]
     }
 
@@ -38,8 +40,9 @@ struct BrowserCrestStudioCommandPalette: View {
         surfaceRows(dark: true)
     }
 
-    /// The tint and opacity of the appearance `dark` names. The opacity has
-    /// nothing to cover until a tint is picked.
+    /// The tint, opacity, text and selected row's text of the appearance
+    /// `dark` names. The opacity has nothing to cover until a tint is picked;
+    /// the selected row lies on paper, so its text falls back to ink.
     @ViewBuilder
     private func surfaceRows(dark: Bool) -> some View {
         let tint = context.paletteTint(dark: dark)
@@ -52,5 +55,8 @@ struct BrowserCrestStudioCommandPalette: View {
         BrowserCrestStudioColorPickerRow(
             title: dark ? "Dark text" : "Light text", value: context.paletteTextColor(dark: dark),
             fallback: .text(for: dark ? .light : .dark))
+        BrowserCrestStudioColorPickerRow(
+            title: dark ? "Dark selected text" : "Light selected text",
+            value: context.paletteSelectedTextColor(dark: dark), fallback: .ink)
     }
 }

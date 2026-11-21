@@ -96,6 +96,7 @@ private struct BrowserThemePalettePreview: View {
         }
         .padding(.horizontal, 10)
         .frame(height: 30)
+        .modifier(SpaceTextColor(color: selected ? surface?.selectedTextColor : nil))
         .background {
             if selected {
                 RoundedRectangle(cornerRadius: 8, style: .continuous).fill(CrestColor.selection)

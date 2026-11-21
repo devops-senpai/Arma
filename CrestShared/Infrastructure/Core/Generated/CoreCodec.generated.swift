@@ -7,7 +7,7 @@ import Foundation
 enum CoreCodec {
     /// SHA-256 of the canonical contract schema. The core refuses any other.
     static let fingerprint: [UInt8] = [
-        0xbf, 0x37, 0x05, 0x53, 0xec, 0x10, 0x69, 0x87, 0x96, 0x11, 0xc7, 0x36, 0xc9, 0x05, 0x8f, 0x36, 0xc7, 0x6e, 0x8c, 0xe2, 0x37, 0x78, 0xa1, 0x17, 0x0e, 0xf8, 0xe8, 0x4d, 0xeb, 0x18, 0x50, 0x08
+        0x07, 0x31, 0x4b, 0x14, 0xe4, 0xce, 0x24, 0xef, 0x91, 0x3b, 0x93, 0x7f, 0x02, 0x27, 0x6a, 0x6f, 0xb9, 0x60, 0x5e, 0xd7, 0x8d, 0xb7, 0x83, 0xcf, 0xa7, 0x35, 0x3f, 0x64, 0x76, 0x59, 0x56, 0x8e
     ]
     /// SHA-256 of the engine contract alone, which an engine binding registers with.
     static let engineFingerprint: [UInt8] = [
@@ -25204,7 +25204,14 @@ extension SpacePaletteSurface {
         } else {
             textColor = nil
         }
-        self.init(tint: tint, opacity: opacity, textColor: textColor)
+        let selectedTextColor: BrandColor?
+        if try reader.readPresence() {
+            let selectedTextColorValue = try BrandColor(from: &reader)
+            selectedTextColor = selectedTextColorValue
+        } else {
+            selectedTextColor = nil
+        }
+        self.init(tint: tint, opacity: opacity, textColor: textColor, selectedTextColor: selectedTextColor)
     }
 
     func encode(into writer: inout WireWriter) {
@@ -25216,6 +25223,12 @@ extension SpacePaletteSurface {
         }
         writer.writeDouble(opacity)
         if let present0 = textColor {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = selectedTextColor {
             writer.writePresence(true)
             present0.encode(into: &writer)
         } else {

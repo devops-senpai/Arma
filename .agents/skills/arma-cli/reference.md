@@ -285,6 +285,7 @@ Look options:
                         the tint of an open, hovered or chosen folder's rows
   --folder-highlight-opacity <0-1>
   --palette-light <hex>|default  --palette-light-opacity <0-1>  --palette-light-text <hex>|default
+  --palette-light-selected-text <hex>|default  --palette-dark-selected-text <hex>|default
   --palette-dark <hex>|default   --palette-dark-opacity <0-1>   --palette-dark-text <hex>|default
   --popover-background <hex>|default    the fill of popovers such as Site Controls
   --popover-text <hex>|default          the color of their text

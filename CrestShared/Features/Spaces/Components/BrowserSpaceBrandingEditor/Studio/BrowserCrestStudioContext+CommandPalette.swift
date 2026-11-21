@@ -29,6 +29,17 @@ extension BrowserCrestStudioContext {
                 }), default: nil)
     }
 
+    /// The color the selected row's text reads in on its paper, in the
+    /// appearance `dark` names, or nil for the paper's ink.
+    func paletteSelectedTextColor(dark: Bool) -> CrestSettingValue<BrandColor?> {
+        CrestSettingValue(
+            Binding(
+                get: { value.commandPalette?.surface(dark: dark).selectedTextColor },
+                set: { color in
+                    editSurface(dark: dark) { $0.selectedTextColor = color }
+                }), default: nil)
+    }
+
     /// How far the tint covers the material in the appearance `dark` names.
     func paletteOpacity(dark: Bool) -> CrestSettingValue<Double> {
         CrestSettingValue(

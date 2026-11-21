@@ -86,7 +86,8 @@ extension CrestTheme.Look {
     private static func surface(_ surface: SpacePaletteSurface?) -> CrestTheme.Dress.PaletteSurface {
         CrestTheme.Dress.PaletteSurface(
             tint: CrestTheme.text(surface?.tint), opacity: surface?.opacity ?? 0,
-            textColor: CrestTheme.text(surface?.textColor))
+            textColor: CrestTheme.text(surface?.textColor),
+            selectedTextColor: CrestTheme.text(surface?.selectedTextColor))
     }
 }
 
@@ -204,6 +205,7 @@ extension SpaceBranding {
             if let text = surface.tint { current = current.tinted(try CrestTheme.color(text)) }
             if let opacity = surface.opacity { current.opacity = opacity }
             if let text = surface.textColor { current.textColor = try CrestTheme.color(text) }
+            if let text = surface.selectedTextColor { current.selectedTextColor = try CrestTheme.color(text) }
         }
     }
 }

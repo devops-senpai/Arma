@@ -26,7 +26,7 @@ public sealed partial class BrowserContractsTests {
         var dress = new SpaceDress(new(DressInk, SecondaryColor: null),
             new(DressSky, BackColor: null, DressMauve, HighlightColor: DressSky, HighlightOpacity: 0.4,
                 new FolderColorOverrides([new(".Home.lab", DressMauve, BackColor: null, OutlineColor: null)])),
-            new(new(DressMauve, 0.6, DressInk), SpacePaletteSurface.Neutral),
+            new(new(DressMauve, 0.6, DressInk, SelectedTextColor: DressSky), SpacePaletteSurface.Neutral),
             new(DressInk, DressMauve, SecondaryTextColor: null, DressSky, AccentOpacity: 0.8, ButtonColor: null, ButtonOutlineColor: DressMauve),
             new(DressSky, FillOpacity: 0.7, DressInk, SecondaryTextColor: null));
         var look = SpaceBranding.Normalized(SpaceBranding.Neutral with { Dress = dress });

@@ -79,7 +79,7 @@ public sealed record SpaceDress(SidebarTextDress? Text, FolderDress? Folders, Sp
     }
 
     private static SpacePaletteSurface Normalized(SpacePaletteSurface surface) =>
-        new(Normalized(surface.Tint), Unit(surface.Opacity), Normalized(surface.TextColor));
+        new(Normalized(surface.Tint), Unit(surface.Opacity), Normalized(surface.TextColor), Normalized(surface.SelectedTextColor));
 
     private static PopoverDress? Normalized(PopoverDress? popovers) =>
         popovers is null || (popovers.BackgroundColor ?? popovers.TextColor ?? popovers.SecondaryTextColor ?? popovers.AccentColor

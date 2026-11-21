@@ -14,7 +14,7 @@ namespace CrestCore.Native;
 public static class ContractCodec {
     /// <summary>SHA-256 of the canonical contract schema.</summary>
     public static ReadOnlySpan<byte> Fingerprint => [
-        0xbf, 0x37, 0x05, 0x53, 0xec, 0x10, 0x69, 0x87, 0x96, 0x11, 0xc7, 0x36, 0xc9, 0x05, 0x8f, 0x36, 0xc7, 0x6e, 0x8c, 0xe2, 0x37, 0x78, 0xa1, 0x17, 0x0e, 0xf8, 0xe8, 0x4d, 0xeb, 0x18, 0x50, 0x08
+        0x07, 0x31, 0x4b, 0x14, 0xe4, 0xce, 0x24, 0xef, 0x91, 0x3b, 0x93, 0x7f, 0x02, 0x27, 0x6a, 0x6f, 0xb9, 0x60, 0x5e, 0xd7, 0x8d, 0xb7, 0x83, 0xcf, 0xa7, 0x35, 0x3f, 0x64, 0x76, 0x59, 0x56, 0x8e
     ];
 
     /// <summary>SHA-256 of the engine contract alone, which an engine binding registers with.</summary>
@@ -19899,6 +19899,7 @@ public static class ContractCodec {
         return new SpacePaletteSurface(
             reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
             reader.ReadDouble(),
+            reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null,
             reader.ReadPresence() ? (BrandColor?)ReadBrandColor(reader) : null);
     }
 
@@ -19915,6 +19916,12 @@ public static class ContractCodec {
         if (value.TextColor is { } presentTextColor) {
             writer.WritePresence(true);
             WriteBrandColor(writer, presentTextColor);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.SelectedTextColor is { } presentSelectedTextColor) {
+            writer.WritePresence(true);
+            WriteBrandColor(writer, presentSelectedTextColor);
         } else {
             writer.WritePresence(false);
         }

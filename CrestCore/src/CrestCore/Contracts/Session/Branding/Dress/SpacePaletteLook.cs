@@ -33,13 +33,16 @@ public sealed record SpacePaletteLook(SpacePaletteSurface Light, SpacePaletteSur
 /// One appearance's palette card surface: <see cref="Tint"/> laid over the system
 /// material, covering it <see cref="Opacity"/> of the way, from 0 for the material
 /// alone to 1 for the solid tint. Without a tint the card is the material alone.
-/// <see cref="TextColor"/> is the one color the card's text reads in, or null for the system's.
+/// <see cref="TextColor"/> is the one color the card's text reads in, or null for the system's,
+/// and <see cref="SelectedTextColor"/> the color the selected row's text reads in on its sheet of
+/// paper, or null for the paper's own ink.
 /// </summary>
-public sealed record SpacePaletteSurface(BrandColor? Tint, double Opacity, BrandColor? TextColor) {
+public sealed record SpacePaletteSurface(BrandColor? Tint, double Opacity, BrandColor? TextColor,
+    BrandColor? SelectedTextColor = null) {
     #region Static Variables
 
     /// The system material alone.
-    public static SpacePaletteSurface Neutral { get; } = new(Tint: null, Opacity: 0, TextColor: null);
+    public static SpacePaletteSurface Neutral { get; } = new(Tint: null, Opacity: 0, TextColor: null, SelectedTextColor: null);
 
     /// How far a tint covers the material when someone first picks one.
     public const double DefaultOpacity = 0.6;
@@ -49,7 +52,7 @@ public sealed record SpacePaletteSurface(BrandColor? Tint, double Opacity, Brand
     #region Variables
 
     /// Whether this surface tints the card at all.
-    public bool IsTinted => (Tint is not null && Opacity > 0) || TextColor is not null;
+    public bool IsTinted => (Tint is not null && Opacity > 0) || TextColor is not null || SelectedTextColor is not null;
 
     #endregion
 }
