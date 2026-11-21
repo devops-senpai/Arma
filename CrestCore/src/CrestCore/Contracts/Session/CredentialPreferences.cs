@@ -5,7 +5,9 @@ namespace CrestCore.Contracts;
 /// and how often it asks to authenticate before showing or copying one
 /// (<see cref="Authentication"/>). The offer to save closes after
 /// <see cref="SavePromptSeconds"/>, and is never made on the websites in
-/// <see cref="NeverSavedSites"/>, where saved passwords still fill. Older
+/// <see cref="NeverSavedSites"/>, where saved passwords still fill. Private
+/// windows suggest saved passwords only with
+/// <see cref="SuggestsInPrivateWindows"/>, and never offer to save one. Older
 /// releases stored only the first three, and a Space that stored none of the
 /// rest takes their defaults.
 /// </summary>
@@ -15,7 +17,8 @@ public sealed record CredentialPreferences(
     bool AlsoOffersSaveToSystemPasswords,
     IReadOnlyList<NeverSavedSite> NeverSavedSites,
     CredentialAuthentication Authentication,
-    int SavePromptSeconds = CredentialPreferences.DefaultSavePromptSeconds) {
+    int SavePromptSeconds = CredentialPreferences.DefaultSavePromptSeconds,
+    bool SuggestsInPrivateWindows = false) {
     #region Static Variables
 
     /// How long the offer to save stays unless a person chooses otherwise.
@@ -51,10 +54,11 @@ public sealed record CredentialPreferences(
         && AlsoOffersSaveToSystemPasswords == other.AlsoOffersSaveToSystemPasswords
         && NeverSavedSites.SequenceEqual(other.NeverSavedSites)
         && Authentication == other.Authentication
-        && SavePromptSeconds == other.SavePromptSeconds;
+        && SavePromptSeconds == other.SavePromptSeconds
+        && SuggestsInPrivateWindows == other.SuggestsInPrivateWindows;
 
     public override int GetHashCode() => HashCode.Combine(IsEnabled, SyncsCrestPasswordsWithICloud, AlsoOffersSaveToSystemPasswords,
-        NeverSavedSites.Count, Authentication, SavePromptSeconds);
+        NeverSavedSites.Count, Authentication, SavePromptSeconds, SuggestsInPrivateWindows);
 
     #endregion
 
