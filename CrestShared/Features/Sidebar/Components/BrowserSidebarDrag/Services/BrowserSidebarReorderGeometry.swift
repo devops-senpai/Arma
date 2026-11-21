@@ -34,6 +34,9 @@ final class BrowserSidebarReorderGeometry {
 
     struct SplitCard {
         let owner: UUID
+        /// The tab the card shows, which a split member dragged onto its
+        /// middle swaps with.
+        var tabID: UUID? = nil
         let space: BrowserSpaceRuntimeAssignment
         let frame: CGRect
     }
@@ -240,7 +243,7 @@ final class BrowserSidebarReorderGeometry {
         splitCardFrame frame: CGRect, for tabID: UUID, in space: BrowserSpaceRuntimeAssignment,
         owner: UUID
     ) {
-        splitCards[Key(id: tabID, space: space)] = SplitCard(owner: owner, space: space, frame: frame)
+        splitCards[Key(id: tabID, space: space)] = SplitCard(owner: owner, tabID: tabID, space: space, frame: frame)
     }
 
     func removeSplitCardFrame(for tabID: UUID, owner: UUID) {
