@@ -29,6 +29,9 @@ struct BrowserTransientSurface<WebContent: View, LinkMenuAnchor: View>: View {
     /// top edge where it is.
     private static func safeAreaInsets(of proxy: GeometryProxy) -> EdgeInsets {
         var insets = proxy.safeAreaInsets
+        // Container corner insets need macOS 26; before it the safe area
+        // stands as the window reports it.
+        guard #available(macOS 26.0, *) else { return insets }
         let corners = proxy.containerCornerInsets
         if corners.topLeading.width > insets.leading {
             insets.top = max(insets.top, corners.topLeading.height)
