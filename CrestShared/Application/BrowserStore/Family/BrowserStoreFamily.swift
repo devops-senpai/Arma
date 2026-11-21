@@ -26,6 +26,9 @@ final class BrowserStoreFamily {
     @ObservationIgnored private weak var spaceCleanupStore: BrowserStore?
     @ObservationIgnored private(set) var spaceCleanupTask: Task<Void, Never>?
     @ObservationIgnored weak var pageDismissalAuthorizer: (any BrowserPageDismissalAuthorizing)?
+    /// When the person last authenticated to show or copy each Space's saved
+    /// passwords, which every window of the family shares.
+    @ObservationIgnored let credentialAuthenticationMemory = BrowserCredentialAuthenticationMemory()
     /// The core that keeps this family's session in its file; nil in memory.
     @ObservationIgnored private let storage: CrestCore?
 
