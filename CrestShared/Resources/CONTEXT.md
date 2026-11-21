@@ -18,7 +18,8 @@ generator.
 | `Localizable.xcstrings` | The string catalog; Xcode regenerates it from `String(localized:)` |
 | `PrivacyInfo.xcprivacy` | The app's privacy manifest |
 | `CrestIcon/` | Icon Composer icons (`Crest.icon` and palette variants), drawn with Arma's banner by `Scripts/fork/generate-arma-icons.py` (`Assets/ArmaMark.svg`); `Sources/` SVG layers and `Validation/` renders are excluded from targets in `project.yml` |
-| `AppIconPreviews.xcassets` | Dock and picker previews of each app icon variant |
+| `AppIconPreviews.xcassets` | Dock and picker previews of each app icon variant, and `ArmaMark`, Arma's banner |
+| `Fonts/` | Allo, Crest's display face, and Pirata One, the blackletter Arma's name is lettered in on setup's welcome (`CrestTypography+Arma.swift`), each with its SIL OFL text |
 | `CrestHeraldry.xcassets` | Heraldic charges for Space crests; credits in `HeraldicArtworkCredits.txt` |
 | `GettingStartedLogos.xcassets` | Website logos for the Getting Started practice pages |
 | `SearchProviderLogos.xcassets` | Search provider marks |

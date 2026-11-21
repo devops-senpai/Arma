@@ -52,7 +52,8 @@ starting from Arma's own **Guidon**, its bird and the Crane.
 
 ![A Space's Appearance settings: its theme, its crest large with its colors, and the Crest Studio's shapes](Brand/Readme/crest-studio.jpg)
 
-Setup walks through its steps beside a live preview of the window it builds.
+Setup opens on Arma's banner, large, with its name lettered in blackletter,
+then walks through its steps beside a live preview of the window it builds.
 Each Space's page offers every theme Arma ships over Crest's own colors and
 icons; choosing one dresses every Space setup makes, and new Spaces after it.
 

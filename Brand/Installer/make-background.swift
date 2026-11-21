@@ -1,10 +1,17 @@
-// Draws the installer disk image's window background: light Catppuccin
-// Latte colors, Arma's logo, and an arrow from the app to Applications.
-// Usage: swift Brand/Installer/make-background.swift <logo.png> <out-dir>
+// Draws the installer disk image's window background, as setup's welcome
+// dresses Arma: ink under fine lines, Arma's banner over the app, its name
+// lettered in Pirata One, and an arrow from the app to Applications. The
+// banner and the face come from the app's own resources.
+// Usage: swift Brand/Installer/make-background.swift <out-dir>
 import AppKit
+import CoreText
 
-let logoPath = CommandLine.arguments[1]
-let outDir = CommandLine.arguments[2]
+let outDir = CommandLine.arguments[1]
+let root = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent()
+    .deletingLastPathComponent().deletingLastPathComponent()
+let bannerPath = root.appendingPathComponent(
+    "CrestShared/Resources/AppIconPreviews.xcassets/ArmaMark.imageset/mark.svg").path
+let facePath = root.appendingPathComponent("CrestShared/Resources/Fonts/PirataOne-Regular.ttf").path
 let size = NSSize(width: 660, height: 420)
 
 func color(_ hex: Int, _ alpha: CGFloat = 1) -> NSColor {
@@ -12,6 +19,11 @@ func color(_ hex: Int, _ alpha: CGFloat = 1) -> NSColor {
         srgbRed: CGFloat((hex >> 16) & 255) / 255, green: CGFloat((hex >> 8) & 255) / 255,
         blue: CGFloat(hex & 255) / 255, alpha: alpha)
 }
+
+// Arma's name is lettered in Pirata One; without it, the system's serif.
+CTFontManagerRegisterFontsForURL(URL(fileURLWithPath: facePath) as CFURL, .process, nil)
+let lettering = NSFont(name: "PirataOne-Regular", size: 72) ?? NSFont.systemFont(ofSize: 72, weight: .bold)
+let serif = NSFont(name: "Times New Roman", size: 21) ?? NSFont.systemFont(ofSize: 21)
 
 func render(scale: CGFloat) -> NSBitmapImageRep {
     let rep = NSBitmapImageRep(
@@ -25,16 +37,21 @@ func render(scale: CGFloat) -> NSBitmapImageRep {
     let cg = context.cgContext
     let bounds = NSRect(origin: .zero, size: size)
 
-    // Latte's base, warmed with lavender and sky glows.
-    NSGradient(colors: [color(0xEFF1F5), color(0xE6E9EF)])!.draw(in: bounds, angle: -90)
+    // Ink, running down into slate, with dusk and sky glows.
+    NSGradient(colors: [color(0x172238), color(0x2B3A5C)])!.draw(in: bounds, angle: -75)
     for (x, y, r, hex) in [
-        (110.0, 360.0, 300.0, 0xCBA6F7), (560.0, 80.0, 320.0, 0x89DCEB), (560.0, 380.0, 220.0, 0xF5C2E7),
+        (110.0, 380.0, 320.0, 0x6B4FA0), (600.0, 40.0, 340.0, 0x5A9BC8),
     ] {
-        NSGradient(colors: [color(hex, 0.32), color(hex, 0)])!.draw(
+        NSGradient(colors: [color(hex, 0.28), color(hex, 0)])!.draw(
             fromCenter: NSPoint(x: x, y: y), radius: 0, toCenter: NSPoint(x: x, y: y), radius: r, options: [])
     }
-    // Fine diagonal lines.
-    cg.setStrokeColor(color(0x7287FD, 0.07).cgColor)
+    // A mist rising from the bottom, under the icons' names, so Finder's
+    // black labels in the light read on the ink as its white ones do in
+    // the dark.
+    NSGradient(colors: [color(0xFFFDF7, 0.2), color(0xFFFDF7, 0)])!.draw(
+        in: NSRect(x: 0, y: 0, width: size.width, height: 170), angle: 90)
+    // Fine diagonal lines, as Arma's texture draws them.
+    cg.setStrokeColor(color(0xFFFDF7, 0.06).cgColor)
     cg.setLineWidth(1)
     var x = -size.height
     while x < size.width {
@@ -44,14 +61,25 @@ func render(scale: CGFloat) -> NSBitmapImageRep {
     }
     cg.strokePath()
 
-    // The logo and the name, above the two icons.
-    if let logo = NSImage(contentsOfFile: logoPath) {
-        logo.draw(in: NSRect(x: (size.width - 92) / 2, y: size.height - 120, width: 92, height: 92))
+    // The banner over the app's icon on the left, with a soft shadow.
+    if let banner = NSImage(contentsOfFile: bannerPath) {
+        let shadow = NSShadow()
+        shadow.shadowColor = color(0x000000, 0.45)
+        shadow.shadowBlurRadius = 14
+        shadow.shadowOffset = NSSize(width: 0, height: -6)
+        NSGraphicsContext.saveGraphicsState()
+        shadow.set()
+        banner.draw(in: NSRect(x: 95, y: 252, width: 140, height: 140))
+        NSGraphicsContext.restoreGraphicsState()
     }
+    // Arma's name and its line, beside the banner.
     let title = NSAttributedString(
-        string: "Arma",
-        attributes: [.font: NSFont.systemFont(ofSize: 22, weight: .semibold), .foregroundColor: color(0x4C4F69)])
-    title.draw(at: NSPoint(x: (size.width - title.size().width) / 2, y: size.height - 152))
+        string: "Arma", attributes: [.font: lettering, .foregroundColor: color(0xFFFDF7)])
+    title.draw(at: NSPoint(x: 268, y: 318))
+    let line = NSAttributedString(
+        string: "A browser for cool people.",
+        attributes: [.font: serif, .foregroundColor: color(0xFFFDF7, 0.72)])
+    line.draw(at: NSPoint(x: 272, y: 288))
 
     // The arrow from the app (left) to Applications (right).
     let arrowY: CGFloat = 175
@@ -62,7 +90,7 @@ func render(scale: CGFloat) -> NSBitmapImageRep {
         controlPoint2: NSPoint(x: 354, y: arrowY + 26))
     path.lineWidth = 4
     path.lineCapStyle = .round
-    color(0x8839EF, 0.85).setStroke()
+    color(0xF2C14E, 0.9).setStroke()
     path.stroke()
     let head = NSBezierPath()
     head.move(to: NSPoint(x: 380, y: arrowY + 13))
@@ -75,7 +103,7 @@ func render(scale: CGFloat) -> NSBitmapImageRep {
 
     let hint = NSAttributedString(
         string: "Drag Arma to Applications",
-        attributes: [.font: NSFont.systemFont(ofSize: 13, weight: .medium), .foregroundColor: color(0x6C6F85)])
+        attributes: [.font: NSFont.systemFont(ofSize: 13, weight: .medium), .foregroundColor: color(0xFFFDF7, 0.7)])
     // Under the arrow, between the two icons, where every Finder shows it.
     hint.draw(at: NSPoint(x: (size.width - hint.size().width) / 2, y: arrowY - 34))
 
