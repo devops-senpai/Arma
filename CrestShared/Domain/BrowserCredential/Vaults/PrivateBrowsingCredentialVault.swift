@@ -1,6 +1,14 @@
 import Foundation
 
 actor PrivateBrowsingCredentialVault: CredentialVault {
+    let readable: (any CredentialVault)?
+    let sources: @Sendable () async -> [UUID]
+
+    init(readingFrom readable: (any CredentialVault)? = nil, sources: @escaping @Sendable () async -> [UUID] = { [] }) {
+        self.readable = readable
+        self.sources = sources
+    }
+
     func descriptors(in spaceID: UUID) async throws -> [CredentialDescriptor] {
         []
     }
@@ -9,7 +17,7 @@ actor PrivateBrowsingCredentialVault: CredentialVault {
         matching origin: CredentialOrigin,
         in spaceID: UUID
     ) async throws -> [CredentialDescriptor] {
-        []
+        try await suggestions(matching: origin, in: spaceID)
     }
 
     func descriptors(
@@ -27,7 +35,7 @@ actor PrivateBrowsingCredentialVault: CredentialVault {
         id: UUID,
         in spaceID: UUID
     ) async throws -> BrowserCredential? {
-        nil
+        try await suggestedCredential(id: id, in: spaceID)
     }
 
     func save(_ credential: BrowserCredential, in spaceID: UUID) async throws {
