@@ -30,7 +30,7 @@ struct BrowserCredentialSuggestionPrompt: View {
                 model: model,
                 fillErrorMessage: fillErrorMessage,
                 metrics: metrics,
-                dismiss: port.dismiss,
+                dismiss: port.close ?? port.dismiss,
                 fill: fill
             )
         }
