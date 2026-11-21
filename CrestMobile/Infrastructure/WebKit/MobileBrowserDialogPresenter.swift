@@ -95,19 +95,43 @@ enum MobileBrowserDialogPresenter {
                 continuation.resume(returning: false)
             }
         }
+        // Registered before Settings opens, so a resignation during the open
+        // waits in the sequence until it is read.
+        let resignations = NotificationCenter.default.notifications(
+            named: UIApplication.willResignActiveNotification)
         guard shouldOpen,
-            await UIApplication.shared.open(settingsURL)
+            await UIApplication.shared.open(settingsURL),
+            await resignsActive(resignations, within: .seconds(60))
         else { return }
-        // Waits for Crest to step aside for Settings, then to come back.
-        if UIApplication.shared.applicationState == .active {
-            for await _ in NotificationCenter.default.notifications(named: UIApplication.willResignActiveNotification) {
-                break
+        // Registered once Crest has resigned and checked against its state
+        // now, so a return that already happened is not waited for again.
+        let activations = NotificationCenter.default.notifications(
+            named: UIApplication.didBecomeActiveNotification)
+        guard UIApplication.shared.applicationState != .active else { return }
+        for await _ in activations { break }
+    }
+
+    /// Whether Crest resigns active within `timeout`, as it does when
+    /// Settings opens over it. On iPad, Settings can open beside Crest with
+    /// Crest staying active, so the wait ends after `timeout` and the request
+    /// goes on from whatever the person had set by then instead of hanging.
+    private static func resignsActive(
+        _ resignations: NotificationCenter.Notifications,
+        within timeout: Duration
+    ) async -> Bool {
+        if UIApplication.shared.applicationState != .active { return true }
+        return await withTaskGroup(of: Bool.self) { group in
+            group.addTask {
+                for await _ in resignations { return true }
+                return false
             }
-        }
-        if UIApplication.shared.applicationState != .active {
-            for await _ in NotificationCenter.default.notifications(named: UIApplication.didBecomeActiveNotification) {
-                break
+            group.addTask {
+                try? await Task.sleep(for: timeout)
+                return false
             }
+            let resigned = await group.next() ?? false
+            group.cancelAll()
+            return resigned
         }
     }
 
