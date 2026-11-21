@@ -6,6 +6,24 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.161</title>
+            <pubDate>Sat, 21 Nov 2026 06:29:41 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>1000161</sparkle:version>
+            <sparkle:shortVersionString>0.10.161</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Chromium 157.0.8103.81, and Crest's clean-up of code nothing used.
+
+### Fixed
+- Chromium is updated to 157.0.8103.81 with upstream security and compatibility fixes.
+
+### Improved
+- Arma follows Crest's removal of code, tests and resources nothing used, with the same features in a lighter app.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.161/Arma-0.10.161.dmg" length="196308566" type="application/octet-stream" sparkle:edSignature="1UXIgwiaIY1pY4RiQte9/+OlR/Qa3lBU+sHCS7zk05oaMsW+mxY5fntcL520tLAx3zfk9QhJp6luTubqiAIxCg=="/>
+        </item>
+        <item>
             <title>0.10.160</title>
             <pubDate>Fri, 20 Nov 2026 20:59:24 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1027,6 +1045,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: Gz2lcWO5QR5pzIQoHLiLkoD2v6g1wE9g67/qIOcKGxBMbfS8gfRJwYXnh2VjtkM/L4xJj4S6f1uMX94/Qfr4Cg==
-length: 79860
+edSignature: TNs3BQiUmPPenoraLzPUksmO5vlOn5AXM8Na6qoWACRQK7q22jgkfnLOkqbgp6a9seiNsUO2iPCQe2ImkQB+CA==
+length: 81006
 -->
