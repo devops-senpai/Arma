@@ -14,7 +14,7 @@ namespace CrestCore.Native;
 public static class ContractCodec {
     /// <summary>SHA-256 of the canonical contract schema.</summary>
     public static ReadOnlySpan<byte> Fingerprint => [
-        0xda, 0x0a, 0xf2, 0x1d, 0x4a, 0x8e, 0xa4, 0x12, 0xd6, 0xc6, 0x17, 0xa6, 0xb8, 0xde, 0x72, 0xe8, 0x65, 0x2b, 0x89, 0xbf, 0x0c, 0xc1, 0xcb, 0xc2, 0x4a, 0x1a, 0x32, 0xbf, 0x77, 0x54, 0x18, 0xfc
+        0x98, 0x7b, 0xbc, 0x03, 0x61, 0xac, 0xe6, 0x96, 0x61, 0x37, 0x80, 0x7b, 0xff, 0x1a, 0xb8, 0xc7, 0x69, 0x19, 0xdb, 0x8a, 0x12, 0xe6, 0xaf, 0x3d, 0xa9, 0xb1, 0x16, 0xee, 0x87, 0x3f, 0x70, 0xc5
     ];
 
     /// <summary>SHA-256 of the engine contract alone, which an engine binding registers with.</summary>
@@ -18338,6 +18338,7 @@ public static class ContractCodec {
             reader.ReadGuid(),
             reader.ReadBool(),
             ReadSpaceCustomization(reader),
+            reader.ReadPresence() ? (Guid?)reader.ReadGuid() : null,
             reader.ReadPresence() ? (Guid?)reader.ReadGuid() : null);
         _ = reader.ReadString();
         return value;
@@ -18353,6 +18354,12 @@ public static class ContractCodec {
         if (value.PrimaryId is { } presentPrimaryId) {
             writer.WritePresence(true);
             writer.WriteGuid(presentPrimaryId);
+        } else {
+            writer.WritePresence(false);
+        }
+        if (value.FolderId is { } presentFolderId) {
+            writer.WritePresence(true);
+            writer.WriteGuid(presentFolderId);
         } else {
             writer.WritePresence(false);
         }
