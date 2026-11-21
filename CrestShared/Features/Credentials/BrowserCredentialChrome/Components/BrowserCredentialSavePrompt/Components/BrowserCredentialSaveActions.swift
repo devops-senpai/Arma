@@ -25,12 +25,17 @@ struct BrowserCredentialSaveActions: View {
         }
     }
 
+    /// Not Now, or Done once there is nothing left to answer. A shell whose
+    /// prompt closes from its corner offers it only as Done.
+    @ViewBuilder
     private var dismissAction: some View {
-        Button(action: dismiss) {
-            Text(route.dismissActionTitle)
+        if metrics.saveOffersNotNow || route.primaryAction == nil {
+            Button(action: dismiss) {
+                Text(route.dismissActionTitle)
+            }
+            .buttonStyle(.crestSecondary)
+            .disabled(route.isBusy)
         }
-        .buttonStyle(.crestSecondary)
-        .disabled(route.isBusy)
     }
 
     @ViewBuilder
