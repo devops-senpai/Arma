@@ -488,6 +488,7 @@ final class MobileBrowserPageStore:
                 serverTrustOverrides: serverTrustOverrides,
                 allowsCredentialAccess: !browsingMode.isPrivate,
                 isCredentialAccessEnabled: space.settings.credentialPreferences.isEnabled,
+                neverSavedSites: browser.neverSavedSites(of: space.id),
                 defaultPageZoom: pageZoomPreferences.defaultZoom,
                 loadsInitialURL: false,
                 loadHTTPAuthenticationCredential: { [loadHTTPAuthenticationCredential] protectionSpace in
@@ -686,6 +687,7 @@ final class MobileBrowserPageStore:
                 mediaSessionStore: mediaSessionStore,
                 allowsCredentialAccess: !browsingMode.isPrivate,
                 isCredentialAccessEnabled: space.settings.credentialPreferences.isEnabled,
+                neverSavedSites: browser.neverSavedSites(of: space.id),
                 defaultPageZoom: pageZoomPreferences.defaultZoom,
                 // The core loads the tab's address once the page is open.
                 loadsInitialURL: false,
