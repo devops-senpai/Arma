@@ -139,7 +139,9 @@ extension BrowserCommandActions {
     /// screen, by site and username; inside a login, what the palette can do
     /// with it. A locked Space, one with passwords off and a private window
     /// list no logins.
-    private func passwordChoices(openSettings: @escaping (BrowserSettingsDestination) -> Void) -> [BrowserPaletteChoice] {
+    private func passwordChoices(openSettings: @escaping (BrowserSettingsDestination) -> Void)
+        -> [BrowserPaletteChoice]
+    {
         guard let space = browser.shownSpace else { return [] }
         let settings = BrowserPaletteChoice(
             scope: .passwords, key: "settings", name: String(localized: "Passwords Settings"),
