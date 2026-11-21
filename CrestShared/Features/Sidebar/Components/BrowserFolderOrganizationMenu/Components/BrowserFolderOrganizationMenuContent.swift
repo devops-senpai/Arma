@@ -43,9 +43,10 @@ struct BrowserFolderOrganizationMenuContent: View {
                 performIfCurrent(changeIcon)
             }
         }
-        Button(kind.colorMenuTitle, systemImage: "paintpalette") {
+        Button("Edit Appearance…", systemImage: "paintpalette") {
             performIfCurrent(changeColor)
         }
+        useSpaceFolderColorsButton
         if folder.location == .current {
             Button(kind.convertTitle, systemImage: kind.convertSymbol) {
                 performIfCurrent {
@@ -218,7 +219,7 @@ struct BrowserFolderOrganizationMenuContent: View {
         }
     }
 
-    private func performIfCurrent(_ action: () -> Void) {
+    func performIfCurrent(_ action: () -> Void) {
         guard isCurrentAndUnlocked else { return }
         action()
     }

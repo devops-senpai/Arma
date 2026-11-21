@@ -13,11 +13,15 @@ struct CrestSurfaceLayer<LayerShape: Shape>: View {
     var isPaper = false
 
     @Environment(\.crestSurfaceMaterial) private var materialOverride
+    @Environment(\.crestSurfaceFill) private var fill
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.deviceColorScheme) private var deviceColorScheme
 
     var body: some View {
         ground
+            .overlay {
+                if let fill { shape.fill(fill) }
+            }
             .overlay {
                 if let tint { shape.fill(tint) }
             }
