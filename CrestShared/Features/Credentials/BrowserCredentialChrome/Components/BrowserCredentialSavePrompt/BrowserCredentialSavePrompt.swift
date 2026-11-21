@@ -32,6 +32,7 @@ struct BrowserCredentialSavePrompt: View {
                 namesSystemPasswordsDestination: namesSystemPasswordsDestination,
                 metrics: metrics,
                 dismiss: port.dismiss,
+                neverSave: neverSaveAction,
                 perform: perform
             )
         }
