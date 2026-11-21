@@ -1,7 +1,8 @@
 import SwiftUI
 
-/// Arma's lettering: Pirata One, a textura blackletter, for Arma's name where
-/// it stands as a sign, and Times under it. Pirata One ships inside the app
+/// Arma's lettering: Pirata One, a textura blackletter, for Arma's name and a
+/// page's title where they stand as a sign, and Times under them and for
+/// the Start Page's title. Pirata One ships inside the app
 /// under the SIL Open Font License beside Allo and is registered for this
 /// process the first time it is asked for; should it ever be missing, the
 /// system's serif stands in, bold.

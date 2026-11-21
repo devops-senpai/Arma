@@ -32,7 +32,7 @@ struct BrowserStartPageHeader: View {
             .frame(width: layout.markSize, height: layout.markSize)
             .accessibilityHidden(true)
         Text("Start Page")
-            .font(CrestTypography.display(30, relativeTo: .largeTitle))
+            .font(CrestTypography.serif(BrowserStartPageHeaderMetrics.titleSize))
             .foregroundStyle(.primary)
             .multilineTextAlignment(.center)
 
@@ -51,6 +51,11 @@ struct BrowserStartPageHeader: View {
             CrestStartPageMark()
         }
     }
+}
+
+enum BrowserStartPageHeaderMetrics {
+    /// The title set in Times, as the welcome's line is.
+    static let titleSize: CGFloat = 34
 }
 
 #if DEBUG
