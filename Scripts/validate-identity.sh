@@ -33,7 +33,7 @@ if [[ -e "$prototype_root" || -e "$prototype_tests" || -e "$prototype_ui_tests" 
 fi
 
 prototype_product="cae""lura"
-prototype_bundle="com.pauldavis.${prototype_root:l}"
+prototype_bundle="com.senpaimedia.${prototype_root:l}"
 prototype_environment="${prototype_root:u}_"
 prototype_import="@testable import ${prototype_root}"
 
@@ -60,8 +60,8 @@ fi
 rg -q '^name: Crest$' project.yml
 rg -q '^  Crest:$' project.yml
 rg -q '^  CrestMobile:$' project.yml
-rg -q 'CREST_MAC_BUNDLE_IDENTIFIER: com\.pauldavis\.crest$' project.yml
-rg -q 'CREST_MOBILE_BUNDLE_IDENTIFIER: com\.pauldavis\.crest$' project.yml
+rg -q 'CREST_MAC_BUNDLE_IDENTIFIER: com\.senpaimedia\.arma$' project.yml
+rg -q 'CREST_MOBILE_BUNDLE_IDENTIFIER: com\.senpaimedia\.arma$' project.yml
 rg -q 'PRODUCT_MODULE_NAME: Crest$' project.yml
 rg -q 'PRODUCT_MODULE_NAME: CrestMobile$' project.yml
 

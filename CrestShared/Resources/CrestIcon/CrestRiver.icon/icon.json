@@ -2,184 +2,42 @@
   "fill-specializations": [
     {
       "value": {
-        "automatic-gradient": "srgb:0.95686,0.93333,0.88235,1.00000"
+        "automatic-gradient": "extended-srgb:0.83137,0.90196,0.92157,1.00000"
       }
     },
     {
       "appearance": "dark",
-      "value": "system-dark"
+      "value": {
+        "automatic-gradient": "extended-srgb:0.83137,0.90196,0.92157,1.00000"
+      }
     }
   ],
   "groups": [
     {
-      "name": "Butter",
       "layers": [
         {
-          "name": "BannerButter",
-          "image-name": "BannerButter.svg",
           "fill-specializations": [
             {
-              "value": {
-                "solid": "srgb:0.00000,0.32941,0.56078,1.00000"
-              }
+              "value": "none"
             },
             {
               "appearance": "dark",
-              "value": {
-                "solid": "srgb:0.85882,0.92157,0.95294,1.00000"
-              }
+              "value": "none"
             },
             {
               "appearance": "tinted",
-              "value": {
-                "solid": "extended-gray:1.00000,1.00000"
-              }
+              "value": "none"
             }
-          ]
+          ],
+          "image-name": "ArmaMark.svg",
+          "name": "ArmaMark"
         }
       ],
+      "name": "Arma Layers",
       "shadow": {
-        "kind": "layer-color",
-        "opacity": 0.5
+        "kind": "neutral",
+        "opacity": 0.6
       },
-      "shadow-specializations": [
-        {
-          "value": {
-            "kind": "layer-color",
-            "opacity": 0.5
-          }
-        },
-        {
-          "appearance": "dark",
-          "value": {
-            "kind": "neutral",
-            "opacity": 0.5
-          }
-        },
-        {
-          "appearance": "tinted",
-          "value": {
-            "kind": "neutral",
-            "opacity": 0.5
-          }
-        }
-      ],
-      "translucency": {
-        "enabled": true,
-        "value": 0.2
-      }
-    },
-    {
-      "name": "Coral",
-      "layers": [
-        {
-          "name": "BannerCoral",
-          "image-name": "BannerCoral.svg",
-          "fill-specializations": [
-            {
-              "value": {
-                "solid": "srgb:0.00000,0.53725,0.63922,1.00000"
-              }
-            },
-            {
-              "appearance": "dark",
-              "value": {
-                "solid": "srgb:0.16078,0.65098,0.74902,1.00000"
-              }
-            },
-            {
-              "appearance": "tinted",
-              "value": {
-                "solid": "extended-gray:0.78000,1.00000"
-              }
-            }
-          ]
-        }
-      ],
-      "shadow": {
-        "kind": "layer-color",
-        "opacity": 0.5
-      },
-      "shadow-specializations": [
-        {
-          "value": {
-            "kind": "layer-color",
-            "opacity": 0.5
-          }
-        },
-        {
-          "appearance": "dark",
-          "value": {
-            "kind": "neutral",
-            "opacity": 0.5
-          }
-        },
-        {
-          "appearance": "tinted",
-          "value": {
-            "kind": "neutral",
-            "opacity": 0.5
-          }
-        }
-      ],
-      "translucency": {
-        "enabled": true,
-        "value": 0.2
-      }
-    },
-    {
-      "name": "Sky",
-      "layers": [
-        {
-          "name": "BannerSky",
-          "image-name": "BannerSky.svg",
-          "fill-specializations": [
-            {
-              "value": {
-                "solid": "srgb:0.43529,0.69020,0.87059,1.00000"
-              }
-            },
-            {
-              "appearance": "dark",
-              "value": {
-                "solid": "srgb:0.29804,0.56078,0.80000,1.00000"
-              }
-            },
-            {
-              "appearance": "tinted",
-              "value": {
-                "solid": "extended-gray:0.56000,1.00000"
-              }
-            }
-          ]
-        }
-      ],
-      "shadow": {
-        "kind": "layer-color",
-        "opacity": 0.5
-      },
-      "shadow-specializations": [
-        {
-          "value": {
-            "kind": "layer-color",
-            "opacity": 0.5
-          }
-        },
-        {
-          "appearance": "dark",
-          "value": {
-            "kind": "neutral",
-            "opacity": 0.5
-          }
-        },
-        {
-          "appearance": "tinted",
-          "value": {
-            "kind": "neutral",
-            "opacity": 0.5
-          }
-        }
-      ],
       "translucency": {
         "enabled": true,
         "value": 0.2
