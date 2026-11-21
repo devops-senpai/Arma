@@ -22,6 +22,7 @@ enum TerminalCommand: Codable, Sendable {
     case page(TerminalPageCommand)
     case settings(TerminalSettingsCommand)
     case site(TerminalSiteCommand)
+    case automation(TerminalAutomationCommand)
     case theme(TerminalThemeCommand)
     case crest(TerminalCrestCommand)
 }
