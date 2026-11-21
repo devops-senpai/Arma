@@ -7,7 +7,7 @@ import Foundation
 enum CoreCodec {
     /// SHA-256 of the canonical contract schema. The core refuses any other.
     static let fingerprint: [UInt8] = [
-        0x1d, 0x72, 0x09, 0xb0, 0x13, 0x02, 0xa9, 0x32, 0x05, 0xec, 0xd1, 0x37, 0x05, 0x75, 0xe0, 0x4c, 0x6f, 0x61, 0x05, 0xa6, 0x09, 0x25, 0x2c, 0x14, 0x3d, 0x24, 0xb7, 0xe4, 0x01, 0x5e, 0xcc, 0x9c
+        0x66, 0x4b, 0x0f, 0x05, 0x84, 0xaf, 0x78, 0xaa, 0x55, 0x5a, 0x75, 0x37, 0x1b, 0x03, 0x40, 0xbe, 0x50, 0x04, 0x05, 0xda, 0xb0, 0xbf, 0xa3, 0x41, 0x64, 0x9c, 0x2e, 0x4f, 0xd5, 0x16, 0xc8, 0x13
     ]
     /// SHA-256 of the engine contract alone, which an engine binding registers with.
     static let engineFingerprint: [UInt8] = [
@@ -17603,7 +17603,8 @@ extension PaletteChoice {
         let name = try reader.readString()
         let detail = try reader.readString()
         let symbol = try reader.readString()
-        self.init(id: id, scope: scope, name: name, detail: detail, symbol: symbol)
+        let stepsInto = try reader.readBool()
+        self.init(id: id, scope: scope, name: name, detail: detail, symbol: symbol, stepsInto: stepsInto)
     }
 
     func encode(into writer: inout WireWriter) {
@@ -17612,6 +17613,7 @@ extension PaletteChoice {
         writer.writeString(name)
         writer.writeString(detail)
         writer.writeString(symbol)
+        writer.writeBool(stepsInto)
     }
 }
 
