@@ -113,17 +113,22 @@ targetTemplates:
       # supply their own.
       - path: CrestShared
         excludes:
+          - "**/CONTEXT.md"
           - Infrastructure/Engines/BrowserEngineRegistration+Composition.swift
           - Features/Settings/Components/BrowserEngineExtensionSettingsPane.swift
           - Features/Settings/Components/BrowserEngineRegistration+FeatureFlags.swift
       - path: CrestMac
         excludes:
+          - "**/CONTEXT.md"
           - App/Composition
           - Features/SiteSettings/Components/BrowserEngineSiteSections.swift
       - path: CrestEngines/Chromium/Apple
         excludes:
+          - "**/CONTEXT.md"
           - CrestChromiumHost.h
       - path: CrestAgents
+        excludes:
+          - "**/CONTEXT.md"
     dependencies:
       - target: CrestDockTilePlugin
         link: false
@@ -192,8 +197,14 @@ targets:
       - path: Documentation/ReleaseNotes.json
         buildPhase: resources
       - path: CrestShared
+        excludes:
+          - "**/CONTEXT.md"
       - path: CrestMac
+        excludes:
+          - "**/CONTEXT.md"
       - path: CrestAgents
+        excludes:
+          - "**/CONTEXT.md"
     dependencies:
       - target: CrestDockTilePlugin
         embed: true
@@ -256,6 +267,8 @@ targets:
     platform: macOS
     sources:
       - path: CrestTests
+        excludes:
+          - "**/CONTEXT.md"
         includes:
           - BrowserTabStateArchiveTests.swift
           - BrowserDataRetentionTests.swift
@@ -299,8 +312,14 @@ targets:
       - path: Documentation/ReleaseNotes.json
         buildPhase: resources
       - path: CrestShared
+        excludes:
+          - "**/CONTEXT.md"
       - path: CrestMac
+        excludes:
+          - "**/CONTEXT.md"
       - path: CrestAgents
+        excludes:
+          - "**/CONTEXT.md"
     dependencies:
       - target: CrestDockTilePlugin
         embed: true
@@ -347,7 +366,11 @@ targets:
     platform: macOS
     sources:
       - path: CrestAgentHelper
+        excludes:
+          - "**/CONTEXT.md"
       - path: CrestAgents
+        excludes:
+          - "**/CONTEXT.md"
     settings:
       base:
         PRODUCT_NAME: crest-browser
@@ -362,6 +385,8 @@ targets:
     platform: macOS
     sources:
       - path: CrestDockTilePlugin
+        excludes:
+          - "**/CONTEXT.md"
       - path: CrestMac/Features/AppIcon/BrowserMacAppIconAssets.swift
       - path: CrestMac/Features/AppIcon/BrowserMacDockTileView.swift
     settings:
@@ -379,6 +404,7 @@ targets:
     sources:
       - path: CrestTests
         excludes:
+          - "**/CONTEXT.md"
           # Fixtures are read relative to #filePath. Bundling their loose files
           # flattens directories and collides on manifest.json/background.js.
           - Fixtures
@@ -403,7 +429,13 @@ targets:
       - path: Documentation/ReleaseNotes.json
         buildPhase: resources
       - path: CrestShared
+        excludes:
+          - "**/CONTEXT.md"
+      # A theme's colors read the way the Mac's theme files spell them.
+      - path: CrestAgents/CrestThemeHex.swift
       - path: CrestMobile
+        excludes:
+          - "**/CONTEXT.md"
     dependencies:
       - sdk: AuthenticationServices.framework
       - sdk: CloudKit.framework
@@ -457,7 +489,13 @@ targets:
       - path: Documentation/ReleaseNotes.json
         buildPhase: resources
       - path: CrestShared
+        excludes:
+          - "**/CONTEXT.md"
+      # A theme's colors read the way the Mac's theme files spell them.
+      - path: CrestAgents/CrestThemeHex.swift
       - path: CrestMobile
+        excludes:
+          - "**/CONTEXT.md"
     dependencies:
       - target: CrestShareExtension
       - sdk: AuthenticationServices.framework
@@ -488,7 +526,11 @@ targets:
     platform: iOS
     sources:
       - path: CrestShareExtension
+        excludes:
+          - "**/CONTEXT.md"
       - path: CrestMobile/Infrastructure/BrowserLinkSharing
+        excludes:
+          - "**/CONTEXT.md"
       - path: CrestShared/Resources/Localizable.xcstrings
     settings:
       base:
@@ -505,6 +547,8 @@ targets:
     platform: iOS
     sources:
       - path: CrestMobileTests
+        excludes:
+          - "**/CONTEXT.md"
     dependencies:
       - target: CrestMobile
     settings:
