@@ -2,8 +2,8 @@ import Foundation
 
 @MainActor
 final class BrowserCredentialSensitiveAccess {
-    private let browser: BrowserStore
-    private let authenticator: any BrowserDeviceAuthenticating
+    let browser: BrowserStore
+    let authenticator: any BrowserDeviceAuthenticating
 
     init(
         browser: BrowserStore,

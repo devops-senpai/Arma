@@ -13,7 +13,9 @@ struct BrowserCredentialSavePrompt: View {
     let browser: BrowserStore
     let metrics: BrowserCredentialPromptMetrics
 
-    @State private var model = BrowserCredentialSavePromptModel()
+    @State var model = BrowserCredentialSavePromptModel()
+    /// Whether the pointer rests on the prompt, which holds it open.
+    @State var isPointerResting = false
 
     var body: some View {
         BrowserCredentialPromptSurface(
@@ -33,8 +35,15 @@ struct BrowserCredentialSavePrompt: View {
                 perform: perform
             )
         }
+        .overlay(alignment: .topLeading) { closeButton }
+        .onHover { hovering in
+            isPointerResting = hovering
+        }
         .task(id: candidate.id) {
             await prepare()
+        }
+        .task(id: countdown) {
+            await closeWhenTimeIsUp()
         }
     }
 
@@ -42,7 +51,7 @@ struct BrowserCredentialSavePrompt: View {
         browser.spaceModel(port.spaceID)?.identity
     }
 
-    private var preferences: CredentialPreferences {
+    var preferences: CredentialPreferences {
         browser.spaceModel(port.spaceID)?.settings.credentialPreferences ?? .seeded
     }
 
@@ -82,7 +91,7 @@ struct BrowserCredentialSavePrompt: View {
         action.perform(self)
     }
 
-    private func prepare() async {
+    func prepare() async {
         await model.prepare(
             candidate: candidate,
             in: port.spaceID,
