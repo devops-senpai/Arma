@@ -27,7 +27,9 @@ extension BrowserCommandActions {
 
     /// Each registered engine's extensions. WebKit takes none yet; when it
     /// does, its page joins here.
-    private func extensionChoices(openSettings: @escaping (BrowserSettingsDestination) -> Void) -> [BrowserPaletteChoice] {
+    private func extensionChoices(openSettings: @escaping (BrowserSettingsDestination) -> Void)
+        -> [BrowserPaletteChoice]
+    {
         let engines = browser.core.state.engines?.engines.map(\.kind) ?? []
         var choices: [BrowserPaletteChoice] = []
         if engines.contains(.chromium) {
