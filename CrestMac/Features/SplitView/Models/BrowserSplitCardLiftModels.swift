@@ -29,6 +29,11 @@ struct BrowserSplitCardLiftGesture {
     /// Whether a card is on the pointer at this instant, straight from the state
     /// that owns the carry.
     let isCarrying: @MainActor @Sendable () -> Bool
+    /// Picks the card a menu named up where the pointer is, so it rides the
+    /// pointer with no button held until a click puts it down.
+    var place: @MainActor @Sendable (UUID, CGPoint) -> Bool = { _, _ in false }
+    /// Whether the carry in flight was placed by a menu rather than pressed.
+    var isPlaced: @MainActor @Sendable () -> Bool = { false }
 }
 
 /// Everything the floating preview window needs to draw a carried Split View

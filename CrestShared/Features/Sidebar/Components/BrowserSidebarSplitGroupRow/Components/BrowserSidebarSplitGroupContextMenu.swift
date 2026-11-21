@@ -37,6 +37,10 @@ struct BrowserSidebarSplitGroupContextMenu: View {
 
                 Divider()
 
+                BrowserSplitArrangeMenu(configuration: configuration)
+
+                Divider()
+
                 Button("Separate All Tabs", systemImage: "rectangle.split.2x1.slash") {
                     guard configuration.isCurrentAndUnlocked,
                         let first = configuration.members.first
