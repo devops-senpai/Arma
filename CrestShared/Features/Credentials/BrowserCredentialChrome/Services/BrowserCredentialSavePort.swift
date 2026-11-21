@@ -33,6 +33,16 @@ struct BrowserCredentialSavePort {
     /// Puts the candidate away, whether it was saved, declined, or already held.
     let dismiss: () -> Void
 
+    /// Closes the prompt because the person chose to, keeping prompts away
+    /// for a moment where the shell can; otherwise as `dismiss` does.
+    var close: (() -> Void)? = nil
+
+    /// Pauses password prompts on this tab, where the shell can.
+    var pause: ((BrowserCredentialPauseLength) -> Void)? = nil
+
+    /// Puts away the offer to pause, where the shell makes one.
+    var dismissPauseOffer: (() -> Void)? = nil
+
     /// Offers the saved password to the system's Passwords app, under the title
     /// the prompt names it by. `nil` where the shell cannot make that offer.
     let offerToSystemPasswords: SystemPasswordsOffer?

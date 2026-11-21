@@ -98,7 +98,8 @@ struct BrowserWebPageSurface: View {
             BrowserCredentialChrome(
                 presentation: BrowserCredentialChromePresentation.resolve(
                     saveCandidate: page.credentialSaveCandidate,
-                    fillRequest: page.credentialFillRequest
+                    fillRequest: page.credentialFillRequest,
+                    pauseOffer: page.credentialPauseOffer
                 ),
                 fillPort: credentialFillPort,
                 savePort: credentialSavePort,
@@ -145,13 +146,19 @@ struct BrowserWebPageSurface: View {
     /// pixels. The chrome is a sibling of the web view inside one box, so the
     /// zoom is the only thing between the two.
     private var credentialFillPort: BrowserCredentialFillPort {
-        BrowserCredentialFillPort(page: page, contentScale: page.renderedPageZoom)
+        var port = BrowserCredentialFillPort(page: page, contentScale: page.renderedPageZoom)
+        port.close = page.snoozeCredentialPrompts
+        return port
     }
 
     /// What the save prompt asks of this surface's page. This shell makes no
     /// offer to the system's Passwords app, so it binds none.
     private var credentialSavePort: BrowserCredentialSavePort {
-        BrowserCredentialSavePort(page: page, offerToSystemPasswords: nil)
+        var port = BrowserCredentialSavePort(page: page, offerToSystemPasswords: nil)
+        port.close = page.snoozeCredentialPrompts
+        port.pause = page.pauseCredentialPrompts(for:)
+        port.dismissPauseOffer = page.dismissCredentialPauseOffer
+        return port
     }
 
     /// What this shell can do: a pointer rests over the chrome and nothing is
