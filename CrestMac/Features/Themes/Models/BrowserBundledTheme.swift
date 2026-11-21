@@ -14,6 +14,43 @@ struct BrowserBundledTheme: Identifiable, Sendable {
     static let crestDefault = BrowserBundledTheme(
         id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E0A", scheme: .crestDefault,
         pitch: "Crest's own look: ink washing down into sky")
+    // Crest's palettes as themes, in the order Crest offers them.
+    static let blossom = BrowserBundledTheme(
+        id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E10", scheme: .blossom,
+        pitch: "A light pastel blossom")
+    static let lagoon = BrowserBundledTheme(
+        id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E11", scheme: .lagoon,
+        pitch: "A light pastel lagoon")
+    static let lilac = BrowserBundledTheme(
+        id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E12", scheme: .lilac,
+        pitch: "A light pastel lilac")
+    static let linen = BrowserBundledTheme(
+        id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E13", scheme: .linen,
+        pitch: "A light pastel linen, with a little grain")
+    static let sunset = BrowserBundledTheme(
+        id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E14", scheme: .sunset,
+        pitch: "A clear, bright sunset")
+    static let ocean = BrowserBundledTheme(
+        id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E15", scheme: .ocean,
+        pitch: "A clear, bright ocean")
+    static let orchid = BrowserBundledTheme(
+        id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E16", scheme: .orchid,
+        pitch: "A clear, bright orchid")
+    static let citrus = BrowserBundledTheme(
+        id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E17", scheme: .citrus,
+        pitch: "A clear, bright citrus")
+    static let midnight = BrowserBundledTheme(
+        id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E18", scheme: .midnight,
+        pitch: "A deep midnight")
+    static let forest = BrowserBundledTheme(
+        id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E19", scheme: .forest,
+        pitch: "A deep forest")
+    static let ember = BrowserBundledTheme(
+        id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E1A", scheme: .ember,
+        pitch: "A deep ember")
+    static let plum = BrowserBundledTheme(
+        id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E1B", scheme: .plum,
+        pitch: "A deep plum")
     static let arcSky = BrowserBundledTheme(
         id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E01", scheme: .arcSky,
         pitch: "Light and airy, for anyone coming from Arc")
@@ -43,7 +80,10 @@ struct BrowserBundledTheme: Identifiable, Sendable {
         pitch: "Macchiato's glow and a fine hatch behind your tabs")
 
     /// Every bundled theme, in the order setup offers them.
-    static let all = [crestDefault, arcSky, arcBlush, latte, catppuccin, macchiato, mocha, frappe, jellyFish, textured]
+    static let all = [
+        crestDefault, blossom, lagoon, lilac, linen, sunset, ocean, orchid, citrus, midnight, forest, ember,
+        plum, arcSky, arcBlush, latte, catppuccin, macchiato, mocha, frappe, jellyFish, textured,
+    ]
 
     // MARK: - Variables
 

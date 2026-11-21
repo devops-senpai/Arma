@@ -36,13 +36,6 @@ struct BrowserSetupSpacePage<Themes: View>: View {
                 }
                 themes()
                 Section {
-                    BrowserSpaceColorWells(branding: editor.branding)
-                        .padding(.vertical, CrestSpacing.small)
-                    BrowserSpacePalettePicker(branding: editor.branding)
-                } header: {
-                    CrestSettingsSectionHeading(title: "Colors")
-                }
-                Section {
                     BrowserSpaceIconPicker(branding: editor.branding, symbol: editor.symbol)
                 } header: {
                     CrestSettingsSectionHeading(title: "Icon")

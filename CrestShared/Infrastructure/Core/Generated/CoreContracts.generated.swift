@@ -25558,8 +25558,1172 @@ struct SpaceScheme: Hashable, Sendable {
         ),
         darkLook: nil
     )
-    static let arcSky = SpaceScheme(
+    static let blossom = SpaceScheme(
         tag: 2,
+        name: "blossom",
+        title: LocalizedStringResource("Blossom"),
+        look: SpaceBranding(
+            colors: ColorPalette(
+                colors: [
+                    BrandColor(red: 0.997, green: 0.814, blue: 0.864, alpha: 1),
+                    BrandColor(red: 0.998, green: 0.83, blue: 0.821, alpha: 1),
+                    BrandColor(red: 1, green: 0.846, blue: 0.778, alpha: 1)
+                ]
+            ),
+            bannerPattern: SpaceBannerPattern.solid,
+            bannerStrength: 1,
+            readabilityFade: 0,
+            keepsControlsReadable: false,
+            themeMode: SpaceThemeMode.gradient,
+            gradientAngle: 90,
+            textureStrength: 0,
+            iconStyle: SpaceIconStyle.simpleSymbol,
+            symbolColor: BrandColor(red: 0.779, green: 0.382, blue: 0.455, alpha: 1),
+            crest: SpaceCrest(
+                backplate: CrestBackplate.shield,
+                fieldDivision: CrestFieldDivision.plain,
+                ordinary: CrestOrdinary.none,
+                trim: CrestTrim.none,
+                symbol: CrestSymbol.mountain,
+                chargeLayout: CrestChargeLayout.single,
+                backplateColorIndex: 1,
+                secondaryFieldColorIndex: 1,
+                ordinaryColorIndex: 2,
+                trimColorIndex: 1,
+                symbolColorIndex: 2,
+                startingPresetID: nil,
+                edgeColorIndex: 1,
+                palette: nil,
+                charge: nil,
+                plateScale: 1,
+                edgeWidth: 0,
+                divisionCount: 4,
+                finish: CrestFinish.flat,
+                ordinaryWidth: 1,
+                trimWeight: 1,
+                trimDetail: 12,
+                chargeScale: 1,
+                chargeOffset: 0,
+                chargeWeight: CrestChargeWeight.bold,
+                sheenAngle: 45,
+                sealTeeth: 12,
+                showsOutline: false,
+                depth: CrestDepth.none,
+                paletteGradients: nil
+            ),
+            renderingVersion: 4,
+            folderColorIntensity: 0,
+            textColorMode: SpaceTextColorMode.dark,
+            hasCustomAppearance: false,
+            gradientKind: nil,
+            symbolGradient: nil,
+            colorGradients: nil,
+            dress: SpaceDress(
+                text: SidebarTextDress(
+                    color: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    secondaryColor: BrandColor(red: 0.361, green: 0.396, blue: 0.459, alpha: 1)
+                ),
+                folders: nil,
+                commandPalette: SpacePaletteLook(
+                    light: SpacePaletteSurface(
+                        tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                    ),
+                    dark: SpacePaletteSurface(
+                        tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                    )
+                ),
+                popovers: PopoverDress(
+                    backgroundColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.361, green: 0.396, blue: 0.459, alpha: 1),
+                    accentColor: BrandColor(red: 0.779, green: 0.382, blue: 0.455, alpha: 1),
+                    accentOpacity: 1,
+                    buttonColor: BrandColor(red: 0.965, green: 0.933, blue: 0.859, alpha: 1),
+                    buttonOutlineColor: BrandColor(red: 0.779, green: 0.382, blue: 0.455, alpha: 1)
+                ),
+                controls: ControlsDress(
+                    fillColor: BrandColor(red: 1, green: 1, blue: 1, alpha: 1),
+                    fillOpacity: 0.7,
+                    textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.361, green: 0.396, blue: 0.459, alpha: 1)
+                )
+            )
+        ),
+        darkLook: nil
+    )
+    static let lagoon = SpaceScheme(
+        tag: 3,
+        name: "lagoon",
+        title: LocalizedStringResource("Lagoon"),
+        look: SpaceBranding(
+            colors: ColorPalette(
+                colors: [
+                    BrandColor(red: 0.752, green: 0.929, blue: 0.876, alpha: 1),
+                    BrandColor(red: 0.741, green: 0.917, blue: 0.919, alpha: 1),
+                    BrandColor(red: 0.73, green: 0.904, blue: 0.962, alpha: 1)
+                ]
+            ),
+            bannerPattern: SpaceBannerPattern.solid,
+            bannerStrength: 1,
+            readabilityFade: 0,
+            keepsControlsReadable: false,
+            themeMode: SpaceThemeMode.gradient,
+            gradientAngle: 90,
+            textureStrength: 0,
+            iconStyle: SpaceIconStyle.simpleSymbol,
+            symbolColor: BrandColor(red: 0, green: 0.537, blue: 0.628, alpha: 1),
+            crest: SpaceCrest(
+                backplate: CrestBackplate.shield,
+                fieldDivision: CrestFieldDivision.plain,
+                ordinary: CrestOrdinary.none,
+                trim: CrestTrim.none,
+                symbol: CrestSymbol.mountain,
+                chargeLayout: CrestChargeLayout.single,
+                backplateColorIndex: 1,
+                secondaryFieldColorIndex: 1,
+                ordinaryColorIndex: 2,
+                trimColorIndex: 1,
+                symbolColorIndex: 2,
+                startingPresetID: nil,
+                edgeColorIndex: 1,
+                palette: nil,
+                charge: nil,
+                plateScale: 1,
+                edgeWidth: 0,
+                divisionCount: 4,
+                finish: CrestFinish.flat,
+                ordinaryWidth: 1,
+                trimWeight: 1,
+                trimDetail: 12,
+                chargeScale: 1,
+                chargeOffset: 0,
+                chargeWeight: CrestChargeWeight.bold,
+                sheenAngle: 45,
+                sealTeeth: 12,
+                showsOutline: false,
+                depth: CrestDepth.none,
+                paletteGradients: nil
+            ),
+            renderingVersion: 4,
+            folderColorIntensity: 0,
+            textColorMode: SpaceTextColorMode.dark,
+            hasCustomAppearance: false,
+            gradientKind: nil,
+            symbolGradient: nil,
+            colorGradients: nil,
+            dress: SpaceDress(
+                text: SidebarTextDress(
+                    color: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    secondaryColor: BrandColor(red: 0.361, green: 0.396, blue: 0.459, alpha: 1)
+                ),
+                folders: nil,
+                commandPalette: SpacePaletteLook(
+                    light: SpacePaletteSurface(
+                        tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                    ),
+                    dark: SpacePaletteSurface(
+                        tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                    )
+                ),
+                popovers: PopoverDress(
+                    backgroundColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.361, green: 0.396, blue: 0.459, alpha: 1),
+                    accentColor: BrandColor(red: 0, green: 0.537, blue: 0.628, alpha: 1),
+                    accentOpacity: 1,
+                    buttonColor: BrandColor(red: 0.965, green: 0.933, blue: 0.859, alpha: 1),
+                    buttonOutlineColor: BrandColor(red: 0, green: 0.537, blue: 0.628, alpha: 1)
+                ),
+                controls: ControlsDress(
+                    fillColor: BrandColor(red: 1, green: 1, blue: 1, alpha: 1),
+                    fillOpacity: 0.7,
+                    textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.361, green: 0.396, blue: 0.459, alpha: 1)
+                )
+            )
+        ),
+        darkLook: nil
+    )
+    static let lilac = SpaceScheme(
+        tag: 4,
+        name: "lilac",
+        title: LocalizedStringResource("Lilac"),
+        look: SpaceBranding(
+            colors: ColorPalette(
+                colors: [
+                    BrandColor(red: 0.876, green: 0.831, blue: 0.971, alpha: 1),
+                    BrandColor(red: 0.838, green: 0.853, blue: 0.986, alpha: 1),
+                    BrandColor(red: 0.799, green: 0.876, blue: 1, alpha: 1)
+                ]
+            ),
+            bannerPattern: SpaceBannerPattern.solid,
+            bannerStrength: 1,
+            readabilityFade: 0,
+            keepsControlsReadable: false,
+            themeMode: SpaceThemeMode.gradient,
+            gradientAngle: 90,
+            textureStrength: 0,
+            iconStyle: SpaceIconStyle.simpleSymbol,
+            symbolColor: BrandColor(red: 0.504, green: 0.409, blue: 0.747, alpha: 1),
+            crest: SpaceCrest(
+                backplate: CrestBackplate.shield,
+                fieldDivision: CrestFieldDivision.plain,
+                ordinary: CrestOrdinary.none,
+                trim: CrestTrim.none,
+                symbol: CrestSymbol.mountain,
+                chargeLayout: CrestChargeLayout.single,
+                backplateColorIndex: 1,
+                secondaryFieldColorIndex: 1,
+                ordinaryColorIndex: 2,
+                trimColorIndex: 1,
+                symbolColorIndex: 2,
+                startingPresetID: nil,
+                edgeColorIndex: 1,
+                palette: nil,
+                charge: nil,
+                plateScale: 1,
+                edgeWidth: 0,
+                divisionCount: 4,
+                finish: CrestFinish.flat,
+                ordinaryWidth: 1,
+                trimWeight: 1,
+                trimDetail: 12,
+                chargeScale: 1,
+                chargeOffset: 0,
+                chargeWeight: CrestChargeWeight.bold,
+                sheenAngle: 45,
+                sealTeeth: 12,
+                showsOutline: false,
+                depth: CrestDepth.none,
+                paletteGradients: nil
+            ),
+            renderingVersion: 4,
+            folderColorIntensity: 0,
+            textColorMode: SpaceTextColorMode.dark,
+            hasCustomAppearance: false,
+            gradientKind: nil,
+            symbolGradient: nil,
+            colorGradients: nil,
+            dress: SpaceDress(
+                text: SidebarTextDress(
+                    color: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    secondaryColor: BrandColor(red: 0.361, green: 0.396, blue: 0.459, alpha: 1)
+                ),
+                folders: nil,
+                commandPalette: SpacePaletteLook(
+                    light: SpacePaletteSurface(
+                        tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                    ),
+                    dark: SpacePaletteSurface(
+                        tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                    )
+                ),
+                popovers: PopoverDress(
+                    backgroundColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.361, green: 0.396, blue: 0.459, alpha: 1),
+                    accentColor: BrandColor(red: 0.504, green: 0.409, blue: 0.747, alpha: 1),
+                    accentOpacity: 1,
+                    buttonColor: BrandColor(red: 0.965, green: 0.933, blue: 0.859, alpha: 1),
+                    buttonOutlineColor: BrandColor(red: 0.504, green: 0.409, blue: 0.747, alpha: 1)
+                ),
+                controls: ControlsDress(
+                    fillColor: BrandColor(red: 1, green: 1, blue: 1, alpha: 1),
+                    fillOpacity: 0.7,
+                    textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.361, green: 0.396, blue: 0.459, alpha: 1)
+                )
+            )
+        ),
+        darkLook: nil
+    )
+    static let linen = SpaceScheme(
+        tag: 5,
+        name: "linen",
+        title: LocalizedStringResource("Linen"),
+        look: SpaceBranding(
+            colors: ColorPalette(
+                colors: [
+                    BrandColor(red: 0.965, green: 0.899, blue: 0.811, alpha: 1),
+                    BrandColor(red: 0.978, green: 0.883, blue: 0.812, alpha: 1),
+                    BrandColor(red: 0.991, green: 0.866, blue: 0.812, alpha: 1)
+                ]
+            ),
+            bannerPattern: SpaceBannerPattern.solid,
+            bannerStrength: 1,
+            readabilityFade: 0,
+            keepsControlsReadable: false,
+            themeMode: SpaceThemeMode.gradient,
+            gradientAngle: 90,
+            textureStrength: 0.5,
+            iconStyle: SpaceIconStyle.simpleSymbol,
+            symbolColor: BrandColor(red: 0.749, green: 0.433, blue: 0.244, alpha: 1),
+            crest: SpaceCrest(
+                backplate: CrestBackplate.shield,
+                fieldDivision: CrestFieldDivision.plain,
+                ordinary: CrestOrdinary.none,
+                trim: CrestTrim.none,
+                symbol: CrestSymbol.mountain,
+                chargeLayout: CrestChargeLayout.single,
+                backplateColorIndex: 1,
+                secondaryFieldColorIndex: 1,
+                ordinaryColorIndex: 2,
+                trimColorIndex: 1,
+                symbolColorIndex: 2,
+                startingPresetID: nil,
+                edgeColorIndex: 1,
+                palette: nil,
+                charge: nil,
+                plateScale: 1,
+                edgeWidth: 0,
+                divisionCount: 4,
+                finish: CrestFinish.flat,
+                ordinaryWidth: 1,
+                trimWeight: 1,
+                trimDetail: 12,
+                chargeScale: 1,
+                chargeOffset: 0,
+                chargeWeight: CrestChargeWeight.bold,
+                sheenAngle: 45,
+                sealTeeth: 12,
+                showsOutline: false,
+                depth: CrestDepth.none,
+                paletteGradients: nil
+            ),
+            renderingVersion: 4,
+            folderColorIntensity: 0,
+            textColorMode: SpaceTextColorMode.dark,
+            hasCustomAppearance: false,
+            gradientKind: nil,
+            symbolGradient: nil,
+            colorGradients: nil,
+            dress: SpaceDress(
+                text: SidebarTextDress(
+                    color: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    secondaryColor: BrandColor(red: 0.361, green: 0.396, blue: 0.459, alpha: 1)
+                ),
+                folders: nil,
+                commandPalette: SpacePaletteLook(
+                    light: SpacePaletteSurface(
+                        tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                    ),
+                    dark: SpacePaletteSurface(
+                        tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                    )
+                ),
+                popovers: PopoverDress(
+                    backgroundColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.361, green: 0.396, blue: 0.459, alpha: 1),
+                    accentColor: BrandColor(red: 0.749, green: 0.433, blue: 0.244, alpha: 1),
+                    accentOpacity: 1,
+                    buttonColor: BrandColor(red: 0.965, green: 0.933, blue: 0.859, alpha: 1),
+                    buttonOutlineColor: BrandColor(red: 0.749, green: 0.433, blue: 0.244, alpha: 1)
+                ),
+                controls: ControlsDress(
+                    fillColor: BrandColor(red: 1, green: 1, blue: 1, alpha: 1),
+                    fillOpacity: 0.7,
+                    textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.361, green: 0.396, blue: 0.459, alpha: 1)
+                )
+            )
+        ),
+        darkLook: nil
+    )
+    static let sunset = SpaceScheme(
+        tag: 6,
+        name: "sunset",
+        title: LocalizedStringResource("Sunset"),
+        look: SpaceBranding(
+            colors: ColorPalette(
+                colors: [
+                    BrandColor(red: 0.963, green: 0.533, blue: 0.425, alpha: 1),
+                    BrandColor(red: 0.958, green: 0.608, blue: 0.385, alpha: 1),
+                    BrandColor(red: 0.953, green: 0.682, blue: 0.346, alpha: 1)
+                ]
+            ),
+            bannerPattern: SpaceBannerPattern.solid,
+            bannerStrength: 1,
+            readabilityFade: 0,
+            keepsControlsReadable: false,
+            themeMode: SpaceThemeMode.gradient,
+            gradientAngle: 90,
+            textureStrength: 0.2,
+            iconStyle: SpaceIconStyle.simpleSymbol,
+            symbolColor: BrandColor(red: 1, green: 0.97, blue: 0.922, alpha: 1),
+            crest: SpaceCrest(
+                backplate: CrestBackplate.shield,
+                fieldDivision: CrestFieldDivision.plain,
+                ordinary: CrestOrdinary.none,
+                trim: CrestTrim.none,
+                symbol: CrestSymbol.mountain,
+                chargeLayout: CrestChargeLayout.single,
+                backplateColorIndex: 1,
+                secondaryFieldColorIndex: 1,
+                ordinaryColorIndex: 2,
+                trimColorIndex: 1,
+                symbolColorIndex: 2,
+                startingPresetID: nil,
+                edgeColorIndex: 1,
+                palette: nil,
+                charge: nil,
+                plateScale: 1,
+                edgeWidth: 0,
+                divisionCount: 4,
+                finish: CrestFinish.flat,
+                ordinaryWidth: 1,
+                trimWeight: 1,
+                trimDetail: 12,
+                chargeScale: 1,
+                chargeOffset: 0,
+                chargeWeight: CrestChargeWeight.bold,
+                sheenAngle: 45,
+                sealTeeth: 12,
+                showsOutline: false,
+                depth: CrestDepth.none,
+                paletteGradients: nil
+            ),
+            renderingVersion: 4,
+            folderColorIntensity: 0,
+            textColorMode: SpaceTextColorMode.light,
+            hasCustomAppearance: false,
+            gradientKind: nil,
+            symbolGradient: nil,
+            colorGradients: nil,
+            dress: SpaceDress(
+                text: SidebarTextDress(
+                    color: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1)
+                ),
+                folders: nil,
+                commandPalette: SpacePaletteLook(
+                    light: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.963, green: 0.533, blue: 0.425, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    ),
+                    dark: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.963, green: 0.533, blue: 0.425, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    )
+                ),
+                popovers: PopoverDress(
+                    backgroundColor: BrandColor(red: 0.62, green: 0.3, blue: 0.22, alpha: 1),
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1),
+                    accentColor: BrandColor(red: 1, green: 0.97, blue: 0.922, alpha: 1),
+                    accentOpacity: 1,
+                    buttonColor: BrandColor(red: 0.62, green: 0.3, blue: 0.22, alpha: 1),
+                    buttonOutlineColor: BrandColor(red: 1, green: 0.97, blue: 0.922, alpha: 1)
+                ),
+                controls: ControlsDress(
+                    fillColor: BrandColor(red: 0.62, green: 0.3, blue: 0.22, alpha: 1),
+                    fillOpacity: 0.9,
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1)
+                )
+            )
+        ),
+        darkLook: nil
+    )
+    static let ocean = SpaceScheme(
+        tag: 7,
+        name: "ocean",
+        title: LocalizedStringResource("Ocean"),
+        look: SpaceBranding(
+            colors: ColorPalette(
+                colors: [
+                    BrandColor(red: 0.207, green: 0.609, blue: 0.852, alpha: 1),
+                    BrandColor(red: 0.209, green: 0.669, blue: 0.79, alpha: 1),
+                    BrandColor(red: 0.211, green: 0.729, blue: 0.729, alpha: 1)
+                ]
+            ),
+            bannerPattern: SpaceBannerPattern.solid,
+            bannerStrength: 1,
+            readabilityFade: 0,
+            keepsControlsReadable: false,
+            themeMode: SpaceThemeMode.gradient,
+            gradientAngle: 90,
+            textureStrength: 0,
+            iconStyle: SpaceIconStyle.simpleSymbol,
+            symbolColor: BrandColor(red: 0.874, green: 0.987, blue: 0.992, alpha: 1),
+            crest: SpaceCrest(
+                backplate: CrestBackplate.shield,
+                fieldDivision: CrestFieldDivision.plain,
+                ordinary: CrestOrdinary.none,
+                trim: CrestTrim.none,
+                symbol: CrestSymbol.mountain,
+                chargeLayout: CrestChargeLayout.single,
+                backplateColorIndex: 1,
+                secondaryFieldColorIndex: 1,
+                ordinaryColorIndex: 2,
+                trimColorIndex: 1,
+                symbolColorIndex: 2,
+                startingPresetID: nil,
+                edgeColorIndex: 1,
+                palette: nil,
+                charge: nil,
+                plateScale: 1,
+                edgeWidth: 0,
+                divisionCount: 4,
+                finish: CrestFinish.flat,
+                ordinaryWidth: 1,
+                trimWeight: 1,
+                trimDetail: 12,
+                chargeScale: 1,
+                chargeOffset: 0,
+                chargeWeight: CrestChargeWeight.bold,
+                sheenAngle: 45,
+                sealTeeth: 12,
+                showsOutline: false,
+                depth: CrestDepth.none,
+                paletteGradients: nil
+            ),
+            renderingVersion: 4,
+            folderColorIntensity: 0,
+            textColorMode: SpaceTextColorMode.light,
+            hasCustomAppearance: false,
+            gradientKind: nil,
+            symbolGradient: nil,
+            colorGradients: nil,
+            dress: SpaceDress(
+                text: SidebarTextDress(
+                    color: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1)
+                ),
+                folders: nil,
+                commandPalette: SpacePaletteLook(
+                    light: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.207, green: 0.609, blue: 0.852, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    ),
+                    dark: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.207, green: 0.609, blue: 0.852, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    )
+                ),
+                popovers: PopoverDress(
+                    backgroundColor: BrandColor(red: 0.12, green: 0.36, blue: 0.52, alpha: 1),
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1),
+                    accentColor: BrandColor(red: 0.874, green: 0.987, blue: 0.992, alpha: 1),
+                    accentOpacity: 1,
+                    buttonColor: BrandColor(red: 0.12, green: 0.36, blue: 0.52, alpha: 1),
+                    buttonOutlineColor: BrandColor(red: 0.874, green: 0.987, blue: 0.992, alpha: 1)
+                ),
+                controls: ControlsDress(
+                    fillColor: BrandColor(red: 0.12, green: 0.36, blue: 0.52, alpha: 1),
+                    fillOpacity: 0.9,
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1)
+                )
+            )
+        ),
+        darkLook: nil
+    )
+    static let orchid = SpaceScheme(
+        tag: 8,
+        name: "orchid",
+        title: LocalizedStringResource("Orchid"),
+        look: SpaceBranding(
+            colors: ColorPalette(
+                colors: [
+                    BrandColor(red: 0.648, green: 0.39, blue: 0.821, alpha: 1),
+                    BrandColor(red: 0.76, green: 0.402, blue: 0.736, alpha: 1),
+                    BrandColor(red: 0.873, green: 0.415, blue: 0.651, alpha: 1)
+                ]
+            ),
+            bannerPattern: SpaceBannerPattern.solid,
+            bannerStrength: 1,
+            readabilityFade: 0,
+            keepsControlsReadable: false,
+            themeMode: SpaceThemeMode.gradient,
+            gradientAngle: 90,
+            textureStrength: 0,
+            iconStyle: SpaceIconStyle.simpleSymbol,
+            symbolColor: BrandColor(red: 1, green: 0.94, blue: 0.992, alpha: 1),
+            crest: SpaceCrest(
+                backplate: CrestBackplate.shield,
+                fieldDivision: CrestFieldDivision.plain,
+                ordinary: CrestOrdinary.none,
+                trim: CrestTrim.none,
+                symbol: CrestSymbol.mountain,
+                chargeLayout: CrestChargeLayout.single,
+                backplateColorIndex: 1,
+                secondaryFieldColorIndex: 1,
+                ordinaryColorIndex: 2,
+                trimColorIndex: 1,
+                symbolColorIndex: 2,
+                startingPresetID: nil,
+                edgeColorIndex: 1,
+                palette: nil,
+                charge: nil,
+                plateScale: 1,
+                edgeWidth: 0,
+                divisionCount: 4,
+                finish: CrestFinish.flat,
+                ordinaryWidth: 1,
+                trimWeight: 1,
+                trimDetail: 12,
+                chargeScale: 1,
+                chargeOffset: 0,
+                chargeWeight: CrestChargeWeight.bold,
+                sheenAngle: 45,
+                sealTeeth: 12,
+                showsOutline: false,
+                depth: CrestDepth.none,
+                paletteGradients: nil
+            ),
+            renderingVersion: 4,
+            folderColorIntensity: 0,
+            textColorMode: SpaceTextColorMode.light,
+            hasCustomAppearance: false,
+            gradientKind: nil,
+            symbolGradient: nil,
+            colorGradients: nil,
+            dress: SpaceDress(
+                text: SidebarTextDress(
+                    color: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1)
+                ),
+                folders: nil,
+                commandPalette: SpacePaletteLook(
+                    light: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.648, green: 0.39, blue: 0.821, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    ),
+                    dark: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.648, green: 0.39, blue: 0.821, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    )
+                ),
+                popovers: PopoverDress(
+                    backgroundColor: BrandColor(red: 0.4, green: 0.22, blue: 0.52, alpha: 1),
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1),
+                    accentColor: BrandColor(red: 1, green: 0.94, blue: 0.992, alpha: 1),
+                    accentOpacity: 1,
+                    buttonColor: BrandColor(red: 0.4, green: 0.22, blue: 0.52, alpha: 1),
+                    buttonOutlineColor: BrandColor(red: 1, green: 0.94, blue: 0.992, alpha: 1)
+                ),
+                controls: ControlsDress(
+                    fillColor: BrandColor(red: 0.4, green: 0.22, blue: 0.52, alpha: 1),
+                    fillOpacity: 0.9,
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1)
+                )
+            )
+        ),
+        darkLook: nil
+    )
+    static let citrus = SpaceScheme(
+        tag: 9,
+        name: "citrus",
+        title: LocalizedStringResource("Citrus"),
+        look: SpaceBranding(
+            colors: ColorPalette(
+                colors: [
+                    BrandColor(red: 0.707, green: 0.86, blue: 0.406, alpha: 1),
+                    BrandColor(red: 0.818, green: 0.856, blue: 0.396, alpha: 1),
+                    BrandColor(red: 0.93, green: 0.853, blue: 0.387, alpha: 1)
+                ]
+            ),
+            bannerPattern: SpaceBannerPattern.solid,
+            bannerStrength: 1,
+            readabilityFade: 0,
+            keepsControlsReadable: false,
+            themeMode: SpaceThemeMode.gradient,
+            gradientAngle: 90,
+            textureStrength: 0,
+            iconStyle: SpaceIconStyle.simpleSymbol,
+            symbolColor: BrandColor(red: 0.205, green: 0.386, blue: 0.164, alpha: 1),
+            crest: SpaceCrest(
+                backplate: CrestBackplate.shield,
+                fieldDivision: CrestFieldDivision.plain,
+                ordinary: CrestOrdinary.none,
+                trim: CrestTrim.none,
+                symbol: CrestSymbol.mountain,
+                chargeLayout: CrestChargeLayout.single,
+                backplateColorIndex: 1,
+                secondaryFieldColorIndex: 1,
+                ordinaryColorIndex: 2,
+                trimColorIndex: 1,
+                symbolColorIndex: 2,
+                startingPresetID: nil,
+                edgeColorIndex: 1,
+                palette: nil,
+                charge: nil,
+                plateScale: 1,
+                edgeWidth: 0,
+                divisionCount: 4,
+                finish: CrestFinish.flat,
+                ordinaryWidth: 1,
+                trimWeight: 1,
+                trimDetail: 12,
+                chargeScale: 1,
+                chargeOffset: 0,
+                chargeWeight: CrestChargeWeight.bold,
+                sheenAngle: 45,
+                sealTeeth: 12,
+                showsOutline: false,
+                depth: CrestDepth.none,
+                paletteGradients: nil
+            ),
+            renderingVersion: 4,
+            folderColorIntensity: 0,
+            textColorMode: SpaceTextColorMode.dark,
+            hasCustomAppearance: false,
+            gradientKind: nil,
+            symbolGradient: nil,
+            colorGradients: nil,
+            dress: SpaceDress(
+                text: SidebarTextDress(
+                    color: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    secondaryColor: BrandColor(red: 0.361, green: 0.396, blue: 0.459, alpha: 1)
+                ),
+                folders: nil,
+                commandPalette: SpacePaletteLook(
+                    light: SpacePaletteSurface(
+                        tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                    ),
+                    dark: SpacePaletteSurface(
+                        tint: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1)
+                    )
+                ),
+                popovers: PopoverDress(
+                    backgroundColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.361, green: 0.396, blue: 0.459, alpha: 1),
+                    accentColor: BrandColor(red: 0.205, green: 0.386, blue: 0.164, alpha: 1),
+                    accentOpacity: 1,
+                    buttonColor: BrandColor(red: 0.965, green: 0.933, blue: 0.859, alpha: 1),
+                    buttonOutlineColor: BrandColor(red: 0.205, green: 0.386, blue: 0.164, alpha: 1)
+                ),
+                controls: ControlsDress(
+                    fillColor: BrandColor(red: 1, green: 1, blue: 1, alpha: 1),
+                    fillOpacity: 0.7,
+                    textColor: BrandColor(red: 0.09, green: 0.133, blue: 0.22, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.361, green: 0.396, blue: 0.459, alpha: 1)
+                )
+            )
+        ),
+        darkLook: nil
+    )
+    static let midnight = SpaceScheme(
+        tag: 10,
+        name: "midnight",
+        title: LocalizedStringResource("Midnight"),
+        look: SpaceBranding(
+            colors: ColorPalette(
+                colors: [
+                    BrandColor(red: 0.092, green: 0.152, blue: 0.295, alpha: 1),
+                    BrandColor(red: 0.152, green: 0.16, blue: 0.335, alpha: 1),
+                    BrandColor(red: 0.211, green: 0.169, blue: 0.375, alpha: 1)
+                ]
+            ),
+            bannerPattern: SpaceBannerPattern.solid,
+            bannerStrength: 1,
+            readabilityFade: 0,
+            keepsControlsReadable: false,
+            themeMode: SpaceThemeMode.gradient,
+            gradientAngle: 90,
+            textureStrength: 0.2,
+            iconStyle: SpaceIconStyle.simpleSymbol,
+            symbolColor: BrandColor(red: 0.705, green: 0.834, blue: 0.971, alpha: 1),
+            crest: SpaceCrest(
+                backplate: CrestBackplate.shield,
+                fieldDivision: CrestFieldDivision.plain,
+                ordinary: CrestOrdinary.none,
+                trim: CrestTrim.none,
+                symbol: CrestSymbol.mountain,
+                chargeLayout: CrestChargeLayout.single,
+                backplateColorIndex: 1,
+                secondaryFieldColorIndex: 1,
+                ordinaryColorIndex: 2,
+                trimColorIndex: 1,
+                symbolColorIndex: 2,
+                startingPresetID: nil,
+                edgeColorIndex: 1,
+                palette: nil,
+                charge: nil,
+                plateScale: 1,
+                edgeWidth: 0,
+                divisionCount: 4,
+                finish: CrestFinish.flat,
+                ordinaryWidth: 1,
+                trimWeight: 1,
+                trimDetail: 12,
+                chargeScale: 1,
+                chargeOffset: 0,
+                chargeWeight: CrestChargeWeight.bold,
+                sheenAngle: 45,
+                sealTeeth: 12,
+                showsOutline: false,
+                depth: CrestDepth.none,
+                paletteGradients: nil
+            ),
+            renderingVersion: 4,
+            folderColorIntensity: 0,
+            textColorMode: SpaceTextColorMode.light,
+            hasCustomAppearance: false,
+            gradientKind: nil,
+            symbolGradient: nil,
+            colorGradients: nil,
+            dress: SpaceDress(
+                text: SidebarTextDress(
+                    color: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1)
+                ),
+                folders: nil,
+                commandPalette: SpacePaletteLook(
+                    light: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.092, green: 0.152, blue: 0.295, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    ),
+                    dark: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.092, green: 0.152, blue: 0.295, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    )
+                ),
+                popovers: PopoverDress(
+                    backgroundColor: BrandColor(red: 0.211, green: 0.169, blue: 0.375, alpha: 1),
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1),
+                    accentColor: BrandColor(red: 0.705, green: 0.834, blue: 0.971, alpha: 1),
+                    accentOpacity: 1,
+                    buttonColor: BrandColor(red: 0.211, green: 0.169, blue: 0.375, alpha: 1),
+                    buttonOutlineColor: BrandColor(red: 0.705, green: 0.834, blue: 0.971, alpha: 1)
+                ),
+                controls: ControlsDress(
+                    fillColor: BrandColor(red: 0.211, green: 0.169, blue: 0.375, alpha: 1),
+                    fillOpacity: 0.9,
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1)
+                )
+            )
+        ),
+        darkLook: nil
+    )
+    static let forest = SpaceScheme(
+        tag: 11,
+        name: "forest",
+        title: LocalizedStringResource("Forest"),
+        look: SpaceBranding(
+            colors: ColorPalette(
+                colors: [
+                    BrandColor(red: 0.038, green: 0.215, blue: 0.138, alpha: 1),
+                    BrandColor(red: 0.019, green: 0.242, blue: 0.198, alpha: 1),
+                    BrandColor(red: 0, green: 0.268, blue: 0.257, alpha: 1)
+                ]
+            ),
+            bannerPattern: SpaceBannerPattern.solid,
+            bannerStrength: 1,
+            readabilityFade: 0,
+            keepsControlsReadable: false,
+            themeMode: SpaceThemeMode.gradient,
+            gradientAngle: 90,
+            textureStrength: 0.25,
+            iconStyle: SpaceIconStyle.simpleSymbol,
+            symbolColor: BrandColor(red: 0.727, green: 0.866, blue: 0.696, alpha: 1),
+            crest: SpaceCrest(
+                backplate: CrestBackplate.shield,
+                fieldDivision: CrestFieldDivision.plain,
+                ordinary: CrestOrdinary.none,
+                trim: CrestTrim.none,
+                symbol: CrestSymbol.mountain,
+                chargeLayout: CrestChargeLayout.single,
+                backplateColorIndex: 1,
+                secondaryFieldColorIndex: 1,
+                ordinaryColorIndex: 2,
+                trimColorIndex: 1,
+                symbolColorIndex: 2,
+                startingPresetID: nil,
+                edgeColorIndex: 1,
+                palette: nil,
+                charge: nil,
+                plateScale: 1,
+                edgeWidth: 0,
+                divisionCount: 4,
+                finish: CrestFinish.flat,
+                ordinaryWidth: 1,
+                trimWeight: 1,
+                trimDetail: 12,
+                chargeScale: 1,
+                chargeOffset: 0,
+                chargeWeight: CrestChargeWeight.bold,
+                sheenAngle: 45,
+                sealTeeth: 12,
+                showsOutline: false,
+                depth: CrestDepth.none,
+                paletteGradients: nil
+            ),
+            renderingVersion: 4,
+            folderColorIntensity: 0,
+            textColorMode: SpaceTextColorMode.light,
+            hasCustomAppearance: false,
+            gradientKind: nil,
+            symbolGradient: nil,
+            colorGradients: nil,
+            dress: SpaceDress(
+                text: SidebarTextDress(
+                    color: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1)
+                ),
+                folders: nil,
+                commandPalette: SpacePaletteLook(
+                    light: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.038, green: 0.215, blue: 0.138, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    ),
+                    dark: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.038, green: 0.215, blue: 0.138, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    )
+                ),
+                popovers: PopoverDress(
+                    backgroundColor: BrandColor(red: 0, green: 0.268, blue: 0.257, alpha: 1),
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1),
+                    accentColor: BrandColor(red: 0.727, green: 0.866, blue: 0.696, alpha: 1),
+                    accentOpacity: 1,
+                    buttonColor: BrandColor(red: 0, green: 0.268, blue: 0.257, alpha: 1),
+                    buttonOutlineColor: BrandColor(red: 0.727, green: 0.866, blue: 0.696, alpha: 1)
+                ),
+                controls: ControlsDress(
+                    fillColor: BrandColor(red: 0, green: 0.268, blue: 0.257, alpha: 1),
+                    fillOpacity: 0.9,
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1)
+                )
+            )
+        ),
+        darkLook: nil
+    )
+    static let ember = SpaceScheme(
+        tag: 12,
+        name: "ember",
+        title: LocalizedStringResource("Ember"),
+        look: SpaceBranding(
+            colors: ColorPalette(
+                colors: [
+                    BrandColor(red: 0.321, green: 0.083, blue: 0.102, alpha: 1),
+                    BrandColor(red: 0.378, green: 0.094, blue: 0.076, alpha: 1),
+                    BrandColor(red: 0.434, green: 0.104, blue: 0.05, alpha: 1)
+                ]
+            ),
+            bannerPattern: SpaceBannerPattern.solid,
+            bannerStrength: 1,
+            readabilityFade: 0,
+            keepsControlsReadable: false,
+            themeMode: SpaceThemeMode.gradient,
+            gradientAngle: 90,
+            textureStrength: 0.35,
+            iconStyle: SpaceIconStyle.simpleSymbol,
+            symbolColor: BrandColor(red: 0.954, green: 0.786, blue: 0.595, alpha: 1),
+            crest: SpaceCrest(
+                backplate: CrestBackplate.shield,
+                fieldDivision: CrestFieldDivision.plain,
+                ordinary: CrestOrdinary.none,
+                trim: CrestTrim.none,
+                symbol: CrestSymbol.mountain,
+                chargeLayout: CrestChargeLayout.single,
+                backplateColorIndex: 1,
+                secondaryFieldColorIndex: 1,
+                ordinaryColorIndex: 2,
+                trimColorIndex: 1,
+                symbolColorIndex: 2,
+                startingPresetID: nil,
+                edgeColorIndex: 1,
+                palette: nil,
+                charge: nil,
+                plateScale: 1,
+                edgeWidth: 0,
+                divisionCount: 4,
+                finish: CrestFinish.flat,
+                ordinaryWidth: 1,
+                trimWeight: 1,
+                trimDetail: 12,
+                chargeScale: 1,
+                chargeOffset: 0,
+                chargeWeight: CrestChargeWeight.bold,
+                sheenAngle: 45,
+                sealTeeth: 12,
+                showsOutline: false,
+                depth: CrestDepth.none,
+                paletteGradients: nil
+            ),
+            renderingVersion: 4,
+            folderColorIntensity: 0,
+            textColorMode: SpaceTextColorMode.light,
+            hasCustomAppearance: false,
+            gradientKind: nil,
+            symbolGradient: nil,
+            colorGradients: nil,
+            dress: SpaceDress(
+                text: SidebarTextDress(
+                    color: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1)
+                ),
+                folders: nil,
+                commandPalette: SpacePaletteLook(
+                    light: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.321, green: 0.083, blue: 0.102, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    ),
+                    dark: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.321, green: 0.083, blue: 0.102, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    )
+                ),
+                popovers: PopoverDress(
+                    backgroundColor: BrandColor(red: 0.434, green: 0.104, blue: 0.05, alpha: 1),
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1),
+                    accentColor: BrandColor(red: 0.954, green: 0.786, blue: 0.595, alpha: 1),
+                    accentOpacity: 1,
+                    buttonColor: BrandColor(red: 0.434, green: 0.104, blue: 0.05, alpha: 1),
+                    buttonOutlineColor: BrandColor(red: 0.954, green: 0.786, blue: 0.595, alpha: 1)
+                ),
+                controls: ControlsDress(
+                    fillColor: BrandColor(red: 0.434, green: 0.104, blue: 0.05, alpha: 1),
+                    fillOpacity: 0.9,
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1)
+                )
+            )
+        ),
+        darkLook: nil
+    )
+    static let plum = SpaceScheme(
+        tag: 13,
+        name: "plum",
+        title: LocalizedStringResource("Plum"),
+        look: SpaceBranding(
+            colors: ColorPalette(
+                colors: [
+                    BrandColor(red: 0.253, green: 0.102, blue: 0.243, alpha: 1),
+                    BrandColor(red: 0.251, green: 0.135, blue: 0.308, alpha: 1),
+                    BrandColor(red: 0.249, green: 0.168, blue: 0.372, alpha: 1)
+                ]
+            ),
+            bannerPattern: SpaceBannerPattern.solid,
+            bannerStrength: 1,
+            readabilityFade: 0,
+            keepsControlsReadable: false,
+            themeMode: SpaceThemeMode.gradient,
+            gradientAngle: 90,
+            textureStrength: 0,
+            iconStyle: SpaceIconStyle.simpleSymbol,
+            symbolColor: BrandColor(red: 0.923, green: 0.801, blue: 0.908, alpha: 1),
+            crest: SpaceCrest(
+                backplate: CrestBackplate.shield,
+                fieldDivision: CrestFieldDivision.plain,
+                ordinary: CrestOrdinary.none,
+                trim: CrestTrim.none,
+                symbol: CrestSymbol.mountain,
+                chargeLayout: CrestChargeLayout.single,
+                backplateColorIndex: 1,
+                secondaryFieldColorIndex: 1,
+                ordinaryColorIndex: 2,
+                trimColorIndex: 1,
+                symbolColorIndex: 2,
+                startingPresetID: nil,
+                edgeColorIndex: 1,
+                palette: nil,
+                charge: nil,
+                plateScale: 1,
+                edgeWidth: 0,
+                divisionCount: 4,
+                finish: CrestFinish.flat,
+                ordinaryWidth: 1,
+                trimWeight: 1,
+                trimDetail: 12,
+                chargeScale: 1,
+                chargeOffset: 0,
+                chargeWeight: CrestChargeWeight.bold,
+                sheenAngle: 45,
+                sealTeeth: 12,
+                showsOutline: false,
+                depth: CrestDepth.none,
+                paletteGradients: nil
+            ),
+            renderingVersion: 4,
+            folderColorIntensity: 0,
+            textColorMode: SpaceTextColorMode.light,
+            hasCustomAppearance: false,
+            gradientKind: nil,
+            symbolGradient: nil,
+            colorGradients: nil,
+            dress: SpaceDress(
+                text: SidebarTextDress(
+                    color: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1)
+                ),
+                folders: nil,
+                commandPalette: SpacePaletteLook(
+                    light: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.253, green: 0.102, blue: 0.243, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    ),
+                    dark: SpacePaletteSurface(
+                        tint: BrandColor(red: 0.253, green: 0.102, blue: 0.243, alpha: 1),
+                        opacity: 0.94,
+                        textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1)
+                    )
+                ),
+                popovers: PopoverDress(
+                    backgroundColor: BrandColor(red: 0.249, green: 0.168, blue: 0.372, alpha: 1),
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1),
+                    accentColor: BrandColor(red: 0.923, green: 0.801, blue: 0.908, alpha: 1),
+                    accentOpacity: 1,
+                    buttonColor: BrandColor(red: 0.249, green: 0.168, blue: 0.372, alpha: 1),
+                    buttonOutlineColor: BrandColor(red: 0.923, green: 0.801, blue: 0.908, alpha: 1)
+                ),
+                controls: ControlsDress(
+                    fillColor: BrandColor(red: 0.249, green: 0.168, blue: 0.372, alpha: 1),
+                    fillOpacity: 0.9,
+                    textColor: BrandColor(red: 1, green: 0.992, blue: 0.969, alpha: 1),
+                    secondaryTextColor: BrandColor(red: 0.78, green: 0.792, blue: 0.812, alpha: 1)
+                )
+            )
+        ),
+        darkLook: nil
+    )
+    static let arcSky = SpaceScheme(
+        tag: 14,
         name: "arcSky",
         title: LocalizedStringResource("Arc Sky"),
         look: SpaceBranding(
@@ -25760,7 +26924,7 @@ struct SpaceScheme: Hashable, Sendable {
         )
     )
     static let arcBlush = SpaceScheme(
-        tag: 3,
+        tag: 15,
         name: "arcBlush",
         title: LocalizedStringResource("Arc Blush"),
         look: SpaceBranding(
@@ -25958,7 +27122,7 @@ struct SpaceScheme: Hashable, Sendable {
         )
     )
     static let latte = SpaceScheme(
-        tag: 4,
+        tag: 16,
         name: "catppuccinLatte",
         title: LocalizedStringResource("Catppuccin Latte"),
         look: SpaceBranding(
@@ -26062,7 +27226,7 @@ struct SpaceScheme: Hashable, Sendable {
         darkLook: nil
     )
     static let latteMocha = SpaceScheme(
-        tag: 5,
+        tag: 17,
         name: "catppuccinLatteMocha",
         title: LocalizedStringResource("Catppuccin Latte / Mocha"),
         look: SpaceBranding(
@@ -26263,7 +27427,7 @@ struct SpaceScheme: Hashable, Sendable {
         )
     )
     static let frappe = SpaceScheme(
-        tag: 6,
+        tag: 18,
         name: "catppuccinFrappe",
         title: LocalizedStringResource("Catppuccin Frappé"),
         look: SpaceBranding(
@@ -26367,7 +27531,7 @@ struct SpaceScheme: Hashable, Sendable {
         darkLook: nil
     )
     static let macchiato = SpaceScheme(
-        tag: 7,
+        tag: 19,
         name: "catppuccinMacchiato",
         title: LocalizedStringResource("Catppuccin Macchiato"),
         look: SpaceBranding(
@@ -26471,7 +27635,7 @@ struct SpaceScheme: Hashable, Sendable {
         darkLook: nil
     )
     static let mocha = SpaceScheme(
-        tag: 8,
+        tag: 20,
         name: "catppuccinMocha",
         title: LocalizedStringResource("Catppuccin Mocha"),
         look: SpaceBranding(
@@ -26578,6 +27742,18 @@ struct SpaceScheme: Hashable, Sendable {
     static let all: [SpaceScheme] = [
         neutral,
         crestDefault,
+        blossom,
+        lagoon,
+        lilac,
+        linen,
+        sunset,
+        ocean,
+        orchid,
+        citrus,
+        midnight,
+        forest,
+        ember,
+        plum,
         arcSky,
         arcBlush,
         latte,

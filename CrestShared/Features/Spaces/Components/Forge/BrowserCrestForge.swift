@@ -143,22 +143,27 @@ struct BrowserCrestForge: View {
 
     // MARK: - Page
 
-    /// The page: a Space's palettes under its stage, its icon, and More
-    /// Customization; a theme, which has no icon, shows what it carries at
-    /// once.
+    /// The page: a Space's icon under its stage, and More Customization; a
+    /// theme, which has no icon, shows the palettes under its stage and what
+    /// it carries at once. A Space takes its colors from its theme, so the
+    /// palettes are themes in the Theme row, not a row of their own here.
     @ViewBuilder private var page: some View {
-        Section {
-            BrowserSpacePalettePicker(branding: $branding)
-        } header: {
-            stageHeader
-        }
         if offersIcon {
             Section {
                 BrowserSpaceIconPicker(branding: $branding, symbol: $symbol)
             } header: {
-                CrestSettingsSectionHeading(title: "Icon")
+                VStack(alignment: .leading, spacing: 0) {
+                    stageHeader
+                    CrestSettingsSectionHeading(title: "Icon")
+                }
             }
             BrowserMoreCustomizationHeader(isExpanded: $showsMore)
+        } else {
+            Section {
+                BrowserSpacePalettePicker(branding: $branding)
+            } header: {
+                stageHeader
+            }
         }
         if showsMore || !offersIcon {
             sidebarSections

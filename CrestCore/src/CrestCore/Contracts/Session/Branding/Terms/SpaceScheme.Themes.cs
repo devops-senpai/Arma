@@ -6,6 +6,14 @@ namespace CrestCore.Contracts;
 public sealed partial class SpaceScheme {
     #region Static Variables
 
+    // The brand's ink and paper, which the palettes' dresses set their text
+    // and surfaces in.
+    private static readonly BrandColor Ink = new(0.090, 0.133, 0.220);
+    private static readonly BrandColor InkMuted = new(0.361, 0.396, 0.459);
+    private static readonly BrandColor Paper = new(1, 0.992, 0.969);
+    private static readonly BrandColor PaperMuted = new(0.780, 0.792, 0.812);
+    private static readonly BrandColor Parchment = new(0.965, 0.933, 0.859);
+
     /// Crest's own look as a theme: ink washing down through dusk into sky,
     /// the colors of Crest's mark, with the Space's icon in butter, its text in
     /// paper and its palette, popovers and controls on ink.
@@ -18,6 +26,47 @@ public sealed partial class SpaceScheme {
             Popovers: new(new(0.169, 0.227, 0.361), new(1, 0.992, 0.969), new(0.636, 0.648, 0.669),
                 new(0.949, 0.757, 0.306), 1, new(0.180, 0.294, 0.408), new(0.353, 0.608, 0.784)),
             Controls: new(new(0.180, 0.294, 0.408), 0.9, new(1, 0.992, 0.969), new(0.636, 0.648, 0.669)))));
+
+    // Crest's palettes as themes, each a Background of two colors running top
+    // to bottom and an Accent set well off it, which draws the Space's icon:
+    // light pastels and Citrus with ink text on paper surfaces, the clear
+    // brights and deep tones with paper text on their own colors.
+    public static readonly SpaceScheme Blossom = new("blossom", "Blossom", PaletteLook(
+        [new(0.997, 0.814, 0.864), new(1.000, 0.846, 0.778)], accent: new(0.779, 0.382, 0.455), texture: 0,
+        SpaceTextColorMode.Dark, LightDress(new(0.779, 0.382, 0.455))));
+    public static readonly SpaceScheme Lagoon = new("lagoon", "Lagoon", PaletteLook(
+        [new(0.752, 0.929, 0.876), new(0.730, 0.904, 0.962)], accent: new(0.000, 0.537, 0.628), texture: 0,
+        SpaceTextColorMode.Dark, LightDress(new(0.000, 0.537, 0.628))));
+    public static readonly SpaceScheme Lilac = new("lilac", "Lilac", PaletteLook(
+        [new(0.876, 0.831, 0.971), new(0.799, 0.876, 1.000)], accent: new(0.504, 0.409, 0.747), texture: 0,
+        SpaceTextColorMode.Dark, LightDress(new(0.504, 0.409, 0.747))));
+    public static readonly SpaceScheme Linen = new("linen", "Linen", PaletteLook(
+        [new(0.965, 0.899, 0.811), new(0.991, 0.866, 0.812)], accent: new(0.749, 0.433, 0.244), texture: 0.5,
+        SpaceTextColorMode.Dark, LightDress(new(0.749, 0.433, 0.244))));
+    public static readonly SpaceScheme Sunset = new("sunset", "Sunset", PaletteLook(
+        [new(0.963, 0.533, 0.425), new(0.953, 0.682, 0.346)], accent: new(1.000, 0.970, 0.922), texture: 0.2,
+        SpaceTextColorMode.Light, DeepDress(new(0.963, 0.533, 0.425), new(0.620, 0.300, 0.220), new(1.000, 0.970, 0.922))));
+    public static readonly SpaceScheme Ocean = new("ocean", "Ocean", PaletteLook(
+        [new(0.207, 0.609, 0.852), new(0.211, 0.729, 0.729)], accent: new(0.874, 0.987, 0.992), texture: 0,
+        SpaceTextColorMode.Light, DeepDress(new(0.207, 0.609, 0.852), new(0.120, 0.360, 0.520), new(0.874, 0.987, 0.992))));
+    public static readonly SpaceScheme Orchid = new("orchid", "Orchid", PaletteLook(
+        [new(0.648, 0.390, 0.821), new(0.873, 0.415, 0.651)], accent: new(1.000, 0.940, 0.992), texture: 0,
+        SpaceTextColorMode.Light, DeepDress(new(0.648, 0.390, 0.821), new(0.400, 0.220, 0.520), new(1.000, 0.940, 0.992))));
+    public static readonly SpaceScheme Citrus = new("citrus", "Citrus", PaletteLook(
+        [new(0.707, 0.860, 0.406), new(0.930, 0.853, 0.387)], accent: new(0.205, 0.386, 0.164), texture: 0,
+        SpaceTextColorMode.Dark, LightDress(new(0.205, 0.386, 0.164))));
+    public static readonly SpaceScheme Midnight = new("midnight", "Midnight", PaletteLook(
+        [new(0.092, 0.152, 0.295), new(0.211, 0.169, 0.375)], accent: new(0.705, 0.834, 0.971), texture: 0.2,
+        SpaceTextColorMode.Light, DeepDress(new(0.092, 0.152, 0.295), new(0.211, 0.169, 0.375), new(0.705, 0.834, 0.971))));
+    public static readonly SpaceScheme Forest = new("forest", "Forest", PaletteLook(
+        [new(0.038, 0.215, 0.138), new(0.000, 0.268, 0.257)], accent: new(0.727, 0.866, 0.696), texture: 0.25,
+        SpaceTextColorMode.Light, DeepDress(new(0.038, 0.215, 0.138), new(0.000, 0.268, 0.257), new(0.727, 0.866, 0.696))));
+    public static readonly SpaceScheme Ember = new("ember", "Ember", PaletteLook(
+        [new(0.321, 0.083, 0.102), new(0.434, 0.104, 0.050)], accent: new(0.954, 0.786, 0.595), texture: 0.35,
+        SpaceTextColorMode.Light, DeepDress(new(0.321, 0.083, 0.102), new(0.434, 0.104, 0.050), new(0.954, 0.786, 0.595))));
+    public static readonly SpaceScheme Plum = new("plum", "Plum", PaletteLook(
+        [new(0.253, 0.102, 0.243), new(0.249, 0.168, 0.372)], accent: new(0.923, 0.801, 0.908), texture: 0,
+        SpaceTextColorMode.Light, DeepDress(new(0.253, 0.102, 0.243), new(0.249, 0.168, 0.372), new(0.923, 0.801, 0.908))));
 
     // Themes Arma ships with, after Arc's sidebar and the Catppuccin palettes
     // (catppuccin.com/palette); Latte / Mocha pairs the light and darkest flavors.
@@ -149,7 +198,8 @@ public sealed partial class SpaceScheme {
                 Controls: new(new(0.192, 0.196, 0.267), 0.9, new(0.804, 0.839, 0.957), new(0.651, 0.678, 0.784)))));
 
     /// The themes, in the order the gallery lists them after Crest's own schemes.
-    private static IReadOnlyList<SpaceScheme> Themes => [CrestDefault, ArcSky, ArcBlush, Latte, LatteMocha, Frappe, Macchiato, Mocha];
+    private static IReadOnlyList<SpaceScheme> Themes => [CrestDefault, Blossom, Lagoon, Lilac, Linen, Sunset, Ocean, Orchid, Citrus,
+        Midnight, Forest, Ember, Plum, ArcSky, ArcBlush, Latte, LatteMocha, Frappe, Macchiato, Mocha];
 
     #endregion
 
@@ -185,10 +235,43 @@ public sealed partial class SpaceScheme {
     /// toward `angle`, with light text, and the Space's icon in place of a
     /// crest, drawn in `symbol`, dressed in `dress`.
     private static SpaceBranding WashLook(Tincture[] colors, double angle, Tincture symbol, SpaceDress dress) =>
-        new(new([.. colors.Select(tincture => tincture.Color)]), SpaceBannerPattern.Solid, BannerStrength: 1, ReadabilityFade: 0,
-            KeepsControlsReadable: false, SpaceThemeMode.Gradient, angle, TextureStrength: 0, SpaceIconStyle.SimpleSymbol, symbol.Color,
-            SpaceBranding.Neutral.Crest, CrestVocabulary.Customization.Version, FolderColorIntensity: 0, SpaceTextColorMode.Light,
-            HasCustomAppearance: false, Dress: dress);
+        PaletteLook([.. colors.Select(tincture => tincture.Color)], symbol.Color, texture: 0, SpaceTextColorMode.Light, dress, angle);
+
+    /// A palette's look: `colors` as one gradient running toward `angle`, top
+    /// to bottom unless told otherwise, under grain at `texture`, its text in
+    /// `text`, and the Space's icon in place of a crest, drawn in `accent`,
+    /// dressed in `dress`. A palette of two colors carries their midpoint as a
+    /// third, which draws the same gradient and gives the neutral crest the
+    /// three colors it indexes.
+    private static SpaceBranding PaletteLook(BrandColor[] colors, BrandColor accent, double texture, SpaceTextColorMode text,
+        SpaceDress dress, double angle = 90) =>
+        new(new(colors.Length == 2 ? [colors[0], Midpoint(colors[0], colors[1]), colors[1]] : colors), SpaceBannerPattern.Solid,
+            BannerStrength: 1, ReadabilityFade: 0, KeepsControlsReadable: false, SpaceThemeMode.Gradient, angle, texture,
+            SpaceIconStyle.SimpleSymbol, accent, SpaceBranding.Neutral.Crest, CrestVocabulary.Customization.Version,
+            FolderColorIntensity: 0, text, HasCustomAppearance: false, Dress: dress);
+
+    /// The color halfway between `first` and `second`, to the thousandth a
+    /// stored color keeps.
+    private static BrandColor Midpoint(BrandColor first, BrandColor second) =>
+        new(Math.Round((first.Red + second.Red) / 2, 3), Math.Round((first.Green + second.Green) / 2, 3),
+            Math.Round((first.Blue + second.Blue) / 2, 3));
+
+    /// The dress a light palette wears: ink text, its palette, popovers and
+    /// controls on paper, and `accent` for its highlights.
+    private static SpaceDress LightDress(BrandColor accent) => new(
+        Text: new(Ink, InkMuted), Folders: null,
+        CommandPalette: new(new(Paper, 0.94, Ink), new(Paper, 0.94, Ink)),
+        Popovers: new(Paper, Ink, InkMuted, accent, 1, Parchment, accent),
+        Controls: new(new(1, 1, 1), 0.7, Ink, InkMuted));
+
+    /// The dress a bright or deep palette wears: paper text, its palette on
+    /// `surface`, its popovers and controls on `popover`, and `accent` for its
+    /// highlights.
+    private static SpaceDress DeepDress(BrandColor surface, BrandColor popover, BrandColor accent) => new(
+        Text: new(Paper, PaperMuted), Folders: null,
+        CommandPalette: new(new(surface, 0.94, Paper), new(surface, 0.94, Paper)),
+        Popovers: new(popover, Paper, PaperMuted, accent, 1, popover, accent),
+        Controls: new(popover, 0.9, Paper, PaperMuted));
 
     #endregion
 }
