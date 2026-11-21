@@ -1,12 +1,12 @@
 import SwiftUI
 
 /// Setup as one window and a sheet of Crest's paper: the welcome fills the
-/// window as Crest's website opens, so the way in is the one thing to do.
-/// Continue slides the sheet to a third of the window, the steps on it in
-/// turn, and beside it comes the Crest window setup builds, Crest's own
-/// browser over a live copy of what setup would leave, which every choice
-/// changes and which the person can use, in a room of paper in the colors
-/// of the look it shows.
+/// window, Arma's banner on the room's own wash, so the way in is the one
+/// thing to do. Continue slides the sheet to a third of the window, the
+/// steps on it in turn, and beside it comes the Crest window setup builds,
+/// Crest's own browser over a live copy of what setup would leave, which
+/// every choice changes and which the person can use, in a room of paper in
+/// the colors of the look it shows.
 struct BrowserSetupWindowContent: View {
     // MARK: - Variables
 
@@ -120,7 +120,9 @@ struct BrowserSetupWindowContent: View {
         )
         .frame(width: windowWidth, alignment: .leading)
         .frame(maxHeight: .infinity)
-        .background { BrowserSetupPaper() }
+        // The welcome lies on the room itself; the paper comes in under the
+        // steps as the sheet slides to its third.
+        .background { BrowserSetupPaper().opacity(isLanding ? 0 : 1) }
         .frame(width: width, alignment: .leading)
         .clipped()
         .overlay(alignment: .trailing) {

@@ -39,9 +39,6 @@ enum CrestBrandTheme {
     /// 4.5:1 on ink.
     static let actionComponents = CrestBrandPalette.crestBlueComponents
 
-    static let canvasLightComponents = CrestBrandPalette.creamComponents
-    static let canvasDarkComponents = CrestBrandPalette.inkComponents
-
     static let surfaceLightComponents = CrestBrandPalette.paperComponents
     static let surfaceDarkComponents = CrestBrandPalette.slateComponents
 
@@ -86,8 +83,10 @@ enum CrestBrandTheme {
         light: accentTextLightComponents,
         dark: accentTextDarkComponents
     )
-    /// The page the content sits on.
-    static let canvas = dynamic(light: canvasLightComponents, dark: canvasDarkComponents)
+    /// The page the content sits on: the window's own background, as every
+    /// page drew before Crest's chrome went on paper, so Arma's Settings,
+    /// setup and guide match the Mac around them.
+    static let canvas = CrestColor.windowBackground
     /// A raised card or panel on the canvas.
     static let surface = dynamic(light: surfaceLightComponents, dark: surfaceDarkComponents)
     /// A flyout floating over a page or the window: paper in the light,
@@ -142,8 +141,10 @@ enum CrestBrandTheme {
         components(accentTextLightComponents, accentTextDarkComponents, colorScheme).color
     }
 
+    /// The window's background follows the appearance it is drawn in, so the
+    /// scheme asked for makes no difference to it.
     static func canvas(_ colorScheme: ColorScheme) -> Color {
-        components(canvasLightComponents, canvasDarkComponents, colorScheme).color
+        CrestColor.windowBackground
     }
 
     static func surface(_ colorScheme: ColorScheme) -> Color {

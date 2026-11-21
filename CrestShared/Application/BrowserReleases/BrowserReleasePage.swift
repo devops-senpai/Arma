@@ -23,8 +23,9 @@ struct BrowserReleasePage: Equatable, Sendable {
 
     // MARK: - Static Variables
 
+    // Arma's releases live on GitHub, one page per tag, on every channel.
     private static let releases: URL = {
-        guard let url = URL(string: "https://crestbrowser.com/releases") else {
+        guard let url = URL(string: "https://github.com/devops-senpai/Arma/releases") else {
             preconditionFailure("Invalid release notes address")
         }
         return url
@@ -36,7 +37,7 @@ struct BrowserReleasePage: Equatable, Sendable {
     let channel: Channel
 
     var url: URL {
-        Self.releases.appending(components: channel.platform, channel.name, version, directoryHint: .isDirectory)
+        Self.releases.appending(components: "tag", "v\(version)")
     }
 
     // MARK: - Actions - This Build
