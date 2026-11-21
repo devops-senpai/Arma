@@ -14,7 +14,7 @@ namespace CrestCore.Native;
 public static class ContractCodec {
     /// <summary>SHA-256 of the canonical contract schema.</summary>
     public static ReadOnlySpan<byte> Fingerprint => [
-        0xed, 0x72, 0x96, 0x16, 0x23, 0x4b, 0x26, 0xc1, 0xc0, 0x30, 0xb8, 0xef, 0xd7, 0xa5, 0xd9, 0x2f, 0x1b, 0x22, 0xc1, 0xf7, 0xd6, 0x3a, 0x2e, 0xf5, 0xc6, 0x36, 0x24, 0xca, 0x0c, 0xa1, 0x24, 0xe2
+        0x7c, 0xf4, 0x95, 0x25, 0xd8, 0xff, 0x2f, 0xcb, 0xc0, 0x2f, 0x0c, 0xe2, 0x24, 0x7a, 0x26, 0xe3, 0x5b, 0x2d, 0x35, 0x8c, 0xa8, 0xb9, 0x1a, 0xfd, 0xc4, 0x71, 0x60, 0x89, 0xd3, 0xaa, 0x21, 0xff
     ];
 
     /// <summary>SHA-256 of the engine contract alone, which an engine binding registers with.</summary>
@@ -7539,6 +7539,7 @@ public static class ContractCodec {
             reader.ReadList(() => ReadNeverSavedSite(reader)),
             ReadCredentialAuthentication(reader),
             reader.ReadInt32(),
+            reader.ReadBool(),
             reader.ReadBool());
     }
 
@@ -7555,6 +7556,7 @@ public static class ContractCodec {
         WriteCredentialAuthentication(writer, value.Authentication);
         writer.WriteInt32(value.SavePromptSeconds);
         writer.WriteBool(value.SuggestsInPrivateWindows);
+        writer.WriteBool(value.AllowsCommandLine);
     }
 
     public static CredentialRecord ReadCredentialRecord(WireReader reader) {
