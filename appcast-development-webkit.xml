@@ -6,6 +6,23 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.215</title>
+            <pubDate>Sun, 22 Nov 2026 11:04:57 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>1000215</sparkle:version>
+            <sparkle:shortVersionString>0.10.215</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Crest's roadmap moves with it to crest-browser; Arma's own links stay.
+
+### Internal
+- Crest's roadmap board now lives at github.com/orgs/crest-browser/projects/1 and its Xcode Cloud builds accept only the new address. Arma's About page, README and update feeds keep pointing at Arma's own repository and issues.
+- The macOS 15 glass stand-in and the crest-browser documentation fixes from 0.10.214 are folded into their commits.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.215/Arma-0.10.215.dmg" length="196225183" type="application/octet-stream" sparkle:edSignature="0dD13Tzlcqr8ktJDAFgJudsSs4l0EDa3RTegvCxJer62ugMuZ0aSTc+Lt5e9g2kFnAJFXazhxL9IB6m7SEavDw=="/>
+        </item>
+        <item>
             <title>0.10.214</title>
             <pubDate>Sun, 22 Nov 2026 00:11:50 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1161,6 +1178,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: 5n3on0tzWOJmWxz7lHIHqHcMXSY++cC9Dk4rb6yr9QKmKg/g0bHQHRpQfldzBwG/ib20TXlpDveqo8NpaP+NDQ==
-length: 89613
+edSignature: RQAbsEUbwmfNogNQi/vyHkXcCO1SbVXEPf1Eygdij8CDk5+eEyIaNXz1T2hq6Db+JUV7NNLq0clIwvB2jsNODg==
+length: 90954
 -->
