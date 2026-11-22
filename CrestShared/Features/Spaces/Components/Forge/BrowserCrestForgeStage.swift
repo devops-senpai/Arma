@@ -20,6 +20,7 @@ struct BrowserCrestForgeStage: View {
 
     @State private var openLayer: BrowserCrestForgeLayer?
     @State private var openSidebarColor: BrowserSpaceBrandColorRole?
+    @State var openTextColor: String?
 
     var body: some View {
         stage
@@ -30,17 +31,16 @@ struct BrowserCrestForgeStage: View {
             .accessibilityIdentifier("space-forge-stage")
     }
 
-    /// The crest beside its colors on the Mac; on iPhone and iPad, beside them
-    /// where there's room for both and above them where there isn't.
-    @ViewBuilder private var stage: some View {
-        #if os(macOS)
+    /// The crest beside its colors where there's room for both, and above
+    /// them where there isn't: beside Settings › Themes' list of themes, the
+    /// page offers the stage less than the wide layout needs at the window's
+    /// usual width, and a column of rows runs past the page's edge rather
+    /// than shrink.
+    private var stage: some View {
+        ViewThatFits(in: .horizontal) {
             wideStage
-        #else
-            ViewThatFits(in: .horizontal) {
-                wideStage
-                compactStage
-            }
-        #endif
+            compactStage
+        }
     }
 
     private var wideStage: some View {
@@ -76,6 +76,7 @@ struct BrowserCrestForgeStage: View {
     private func mark(size: CGFloat) -> some View {
         BrowserCrestStudioMark(branding: branding, symbol: symbol, size: size)
             .accessibilityLabel("Crest preview")
+            .replacedInThemeForge { themeStage($0) }
     }
 
     /// The Space's name under its crest, where the page doesn't already
@@ -84,6 +85,7 @@ struct BrowserCrestForgeStage: View {
         if let name {
             BrowserInlineSpaceName(name: name, size: 20, titleFont: .title3.weight(.semibold))
                 .frame(maxWidth: BrowserCrestForgeMetrics.nameWidth)
+                .replacedInThemeForge { _ in EmptyView() }
         }
     }
 
@@ -94,6 +96,9 @@ struct BrowserCrestForgeStage: View {
             swatchGroup("Colors") {
                 ForEach(shownRoles) { role in
                     sidebarSwatch(role, columnWidth: sidebarColumnWidth ?? columnWidth)
+                }
+                ForEach(BrowserCrestForgeTextColor.all) { text in
+                    textSwatch(text, columnWidth: sidebarColumnWidth ?? columnWidth)
                 }
             }
             if showsCrestColors, branding.iconStyle == .layeredCrest {
@@ -145,6 +150,7 @@ struct BrowserCrestForgeStage: View {
                 ],
                 startPoint: start, endPoint: end)
         }
+        .replacedInThemeForge { _ in Color.black.opacity(0.82) }
     }
 
     private var tools: some View {
@@ -218,7 +224,7 @@ struct BrowserCrestForgeStage: View {
 
 /// One color on the stage, named by what it paints. A part the crest doesn't
 /// draw shows its color faintly, says on hover how to add it, and leads there.
-private struct BrowserCrestForgeSwatch: View {
+struct BrowserCrestForgeSwatch: View {
     let title: LocalizedStringResource
     /// What the part wears: one color, or a gradient.
     let fill: CrestColorFill

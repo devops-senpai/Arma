@@ -10,7 +10,7 @@ namespace CrestCore.Application;
 /// Additive fields in an accepted wire record belong to that record. A local
 /// projection replaces fields this client understands and carries the rest
 /// forward. Removed known fields and removed collection members stay removed.
-internal static class NativeSyncCompatibility {
+internal static partial class NativeSyncCompatibility {
     #region Variables
 
     private sealed record Shape(string Names, Dictionary<string, Shape>? Children = null, Shape? Element = null, bool ById = false) {
@@ -38,13 +38,14 @@ internal static class NativeSyncCompatibility {
         new() { [K.Palette] = List(Color), [K.Charge] = Charge, [K.PaletteGradients] = List(Gradient) });
 
     private static readonly Shape Branding = new(
-        [K.Colors, K.BannerPattern, K.BannerStrength, K.ReadabilityFade, K.KeepsControlsReadable, K.ThemeMode, K.GradientAngle, K.ShowsTexture, K.TextureStrength, K.IconStyle, K.SymbolColor, K.Crest, K.RenderingVersion, K.FolderColorIntensity, K.TextColorMode, K.HasCustomAppearance, K.GradientKind, K.SymbolGradient, K.ColorGradients],
+        [K.Colors, K.BannerPattern, K.BannerStrength, K.ReadabilityFade, K.KeepsControlsReadable, K.ThemeMode, K.GradientAngle, K.ShowsTexture, K.TextureStrength, K.IconStyle, K.SymbolColor, K.Crest, K.RenderingVersion, K.FolderColorIntensity, K.TextColorMode, K.HasCustomAppearance, K.GradientKind, K.SymbolGradient, K.ColorGradients, .. DressKeys.Split(' ')],
         new() {
             [K.Colors] = List(Color),
             [K.SymbolColor] = Color,
             [K.Crest] = Crest,
             [K.SymbolGradient] = Gradient,
-            [K.ColorGradients] = List(Gradient)
+            [K.ColorGradients] = List(Gradient),
+            [StoredSessionCodec.DressKey.Dress] = Dress
         });
 
     private static readonly Shape SearchProvider = new([K.Id, K.Name, K.SearchUrlTemplate, K.SuggestionUrlTemplate]);
@@ -68,6 +69,7 @@ internal static class NativeSyncCompatibility {
             [K.Id] = Identity,
             [K.PrimarySpaceId] = Identity,
             [K.Branding] = Branding,
+            [StoredSessionCodec.DressKey.DarkBranding] = Branding,
             [K.BrowsingPreferences] = Browsing,
             [K.SplitGroups] = List(Group, true)
         }),
