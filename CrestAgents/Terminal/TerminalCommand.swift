@@ -25,6 +25,7 @@ enum TerminalCommand: Codable, Sendable {
     case automation(TerminalAutomationCommand)
     case theme(TerminalThemeCommand)
     case crest(TerminalCrestCommand)
+    case passwords(TerminalPasswordsCommand)
 }
 
 /// What a terminal command answers: the lines the person reads, and the same
