@@ -6,6 +6,23 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.217</title>
+            <pubDate>Sun, 22 Nov 2026 14:14:16 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>1000217</sparkle:version>
+            <sparkle:shortVersionString>0.10.217</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Synced with Crest b69b647fc (#1309).
+
+### Internal
+- Crest's product site, its page generators, the credits list and the App Store listing moved to crest-browser/crestbrowser.com; the `Website/` folder, the Pages deploy and the credits and release-page scripts are gone from the repository. The README's images now live in `Documentation/Images`. Arma's context docs drop the Website folder and point the Help Center build at `HelpCenter/build/`.
+- The new site-refresh workflow runs only in Crest's own repository, so it is inert on Arma.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.217/Arma-0.10.217.dmg" length="196224647" type="application/octet-stream" sparkle:edSignature="MiuE3jEPamFBAwFN5xMX06eXxFc6mN+t5p/IH9016vT5HcQ4TfMQNvKs1JQJlcvirmEYkpX7obEdhzV2vE6DCA=="/>
+        </item>
+        <item>
             <title>0.10.216</title>
             <pubDate>Sun, 22 Nov 2026 13:09:32 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1194,6 +1211,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: Mf1zr4ycCs4+9222o+CMIGuJ7pmTKka+x02ZrprKnS326csM2bqgxpM+93OHRnzAc0wi1VxlYzoJ5817ZE0sDA==
-length: 92202
+edSignature: X5p844bncQ6FRRBlrQqHulzJMVtFuH1eaz6xdWCer1iYvYSYy3esf8Tuv2zXb/4tC4W+Ny5JIP9Zi9Vr3V7OCQ==
+length: 93653
 -->
