@@ -6,6 +6,31 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.214</title>
+            <pubDate>Sun, 22 Nov 2026 00:11:49 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>1000214</sparkle:version>
+            <sparkle:shortVersionString>0.10.214</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Crest's own colours everywhere, design-system fields and buttons, and Crest's move to crest-browser.
+
+### Improved
+- Status colours come from Crest's tokens: iCloud sync and the archive list read in Crest blue, green, amber and red; saved passwords and Space choices in Settings show each Space in its own accent colour, and the downloads badge takes it too.
+- Search rows, glyph buttons, cards and form rows across Mac, iPhone and iPad stand on the design system's components, with hover, pressed and focus states; the password save prompt's fields sit on the same field surface.
+- Sidebar preview cards, the lists fan and controls that appear in place grow from 80% of their size as they fade in, instead of out of a point.
+- The command palette's pinned, saved and open tab rows wear the same filled symbols as their sidebar sections; the globe engine mark is Crest blue and the Servo mark a brand gold.
+- Extension badges are Crest's red with slightly larger text, and pinned extension buttons share the toolbar's hover highlight.
+- The badge colours follow the Space's shown look, so they match a dark window's theme.
+
+### Internal
+- Crest's project home is now github.com/crest-browser/Crest; Arma's docs and sync tooling point there. Arma's own feeds, links and repository are unchanged.
+- The macOS 15 glass stand-in now knows the identity glass that grouped glyph buttons use, so the Mac app still builds for macOS 15.2.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.214/Arma-0.10.214.dmg" length="196224204" type="application/octet-stream" sparkle:edSignature="xeI3ddRZMZtu4miYWA6WD+dA/V76jwZIksSOdNV98CO0NoOzdXzmAptEvm0DAReICES2Plz0e5hYKh7UZJGvBQ=="/>
+        </item>
+        <item>
             <title>0.10.203</title>
             <pubDate>Sat, 21 Nov 2026 18:43:19 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1136,6 +1161,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: GkD/5svd1rcac4EDwEjA0d3lo+6cs9mIzeIcaJ/kmzt360gwUIZ9G94dVwlsMKgKI2PnDB5jHup78F+p5PKGDg==
-length: 87272
+edSignature: 7e6iokcZC4NTVUmYV2RHUn1DaugI8j6pTZtwR+YXUgrvhb49sAzgWPfaRla/Upg+QWTocQ5BlUQApO3nphsYCw==
+length: 89613
 -->
