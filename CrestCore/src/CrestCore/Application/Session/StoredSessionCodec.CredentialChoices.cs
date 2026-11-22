@@ -16,6 +16,8 @@ internal static partial class StoredSessionCodec {
                 [Key.Host] = site.Host,
                 [Key.IncludesSubdomains] = site.IncludesSubdomains
             })]);
+        if (preferences.Authentication != DefaultCredentialPreferences.Authentication)
+            value[Key.Authentication] = preferences.Authentication.Name;
         if (preferences.SavePromptSeconds != DefaultCredentialPreferences.SavePromptSeconds)
             value[Key.SavePromptSeconds] = preferences.SavePromptSeconds;
         return value;
