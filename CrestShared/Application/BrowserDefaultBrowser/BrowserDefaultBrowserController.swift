@@ -10,7 +10,7 @@ struct BrowserDefaultBrowserStatus: Hashable, Sendable {
     static let unknown = BrowserDefaultBrowserStatus(
         name: "unknown", title: "Not checked", symbol: "circle.dotted", tone: nil)
     static let isDefault = BrowserDefaultBrowserStatus(
-        name: "isDefault", title: "Crest", symbol: "checkmark.circle.fill", tone: .success)
+        name: "isDefault", title: "Arma", symbol: "checkmark.circle.fill", tone: .success)
     static let notDefault = BrowserDefaultBrowserStatus(
         name: "notDefault", title: "Another browser", symbol: "circle", tone: nil)
 
