@@ -23,7 +23,7 @@ running app only for the calls that need it.
 | `CommandAppLink.swift` | The link the terminal sections use to reach the running app over the commands socket |
 | `Terminal/TerminalCommandLine.swift` | `arma <section> <action>`: the `TerminalSection` protocol, the list of sections, help, `--json`, and sending a command |
 | `Terminal/TerminalArguments.swift` | The words after a section: values in order, `--options` and switches |
-| `Terminal/Terminal*CommandLine.swift` | One section each (`space`, `tab`, `window`, `folder`, `split`, `command`, `page`, `extension`, `history`, `archive`, `download`, `settings`, `site`, `automation`, `theme`, `crest`): its usage and how its words become a command |
+| `Terminal/Terminal*CommandLine.swift` | One section each (`space`, `tab`, `window`, `folder`, `split`, `command`, `page`, `extension`, `history`, `archive`, `download`, `settings`, `site`, `automation`, `theme`, `crest`, `passwords`): its usage and how its words become a command |
 
 ## Depends on
 

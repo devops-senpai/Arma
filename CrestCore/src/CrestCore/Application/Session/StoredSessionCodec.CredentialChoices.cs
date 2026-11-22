@@ -22,6 +22,8 @@ internal static partial class StoredSessionCodec {
             value[Key.SavePromptSeconds] = preferences.SavePromptSeconds;
         if (preferences.SuggestsInPrivateWindows != DefaultCredentialPreferences.SuggestsInPrivateWindows)
             value[Key.SuggestsInPrivateWindows] = preferences.SuggestsInPrivateWindows;
+        if (preferences.AllowsCommandLine != DefaultCredentialPreferences.AllowsCommandLine)
+            value[Key.AllowsCommandLine] = preferences.AllowsCommandLine;
         return value;
     }
 
