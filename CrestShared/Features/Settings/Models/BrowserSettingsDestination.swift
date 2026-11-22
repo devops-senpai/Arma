@@ -34,6 +34,7 @@ struct BrowserSettingsDestination: Hashable, Identifiable, Sendable {
         case advanced
         case about
         case agents
+        case automation
         case themes
     }
 
