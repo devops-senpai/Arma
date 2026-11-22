@@ -381,8 +381,6 @@ targets:
       - path: CrestShared
         excludes:
           - "**/CONTEXT.md"
-      # A theme's colors read the way the Mac's theme files spell them.
-      - path: CrestAgents/CrestThemeHex.swift
       - path: CrestMobile
         excludes:
           - "**/CONTEXT.md"
@@ -439,8 +437,6 @@ targets:
       - path: CrestShared
         excludes:
           - "**/CONTEXT.md"
-      # A theme's colors read the way the Mac's theme files spell them.
-      - path: CrestAgents/CrestThemeHex.swift
       - path: CrestMobile
         excludes:
           - "**/CONTEXT.md"
