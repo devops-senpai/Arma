@@ -8,7 +8,7 @@ extension KeychainCredentialVault {
         self.init(
             store: SecurityCredentialKeychainStore(),
             servicePrefix: servicePrefix,
-            fills: { page, saved in try core.fills(page, from: saved) }
+            fills: { page, saved, reaching in try core.fills(page, from: saved, reaching: reaching) }
         )
     }
 }
