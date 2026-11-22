@@ -122,7 +122,7 @@ final class BrowserCredentialPageState<FillTarget> {
             request.id == requestID,
             fillAllowed(from: .saved, into: request.passwordKind),
             credential.descriptor.spaceID == spaceID,
-            credential.descriptor.origin == request.origin,
+            fills(request.origin, with: credential.descriptor),
             let target = fillTargets[requestID]
         else {
             throw BrowserCredentialFillError.staleOrMismatchedRequest
