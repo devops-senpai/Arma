@@ -122,7 +122,7 @@ has the details.
 
 ## Arma fork
 
-Arma is a fork of pauljoda/Crest. Where this section and the sections above
+Arma is a fork of crest-browser/Crest. Where this section and the sections above
 or the contribution skill differ, this section wins; everything above is
 upstream's text, kept verbatim so syncs merge cleanly.
 
@@ -152,7 +152,7 @@ the same commit.
 
 ### Keeping up with upstream
 
-Arma is a fork of pauljoda/Crest. Its `main` is upstream's `main` plus one
+Arma is a fork of crest-browser/Crest. Its `main` is upstream's `main` plus one
 commit per fork change, with no merge commits: each fix to Crest's code is
 its own commit, and each feature Arma adds is one commit with every later
 change to it folded in. `Documentation/ForkRunbook.md` has the steps and

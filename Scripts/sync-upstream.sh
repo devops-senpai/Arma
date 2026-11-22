@@ -15,7 +15,7 @@ set -euo pipefail
 #                            [--no-commit] [--skip-checks] [--build]
 #   Scripts/sync-upstream.sh --continue [--no-commit] [--skip-checks] [--build]
 #
-# --upstream names the remote for pauljoda/Crest; by default the script finds
+# --upstream names the remote for crest-browser/Crest; by default the script finds
 # it by URL and adds one called "upstream" when none exists. --no-commit stops
 # after resolving so the merge can be reviewed. --build also builds the Crest
 # scheme in Debug.
@@ -62,12 +62,12 @@ start_merge() {
     ! git rev-parse -q --verify MERGE_HEAD >/dev/null || fail "a merge is in progress; finish it with --continue or 'git merge --abort'"
 
     if [[ -z "$upstream_remote" ]]; then
-        upstream_remote="$(git remote -v | awk '/github\.com[:\/]pauljoda\/Crest(\.git)? \(fetch\)/ { print $1; exit }')"
+        upstream_remote="$(git remote -v | awk '/github\.com[:\/](pauljoda|crest-browser)\/Crest(\.git)? \(fetch\)/ { print $1; exit }')"
     fi
     if [[ -z "$upstream_remote" ]]; then
-        git remote add upstream https://github.com/pauljoda/Crest.git
+        git remote add upstream https://github.com/crest-browser/Crest.git
         upstream_remote="upstream"
-        print "Added the upstream remote https://github.com/pauljoda/Crest.git."
+        print "Added the upstream remote https://github.com/crest-browser/Crest.git."
     fi
 
     git fetch --quiet "$upstream_remote" "$upstream_branch"
