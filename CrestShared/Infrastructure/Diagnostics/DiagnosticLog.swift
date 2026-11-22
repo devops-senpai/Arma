@@ -34,6 +34,7 @@ struct DiagnosticLog: Sendable {
     static let sessionStorage = DiagnosticLog(category: "SessionStorage")
     static let shortcuts = DiagnosticLog(category: "Shortcuts")
     static let sitePermissions = DiagnosticLog(category: "SitePermissions")
+    static let themes = DiagnosticLog(category: "Themes")
     static let windows = DiagnosticLog(category: "Windows")
     /// A page view's host claiming and letting go of it, timed for
     /// Instruments.
