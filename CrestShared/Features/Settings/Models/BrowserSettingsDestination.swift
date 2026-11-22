@@ -34,6 +34,7 @@ struct BrowserSettingsDestination: Hashable, Identifiable, Sendable {
         case advanced
         case about
         case agents
+        case themes
     }
 
     // MARK: - Static Variables
@@ -118,6 +119,16 @@ struct BrowserSettingsDestination: Hashable, Identifiable, Sendable {
         searchTerms:
             "agents AI MCP model context protocol coding agents scripts automation Claude Codex Cursor command line terminal",
         symbol: "sparkles", color: CrestBrandPalette.butter, platforms: [.desktop])
+    static let automation = BrowserSettingsDestination(
+        kind: .automation, name: "automation", title: "Automation", subtitle: "Testing frameworks",
+        searchTerms:
+            "automation testing frameworks Playwright Puppeteer Selenium WebdriverIO Katalon TestCafe Cypress ChromeDriver DevTools CDP remote debugging port",
+        symbol: "testtube.2", color: CrestBrandPalette.coral, platforms: [.desktop])
+    static let themes = BrowserSettingsDestination(
+        kind: .themes, name: "themes", title: "Themes", subtitle: "Saved themes for Spaces",
+        searchTerms:
+            "themes saved theme new duplicate rename delete import export colors look dark light background image picture tab backing Catppuccin",
+        symbol: "swatchpalette", color: CrestBrandPalette.butter, platforms: [.desktop])
     static let about = BrowserSettingsDestination(
         kind: .about, name: "about", title: "About", subtitle: "Version, updates, and support",
         searchTerms:
@@ -126,8 +137,8 @@ struct BrowserSettingsDestination: Hashable, Identifiable, Sendable {
 
     /// Every destination, in catalog order.
     static let all: [BrowserSettingsDestination] = [
-        general, tabs, search, engines, lookAndFeel, links, shortcuts, spaces, sync, privacy, adBlocking, passwords,
-        extensions, featureFlags, agents, advanced, about,
+        general, tabs, search, engines, lookAndFeel, themes, links, shortcuts, spaces, sync, privacy, adBlocking,
+        passwords, extensions, featureFlags, agents, advanced, about,
     ]
 
     // MARK: - Variables
