@@ -175,12 +175,12 @@ extension BrowserCommandActions {
         }
         guard !browser.isPrivateBrowsing, !spaceAccess.isLocked(space), space.settings.credentialPreferences.isEnabled,
             let logins = chrome.palettePasswords.logins(in: space.id, from: browser)
-        else { return [settings] }
+        else { return settingsAndPause }
         if let id = chrome.palettePasswords.steppedInto, let login = chrome.palettePasswords.login(id) {
             return loginChoices(login, in: space)
         }
         // A login's category rides in its detail, so "@passwords work" finds every Work login.
-        return [settings]
+        return settingsAndPause
             + logins.map { login in
                 BrowserPaletteChoice(
                     scope: .passwords, key: "login-\(login.id)", name: login.origin.host,
