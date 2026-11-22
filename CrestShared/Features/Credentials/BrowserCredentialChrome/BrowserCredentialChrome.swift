@@ -15,9 +15,11 @@ struct BrowserCredentialChrome: View {
     let capabilities: BrowserInteractionCapabilities
 
     var body: some View {
+        let metrics = BrowserCredentialPromptMetrics.resolve(capabilities)
         BrowserCredentialChromePlacement(
             field: anchoredField,
-            metrics: BrowserCredentialPromptMetrics.resolve(capabilities)
+            metrics: metrics,
+            floatsAtTrailingEdge: presentation.floatsAtCorner && metrics.floatsSavePromptAtTrailingEdge
         ) { metrics in
             prompt(metrics)
         }
