@@ -364,6 +364,7 @@ extension BrowserStore {
         isSynchronizable: Bool? = nil,
         email: String? = nil,
         category: String? = nil,
+        includesSubdomains: Bool? = nil,
         now: Date = Date()
     ) async throws -> CredentialDescriptor {
         guard let space = spaceModel(spaceID) else {
@@ -384,13 +385,16 @@ extension BrowserStore {
         let vaultID = try credentialVaultID(of: spaceID, keeping: existing)
         let descriptor: CredentialDescriptor
         if var existing {
-            guard existing.origin == origin else {
+            // A password saved on the site above, reaching this page, is updated where it is.
+            guard existing.origin == origin || existing.includesSubdomains && reaches(existing.origin, origin) else {
                 throw CredentialVaultError.invalidOrigin
             }
             existing.username = username
             existing.displayName = displayName?.nilIfEmpty ?? existing.displayName
             existing.email = email.map { $0.nilIfEmpty } ?? existing.email
             existing.category = category.map { Self.credentialCategory($0) } ?? existing.category
+            existing.includesSubdomains = try subdomainReach(
+                includesSubdomains ?? existing.includesSubdomains, from: existing.origin)
             existing.updatedAt = now
             existing.isSynchronizable = resolvedSynchronization
             descriptor = existing
@@ -402,6 +406,7 @@ extension BrowserStore {
                 displayName: displayName?.nilIfEmpty,
                 email: email?.nilIfEmpty,
                 category: category.flatMap { Self.credentialCategory($0) },
+                includesSubdomains: try subdomainReach(includesSubdomains ?? false, from: origin),
                 createdAt: now,
                 isSynchronizable: resolvedSynchronization
             )
@@ -543,6 +548,7 @@ extension BrowserStore {
             replacing: existing,
             email: candidate.email,
             category: candidate.category ?? "",
+            includesSubdomains: candidate.includesSubdomains,
             now: now
         )
     }

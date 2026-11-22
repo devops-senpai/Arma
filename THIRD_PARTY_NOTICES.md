@@ -7,6 +7,7 @@ Crest ships these third-party runtime components:
 | [Sparkle](https://github.com/sparkle-project/Sparkle) | 2.9.6 | Signed software updates on macOS | MIT-style license with bundled BSD, MIT, and zlib-style notices |
 | [.NET runtime](https://github.com/dotnet/runtime) (Native AOT) | 10.0.5 | Crest's core, compiled ahead of time into every app | MIT, with bundled third-party notices |
 | [adblock-rust](https://github.com/brave/adblock-rust), Brave's ad-block engine | 0.13.5 | Crest's content filter, compiled into the core on every platform | MPL-2.0, built from MIT, Apache-2.0, Unicode-3.0 and Unlicense Rust crates |
+| [Public Suffix List](https://publicsuffix.org/) | Fetched 2026-11-04 | Which sites a saved password may reach, built into the core as `CrestCore/src/CrestCore/Domain/Links/public_suffix_list.dat` | MPL-2.0 |
 | [Chromium](https://www.chromium.org/), with Crest's patches, some adapted from [ungoogled-chromium](https://github.com/ungoogled-software/ungoogled-chromium) | 156.0.8078.80 | The Chromium engine in Crest's Chromium build for macOS | BSD-3-Clause, with bundled third-party licenses |
 | [Allo](https://allo.joshpuckett.me) by Josh Puckett, built from [Inter](https://github.com/rsms/inter) | 1.0.3 | Crest's display type for headings, buttons and labels, in the app and on its website | SIL Open Font License 1.1 |
 
@@ -20,6 +21,8 @@ ships beside the font, in
 and the website's and Help Center's font folders. The content
 filter's notices cover adblock-rust and every Rust crate its lock file resolves,
 and the license audit keeps that list in step with the lock.
+The Public Suffix List carries its MPL-2.0 notice at the top of the copy built
+into the core; refresh it from https://publicsuffix.org/list/public_suffix_list.dat.
 Chromium includes many third-party components under their own licenses; the
 Chromium build lists every one of them, with its license text, at
 `chrome://credits`.
