@@ -14,8 +14,9 @@ actor KeychainCredentialVault: CredentialVault {
     let servicePrefix: String
     private let codec = CredentialKeychainCodec()
     /// Whether passwords saved for each origin fill a page at the first, in
-    /// order, which the core answers in production.
-    private let fills: @Sendable (CredentialOrigin, [CredentialOrigin]) throws -> [Bool]
+    /// order, which the core answers in production; those at the indexes
+    /// given last reach the hosts under their origin too.
+    private let fills: @Sendable (CredentialOrigin, [CredentialOrigin], [Int]) throws -> [Bool]
     /// Whether a write holds the vault, and the writes waiting their turn.
     private var isWriting = false
     private var waitingWrites: [CheckedContinuation<Void, Never>] = []
@@ -25,7 +26,7 @@ actor KeychainCredentialVault: CredentialVault {
     init(
         store: any CredentialKeychainStoring,
         servicePrefix: String = CredentialKeychainNamespace.productionPrefix,
-        fills: @escaping @Sendable (CredentialOrigin, [CredentialOrigin]) throws -> [Bool] = { page, saved in
+        fills: @escaping @Sendable (CredentialOrigin, [CredentialOrigin], [Int]) throws -> [Bool] = { page, saved, _ in
             saved.map { $0 == page }
         }
     ) {
@@ -262,14 +263,16 @@ actor KeychainCredentialVault: CredentialVault {
     /// The descriptors among `descriptors` whose passwords fill a page at
     /// `origin`: those saved for it, and those whose origin the core reads as
     /// it, such as an IP address an earlier import kept in another spelling.
+    /// Those that reach the hosts under their origin fill one of them too.
     private func filling(
         _ origin: CredentialOrigin,
         from descriptors: [CredentialDescriptor]
     ) throws -> [CredentialDescriptor] {
         let others = descriptors.filter { $0.origin != origin }
+        let reaching = others.indices.filter { others[$0].includesSubdomains }
         let othersFill: [Bool]
         do {
-            othersFill = try fills(origin, others.map(\.origin))
+            othersFill = try fills(origin, others.map(\.origin), reaching)
         } catch Rejection.invalidCredentialOrigin {
             // No page has such an origin, but if one did, its own passwords still fill it.
             othersFill = []

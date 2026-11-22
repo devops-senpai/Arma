@@ -67,12 +67,13 @@ public sealed record InvalidNeverSavedSite() : Rejection {
     #endregion
 }
 
-/// A never-saved site would reach every subdomain of `Host`, a public suffix
-/// such as `co.uk` whose subdomains belong to different people.
+/// A never-saved site or a saved password would reach every subdomain of
+/// `Host`, a public suffix such as `co.uk` or `github.io` whose subdomains
+/// belong to different people.
 public sealed record SubdomainsOfPublicSuffix(string Host) : Rejection {
     #region Variables
 
-    /// What the site list tells the person.
+    /// What the site list or the save prompt tells the person.
     [Localized]
     public string Message => "This website's subdomains belong to different owners, so they can't be included.";
 
