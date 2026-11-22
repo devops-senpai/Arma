@@ -485,7 +485,7 @@ struct BrowserPasswordSettingsPane: View {
         let count = selectedCredentialIDs.count
         let passwordLabel = count == 1 ? "password" : "passwords"
         return
-            "Delete \(count) selected \(passwordLabel) from \(spaceName)? Crest will authenticate you and apply the deletion as one Keychain change. This cannot be undone."
+            "Delete \(count) selected \(passwordLabel) from \(spaceName)? Arma will authenticate you and apply the deletion as one Keychain change. This cannot be undone."
     }
 
     private var unreadablePasswordsLabel: String {
@@ -534,7 +534,7 @@ struct BrowserPasswordSettingsPane: View {
             let selectedSpaceID
         else {
             if case .failure = result {
-                credentials.errorMessage = "Crest couldn’t open that password file."
+                credentials.errorMessage = "Arma couldn’t open that password file."
             }
             return
         }
