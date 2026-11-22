@@ -30,7 +30,7 @@ struct BrowserStrongPasswordPrompt: View {
                 siteIconData: port.siteIconData,
                 model: model,
                 metrics: metrics,
-                dismiss: port.dismiss,
+                dismiss: port.close ?? port.dismiss,
                 generation: $generation,
                 generateAndFill: generateAndFill
             )

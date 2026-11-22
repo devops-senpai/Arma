@@ -65,6 +65,10 @@ struct BrowserCredentialChrome: View {
                 browser: browser,
                 metrics: metrics
             )
+        case .pauseOffer(let offerID):
+            if let pause = savePort.pause, let dismissOffer = savePort.dismissPauseOffer {
+                BrowserCredentialPauseOffer(offerID: offerID, pause: pause, dismiss: dismissOffer, metrics: metrics)
+            }
         case .suggestions(let request):
             BrowserCredentialSuggestionPrompt(
                 request: request,
