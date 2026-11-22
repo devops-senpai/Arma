@@ -172,9 +172,9 @@ extension BrowserStore {
 extension BrowserStore {
     /// How to compose a generated password. The password itself is drawn
     /// natively, so it never enters the core.
-    func strongPasswordRecipe() throws -> StrongPasswordRecipe {
+    func strongPasswordRecipe(_ generation: PasswordGeneration? = nil) throws -> StrongPasswordRecipe {
         do {
-            return try core.query(StrongPassword(length: nil))
+            return try core.query(StrongPassword(length: generation?.length, generation: generation))
         } catch {
             throw BrowserStrongPasswordGenerationError.unavailable
         }
