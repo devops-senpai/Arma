@@ -60,6 +60,12 @@ jobs:
           allow-unsafe-pr-checkout: ${{ github.event.pull_request.merged == true }}
           fetch-depth: 0
 
+      - name: Derive the version
+        # Changes never edit Config/Version.xcconfig. This checkout takes the
+        # version its history derives, so every later step reads it where it
+        # always has. Never committed.
+        run: python3 Scripts/derive-version.py stamp
+
       - name: Resolve release identity and previous publication
         id: release
         shell: bash
@@ -247,6 +253,12 @@ jobs:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
           allow-unsafe-pr-checkout: ${{ github.event.pull_request.merged == true }}
           fetch-depth: 0
+
+      - name: Derive the version
+        # Changes never edit Config/Version.xcconfig. This checkout takes the
+        # version its history derives, so every later step reads it where it
+        # always has. Never committed.
+        run: python3 Scripts/derive-version.py stamp
 
       - name: Ensure build tools are available
         run: |
