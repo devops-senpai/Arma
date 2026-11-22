@@ -72,6 +72,12 @@ final class BrowserSplitCardLiftState {
         carriedTabID != nil
     }
 
+    /// Whether the carry on the pointer was placed by a menu, so it rides the
+    /// pointer with no button held and a click puts it down.
+    var isPlaced: Bool {
+        carriedTabID != nil && lift?.isPlaced == true
+    }
+
     /// Stage a pickup: mint the identity its snapshot request will be matched
     /// against, before a single thing changes on screen.
     ///
@@ -99,7 +105,8 @@ final class BrowserSplitCardLiftState {
         originIndex: Int,
         cardFrame: CGRect,
         pointer: CGPoint,
-        surfaceOrigin: CGPoint
+        surfaceOrigin: CGPoint,
+        placed: Bool = false
     ) -> Bool {
         guard stagedToken == token else { return false }
         stagedToken = nil
@@ -117,7 +124,8 @@ final class BrowserSplitCardLiftState {
             surfaceOrigin: surfaceOrigin,
             pointer: pointer,
             gapIndex: originIndex,
-            snapshot: nil
+            snapshot: nil,
+            isPlaced: placed
         )
         return true
     }
@@ -137,10 +145,16 @@ final class BrowserSplitCardLiftState {
     /// wherever on screen the pointer happens to be, and a release far away
     /// commits that same slot. There is no "outside" and nothing to explain
     /// about where a drop stops counting.
-    func update(pointer: CGPoint, gapIndex: Int, surfaceOrigin: CGPoint) {
+    func update(
+        pointer: CGPoint, gapIndex: Int, gapShape: SplitShape? = nil, swapsWith: UUID? = nil,
+        aimFrames: [UUID: CGRect]? = nil, surfaceOrigin: CGPoint
+    ) {
         guard var lift, !lift.isSettling else { return }
         lift.pointer = pointer
         lift.gapIndex = gapIndex
+        lift.gapShape = gapShape
+        lift.swapsWith = swapsWith
+        lift.aimFrames = aimFrames
         lift.surfaceOrigin = surfaceOrigin
         self.lift = lift
     }
@@ -161,15 +175,17 @@ final class BrowserSplitCardLiftState {
         self.lift = lift
     }
 
-    /// Puts the card down, and says which slot to commit.
+    /// Puts the card down, and says which slot to commit, the shape it takes
+    /// the split to when that changed, and the card it swaps with instead,
+    /// when it was put down on one.
     ///
     /// The move is the caller's to make. This only stops the carry — the row
     /// puts the card back on show in the slot the gap was already holding, and
     /// the preview fades off it.
-    func drop() -> (tabID: UUID, memberIndex: Int)? {
+    func drop() -> (tabID: UUID, memberIndex: Int, shape: SplitShape?, swapsWith: UUID?)? {
         guard let lift, !lift.isSettling else { return nil }
         beginSettling()
-        return (lift.tabID, lift.gapIndex)
+        return (lift.tabID, lift.gapIndex, lift.gapShape, lift.swapsWith)
     }
 
     /// Escape, a right-click, a window that stopped being key, or anything else

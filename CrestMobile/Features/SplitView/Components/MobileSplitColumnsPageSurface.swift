@@ -32,6 +32,8 @@ struct MobileSplitColumnsPageSurface: View {
     /// The slot a drag out of the sidebar would drop a card into.
     /// `MobileRegularPageSurface` owns the decision; the row only draws it.
     let placeholderIndex: Int?
+    /// The shape the cards and that slot tile in, or `nil` for columns.
+    var placeholderShape: SplitShape? = nil
 
     private var appearance: BrowserChromeAppearance { .device(windowCornerRadius: windowCornerRadius) }
 
@@ -86,6 +88,7 @@ struct MobileSplitColumnsPageSurface: View {
         }
         .environment(\.browserSplitUsesBorderlessFrame, appearance.borderless)
         .environment(\.browserSplitInterCardGap, interCardGap)
+        .environment(\.browserSplitShaping, shaping)
         .onGeometryChange(for: CGRect.self) { proxy in
             proxy.frame(in: .global)
         } action: { frame in
@@ -101,6 +104,13 @@ struct MobileSplitColumnsPageSurface: View {
             model.seedSplitColumnFractions()
             model.prepareSplitCardPages()
         }
+    }
+
+    /// How the cards tile: in the split's shape, or the one a drag would make.
+    private var shaping: BrowserSplitShaping {
+        model.browser.splitShaping(
+            in: space, shape: model.browser.shownSplitShape(in: space), placeholderShape: placeholderShape,
+            keepsShares: true)
     }
 
     private var frameInsets: EdgeInsets {
