@@ -6,6 +6,21 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.216</title>
+            <pubDate>Sun, 22 Nov 2026 13:09:20 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>1000216</sparkle:version>
+            <sparkle:shortVersionString>0.10.216</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Synced with Crest 4167974c2 (#1307).
+
+### Internal
+- The release-notes site now builds from one exported release history: `Scripts/export-release-history.py` reads the tags, version history and note files once and writes a JSON file, and `build-release-pages.py` only renders it. Arma's per-entry note files export through it unchanged.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.216/Arma-0.10.216.dmg" length="196225660" type="application/octet-stream" sparkle:edSignature="Y7fmoE3JxxKlG9kNF5cGyIXoh7ysTUQR5VvY1pOb+fuNEK83airyYvVKJwx53iJNPHxO5KrPYxUT9sgA+WDGBw=="/>
+        </item>
+        <item>
             <title>0.10.215</title>
             <pubDate>Sun, 22 Nov 2026 11:04:43 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1123,6 +1138,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: aPzI2OhMcgZZONuFzqNM6156uSLfsFvJa5pDSDUevp2asNQSvN/slKM2/vZdjl8A+vTEEK+qYeVrFZyj+itiCg==
-length: 87709
+edSignature: MF0q83zaVwFSgVsvSqnoFI6/0w6EDtTn57rIUs5z19Qt1TwMPtO2Ebxtwea5/thoFCroUsByLUCtRseSrsQTBg==
+length: 88898
 -->
