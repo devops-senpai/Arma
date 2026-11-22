@@ -26,6 +26,9 @@ struct DiagnosticLog: Sendable {
     /// timed for Instruments.
     static let pageHistory = DiagnosticLog(category: "PageHistory")
     static let popups = DiagnosticLog(category: "Popups")
+    /// Arma's Servo engine: the library it loaded, and the pages it built,
+    /// loaded and closed, named by their identities.
+    static let servo = DiagnosticLog(category: "Servo")
     /// Why the core could not save the session, or a save outran the wait for
     /// it at quit.
     static let sessionStorage = DiagnosticLog(category: "SessionStorage")
