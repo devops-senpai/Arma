@@ -8,6 +8,8 @@ struct BrowserCredentialSaveActionRow: View {
     let space: BrowserSpaceIdentity?
     let metrics: BrowserCredentialPromptMetrics
     let dismiss: () -> Void
+    /// Stops the Space offering to save on this site, while the prompt asks.
+    var neverSave: (() -> Void)? = nil
     let perform: (BrowserCredentialPromptPrimaryAction) -> Void
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -15,10 +17,14 @@ struct BrowserCredentialSaveActionRow: View {
     @ViewBuilder
     var body: some View {
         if dynamicTypeSize.isAccessibilitySize {
-            actions(isStacked: true)
-                .frame(maxWidth: .infinity, alignment: .trailing)
+            VStack(alignment: .trailing, spacing: BrowserCredentialPromptMetrics.saveActionSpacing) {
+                actions(isStacked: true)
+                neverSaveAction
+            }
+            .frame(maxWidth: .infinity, alignment: .trailing)
         } else {
             HStack {
+                neverSaveAction
                 Spacer(minLength: 0)
                 actions(isStacked: false)
             }
