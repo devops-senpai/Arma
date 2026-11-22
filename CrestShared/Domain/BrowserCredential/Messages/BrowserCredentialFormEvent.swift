@@ -61,7 +61,20 @@ struct BrowserCredentialFormEvent: Hashable, Sendable, Decodable {
                 && !fields.containsPasswordKind
         })
 
-    static let all: [BrowserCredentialFormEvent] = [username, focus, submit, documentState, fieldGeometry]
+    /// The person left the field the prompt points at: clicked or moved
+    /// focus elsewhere on the page, or typed more than a few characters into
+    /// it. It names the form and nothing else, so it can only close a prompt.
+    static let fieldLeft = BrowserCredentialFormEvent(
+        name: "fieldLeft", captureEvent: nil, closesFillOfItsForm: true,
+        accepts: { fields in
+            fields.formID != nil
+                && fields.fieldRect == nil
+                && !fields.containsUsername
+                && !fields.containsPassword
+                && !fields.containsPasswordKind
+        })
+
+    static let all: [BrowserCredentialFormEvent] = [username, focus, submit, documentState, fieldGeometry, fieldLeft]
 
     // MARK: - Variables
 
@@ -80,6 +93,9 @@ struct BrowserCredentialFormEvent: Hashable, Sendable, Decodable {
     /// submit against this event.
     let weighsPendingCandidate: Bool
 
+    /// Whether the event closes the fill prompt of the form it names.
+    let closesFillOfItsForm: Bool
+
     /// Whether a message of this event has the fields it needs and none it
     /// must not carry.
     let accepts: @Sendable (BrowserCredentialFormFields) -> Bool
@@ -88,12 +104,14 @@ struct BrowserCredentialFormEvent: Hashable, Sendable, Decodable {
 
     private init(
         name: String, captureEvent: CredentialCaptureEvent?, closesFillWhenRefused: Bool = false,
-        weighsPendingCandidate: Bool = false, accepts: @escaping @Sendable (BrowserCredentialFormFields) -> Bool
+        weighsPendingCandidate: Bool = false, closesFillOfItsForm: Bool = false,
+        accepts: @escaping @Sendable (BrowserCredentialFormFields) -> Bool
     ) {
         self.name = name
         self.captureEvent = captureEvent
         self.closesFillWhenRefused = closesFillWhenRefused
         self.weighsPendingCandidate = weighsPendingCandidate
+        self.closesFillOfItsForm = closesFillOfItsForm
         self.accepts = accepts
     }
 
