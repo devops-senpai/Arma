@@ -11,6 +11,11 @@ extension EngineMark {
                 .resizable()
                 .scaledToFit()
                 .foregroundStyle(CrestBrandPalette.crestBlue)
+        case .gears:
+            Image(systemName: "gearshape.2.fill")
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(CrestBrandPalette.butter)
         }
     }
 }
