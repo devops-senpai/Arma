@@ -8,9 +8,12 @@ struct Glass {
     // MARK: - Static Variables
 
     static var regular: Glass { Glass() }
+    /// No glass at all: a control in a group leaves the glass to the group.
+    static var identity: Glass { Glass(isIdentity: true) }
 
     // MARK: - Variables
 
+    private var isIdentity = false
     private var tintColor: Color?
     private var isInteractive = false
 
@@ -32,16 +35,18 @@ struct Glass {
 
     @available(macOS 26.0, *)
     fileprivate var system: SwiftUI.Glass {
-        SwiftUI.Glass.regular.tint(tintColor).interactive(isInteractive)
+        isIdentity ? .identity : SwiftUI.Glass.regular.tint(tintColor).interactive(isInteractive)
     }
 
     /// What macOS 15 draws in the glass's place: a material, under the tint
-    /// when the glass has one.
+    /// when the glass has one, and nothing for the identity.
     @ViewBuilder
     fileprivate func fallback(in shape: some Shape) -> some View {
-        shape.fill(.regularMaterial)
-        if let tintColor {
-            shape.fill(tintColor)
+        if !isIdentity {
+            shape.fill(.regularMaterial)
+            if let tintColor {
+                shape.fill(tintColor)
+            }
         }
     }
 }
