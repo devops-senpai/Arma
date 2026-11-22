@@ -28,4 +28,14 @@ extension BrowserCredentialSensitiveAccess {
         }
         browser.family.credentialAuthenticationMemory.authenticated(in: spaceID)
     }
+
+    /// Asks the person to authenticate before Space `spaceID` lets the
+    /// terminal reach its passwords, always. Throws when they don't.
+    func authorizeCommandLineAccess(in spaceID: UUID) async throws {
+        let reason = String(localized: "Authenticate to let the terminal reach these passwords.")
+        guard try await authenticator.authenticate(reason: reason) else {
+            throw BrowserCredentialSensitiveAccessError.authenticationDenied
+        }
+        browser.family.credentialAuthenticationMemory.authenticated(in: spaceID)
+    }
 }
