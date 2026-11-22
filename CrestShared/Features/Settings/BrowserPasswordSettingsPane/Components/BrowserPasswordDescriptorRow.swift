@@ -15,6 +15,8 @@ struct BrowserPasswordDescriptorRow: View {
     var isSelectionActive = false
     var isSelected = false
     let showDetails: () -> Void
+    /// Opens the saved password in the editor, where the row opens it.
+    var edit: (() -> Void)? = nil
     let requestDeletion: () -> Void
     var toggleSelection: () -> Void = {}
 
@@ -73,6 +75,7 @@ struct BrowserPasswordDescriptorRow: View {
                 Menu("Password Actions", systemImage: "ellipsis.circle") {
                     Group {
                         Button("View Password", systemImage: "eye", action: showDetails)
+                        if let edit { Button("Edit Password", systemImage: "pencil", action: edit) }
                         Divider()
                         Button(
                             "Delete Password",
@@ -94,6 +97,7 @@ struct BrowserPasswordDescriptorRow: View {
             if !isSelectionActive {
                 Group {
                     Button("View Password", systemImage: "eye", action: showDetails)
+                    if let edit { Button("Edit Password", systemImage: "pencil", action: edit) }
                     Button(
                         "Delete Password",
                         systemImage: "trash",
@@ -159,16 +163,18 @@ struct BrowserPasswordDescriptorRow: View {
             descriptor.username.isEmpty
             ? String(localized: "No username")
             : descriptor.username
-        return descriptor.displayName == nil
+        let line =
+            descriptor.displayName == nil
             ? "\(account) · \(descriptor.origin.description)"
             : "\(account) · \(descriptor.origin.host)"
+        return descriptor.category.map { "\(line) · \($0)" } ?? line
     }
 
     private func primaryAction() {
         if isSelectionActive {
             toggleSelection()
         } else {
-            showDetails()
+            (edit ?? showDetails)()
         }
     }
 }

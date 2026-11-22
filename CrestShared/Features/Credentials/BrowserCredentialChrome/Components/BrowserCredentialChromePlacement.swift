@@ -17,6 +17,9 @@ struct BrowserCredentialChromePlacement<Content: View>: View {
     /// from a frame whose coordinates say nothing about where the page is.
     let field: CGRect?
     let metrics: BrowserCredentialPromptMetrics
+    /// Whether the prompt keeps to the page's top trailing corner when it is
+    /// not anchored, as the save prompt does on a pointer shell.
+    var floatsAtTrailingEdge = false
     let content: (BrowserCredentialPromptMetrics) -> Content
 
     @State private var pageSize = CGSize.zero
@@ -28,8 +31,13 @@ struct BrowserCredentialChromePlacement<Content: View>: View {
             anchored(to: field)
         } else {
             content(metrics)
-                .transition(.move(edge: .top).combined(with: .opacity))
+                .transition(
+                    floatsAtTrailingEdge
+                        ? .move(edge: .trailing).combined(with: .opacity)
+                        : .move(edge: .top).combined(with: .opacity)
+                )
                 .padding(metrics.chromeInset)
+                .frame(maxWidth: .infinity, alignment: floatsAtTrailingEdge ? .trailing : .center)
         }
     }
 

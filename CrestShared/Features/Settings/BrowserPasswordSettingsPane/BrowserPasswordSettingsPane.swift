@@ -21,6 +21,8 @@ struct BrowserPasswordSettingsPane: View {
     var manage: (() -> Void)?
     /// The one Space whose passwords the pane shows, or nil to pick one.
     let fixedSpaceID: UUID?
+    /// A site to start a new saved password for, which the pane takes and clears.
+    @Binding var newPasswordSite: String?
 
     @State private var credentials: BrowserCredentialSpaceStore
     @State private var pickedSpaceID: UUID?
@@ -30,6 +32,7 @@ struct BrowserPasswordSettingsPane: View {
     }
     @State private var credentialPendingDeletion: CredentialDescriptor?
     @State private var credentialDetailRequest: BrowserCredentialDetailRequest?
+    @State var passwordEditorRequest: BrowserSavedPasswordEditorRequest?
     @State private var confirmsPlaintextExport = false
     @State private var isExporting = false
     @State private var isChoosingImportFile = false
@@ -44,7 +47,8 @@ struct BrowserPasswordSettingsPane: View {
         layout: BrowserPasswordSettingsLayout,
         searchText: Binding<String> = .constant(""),
         manage: (() -> Void)? = nil,
-        fixedSpaceID: UUID? = nil
+        fixedSpaceID: UUID? = nil,
+        newPasswordSite: Binding<String?> = .constant(nil)
     ) {
         self.browser = browser
         self.spaceAccess = spaceAccess
@@ -52,6 +56,7 @@ struct BrowserPasswordSettingsPane: View {
         _searchText = searchText
         self.manage = manage
         self.fixedSpaceID = fixedSpaceID
+        _newPasswordSite = newPasswordSite
         _credentials = State(
             initialValue: BrowserCredentialSpaceStore(browser: browser)
         )
@@ -135,6 +140,24 @@ struct BrowserPasswordSettingsPane: View {
                 request: request
             )
             .id(request.id)
+        }
+        .onChange(of: newPasswordSite, initial: true) { _, site in
+            guard let site else { return }
+            newPasswordSite = nil
+            passwordEditorRequest = BrowserSavedPasswordEditorRequest(account: nil, website: site)
+        }
+        .sheet(item: $passwordEditorRequest) { request in
+            if let space {
+                BrowserSavedPasswordEditor(
+                    browser: browser,
+                    space: space,
+                    account: request.account,
+                    website: request.website,
+                    categories: BrowserStore.credentialCategories(in: credentials.descriptors)
+                ) {
+                    Task { await credentials.load(in: selectedSpaceID, accessController: spaceAccess) }
+                }
+            }
         }
         .sheet(item: $credentials.importReview) { review in
             BrowserCredentialImportReviewView(
@@ -279,11 +302,13 @@ struct BrowserPasswordSettingsPane: View {
         if layout.supportsCredentialFileImport, let space {
             ViewThatFits {
                 HStack {
+                    addButton(space: space)
                     importButton(space: space)
                     Spacer()
                     selectionButton
                 }
                 VStack(alignment: .leading) {
+                    addButton(space: space)
                     importButton(space: space)
                     selectionButton
                 }
@@ -385,6 +410,7 @@ struct BrowserPasswordSettingsPane: View {
                         else { return }
                         credentialDetailRequest = request
                     },
+                    edit: { passwordEditorRequest = BrowserSavedPasswordEditorRequest(account: descriptor) },
                     requestDeletion: { credentialPendingDeletion = descriptor },
                     toggleSelection: {
                         if !selectedCredentialIDs.insert(descriptor.id).inserted {
