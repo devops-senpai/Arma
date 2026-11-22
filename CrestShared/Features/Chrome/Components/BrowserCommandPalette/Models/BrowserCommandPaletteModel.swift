@@ -356,11 +356,14 @@ final class BrowserCommandPaletteModel {
         narrowed(keeping: entry.text)
     }
 
+    /// Asks once for the narrowed palette: a changed text asks as it is set,
+    /// the same text asks here.
     private func narrowed(keeping text: String = "") {
         invalidateURLCompletion()
+        let changed = query != text
         query = text
         replaceText?(text)
-        requestAnswer()
+        if !changed { requestAnswer() }
     }
 
     // MARK: - Actions - Selection
