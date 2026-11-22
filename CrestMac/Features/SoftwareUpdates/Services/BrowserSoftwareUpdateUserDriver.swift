@@ -22,7 +22,7 @@ struct BrowserSoftwareUpdateMetadata: Equatable, Sendable {
     init(appcastItem: SUAppcastItem) {
         title =
             appcastItem.title
-            ?? "Crest \(appcastItem.displayVersionString)"
+            ?? "Arma \(appcastItem.displayVersionString)"
         version = appcastItem.displayVersionString
         build = appcastItem.versionString
         informationURL = appcastItem.infoURL
@@ -159,7 +159,7 @@ final class BrowserSoftwareUpdateUserDriver: NSObject, SPUUserDriver,
         }
         model.presentUpdate(
             title: appcastItem.title
-                ?? "Crest \(appcastItem.displayVersionString)",
+                ?? "Arma \(appcastItem.displayVersionString)",
             version: appcastItem.displayVersionString,
             build: appcastItem.versionString,
             informationURL: appcastItem.infoURL,
@@ -329,7 +329,7 @@ final class BrowserSoftwareUpdateUserDriver: NSObject, SPUUserDriver,
                 code: 1,
                 userInfo: [
                     NSLocalizedDescriptionKey:
-                        "Crest \(updateItem.displayVersionString) is older than the running \(runningVersion ?? "build") and was discarded."
+                        "Arma \(updateItem.displayVersionString) is older than the running \(runningVersion ?? "build") and was discarded."
                 ]
             )
         }
