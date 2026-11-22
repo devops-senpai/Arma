@@ -57,11 +57,12 @@ public sealed partial class BrowserTabCollection {
     /// selected tab, at member `index` and on, and answers the last tab that
     /// joined, or `shown` when none had to, with the copies made for saved or
     /// pinned tabs. A split copied into new tabs keeps its name, icon and tint.
+    /// The split then takes `shape`, when one is named, as `Shape` lays it out.
     /// Refused with `WebPagesOnly` for a Start Page target, and
     /// `SplitNeedsTwoTabs` or `SplitLimitReached` for a split that would be
     /// too small or too large.
     public (Guid? Shown, IReadOnlyList<(Guid Source, Guid Copy)> Copies) SplitSelected(ResolvedSelection selection, Guid? target,
-        int? index, Guid? shown, IIdSource ids, DateTimeOffset now) {
+        int? index, Guid? shown, IIdSource ids, DateTimeOffset now, SplitShape? shape = null) {
         RequireSelectedTabs(selection);
         var targetId = target ?? selection.MemberIds[0];
         if (Tab(targetId).Content.IsStartPage) throw new Rejected(new WebPagesOnly(targetId));
@@ -85,6 +86,7 @@ public sealed partial class BrowserTabCollection {
             if (insertion is { } slot) insertion = checked(slot + 1);
         }
         foreach (var (source, copy) in groupCopies) CopySplitMetadata(source, copy, now);
+        if (shape is not null && Tab(targetId).SplitGroupId is { } shaped) Shape(shaped, shape, now);
         return (shown, copies);
     }
 
