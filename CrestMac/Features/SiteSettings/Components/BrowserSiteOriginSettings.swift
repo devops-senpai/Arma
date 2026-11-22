@@ -15,6 +15,7 @@ struct BrowserSiteOriginSettings: View {
                 origin: origin,
                 reviewCertificate: reviewCertificate
             )
+            BrowserSitePasswordControls(page: page)
             Divider()
             BrowserEngineSitePermissionsSection(
                 page: page,

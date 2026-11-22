@@ -362,6 +362,8 @@ extension BrowserStore {
         displayName: String? = nil,
         replacing existing: CredentialDescriptor? = nil,
         isSynchronizable: Bool? = nil,
+        email: String? = nil,
+        category: String? = nil,
         now: Date = Date()
     ) async throws -> CredentialDescriptor {
         guard let space = spaceModel(spaceID) else {
@@ -387,6 +389,8 @@ extension BrowserStore {
             }
             existing.username = username
             existing.displayName = displayName?.nilIfEmpty ?? existing.displayName
+            existing.email = email.map { $0.nilIfEmpty } ?? existing.email
+            existing.category = category.map { Self.credentialCategory($0) } ?? existing.category
             existing.updatedAt = now
             existing.isSynchronizable = resolvedSynchronization
             descriptor = existing
@@ -396,6 +400,8 @@ extension BrowserStore {
                 origin: origin,
                 username: username,
                 displayName: displayName?.nilIfEmpty,
+                email: email?.nilIfEmpty,
+                category: category.flatMap { Self.credentialCategory($0) },
                 createdAt: now,
                 isSynchronizable: resolvedSynchronization
             )
@@ -535,6 +541,8 @@ extension BrowserStore {
             for: url,
             in: spaceID,
             replacing: existing,
+            email: candidate.email,
+            category: candidate.category ?? "",
             now: now
         )
     }

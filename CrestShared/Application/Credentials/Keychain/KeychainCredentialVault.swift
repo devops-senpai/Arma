@@ -191,6 +191,18 @@ actor KeychainCredentialVault: CredentialVault {
                 }
                 throw error
             }
+            // Notes follow the passwords they belong to; a note that fails to
+            // move moves with the next change.
+            let passwords = Set(originalItems.filter { reads($0, in: spaceID) }.map(\.account))
+            let noteService = noteService(for: spaceID)
+            for note in try await store.items(in: noteService)
+            where passwords.contains(note.account) && note.isSynchronizable != isSynchronizable {
+                try await store.upsert(
+                    CredentialKeychainItem(
+                        account: note.account, metadata: note.metadata, secret: note.secret,
+                        isSynchronizable: isSynchronizable),
+                    in: noteService)
+            }
         }
     }
 
@@ -200,12 +212,14 @@ actor KeychainCredentialVault: CredentialVault {
                 account: id.uuidString.lowercased(),
                 in: service(for: spaceID)
             )
+            try await store.delete(account: id.uuidString.lowercased(), in: noteService(for: spaceID))
         }
     }
 
     func deleteAll(in spaceID: UUID) async throws {
         try await writing {
             try await store.deleteAll(in: service(for: spaceID))
+            try await store.deleteAll(in: noteService(for: spaceID))
         }
     }
 
