@@ -30,6 +30,15 @@ extension BrowserCredentialSession {
         try await fillGeneratedPassword(password, for: requestID, evaluate: Self.evaluator(in: webView))
     }
 
+    /// Evaluates a bridge call in `webView`'s main document.
+    static func mainFrameEvaluator(in webView: WKWebView) -> MainFrameEvaluate {
+        { [weak webView] body, arguments in
+            guard let webView else { throw BrowserCredentialFillError.formChanged }
+            return try await webView.callAsyncJavaScript(
+                body, arguments: arguments, in: nil, contentWorld: BrowserCredentialContentBridge.contentWorld)
+        }
+    }
+
     static func evaluator(in webView: WKWebView) -> Evaluate {
         { [weak webView] body, arguments, frame in
             guard let webView, let frameInfo = frame.handle as? WKFrameInfo else {

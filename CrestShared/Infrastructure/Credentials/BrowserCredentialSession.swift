@@ -9,6 +9,7 @@ import Observation
 final class BrowserCredentialSession {
     typealias FillTarget = (formID: String, frame: BrowserContentFrame)
     typealias Evaluate = @MainActor (String, [String: Any], BrowserContentFrame) async throws -> Any?
+    typealias MainFrameEvaluate = @MainActor (String, [String: Any]) async throws -> Any?
 
     let state: BrowserCredentialPageState<FillTarget>
     private(set) var isEnabled: Bool
