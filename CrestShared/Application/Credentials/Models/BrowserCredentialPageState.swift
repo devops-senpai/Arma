@@ -34,6 +34,9 @@ final class BrowserCredentialPageState<FillTarget> {
     /// The sites the page's Space never offers to save passwords on, read
     /// fresh for each decision so an edit in Settings applies at once.
     @ObservationIgnored private let neverSavedSites: @MainActor () -> [NeverSavedSite]
+    /// Whether the page may offer to save a submitted password; a private
+    /// window's never does.
+    @ObservationIgnored private let allowsSaving: Bool
 
     private(set) var fillRequest: BrowserCredentialFillRequest?
     private(set) var saveCandidate: BrowserCredentialSaveCandidate?
@@ -61,10 +64,14 @@ final class BrowserCredentialPageState<FillTarget> {
     @ObservationIgnored private var pendingSaveCandidate: BrowserCredentialSaveCandidate?
     @ObservationIgnored private var candidateExpirationTask: Task<Void, Never>?
 
-    init(spaceID: UUID, core: CrestCore, neverSavedSites: @escaping @MainActor () -> [NeverSavedSite] = { [] }) {
+    init(
+        spaceID: UUID, core: CrestCore, neverSavedSites: @escaping @MainActor () -> [NeverSavedSite] = { [] },
+        allowsSaving: Bool = true
+    ) {
         self.spaceID = spaceID
         self.core = core
         self.neverSavedSites = neverSavedSites
+        self.allowsSaving = allowsSaving
     }
 
     /// Applies one validated form message. The portable core decides what
@@ -329,7 +336,7 @@ extension BrowserCredentialPageState: CredentialCapturePerformer {
     }
 
     func captureCandidate(_ observation: BrowserCredentialObservation<FillTarget>) {
-        guard !isPaused else { return }
+        guard allowsSaving, !isPaused else { return }
         let message = observation.message
         let decision = observation.decision
         guard
