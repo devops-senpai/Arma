@@ -11,6 +11,8 @@ struct BrowserCredentialSavePromptHeader: View {
     let space: BrowserSpaceIdentity?
     let metrics: BrowserCredentialPromptMetrics
     let dismiss: () -> Void
+    /// Stops the Space offering to save on this site, while the prompt asks.
+    var neverSave: (() -> Void)? = nil
     let perform: (BrowserCredentialPromptPrimaryAction) -> Void
 
     var body: some View {
@@ -40,6 +42,9 @@ struct BrowserCredentialSavePromptHeader: View {
                     minLength: BrowserCredentialPromptMetrics
                         .saveHeaderSpacerLength
                 )
+                if let neverSave {
+                    BrowserCredentialNeverSaveButton(route: route, neverSave: neverSave)
+                }
                 BrowserCredentialSaveActions(
                     route: route,
                     space: space,
