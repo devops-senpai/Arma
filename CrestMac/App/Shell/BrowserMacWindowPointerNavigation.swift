@@ -14,4 +14,12 @@ protocol BrowserMacWindowPointerNavigation: AnyObject {
     /// a page nor the sidebar goes back or forward on the window's active
     /// page, answering whether Crest took it.
     func navigate(_ action: BrowserSidebarMouseButtonAction, swipedAt event: NSEvent) -> Bool
+    /// The page under the pointer at `event`, which says whether a press
+    /// there may move the window, or nil over anything else.
+    func pageDragTarget(at event: NSEvent) -> (any BrowserMacWindowPageDragTarget)?
+}
+
+extension BrowserMacWindowPointerNavigation {
+    /// Content that knows no pages never lets a press move the window.
+    func pageDragTarget(at event: NSEvent) -> (any BrowserMacWindowPageDragTarget)? { nil }
 }

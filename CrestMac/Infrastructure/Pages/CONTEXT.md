@@ -15,7 +15,7 @@ only through its adapter, its events and the core's page state.
 
 | Path | What it is |
 | --- | --- |
-| `BrowserPage.swift`, `BrowserPage+*.swift` | The page and its Mac behavior: downloads, engine links, native presentation, prompts, site data, sharing, web notifications |
+| `BrowserPage.swift`, `BrowserPage+*.swift` | The page and its Mac behavior: downloads, engine links, native presentation, prompts, site data, sharing, web notifications, whether a press may move the window |
 | `BrowserPagePool.swift`, `BrowserPagePool+*.swift` | A window's pages: active-page matching, Space selection, screen sharing; hands page-made windows to a Quick Window |
 | `BrowserPagePoolRegistry.swift`, `BrowserPagePoolWindowRuntime.swift` | Every open window's pool, and a pool's window runtime |
 | `BrowserPageEngineAdapter.swift`, `EngineHostedPage+Desktop.swift` | The desktop half of an engine's adapter for one page |
