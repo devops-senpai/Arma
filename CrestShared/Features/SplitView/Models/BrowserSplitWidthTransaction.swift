@@ -26,14 +26,20 @@ struct BrowserSplitWidthTransaction: Equatable {
     }
 
     /// Applies total drag travel to the baseline captured on the first update.
-    mutating func resize(dividerIndex: Int, delta: CGFloat, containerWidth: CGFloat) {
+    /// `minimum` is the least a card becomes along the drag: a row of a
+    /// split's shape passes the card's least height.
+    mutating func resize(
+        dividerIndex: Int, delta: CGFloat, containerWidth: CGFloat,
+        minimum: CGFloat = BrowserSplitLayoutMetrics.minimumCardWidth
+    ) {
         let baseline = dragBaseline ?? fractions
         dragBaseline = baseline
         fractions = BrowserSplitColumnLayout.fractionsAfterResize(
             fractions: baseline,
             dividerIndex: dividerIndex,
             delta: delta,
-            containerWidth: containerWidth
+            containerWidth: containerWidth,
+            minimum: minimum
         )
     }
 

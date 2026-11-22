@@ -3,8 +3,9 @@ namespace CrestCore.Domain;
 public sealed partial class BrowserTabCollection {
     #region Actions - Split metadata
 
-    /// A split copied into new tabs keeps its name, icon, tint and collapse,
-    /// each recorded as chosen now so the copy's fields win over nothing older.
+    /// A split copied into new tabs keeps its name, icon, tint, collapse and
+    /// shape, each recorded as chosen now so the copy's fields win over nothing
+    /// older.
     public void CopySplitMetadata(Guid source, Guid copy, DateTimeOffset now) {
         if (splitGroups.FirstOrDefault(group => group.Id == source) is not { } metadata) return;
         var changedAt = BrowserEditTimestamp.Normalize(now);
@@ -13,7 +14,8 @@ public sealed partial class BrowserTabCollection {
             TitleModifiedAt = changedAt,
             IconModifiedAt = changedAt,
             TintModifiedAt = changedAt,
-            CollapseModifiedAt = changedAt
+            CollapseModifiedAt = changedAt,
+            ShapeModifiedAt = changedAt
         });
     }
 
