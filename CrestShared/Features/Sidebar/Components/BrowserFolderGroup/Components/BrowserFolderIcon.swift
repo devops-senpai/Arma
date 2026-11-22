@@ -5,10 +5,14 @@ struct BrowserFolderIcon: View {
     let folder: FolderStateModel
     let isExpanded: Bool
     let metrics: BrowserFolderHeaderMetrics
+    /// The look and the Space whose folder colors a folder without its own
+    /// wears; without a look the folder draws its own colors alone.
+    var branding: SpaceBranding? = nil
+    var space: SpaceModel? = nil
     private var iconOnly: Bool { BrowserDeviceAppearanceStore.shared.foldersIconOnly }
 
     var body: some View {
-        BrowserFolderArtwork(symbol: folder.displaySymbol, color: folder.displayColor, isExpanded: isExpanded)
+        BrowserFolderArtwork(symbol: folder.displaySymbol, color: dressedColor, isExpanded: isExpanded)
             .modifier(
                 BrowserFolderIconColumn(
                     metrics: metrics,
@@ -17,6 +21,7 @@ struct BrowserFolderIcon: View {
                 )
             )
             .accessibilityHidden(true)
+            .environment(\.browserFolderFaceDress, faceDress)
     }
 }
 

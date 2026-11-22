@@ -31,6 +31,7 @@ struct BrowserAddressContent: View {
     let submit: () -> Void
 
     @FocusState private var isFocused: Bool
+    @Environment(\.spaceControlColors) var controlColors
     @State private var selection: TextSelection?
     /// How much farther the field reaches past the address's leading edge
     /// than past its trailing edge.
@@ -184,7 +185,7 @@ struct BrowserAddressContent: View {
                 if let route = presentation.route {
                     Text(route)
                         .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(routeStyle)
                         .lineLimit(1)
                         .truncationMode(.middle)
                 }
@@ -199,7 +200,7 @@ struct BrowserAddressContent: View {
                 if let route = presentation.route {
                     Text(route)
                         .font(.callout)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(routeStyle)
                         .lineLimit(1)
                         .truncationMode(.tail)
                 }

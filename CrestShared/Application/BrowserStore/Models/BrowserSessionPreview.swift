@@ -83,7 +83,7 @@ extension SpaceSettings {
             isSavedTabsExpanded: isSavedTabsExpanded, savedTabsExpansionModifiedAt: savedTabsExpansionModifiedAt,
             credentialsEnabledModifiedAt: credentialsEnabledModifiedAt, accessPolicyModifiedAt: accessPolicyModifiedAt,
             separatesPinnedTabs: separatesPinnedTabs, separatesPinnedTabsModifiedAt: separatesPinnedTabsModifiedAt,
-            protectionModifiedAt: protectionModifiedAt, look: customization.branding,
-            requiresAuthentication: requiresAuthentication)
+            protectionModifiedAt: protectionModifiedAt, darkBranding: darkBranding, look: customization.branding,
+            requiresAuthentication: requiresAuthentication, darkLook: darkLook)
     }
 }
