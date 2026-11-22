@@ -20,6 +20,8 @@ internal static partial class StoredSessionCodec {
             value[Key.Authentication] = preferences.Authentication.Name;
         if (preferences.SavePromptSeconds != DefaultCredentialPreferences.SavePromptSeconds)
             value[Key.SavePromptSeconds] = preferences.SavePromptSeconds;
+        if (preferences.SuggestsInPrivateWindows != DefaultCredentialPreferences.SuggestsInPrivateWindows)
+            value[Key.SuggestsInPrivateWindows] = preferences.SuggestsInPrivateWindows;
         return value;
     }
 
