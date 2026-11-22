@@ -10,8 +10,8 @@ import Foundation
 actor KeychainCredentialVault: CredentialVault {
     // MARK: - Variables
 
-    private let store: any CredentialKeychainStoring
-    private let servicePrefix: String
+    let store: any CredentialKeychainStoring
+    let servicePrefix: String
     private let codec = CredentialKeychainCodec()
     /// Whether passwords saved for each origin fill a page at the first, in
     /// order, which the core answers in production.
@@ -222,7 +222,7 @@ actor KeychainCredentialVault: CredentialVault {
 
     /// Runs `write` once no other write holds the vault, holding it until
     /// `write` ends, when the write that waited longest takes it.
-    private func writing<Result>(_ write: () async throws -> Result) async rethrows -> Result {
+    func writing<Result>(_ write: () async throws -> Result) async rethrows -> Result {
         if isWriting {
             await withCheckedContinuation { waitingWrites.append($0) }
         } else {

@@ -234,9 +234,8 @@ extension BrowserStore {
         guard let current = spaceModel(matching: assignment)?.settings.credentialPreferences else {
             throw CredentialVaultError.missingSpace
         }
-        let preferences = CredentialPreferences(
-            isEnabled: current.isEnabled, syncsCrestPasswordsWithICloud: isSynchronizable,
-            alsoOffersSaveToSystemPasswords: current.alsoOffersSaveToSystemPasswords)
+        var preferences = current
+        preferences.syncsCrestPasswordsWithICloud = isSynchronizable
         // The native credential operation completed for this profile. Persist
         // its corresponding policy through the same session authority.
         let sent = SetCredentialPreferences(workspaceID: family.workspaceID, spaceID: spaceID, preferences: preferences)
