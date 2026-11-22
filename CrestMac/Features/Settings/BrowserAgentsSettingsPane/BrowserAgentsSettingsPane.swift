@@ -45,7 +45,7 @@ struct BrowserAgentsSettingsPane: View {
 
     private var preferences: AgentPreferences { core.state.agentPreferences }
     /// The helper agents run, inside this app.
-    private let helper = Bundle.main.bundleURL.appendingPathComponent("Contents/Helpers/crest-browser").path
+    private let helper = Bundle.main.bundleURL.appendingPathComponent("Contents/Helpers/arma").path
     /// Whether macOS runs this copy of Crest from a temporary place, where the
     /// helper's path changes every launch.
     private var isTranslocated: Bool { helper.contains("/AppTranslocation/") }
