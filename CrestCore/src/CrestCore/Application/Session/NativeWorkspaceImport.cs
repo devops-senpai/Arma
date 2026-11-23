@@ -186,7 +186,8 @@ internal sealed class NativeWorkspaceImport {
 
     /// The Space a manual setup's `space` brings into the import: the new
     /// Space it makes, holding nothing yet, or the identity and profile of the
-    /// existing Space it names. `ApplySetup` gives it its name and look.
+    /// existing Space it names. `ApplySetup` gives it its name, look and the
+    /// folder it starts with.
     internal static SpaceState SetupSpace(SetupDraftSpace space) {
         ArgumentNullException.ThrowIfNull(space);
         var customization = space.Customization;
@@ -196,8 +197,9 @@ internal sealed class NativeWorkspaceImport {
         return new(space.SpaceId, space.ProfileId, settings, Folders: [], Tabs: [], SplitGroups: [], ArchivedTabs: [], History: []);
     }
 
-    /// Applies a manual setup's Spaces in their order, a new Sub-Space joining
-    /// its group at `now`; see `ApplyManualSetup`.
+    /// Applies a manual setup's Spaces in their order, each Space the setup
+    /// gave a folder starting with it, a new Sub-Space joining its group at
+    /// `now`; see `ApplyManualSetup`.
     internal void ApplySetup(SetupDraft setup, DateTimeOffset now) {
         var paired = Pair(setup.Spaces, draft => draft.SpaceId);
         SessionState.RequireSpaceCapacity(spaces.Count, setup.Spaces.Count(draft => draft.IsNew));
@@ -212,6 +214,10 @@ internal sealed class NativeWorkspaceImport {
             if (created && spaces.Any(s => s.State.OwnProfileId == input.State.OwnProfileId || s.State.ProfileId == input.State.OwnProfileId))
                 throw new Rejected(new ProfileInUse(input.State.OwnProfileId));
             Customize(destination, draft.Customization);
+            if (draft.FolderId is { } folderId && destination.State.Folders.All(folder => folder.Id != folderId))
+                destination.State = destination.State with {
+                    Folders = [.. destination.State.Folders, new FolderState(folderId, TabPlacement.Saved, SetupDraft.NewSpaceFolderTitle)]
+                };
             if (!created) continue;
             spaces.Add(destination);
             affected ??= destination;
