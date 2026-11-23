@@ -14,10 +14,10 @@ final class BrowserPagePoolTests: XCTestCase {
         XCTAssertTrue(try XCTUnwrap(pool.activePage).isCredentialAccessEnabled)
 
         let space = try XCTUnwrap(browser.shownSpace)
-        browser.updateCredentialPreferences(
-            CredentialPreferences(
-                isEnabled: false, syncsCrestPasswordsWithICloud: false, alsoOffersSaveToSystemPasswords: false),
-            in: space.id)
+        var preferences = space.settings.credentialPreferences
+        preferences.isEnabled = false
+        preferences.syncsCrestPasswordsWithICloud = false
+        browser.updateCredentialPreferences(preferences, in: space.id)
         pool.reconcileCredentialAccess()
 
         XCTAssertFalse(try XCTUnwrap(pool.activePage).isCredentialAccessEnabled)
