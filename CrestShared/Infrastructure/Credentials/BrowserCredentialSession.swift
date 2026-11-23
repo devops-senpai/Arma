@@ -14,6 +14,9 @@ final class BrowserCredentialSession {
     let state: BrowserCredentialPageState<FillTarget>
     private(set) var isEnabled: Bool
     @ObservationIgnored private let supportsAccess: Bool
+    /// Whether the Space's "save passwords" preference turns the session on
+    /// and off. A private window's follows the Spaces it suggests from instead.
+    @ObservationIgnored private let followsSpacePreference: Bool
     @ObservationIgnored private let httpAuthentication: BrowserHTTPAuthenticationSession
 
     init(
@@ -22,16 +25,20 @@ final class BrowserCredentialSession {
         supportsAccess: Bool,
         isEnabled: Bool,
         httpAuthentication: BrowserHTTPAuthenticationSession,
-        neverSavedSites: @escaping @MainActor () -> [NeverSavedSite] = { [] }
+        neverSavedSites: @escaping @MainActor () -> [NeverSavedSite] = { [] },
+        allowsSaving: Bool = true,
+        followsSpacePreference: Bool = true
     ) {
-        state = BrowserCredentialPageState(spaceID: spaceID, core: core, neverSavedSites: neverSavedSites)
+        state = BrowserCredentialPageState(
+            spaceID: spaceID, core: core, neverSavedSites: neverSavedSites, allowsSaving: allowsSaving)
         self.supportsAccess = supportsAccess
-        self.isEnabled = supportsAccess && isEnabled
+        self.followsSpacePreference = followsSpacePreference
+        self.isEnabled = supportsAccess && (isEnabled || !followsSpacePreference)
         self.httpAuthentication = httpAuthentication
     }
 
     func setEnabled(_ isEnabled: Bool) {
-        let resolvedValue = supportsAccess && isEnabled
+        let resolvedValue = supportsAccess && (isEnabled || !followsSpacePreference)
         guard self.isEnabled != resolvedValue else { return }
         self.isEnabled = resolvedValue
         httpAuthentication.setCredentialStorageEnabled(resolvedValue)
