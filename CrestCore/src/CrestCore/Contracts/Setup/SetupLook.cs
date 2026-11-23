@@ -7,7 +7,7 @@ public sealed class SetupLook {
 
     /// A Space wears a template's banner and its layered crest.
     public static readonly SetupLook Heraldic = new(name: "heraldic", title: "Heraldic (Full)", SpaceThemeMode.Banner,
-        SpaceIconStyle.LayeredCrest, newSpaceLook: accent => accent.House);
+        SpaceIconStyle.LayeredCrest, newSpaceLook: SpaceHouse.NewSpaceLook);
 
     public static IReadOnlyList<SetupLook> All { get; } = [Heraldic];
 
