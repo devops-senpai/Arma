@@ -231,6 +231,9 @@ struct BrowserPasswordSettingsPane: View {
                             isOn: browser.credentialPreferenceBinding(\.suggestsInPrivateWindows, in: space)
                         )
                         .accessibilityIdentifier("space-credential-private-windows")
+                        #if os(macOS)
+                            BrowserPasswordCommandLineRows(browser: browser, space: space)
+                        #endif
 
                         if layout.showsManageAction {
                             Button("Manage Saved Passwords…") {

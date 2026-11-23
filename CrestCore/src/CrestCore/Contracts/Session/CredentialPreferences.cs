@@ -7,7 +7,10 @@ namespace CrestCore.Contracts;
 /// <see cref="SavePromptSeconds"/>, and is never made on the websites in
 /// <see cref="NeverSavedSites"/>, where saved passwords still fill. Private
 /// windows suggest saved passwords only with
-/// <see cref="SuggestsInPrivateWindows"/>, and never offer to save one. Older
+/// <see cref="SuggestsInPrivateWindows"/>, and never offer to save one. The
+/// `arma passwords` command reaches the Space's passwords only with
+/// <see cref="AllowsCommandLine"/>, and only through a session the person
+/// unlocked. Older
 /// releases stored only the first three, and a Space that stored none of the
 /// rest takes their defaults.
 /// </summary>
@@ -18,7 +21,8 @@ public sealed record CredentialPreferences(
     IReadOnlyList<NeverSavedSite> NeverSavedSites,
     CredentialAuthentication Authentication,
     int SavePromptSeconds = CredentialPreferences.DefaultSavePromptSeconds,
-    bool SuggestsInPrivateWindows = false) {
+    bool SuggestsInPrivateWindows = false,
+    bool AllowsCommandLine = false) {
     #region Static Variables
 
     /// How long the offer to save stays unless a person chooses otherwise.
@@ -55,10 +59,11 @@ public sealed record CredentialPreferences(
         && NeverSavedSites.SequenceEqual(other.NeverSavedSites)
         && Authentication == other.Authentication
         && SavePromptSeconds == other.SavePromptSeconds
-        && SuggestsInPrivateWindows == other.SuggestsInPrivateWindows;
+        && SuggestsInPrivateWindows == other.SuggestsInPrivateWindows
+        && AllowsCommandLine == other.AllowsCommandLine;
 
     public override int GetHashCode() => HashCode.Combine(IsEnabled, SyncsCrestPasswordsWithICloud, AlsoOffersSaveToSystemPasswords,
-        NeverSavedSites.Count, Authentication, SavePromptSeconds, SuggestsInPrivateWindows);
+        NeverSavedSites.Count, Authentication, SavePromptSeconds, SuggestsInPrivateWindows, AllowsCommandLine);
 
     #endregion
 

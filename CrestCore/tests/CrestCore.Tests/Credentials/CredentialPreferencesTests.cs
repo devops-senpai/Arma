@@ -28,7 +28,7 @@ public sealed class CredentialPreferencesTests {
     [Fact]
     public void TheSavePromptTimeIsStoredAndKeptWithinItsRange() {
         var chosen = new CredentialPreferences(true, true, false, [], CredentialAuthentication.EachTime, SavePromptSeconds: 25,
-            SuggestsInPrivateWindows: true);
+            SuggestsInPrivateWindows: true, AllowsCommandLine: true);
         Assert.Equal(chosen, StoredSessionCodec.DecodeCredentialPreferences(StoredSessionCodec.Encode(chosen)));
 
         var stored = (JsonObject)Older.DeepClone();
