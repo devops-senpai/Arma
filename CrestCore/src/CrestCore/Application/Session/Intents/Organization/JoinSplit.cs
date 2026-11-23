@@ -7,15 +7,17 @@ namespace CrestCore.Contracts;
 /// member `Index` or after the others. A saved or pinned tab stays where it is
 /// and an open copy joins in its place, with an identity the core gives it,
 /// showing what its source's page shows now; each copy is published as
-/// `TabCopied`. The window that asked shows the joined tab in its Space.
-public sealed record JoinSplit(Guid WorkspaceId, Guid WindowId, Guid SpaceId, Guid TabId, Guid TargetTabId, int? Index)
-    : SessionIntent(WorkspaceId) {
+/// `TabCopied`. The window that asked shows the joined tab in its Space. The
+/// split then takes `Shape`, when one is named: how its cards tile once the
+/// tab sits at `Index`.
+public sealed record JoinSplit(Guid WorkspaceId, Guid WindowId, Guid SpaceId, Guid TabId, Guid TargetTabId, int? Index,
+    SplitShape? Shape = null) : SessionIntent(WorkspaceId) {
     #region Actions - Session
 
     internal override SessionEdit? Edit(NativeSessionAuthority workspace, SessionTurn turn) {
         var space = workspace.Editable(turn.Basis, SpaceId);
         return workspace.Joining(turn.Basis, space, BrowserTabCollection.Restore(space), WindowId, TabId, TargetTabId,
-            Index, turn.Pages, turn.Now, turn.Ids);
+            Index, turn.Pages, turn.Now, turn.Ids, Shape);
     }
 
     #endregion
