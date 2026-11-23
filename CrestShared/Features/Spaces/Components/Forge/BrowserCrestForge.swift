@@ -1,5 +1,62 @@
 import SwiftUI
 
+// MARK: - Types
+
+/// The looks a Space's Crest Studio can put back. The Forge keeps one, and
+/// shares it with the step pages it opens on a phone, so a drag on any page is
+/// one change to undo and Undo on any page steps back through the same past.
+struct BrowserCrestForgeHistory {
+    // MARK: - Static Variables
+
+    static let limit = 40
+
+    // MARK: - Variables
+
+    private var looks: [SpaceBranding] = []
+    /// The look a drag started from; the drag ends as one change from it.
+    private(set) var editingStart: SpaceBranding?
+    /// The look Undo put back, which is not itself a change to remember.
+    private var restoredLook: SpaceBranding?
+
+    var canUndo: Bool { !looks.isEmpty }
+
+    // MARK: - Mutators
+
+    /// Remembers the look a change replaced, unless a drag is still running
+    /// or the change is Undo putting a look back.
+    mutating func noteChange(from previous: SpaceBranding, to current: SpaceBranding) {
+        if let restored = restoredLook {
+            restoredLook = nil
+            if current == restored { return }
+        }
+        guard editingStart == nil else { return }
+        remember(previous)
+    }
+
+    /// Marks a drag's start or end over `current`: one change to undo,
+    /// however many samples the drag sent.
+    mutating func setEditing(_ editing: Bool, over current: SpaceBranding) {
+        if editing {
+            if editingStart == nil { editingStart = current }
+        } else if let start = editingStart {
+            editingStart = nil
+            if start != current { remember(start) }
+        }
+    }
+
+    /// Takes the look to put back, if there is one.
+    mutating func undo() -> SpaceBranding? {
+        guard let previous = looks.popLast() else { return nil }
+        restoredLook = previous
+        return previous
+    }
+
+    private mutating func remember(_ previous: SpaceBranding) {
+        looks.append(previous)
+        if looks.count > Self.limit { looks.removeFirst() }
+    }
+}
+
 /// A Space's appearance: its crest or icon on the Space's own sidebar field,
 /// beside the Space's Background and Accent, then palettes to take in one
 /// tap, then its icon, a crest started from a house or a plain symbol or
@@ -18,13 +75,22 @@ struct BrowserCrestForge: View {
     var listsSteps = false
     /// Whether this is the whole page rather than one part's own page.
     var showsStepBar = true
+    /// The Forge's history, on one of the step pages it opens; the Forge
+    /// itself keeps its own.
+    var sharedHistory: Binding<BrowserCrestForgeHistory>? = nil
 
     @State private var initialAppearance: SpaceBranding?
-    @State private var history: [SpaceBranding] = []
-    @State private var editingStart: SpaceBranding?
-    /// The look Undo put back, which is not itself a change to remember.
-    @State private var restoredBranding: SpaceBranding?
+    @State private var ownHistory = BrowserCrestForgeHistory()
     @State private var showsMore = false
+    @Environment(\.browserSpaceThemeFiles) var themeFiles
+    /// The theme the Forge edits in place of a Space, when it edits one.
+    @Environment(\.browserThemeForgeSubject) var themeSubject
+    /// Why the last theme file could not be written or read, until the next try.
+    @State var themeFileProblem: String?
+
+    private var history: Binding<BrowserCrestForgeHistory> { sharedHistory ?? $ownHistory }
+
+    private var editingStart: SpaceBranding? { history.wrappedValue.editingStart }
 
     private var context: BrowserCrestStudioContext {
         BrowserCrestStudioContext(
@@ -46,9 +112,12 @@ struct BrowserCrestForge: View {
         #if os(iOS)
             .modifier(
                 BrowserCrestForgeStepPages(isEnabled: listsSteps) { step in
-                    BrowserCrestForge(branding: $branding, symbol: $symbol, step: .constant(step), showsStepBar: false)
-                        .navigationTitle(Text(step.title))
-                        .navigationBarTitleDisplayMode(.inline)
+                    BrowserCrestForge(
+                        branding: $branding, symbol: $symbol, step: .constant(step), showsStepBar: false,
+                        sharedHistory: history
+                    )
+                    .navigationTitle(Text(step.title))
+                    .navigationBarTitleDisplayMode(.inline)
                 })
         #endif
         #if os(macOS)
@@ -59,54 +128,53 @@ struct BrowserCrestForge: View {
             BrowserCrestStudioEditingAction { editing in
                 // A drag is one change to undo, and the galleries keep their
                 // compositions while it runs.
-                if editing {
-                    if editingStart == nil { editingStart = branding }
-                } else if let start = editingStart {
-                    editingStart = nil
-                    if start != branding { remember(start) }
-                }
+                history.wrappedValue.setEditing(editing, over: branding)
             }
         )
         .onAppear { if initialAppearance == nil { initialAppearance = branding } }
         .onChange(of: branding) { previous, current in
-            if let restored = restoredBranding {
-                restoredBranding = nil
-                if current == restored { return }
-            }
-            guard editingStart == nil else { return }
-            remember(previous)
+            // The Forge sees its step pages' changes through the shared
+            // binding, so it alone remembers them.
+            guard sharedHistory == nil else { return }
+            history.wrappedValue.noteChange(from: previous, to: current)
         }
         .accessibilityIdentifier("space-customization-controls")
     }
 
     // MARK: - Page
 
+    /// The page: a Space's palettes under its stage, its icon, and More
+    /// Customization; a theme, which has no icon, shows what it carries at
+    /// once.
     @ViewBuilder private var page: some View {
         Section {
             BrowserSpacePalettePicker(branding: $branding)
         } header: {
             stageHeader
         }
-        Section {
-            BrowserSpaceIconPicker(branding: $branding, symbol: $symbol)
-        } header: {
-            CrestSettingsSectionHeading(title: "Icon")
+        if offersIcon {
+            Section {
+                BrowserSpaceIconPicker(branding: $branding, symbol: $symbol)
+            } header: {
+                CrestSettingsSectionHeading(title: "Icon")
+            }
+            BrowserMoreCustomizationHeader(isExpanded: $showsMore)
         }
-        BrowserMoreCustomizationHeader(isExpanded: $showsMore)
-        if showsMore {
+        if showsMore || !offersIcon {
             sidebarSections
-            if isCrest {
+            if isCrest && offersIcon {
                 crestSections
             }
+            otherSections
         }
     }
 
     /// The stage heads the page's first section, outside the grouped boxes,
     /// so the crest sits on the Space's field alone.
-    private var stageHeader: some View {
+    var stageHeader: some View {
         BrowserCrestForgeStage(
-            branding: $branding, symbol: symbol, showsCrestColors: showsMore || !showsStepBar, name: name,
-            canUndo: !history.isEmpty, shuffle: shuffle, undo: undo,
+            branding: $branding, symbol: symbol, showsCrestColors: offersIcon && (showsMore || !showsStepBar),
+            name: name, canUndo: history.wrappedValue.canUndo, shuffle: shuffle, undo: undo,
             openStep: { opened in
                 step = opened
                 showsMore = true
@@ -149,7 +217,9 @@ struct BrowserCrestForge: View {
                 title: "Texture", value: context.setting(\.textureStrength),
                 readout: .percent(zero: "None", full: "Full"))
             textColor
+            BrowserCrestStudioSidebarTextColors(context: context)
         }
+        BrowserCrestForgeThemeSidebarSections(context: context)
     }
 
     private func patternChoice(_ pattern: SpaceBannerPattern) -> some View {
@@ -307,14 +377,8 @@ struct BrowserCrestForge: View {
 
     // MARK: - History
 
-    private func remember(_ previous: SpaceBranding) {
-        history.append(previous)
-        if history.count > BrowserCrestForgeHistory.limit { history.removeFirst() }
-    }
-
     private func undo() {
-        guard let previous = history.popLast() else { return }
-        restoredBranding = previous
+        guard let previous = history.wrappedValue.undo() else { return }
         branding = previous
     }
 
@@ -360,10 +424,6 @@ struct BrowserCrestForge: View {
         look.hasCustomAppearance = true
         return look.normalized()
     }
-}
-
-private enum BrowserCrestForgeHistory {
-    static let limit = 40
 }
 
 #if os(iOS)
