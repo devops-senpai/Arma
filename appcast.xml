@@ -6,6 +6,44 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.10.234</title>
+            <pubDate>Mon, 23 Nov 2026 11:44:43 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>1000234</sparkle:version>
+            <sparkle:shortVersionString>0.10.234</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Synced with Crest 8ecda9450 (#1302 to #1318), runs on macOS 15 and later, ships as one universal download for Apple silicon and Intel, and returns closed pinned and saved tabs to their saved address.
+
+### New
+- Arma for Mac now runs on macOS 15 Sequoia and later. On macOS 15, controls that stand on Liquid Glass on macOS 26 stand on Arma's own material instead, and pages translate when you choose Translate rather than automatically.
+
+### New
+- A Space's Appearance page has Modify Theme Too, off to begin with. On, edits there save over a theme named for the Space, and choosing a house crest starts the whole look over from the house's own.
+- Settings › Themes can restore a theme to how it was when it was installed or imported, taking back every change made to it since. Undo takes that back too.
+
+### Fixed
+- Choosing a house crest in a Space's Crest Studio changes only the crest. The Space keeps its theme's colors.
+
+### Improved
+- Closing a pinned or saved tab returns it to its saved address, unless you choose Resume Last Location in Settings › Tabs.
+- In the command palette, typing the start of an open or pinned tab's name or site, or of a site you use, puts it first again, so Return goes there instead of searching. Phrases still search first.
+- Pages opening in dark mode go straight from the loading screen to the page, without a flash of white in between.
+- In dark mode, the space behind pages, Getting Started, the command palette and the other screens is black, as in Settings, instead of navy.
+- Panels, notices, drag previews, Peeks and setup's windows now cast one consistent set of shadows, so surfaces at the same height look the same everywhere.
+- Disabled glyph buttons, such as reload, fade to the same strength as every other disabled glyph.
+- On Mac, a shortcut button you're recording a shortcut into is tinted blue instead of the system accent color.
+- Text buttons and setup's welcome line on iPhone and iPad grow with your text size, and setup's welcome on iPad scrolls at the largest sizes so Continue stays in reach.
+
+### Internal
+- The Mac app, its native core, its helpers and the Chromium engine build for Intel as well as Apple silicon; the installer is one universal download and a release checks that every slice it ships holds both architectures.
+- Every design token has one name: spacing, corners, fills, opacities, shadows, hit targets and glyph sizes across the Mac, iPhone and iPad views come from the shared tokens, with no visible change. Arma's themes, setup pages and identity views read the same tokens.
+- Crest's update feeds moved to updates.crestbrowser.com; Arma keeps checking its own feeds in the Arma repository.
+- Arma's iCloud container now carries the sync record types in Production, so iCloud Sync uploads instead of reporting "Failed to send changes".
+- This build was made from the pre-sync commit b4e262655 with the two theme fixes and the Chromium 157.0.8103.81 universal engine (chromium-engine-934827a81220c6c0). main at this tag already carries Crest's Chromium 158.0.8127.37 engine inputs (#1322, #1323) for the next engine build.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.234/Arma-0.10.234.dmg" length="326116695" type="application/octet-stream" sparkle:edSignature="KOBsIJjDsjjUOhg9RPdgi106Z/rUfNDzPWvbEoZhpCqr67ve12tWSs1Sgb0jBP3bePfReCe4o7idFqCMxsvdDA=="/>
+        </item>
+        <item>
             <title>0.10.217</title>
             <pubDate>Sun, 22 Nov 2026 14:14:04 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1154,6 +1192,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: w95eHA3HTBTTrtJ4t+yIVdUR1WBlvinTJbq9qc2NQxf9e9dVMgtWS5c1Jp/8IiJgjHHV5HjLblOnaIeuz/n+AQ==
-length: 90290
+edSignature: FeoFGW3zwMOmtN9HsOy6L/V1ZGeTOnanF0VZKixPYeXIzcYG7clS1jO9WSoOSl31hUlCO9Az7yv20e8aeUNIDA==
+length: 94174
 -->
