@@ -15,12 +15,24 @@ written by the commit that moves `MARKETING_VERSION` to it:
 platforms never change once it is on main. `release` is the curated write-up of a
 version published as Stable; it may be written and edited after the version lands.
 Leaving out `platforms` means the change reaches every platform.
+
+Arma writes no version file: a change adds its note as one file beside the
+version folders, `Documentation/ReleaseNotes/<id>.json`, holding the entry
+without its id:
+
+    { "category": "fixed", "message": "...", "platforms": ["mac"] }
+
+The entry belongs to the version its commit builds as, which
+`Scripts/derive-version.py` counts from history, and a file not committed yet
+to the next one, so the version files change only as upstream wrote them and
+two changes never edit the same file.
 """
 
 from __future__ import annotations
 
 import argparse
 from dataclasses import dataclass
+import importlib.util
 import json
 import pathlib
 import re
@@ -146,6 +158,9 @@ class VersionNotes:
 @dataclass(frozen=True)
 class ReleaseNoteCatalog:
     versions: tuple[VersionNotes, ...]
+    # The versions that hold only entry files, named by the commits that
+    # added them rather than by a file of their own.
+    derived: frozenset[Version] = frozenset()
 
     @property
     def entries(self) -> dict[str, ReleaseNoteEntry]:
@@ -162,6 +177,12 @@ class ReleaseNoteCatalog:
 
     def notes(self, version: Version) -> Optional[VersionNotes]:
         return next((notes for notes in self.versions if notes.version == version), None)
+
+    @property
+    def newest_written(self) -> Optional[VersionNotes]:
+        """The newest version with a file of its own."""
+        written = [notes for notes in self.versions if notes.version not in self.derived]
+        return written[-1] if written else None
 
 
 # MARK: - Parsing
@@ -297,35 +318,79 @@ def version_for_path(relative_path: str) -> Version:
     return version
 
 
-def assemble(documents: Iterable[tuple[str, str]]) -> ReleaseNoteCatalog:
-    """A catalog from (path relative to the catalog directory, contents) pairs."""
-    versions = []
+def is_entry_file(relative_path: str) -> bool:
+    """Whether a path in the catalog directory is an entry file, beside the version folders."""
+    return "/" not in relative_path
+
+
+def identifier_for_path(relative_path: str) -> str:
+    """The id an entry file's name gives its entry."""
+    if not relative_path.endswith(".json"):
+        raise CatalogValidationError(f"{CATALOG_DIRECTORY}/{relative_path}: entry files are named <id>.json")
+    return relative_path.removesuffix(".json")
+
+
+def parse_entry_file(contents: str, version: Version, source: str) -> ReleaseNoteEntry:
+    """One entry file: the entry's category, message and optional platforms; its name is the id."""
+    try:
+        raw = json.loads(contents, object_pairs_hook=unique_json_object)
+    except (json.JSONDecodeError, CatalogValidationError) as error:
+        raise CatalogValidationError(f"{source}: {error}") from error
+    if not isinstance(raw, dict) or "id" in raw:
+        raise CatalogValidationError(
+            f"{source}: an entry file holds category, message and optional platforms; its name is the id"
+        )
+    identifier = identifier_for_path(source.removeprefix(f"{CATALOG_DIRECTORY}/"))
+    return parse_entry({"id": identifier, **raw}, version, source)
+
+
+def assemble(
+    documents: Iterable[tuple[str, str]], entries: Iterable[tuple[str, str, Version]] = ()
+) -> ReleaseNoteCatalog:
+    """A catalog from (path relative to the catalog directory, contents) pairs,
+    and from entry files as (path, contents, the version the file belongs to)."""
+    versions: dict[Version, VersionNotes] = {}
     for relative_path, contents in documents:
         version = version_for_path(relative_path)
-        versions.append(
-            parse_version_document(contents, version, f"{CATALOG_DIRECTORY}/{relative_path}")
-        )
-    versions.sort(key=lambda notes: notes.version)
+        versions[version] = parse_version_document(contents, version, f"{CATALOG_DIRECTORY}/{relative_path}")
+    derived: set[Version] = set()
+    for relative_path, contents, version in entries:
+        entry = parse_entry_file(contents, version, f"{CATALOG_DIRECTORY}/{relative_path}")
+        notes = versions.get(version)
+        if notes is None:
+            notes = VersionNotes(version, (), None)
+            derived.add(version)
+        versions[version] = VersionNotes(version, notes.entries + (entry,), notes.write_up)
+    ordered = sorted(versions.values(), key=lambda notes: notes.version)
     seen: dict[str, Version] = {}
-    for notes in versions:
+    for notes in ordered:
         for entry in notes.entries:
             if entry.identifier in seen:
                 raise CatalogValidationError(
                     f"entry id '{entry.identifier}' is in both {seen[entry.identifier]} and {notes.version}"
                 )
             seen[entry.identifier] = notes.version
-    return ReleaseNoteCatalog(tuple(versions))
+    return ReleaseNoteCatalog(tuple(ordered), frozenset(derived))
 
 
-def read_catalog(directory: pathlib.Path) -> ReleaseNoteCatalog:
+def read_catalog(directory: pathlib.Path, repository_root: Optional[pathlib.Path] = None) -> ReleaseNoteCatalog:
+    """The catalog in the working tree, whose entry files belong to the versions
+    of the commits that added them, or to the next version when not committed yet."""
     if not directory.is_dir():
         raise CatalogValidationError(f"{CATALOG_DIRECTORY} is missing")
+    repository_root = repository_root or directory.resolve().parents[1]
     documents = []
+    entry_files = []
     for path in sorted(directory.rglob("*")):
         if path.is_dir() or path.name == ".DS_Store":
             continue
-        documents.append((path.relative_to(directory).as_posix(), path.read_text()))
-    return assemble(documents)
+        relative_path = path.relative_to(directory).as_posix()
+        if is_entry_file(relative_path):
+            entry_files.append((relative_path, path.read_text()))
+        else:
+            documents.append((relative_path, path.read_text()))
+    versions = entry_versions(repository_root, "HEAD", [path for path, _ in entry_files])
+    return assemble(documents, ((path, contents, versions[path]) for path, contents in entry_files))
 
 
 # MARK: - Git
@@ -379,11 +444,57 @@ def read_catalog_at(repository_root: pathlib.Path, treeish: str) -> Optional[Rel
         return None
     prefix = f"{CATALOG_DIRECTORY}/"
     contents = read_blobs(repository_root, [blob for _, blob in blobs])
-    return assemble(
+    files = [
         (path.removeprefix(prefix), text)
         for (path, _), text in zip(blobs, contents)
         if not path.endswith("/.DS_Store")
+    ]
+    entry_files = [(path, text) for path, text in files if is_entry_file(path)]
+    versions = entry_versions(
+        repository_root, "HEAD" if treeish == ":" else treeish, [path for path, _ in entry_files])
+    return assemble(
+        ((path, text) for path, text in files if not is_entry_file(path)),
+        ((path, text, versions[path]) for path, text in entry_files),
     )
+
+
+def entry_versions(repository_root: pathlib.Path, reference: str, paths: list[str]) -> dict[str, Version]:
+    """The version each entry file belongs to: the one the first-parent commit of
+    `reference` that added it builds as, or the next version for a file
+    `reference` does not have yet."""
+    if not paths:
+        return {}
+    prefix = f"{CATALOG_DIRECTORY}/"
+    added_by: dict[str, str] = {}
+    log = git(
+        repository_root, "log", "--first-parent", "--diff-merges=first-parent", "--diff-filter=A",
+        "--name-only", "--format=%x00%H", reference, "--", CATALOG_DIRECTORY)
+    commit = None
+    for line in log.stdout.splitlines() if log.returncode == 0 else []:
+        if line.startswith("\0"):
+            commit = line[1:]
+        elif line.startswith(prefix) and commit is not None:
+            added_by.setdefault(line.removeprefix(prefix), commit)
+    derive = derive_version_module()
+    commits = {added_by[path] for path in paths if path in added_by}
+    try:
+        current = Version.parse(derive.derived_version(repository_root, reference))
+        versions = {commit: Version.parse(version) for commit, version in derive.derived_versions(
+            repository_root, reference, sorted(commits)).items()}
+    except derive.VersionError as error:
+        raise CatalogValidationError(str(error)) from error
+    following = Version(current.major, current.minor, current.patch + 1)
+    return {path: versions[added_by[path]] if path in added_by else following for path in paths}
+
+
+def derive_version_module():
+    """`Scripts/derive-version.py`, which counts a commit's version from history."""
+    path = pathlib.Path(__file__).with_name("derive-version.py")
+    specification = importlib.util.spec_from_file_location("derive_version", path)
+    module = importlib.util.module_from_spec(specification)
+    sys.modules[specification.name] = module
+    specification.loader.exec_module(module)
+    return module
 
 
 def legacy_entries_at(repository_root: pathlib.Path, treeish: str) -> Optional[dict[str, tuple[str, str]]]:
@@ -404,9 +515,11 @@ def file_at(repository_root: pathlib.Path, object_name: str) -> Optional[str]:
 
 
 def validate_working_catalog(repository_root: pathlib.Path) -> ReleaseNoteCatalog:
-    catalog = read_catalog(repository_root / CATALOG_DIRECTORY)
+    catalog = read_catalog(repository_root / CATALOG_DIRECTORY, repository_root)
     version_file = repository_root / VERSION_FILE_PATH
-    newest = catalog.newest
+    # Entry files take their versions from history; only a version file can
+    # name one the release line has not reached.
+    newest = catalog.newest_written
     if version_file.is_file() and newest is not None:
         marketing_version = Version.from_version_file(version_file.read_text(), VERSION_FILE_PATH)
         if newest.version > marketing_version:
@@ -417,58 +530,32 @@ def validate_working_catalog(repository_root: pathlib.Path) -> ReleaseNoteCatalo
 
 
 def validate_staged_entry(repository_root: pathlib.Path) -> tuple[str, ...]:
-    """The entries a fix commit adds, after checking it adds them where they belong."""
-    staged_version_file = file_at(repository_root, f":{VERSION_FILE_PATH}")
-    if staged_version_file is None:
-        raise CatalogValidationError(f"stage {VERSION_FILE_PATH} with the current commit")
-    version = Version.from_version_file(staged_version_file, f"staged {VERSION_FILE_PATH}")
-    current = read_catalog_at(repository_root, ":")
-    if current is None:
-        raise CatalogValidationError(f"stage {version.path} with this change's release notes")
-    current_entries = current.entries
-
+    """The entries a change commit adds, as entry files beside the version
+    files, which it leaves as upstream wrote them. The patch version is derived
+    from history, so nothing names it."""
     has_head = git(repository_root, "rev-parse", "--verify", "--quiet", "HEAD").returncode == 0
-    previous = read_catalog_at(repository_root, "HEAD") if has_head else None
-    if previous is not None:
-        previous_content = {identifier: entry.content for identifier, entry in previous.entries.items()}
-        current_content = {identifier: entry.content for identifier, entry in current_entries.items()}
-    else:
-        previous_content = (legacy_entries_at(repository_root, "HEAD") if has_head else None) or {}
-        current_content = {
-            identifier: (entry.category, entry.message) for identifier, entry in current_entries.items()
-        }
-
-    deleted = sorted(previous_content.keys() - current_content.keys())
-    if deleted:
-        raise CatalogValidationError(
-            f"commits must not delete release-note entries: {', '.join(deleted)}"
-        )
-    rewritten = [
-        identifier
-        for identifier, content in previous_content.items()
-        if current_content[identifier] != content
-    ]
-    if rewritten:
-        raise CatalogValidationError(
-            f"commits must not change or move release-note entries: {', '.join(rewritten)}"
-        )
-
-    added = tuple(identifier for identifier in current_entries if identifier not in previous_content)
+    against = ["HEAD"] if has_head else ["--root"]
+    listing = git(
+        repository_root, "diff", "--cached", "--name-status", "--no-renames", *against, "--", CATALOG_DIRECTORY)
+    if listing.returncode != 0:
+        raise CatalogValidationError(f"cannot read the staged release notes: {listing.stderr.strip()}")
+    prefix = f"{CATALOG_DIRECTORY}/"
+    added = []
+    for line in listing.stdout.splitlines():
+        status, path = line.split("\t", 1)
+        relative_path = path.removeprefix(prefix)
+        if not is_entry_file(relative_path):
+            raise CatalogValidationError(
+                f"{path} changes only as upstream wrote it: add the entry as {prefix}<id>.json"
+            )
+        if status != "A":
+            raise CatalogValidationError(f"commits must not change or delete release-note entries: {path}")
+        added.append(identifier_for_path(relative_path))
     if not added:
-        raise CatalogValidationError(
-            f"add at least one new release-note entry to {version.path}"
-        )
-    misplaced = [identifier for identifier in added if current_entries[identifier].version != version]
-    if misplaced:
-        raise CatalogValidationError(
-            f"new release-note entries belong in {version.path}: {', '.join(misplaced)}"
-        )
-    newest = current.newest
-    if newest is not None and newest.version != version:
-        raise CatalogValidationError(
-            f"{newest.version.path} is newer than the staged MARKETING_VERSION {version}"
-        )
-    return added
+        raise CatalogValidationError(f"stage at least one new release-note entry as {prefix}<id>.json")
+    # Parsing the staged catalog refuses an id another entry already has.
+    read_catalog_at(repository_root, ":")
+    return tuple(added)
 
 
 # MARK: - Writing
