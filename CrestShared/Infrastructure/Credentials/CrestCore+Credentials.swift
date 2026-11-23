@@ -16,12 +16,18 @@ extension CrestCore {
 
     /// Whether a password saved for each of `saved` fills a page at `page`, in
     /// order, asked in core-sized batches. Throws the core's rejection when it
-    /// refuses the page's origin.
-    nonisolated func fills(_ page: CredentialOrigin, from saved: [CredentialOrigin]) throws(Rejection) -> [Bool] {
+    /// refuses the page's origin. Those at the indexes in `reaching` also fill
+    /// the hosts under their origin.
+    nonisolated func fills(
+        _ page: CredentialOrigin, from saved: [CredentialOrigin], reaching: [Int] = []
+    ) throws(Rejection) -> [Bool] {
         var fills: [Bool] = []
         for start in stride(from: 0, to: saved.count, by: Self.fillBatchLimit) {
-            let batch = Array(saved[start..<min(start + Self.fillBatchLimit, saved.count)])
-            fills += try query(CredentialsFillingPage(page: page, saved: batch)).fills
+            let end = min(start + Self.fillBatchLimit, saved.count)
+            let batch = Array(saved[start..<end])
+            let batchReaching = reaching.filter { (start..<end).contains($0) }.map { $0 - start }
+            fills +=
+                try query(CredentialsFillingPage(page: page, saved: batch, reachingSubdomains: batchReaching)).fills
         }
         return fills
     }
