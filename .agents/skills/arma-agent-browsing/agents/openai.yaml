@@ -1,0 +1,3 @@
+interface:
+  display_name: "Arma agent browsing"
+  short_description: "Read and act inside Arma's pages: MCP, arma page, automation"
