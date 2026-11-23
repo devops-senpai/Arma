@@ -201,6 +201,7 @@ struct BrowserPasswordSettingsPane: View {
                             credentialPreferences(in: space)
                         }
 
+                        BrowserCredentialAuthenticationRow(browser: browser, space: space)
                         BrowserSavePromptSecondsRow(browser: browser, space: space)
 
                         if layout.showsManageAction {
