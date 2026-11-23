@@ -43,10 +43,10 @@ struct BrowserSpaceIconKind: Hashable, Identifiable, Sendable {
     }
 }
 
-/// A Space's icon: a crest, started from one of the houses, which also sets
-/// the Space's Background and Accent, or a plain symbol or emoji in the
-/// Accent. Setup's Space page and a Space's appearance in Settings both show
-/// it.
+/// A Space's icon: a crest, started from one of the houses in the house's
+/// own colors while the Space's theme keeps the sidebar, or a plain symbol
+/// or emoji in the Accent. Setup's Space page and a Space's appearance in
+/// Settings both show it.
 struct BrowserSpaceIconPicker: View {
     // MARK: - Variables
 
@@ -115,8 +115,8 @@ struct BrowserSpaceIconPicker: View {
     }
 
     private func crest(of house: SpaceHouse) -> some View {
-        BrowserCrestStudioChoice(title: house.title, selected: house.isWorn(by: branding)) {
-            branding = house.applying(to: branding)
+        BrowserCrestStudioChoice(title: house.title, selected: branding.wearsCrest(of: house)) {
+            branding = branding.wearingCrest(of: house)
         } artwork: {
             BrowserSpaceCrestIcon(
                 branding: Self.starterLook(of: house), size: BrowserCrestForgeMetrics.tileCrestSize,

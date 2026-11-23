@@ -22,6 +22,25 @@ extension SpaceBranding {
         for layer in BrowserCrestForgeLayer.all { crest[keyPath: layer.index] = layer.slot }
     }
 
+    /// This look wearing `house`'s crest in the house's own colors, with the
+    /// sidebar left as it is. Upstream a house starts the whole look over,
+    /// colors included; here the Space's theme colors the sidebar, so a
+    /// house gives the Space only its crest.
+    func wearingCrest(of house: SpaceHouse) -> SpaceBranding {
+        var started = house.applying(to: self)
+        started.keepIdentityColors()
+        var updated = self
+        updated.iconStyle = .layeredCrest
+        updated.crest = started.crest
+        updated.hasCustomAppearance = true
+        return updated.normalized()
+    }
+
+    /// Whether this look wears `house`'s crest as `wearingCrest(of:)` gives it.
+    func wearsCrest(of house: SpaceHouse) -> Bool {
+        iconStyle == .layeredCrest && crest == wearingCrest(of: house).crest
+    }
+
     /// This look wearing a new crest shuffled from the Forge's parts, with
     /// the sidebar left as it is.
     func shuffledCrest() -> SpaceBranding {
