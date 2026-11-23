@@ -22,7 +22,8 @@ public sealed partial class BrowserContractsTests {
         var privateWorkspace = device.Attach(SessionOf(SpaceOf(hidden, Fixed(3_493), "Private")), WorkspaceKind.Private);
         device.Send(new JoinSpace(device.Workspace, member, primary));
         device.Send(new SetCredentialPreferences(device.Workspace, alone,
-            new CredentialPreferences(IsEnabled: false, SyncsCrestPasswordsWithICloud: false, AlsoOffersSaveToSystemPasswords: false)));
+            new CredentialPreferences(IsEnabled: false, SyncsCrestPasswordsWithICloud: false, AlsoOffersSaveToSystemPasswords: false,
+                NeverSavedSites: [])));
         var secure = new CredentialOrigin("https", "accounts.example.com", 443);
         var plain = new CredentialOrigin("http", "accounts.example.com", 80);
         CredentialAccessAnswer Access(Guid space, CredentialUse use, CredentialOrigin? origin = null, Guid? workspace = null) =>
