@@ -58,6 +58,7 @@ public sealed partial record SpaceBranding {
             SymbolColor = branding.SymbolColor is { } symbol ? NormalizedColor(symbol) : null,
             SymbolGradient = branding.SymbolColor is null ? null : NormalizedGradient(branding.SymbolGradient),
             ColorGradients = NormalizedGradients(branding.ColorGradients, colors.Length),
+            Dress = branding.Dress?.Normalized(),
             Crest = crest with {
                 Palette = palette is null ? null : new(palette),
                 PaletteGradients = palette is null ? null : NormalizedGradients(crest.PaletteGradients, palette.Length),
