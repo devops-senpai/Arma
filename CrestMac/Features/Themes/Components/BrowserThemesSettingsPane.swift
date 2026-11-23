@@ -109,6 +109,8 @@ struct BrowserThemesSettingsPane: View {
                             }
                             Button("Duplicate", systemImage: "plus.square.on.square") { duplicate(id) }
                             Button("Export Theme…", systemImage: "square.and.arrow.up") { export(id) }
+                            Button("Restore Original", systemImage: "arrow.counterclockwise") { restoreOriginal(id) }
+                                .disabled(library.isOriginal(id))
                             Divider()
                             Button("Delete Theme", systemImage: "trash", role: .destructive) { requestRemoval(id) }
                         }
@@ -128,6 +130,8 @@ struct BrowserThemesSettingsPane: View {
                 glyph("plus", label: "New Theme") { selection = library.addNew() }
                 glyph("plus.square.on.square", label: "Duplicate Theme") { selection.map(duplicate) }
                     .disabled(selection == nil)
+                glyph("arrow.counterclockwise", label: "Restore Original") { selection.map(restoreOriginal) }
+                    .disabled(selection.map(library.isOriginal) ?? true)
                 glyph("minus", label: "Delete Theme") { selection.map(requestRemoval) }
                     .disabled(selection == nil)
                 glyph("checkmark.circle", label: "Use for \(shownSpaceName ?? "This Space")") {
@@ -321,6 +325,12 @@ struct BrowserThemesSettingsPane: View {
 
     private func duplicate(_ id: UUID) {
         if let copy = library.duplicate(id) { selection = copy }
+    }
+
+    /// Puts theme `id` back as it was installed or imported; ⌘Z takes
+    /// that back like any other change.
+    private func restoreOriginal(_ id: UUID) {
+        _ = show(library.restoreOriginal(id, in: browser))
     }
 
     /// Removes theme `id`, unless a Space wears it: every Space wears a

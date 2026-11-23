@@ -45,10 +45,13 @@ window and its command palette.
 
 ![Settings › Themes editing Catppuccin Macchiato: the theme list, a live preview, and the sidebar's pattern, colors, intensity and text](Brand/Readme/settings-themes-macchiato.jpg)
 
-⌘Z and ⇧⌘Z on the Themes page undo and redo your edits.
+⌘Z and ⇧⌘Z on the Themes page undo and redo your edits. **Restore Original**
+puts a theme back as it was installed or imported, and ⌘Z takes even that back.
 
 A Space picks its theme; its crest stays its own. The Crest Studio shapes it,
-starting from Arma's own **Guidon**, its bird and the Crane.
+starting from Arma's own **Guidon**, its bird and the Crane. Editing a Space
+changes no theme unless **Modify Theme Too** is on: then its edits save over a
+theme named for the Space, and a house starts the whole look over.
 
 ![A Space's Appearance settings: its theme, its crest large with its colors, and the Crest Studio's shapes](Brand/Readme/crest-studio.jpg)
 

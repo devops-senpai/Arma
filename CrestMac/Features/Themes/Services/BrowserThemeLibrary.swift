@@ -276,6 +276,23 @@ final class BrowserThemeLibrary {
         return id
     }
 
+    /// Has Space `space` wear the theme named for it, keeping the look it
+    /// has: the saved theme of that name, its looks replaced by the Space's,
+    /// or a new one made from the Space. Edits then save over that theme and
+    /// no other.
+    func wearOwnTheme(of space: SpaceModel) {
+        let name = space.settings.name
+        if let id = themeID(of: space.id), entry(id)?.name == name { return }
+        guard let own = entries.first(where: { !$0.isBundled && $0.name == name }) else {
+            saveAsTheme(space)
+            return
+        }
+        pendingSpaceEdits.removeValue(forKey: space.id)?.cancel()
+        replaceLooks(of: own.id, with: Self.theme(of: space, named: name))
+        links.spaces[space.id] = own.id
+        saveLinks()
+    }
+
     /// Has Space `spaceID` wear no theme, keeping the look it has.
     func unlink(_ spaceID: UUID) {
         pendingSpaceEdits.removeValue(forKey: spaceID)?.cancel()
@@ -434,6 +451,33 @@ final class BrowserThemeLibrary {
         if let before, before != entries[index].theme { registerUndo(of: id, back: before, in: browser) }
     }
 
+    // MARK: - Actions - Originals
+
+    /// Theme `id` as it was installed or imported: a bundled theme as Arma
+    /// ships it, a saved one as its file was first added.
+    func original(of id: UUID) -> CrestTheme? {
+        if let bundled = BrowserBundledTheme.named(id)?.theme { return bundled }
+        guard let file = originalFile(for: id), let data = try? Data(contentsOf: file) else { return nil }
+        return try? CrestTheme(json: data)
+    }
+
+    /// Whether theme `id` is still as it was installed or imported.
+    func isOriginal(_ id: UUID) -> Bool {
+        guard let entry = entry(id), let original = original(of: id) else { return true }
+        return entry.theme == original
+    }
+
+    /// Puts theme `id` back as it was installed or imported, taking back
+    /// every change made to it since, as one step Undo takes back in turn.
+    /// Answers the theme, or nil when it was already so.
+    func restoreOriginal(_ id: UUID, in browser: BrowserStore) -> UUID? {
+        settleAll(in: browser)
+        guard let entry = entry(id), let original = original(of: id), original != entry.theme else { return nil }
+        restore(id, to: original, in: browser)
+        DiagnosticLog.themes.notice("Theme \(id) restored to its original")
+        return id
+    }
+
     // MARK: - Actions - Undoing
 
     /// Takes back the last run of edits on the Themes page, answering the
@@ -492,6 +536,7 @@ final class BrowserThemeLibrary {
         let entry = Entry(id: UUID(), theme: theme)
         entries.append(entry)
         write(entry)
+        keepOriginal(entry)
         sort()
         DiagnosticLog.themes.notice("Theme \(entry.id) saved")
         return entry.id
@@ -563,6 +608,7 @@ final class BrowserThemeLibrary {
         if BrowserBundledTheme.named(id) != nil { hideBundledTheme(id) }
         previewBackdrops.remove(for: id)
         DiagnosticLog.themes.notice("Theme \(id) removed")
+        if let original = originalFile(for: id) { try? FileManager.default.removeItem(at: original) }
         guard let file = file(for: id) else { return }
         try? FileManager.default.removeItem(at: file)
     }
@@ -591,6 +637,8 @@ final class BrowserThemeLibrary {
         }
         entries = saved + bundled
         sort()
+        // A theme saved before originals were kept is taken as it is now.
+        for entry in saved where BrowserBundledTheme.named(entry.id) == nil { keepOriginal(entry) }
     }
 
     /// The record of bundled themes the library has dealt with. A library
@@ -651,6 +699,24 @@ final class BrowserThemeLibrary {
 
     private func file(for id: UUID) -> URL? {
         directory?.appendingPathComponent(id.uuidString + ".json", isDirectory: false)
+    }
+
+    /// Where theme `id` is kept as it was installed or imported. Its name
+    /// is no theme's identity, so `reload` passes it by.
+    private func originalFile(for id: UUID) -> URL? {
+        directory?.appendingPathComponent(id.uuidString + ".original.json", isDirectory: false)
+    }
+
+    /// Keeps `entry`'s theme as its original, unless one is kept already.
+    private func keepOriginal(_ entry: Entry) {
+        guard let directory, let file = originalFile(for: entry.id), !FileManager.default.fileExists(atPath: file.path)
+        else { return }
+        do {
+            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+            try entry.theme.json().write(to: file, options: .atomic)
+        } catch {
+            DiagnosticLog.themes.notice("Theme \(entry.id) original was not kept: \(DiagnosticLog.describe(error))")
+        }
     }
 
     /// Writes `entry` as a version 2 theme file, saving a bundled theme as

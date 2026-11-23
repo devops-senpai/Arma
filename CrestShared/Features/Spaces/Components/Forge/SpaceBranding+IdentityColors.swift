@@ -1,5 +1,12 @@
 import SwiftUI
 
+extension EnvironmentValues {
+    /// Whether a house chosen in the Crest Studio starts the Space's whole
+    /// look over, as upstream's does, rather than giving it only its crest.
+    /// A Space's Appearance page turns it on with Modify Theme Too.
+    @Entry var browserHouseStartsLook = false
+}
+
 /// A Space's crest and icon colors kept apart from its sidebar's, so a theme
 /// laid over the Space changes only the sidebar.
 extension SpaceBranding {
@@ -39,6 +46,23 @@ extension SpaceBranding {
     /// Whether this look wears `house`'s crest as `wearingCrest(of:)` gives it.
     func wearsCrest(of house: SpaceHouse) -> Bool {
         iconStyle == .layeredCrest && crest == wearingCrest(of: house).crest
+    }
+
+    /// `house`'s whole look, crest included, in place of this one. Unlike
+    /// `SpaceHouse.applying(to:)`, nothing of this look is kept: a house's
+    /// look is drawn for the browser's own folder, command palette, popover
+    /// and control colors, so whatever a theme set of those goes back to them.
+    func startingOver(from house: SpaceHouse) -> SpaceBranding {
+        var look = house.look
+        look.iconStyle = .layeredCrest
+        look.crest.startingPresetID = house.name
+        look.hasCustomAppearance = false
+        return look.normalized()
+    }
+
+    /// Whether this look is `house`'s whole look, as `startingOver(from:)` gives it.
+    func startedOver(from house: SpaceHouse) -> Bool {
+        normalized() == startingOver(from: house)
     }
 
     /// This look wearing a new crest shuffled from the Forge's parts, with

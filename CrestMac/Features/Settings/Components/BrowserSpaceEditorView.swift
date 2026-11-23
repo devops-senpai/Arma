@@ -6,14 +6,20 @@ import SwiftUI
 struct BrowserSpaceEditorView: View {
     @Environment(\.browserSettingsTabState) private var tabState
     @State private var standaloneStep = BrowserCrestStudioStep.shape
+    /// Whether edits here also change a theme: one named for the Space, so
+    /// no other theme changes by mistake. Off each time the page opens.
+    @State private var modifiesTheme = false
 
     let browser: BrowserStore
     let space: SpaceModel
 
     var body: some View {
         BrowserCrestForge(branding: branding, symbol: symbol, step: forgeStep)
+            .environment(\.browserHouseStartsLook, modifiesTheme)
             // The theme the Space wears heads the page, over the editor.
-            .safeAreaInset(edge: .top, spacing: 0) { BrowserSpaceThemePicker(browser: browser, space: space) }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                BrowserSpaceThemePicker(browser: browser, space: space, modifiesTheme: $modifiesTheme)
+            }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .accessibilityIdentifier("space-customization-controls")
     }

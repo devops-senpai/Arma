@@ -2,14 +2,17 @@ import SwiftUI
 
 /// The theme a Space wears, heading its Appearance page above the editor, and
 /// the other Spaces wearing the same theme. Choosing a theme copies its looks
-/// into the Space, as a house or scheme does; while the Space keeps wearing
-/// it, editing the Space's look here saves over the theme, and editing the
-/// theme under Settings › Themes dresses the Space again.
+/// into the Space, as a house or scheme does. Editing the Space's look here
+/// changes no theme unless Modify Theme Too is on: then the Space wears a
+/// theme named for it, the edits save over that theme, and editing the theme
+/// under Settings › Themes dresses the Space again.
 struct BrowserSpaceThemePicker: View {
     // MARK: - Variables
 
     let browser: BrowserStore
     let space: SpaceModel
+    /// Whether edits here save over a theme named for the Space.
+    @Binding var modifiesTheme: Bool
 
     @State private var library = BrowserThemeLibrary.shared
     @State private var problem: String?
@@ -52,6 +55,10 @@ struct BrowserSpaceThemePicker: View {
             .fixedSize()
             .help("The theme this Space wears; edit themes in Settings › Themes")
             .accessibilityIdentifier("space-theme-picker")
+            Toggle("Modify Theme Too", isOn: $modifiesTheme)
+                .toggleStyle(.checkbox)
+                .help("Save edits over a theme named for this Space, and let a house start the whole look over")
+                .accessibilityIdentifier("space-theme-modifies")
             if let alsoUsedBy {
                 Text(alsoUsedBy)
                     .font(.callout)
@@ -65,8 +72,20 @@ struct BrowserSpaceThemePicker: View {
         }
         .padding(.horizontal, CrestSpacing.large)
         .padding(.vertical, CrestSpacing.small)
+        .onChange(of: modifiesTheme) { _, modifies in
+            if modifies { library.wearOwnTheme(of: space) }
+        }
         .onChange(of: space.settings.look) { _, look in
             library.keepDarkLookIdentity(of: space, as: look, in: browser)
+            // Edits reach a theme only through Modify Theme Too, and then
+            // only the theme named for the Space.
+            guard modifiesTheme else { return }
+            // A house starting the look over takes the picture and the dark
+            // look with it, which a theme carries and the house's look lacks.
+            if SpaceHouse.all.contains(where: look.startedOver(from:)) {
+                BrowserSpaceBackdropStore.shared.remove(for: space.id)
+                if space.settings.darkBranding != nil { browser.updateSpaceDarkBranding(nil, in: space.id) }
+            }
             library.spaceEdited(space.id, in: browser)
         }
     }

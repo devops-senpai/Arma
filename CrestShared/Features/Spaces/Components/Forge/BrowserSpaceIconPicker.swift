@@ -52,6 +52,7 @@ struct BrowserSpaceIconPicker: View {
 
     @Binding var branding: SpaceBranding
     @Binding var symbol: String
+    @Environment(\.browserHouseStartsLook) private var houseStartsLook
 
     /// The kind picked, which may run ahead of the Space while a person
     /// chooses their first emoji.
@@ -115,8 +116,11 @@ struct BrowserSpaceIconPicker: View {
     }
 
     private func crest(of house: SpaceHouse) -> some View {
-        BrowserCrestStudioChoice(title: house.title, selected: branding.wearsCrest(of: house)) {
-            branding = branding.wearingCrest(of: house)
+        BrowserCrestStudioChoice(
+            title: house.title,
+            selected: houseStartsLook ? branding.startedOver(from: house) : branding.wearsCrest(of: house)
+        ) {
+            branding = houseStartsLook ? branding.startingOver(from: house) : branding.wearingCrest(of: house)
         } artwork: {
             BrowserSpaceCrestIcon(
                 branding: Self.starterLook(of: house), size: BrowserCrestForgeMetrics.tileCrestSize,
