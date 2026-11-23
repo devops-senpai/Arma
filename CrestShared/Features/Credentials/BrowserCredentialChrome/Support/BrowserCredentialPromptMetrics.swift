@@ -144,8 +144,17 @@ struct BrowserCredentialPromptMetrics: Equatable, Sendable {
     /// two actions, so it is given more room than a fill prompt.
     let savePromptWidth: BrowserCredentialPromptWidth
 
+    /// Whether the save prompt floats at the page's top trailing corner, as a
+    /// notification does, rather than across the top. A pointer shell keeps
+    /// it out of the way of the page's own content.
+    let floatsSavePromptAtTrailingEdge: Bool
+
     /// Where the save prompt's actions go.
     let saveActionPlacement: BrowserCredentialSaveActionPlacement
+
+    /// Whether the save prompt offers Not Now beside its commit. A shell with
+    /// a close control at the prompt's corner needs only that.
+    let saveOffersNotNow: Bool
 
     /// The frame the save prompt's spinner claims while it stands in for the
     /// commit action, or `nil` where it keeps the size its control size gives
@@ -180,8 +189,10 @@ struct BrowserCredentialPromptMetrics: Equatable, Sendable {
         closeControlSize: CrestLayout.pointerHitTarget,
         actionMinimumWidth: 44,
         actionMaximumWidth: nil,
-        savePromptWidth: .bounded(560),
-        saveActionPlacement: .besideTitle,
+        savePromptWidth: .fixed(340),
+        floatsSavePromptAtTrailingEdge: true,
+        saveActionPlacement: .belowContent,
+        saveOffersNotNow: false,
         saveBusyIndicatorSize: nil,
         destinationPresentation: .separateSyncStatus,
         saveCrossOriginSubject: .definiteCredential
@@ -209,6 +220,7 @@ struct BrowserCredentialPromptMetrics: Equatable, Sendable {
         actionMinimumWidth: nil,
         actionMaximumWidth: .infinity,
         savePromptWidth: .flexible,
+        floatsSavePromptAtTrailingEdge: false,
         saveActionPlacement: .belowContent,
         saveOffersNotNow: true,
         saveBusyIndicatorSize: CrestLayout.touchHitTarget,

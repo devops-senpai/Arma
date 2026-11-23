@@ -16,6 +16,14 @@ struct BrowserCredentialSavePrompt: View {
     @State var model = BrowserCredentialSavePromptModel()
     /// Whether the pointer rests on the prompt, which holds it open.
     @State var isPointerResting = false
+    /// The candidate as the person corrects it, from the moment the prompt
+    /// starts asking.
+    @State var draft: BrowserCredentialSaveCandidate?
+    /// The categories the Space's saved passwords are filed under.
+    @State var categories: [String] = []
+    /// Whether the person has started answering: touched a field or a choice.
+    /// From then on the prompt waits for them.
+    @State var isEngaged = false
 
     var body: some View {
         BrowserCredentialPromptSurface(
@@ -25,7 +33,7 @@ struct BrowserCredentialSavePrompt: View {
             metrics: metrics
         ) {
             BrowserCredentialSavePromptContent(
-                candidate: candidate,
+                candidate: current,
                 route: route,
                 destination: destination,
                 space: space,
@@ -33,6 +41,7 @@ struct BrowserCredentialSavePrompt: View {
                 metrics: metrics,
                 dismiss: port.dismiss,
                 neverSave: neverSaveAction,
+                fields: fields,
                 perform: perform
             )
         }
@@ -41,7 +50,13 @@ struct BrowserCredentialSavePrompt: View {
             isPointerResting = hovering
         }
         .task(id: candidate.id) {
-            await prepare()
+            begin()
+            categories = BrowserStore.credentialCategories(
+                in: (try? await browser.savedCredentialDescriptors(in: port.spaceID)) ?? [])
+            await prepare(dismissesWhenStored: true)
+        }
+        .task(id: correction) {
+            await replanAfterCorrection()
         }
         .task(id: countdown) {
             await closeWhenTimeIsUp()
@@ -92,13 +107,16 @@ struct BrowserCredentialSavePrompt: View {
         action.perform(self)
     }
 
-    func prepare() async {
+    /// Plans the save of what the prompt holds now. A first plan that finds
+    /// the password already kept puts the prompt away; a correction that does
+    /// says so instead.
+    func prepare(dismissesWhenStored: Bool) async {
         await model.prepare(
-            candidate: candidate,
+            candidate: current,
             in: port.spaceID,
             browser: browser
         )
-        guard !Task.isCancelled,
+        guard dismissesWhenStored, !Task.isCancelled,
             port.presentedCandidateID() == candidate.id,
             model.phase == .alreadyStored
         else { return }
@@ -109,8 +127,8 @@ struct BrowserCredentialSavePrompt: View {
         guard let offer = port.offerToSystemPasswords else { return }
         await model.offerToSystemPasswords {
             try await offer(
-                candidate,
-                "\(candidate.username) · \(space?.name ?? "this Space")"
+                current,
+                "\(current.username) · \(space?.name ?? "this Space")"
             )
         }
     }
@@ -120,15 +138,22 @@ struct BrowserCredentialSavePrompt: View {
 
 extension BrowserCredentialSavePrompt: BrowserCredentialPromptPerformer {
     func save() {
+        guard !current.username.isEmpty, !current.password.isEmpty,
+            current.notes.utf8.count <= credentialNotesByteLimit
+        else { return }
+        let notes = current.notes
         Task { @MainActor in
             await model.commit(
-                candidate: candidate,
+                candidate: current,
                 in: port.spaceID,
                 browser: browser
             )
             guard port.presentedCandidateID() == candidate.id,
                 case .saved = model.phase
             else { return }
+            if !notes.isEmpty, let saved = model.savedDescriptor {
+                try? await browser.setCredentialNotes(notes, for: saved)
+            }
             guard shouldOfferSystemPasswords else {
                 port.dismiss()
                 return
@@ -141,7 +166,7 @@ extension BrowserCredentialSavePrompt: BrowserCredentialPromptPerformer {
 
     func retryPreparation() {
         Task { @MainActor in
-            await prepare()
+            await prepare(dismissesWhenStored: false)
         }
     }
 
