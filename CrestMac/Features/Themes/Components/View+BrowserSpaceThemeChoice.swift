@@ -28,6 +28,16 @@ private struct BrowserSpaceThemeChoiceModifier: ViewModifier {
             + library.entries.map { BrowserSpaceThemeChoice.Option(id: $0.id, name: $0.name, symbol: "paintpalette") }
     }
 
+    /// The crests the worn theme keeps, as this Space would wear them; one
+    /// the file misspells is left out.
+    private var crests: [BrowserSpaceThemeChoice.Crest] {
+        guard let themeID, let kept = library.entry(themeID)?.theme.crests else { return [] }
+        let look = space.settings.look
+        return kept.compactMap { crest in
+            (try? crest.crest(on: look)).map { BrowserSpaceThemeChoice.Crest(name: crest.name, crest: $0) }
+        }
+    }
+
     /// The other Spaces wearing this Space's theme, as a sentence lists them.
     private var alsoUsedBy: String? {
         guard let themeID else { return nil }
@@ -43,7 +53,15 @@ private struct BrowserSpaceThemeChoiceModifier: ViewModifier {
             .environment(
                 \.browserSpaceThemeChoice,
                 BrowserSpaceThemeChoice(
-                    options: options, chosenID: themeID, note: problem ?? alsoUsedBy, choose: choose)
+                    options: options, chosenID: themeID, note: problem ?? alsoUsedBy, choose: choose, crests: crests,
+                    keepCrest: { name in
+                        themeID.map { library.keepCrest(of: space, named: name, in: $0, browser: browser) }
+                    },
+                    renameCrest: { name, newName in
+                        themeID.map { library.renameCrest(name, to: newName, in: $0, browser: browser) }
+                    },
+                    removeCrest: { name in themeID.map { library.removeCrest(named: name, from: $0, browser: browser) }
+                    })
             )
             .onChange(of: space.settings.look) { _, look in
                 library.keepDarkLookIdentity(of: space, as: look, in: browser)

@@ -209,3 +209,90 @@ extension SpaceBranding {
         }
     }
 }
+
+extension CrestTheme.Crest {
+    // MARK: - Initializers
+
+    /// `crest` as `look` wears it, kept under `name`: every part and
+    /// measure, and each layer's color as the crest's own.
+    init(name: String, crest: SpaceCrest, in look: SpaceBranding) {
+        let worn = look.wearing(crest)
+        let colors = Dictionary(
+            uniqueKeysWithValues: zip(Self.layerWords, BrowserCrestForgeLayer.all).map { word, layer in
+                (word, CrestTheme.text(worn.forgeFill(of: layer).colors[0]))
+            })
+        self.init(
+            name: name, shape: crest.backplate.name, field: crest.fieldDivision.name, band: crest.ordinary.name,
+            emblem: crest.symbol.name, border: crest.trim.name, finish: crest.finish.name, colors: colors,
+            chargeLayout: crest.chargeLayout.name,
+            charge: crest.charge.map { charge in
+                Charge(kind: charge.kind.name, symbol: charge.symbol?.name, text: charge.text, style: charge.style?.name)
+            },
+            chargeWeight: crest.chargeWeight.name, plateScale: crest.plateScale, edgeWidth: crest.edgeWidth,
+            divisionCount: crest.divisionCount, ordinaryWidth: crest.ordinaryWidth, trimWeight: crest.trimWeight,
+            trimDetail: crest.trimDetail, chargeScale: crest.chargeScale, chargeOffset: crest.chargeOffset,
+            sheenAngle: crest.sheenAngle, sealTeeth: crest.sealTeeth, showsOutline: crest.showsOutline,
+            startedFrom: crest.startingPresetID)
+    }
+
+    // MARK: - Actions - Wearing
+
+    /// The crest as `look` would wear it: `look`'s crest with every part,
+    /// measure and color this names, each color the crest's own; a measure
+    /// left out keeps `look`'s. Throws a problem for a word or color the
+    /// theme misspells.
+    func crest(on look: SpaceBranding) throws(CrestThemeProblem) -> SpaceCrest {
+        var worn = look
+        worn.iconStyle = .layeredCrest
+        worn.crest.backplate = try Self.part(shape, CrestBackplate.all, \.name, "shape")
+        worn.crest.fieldDivision = try Self.part(field, CrestFieldDivision.all, \.name, "field")
+        worn.crest.ordinary = try Self.part(band, CrestOrdinary.all, \.name, "band")
+        worn.crest.symbol = try Self.part(emblem, CrestSymbol.all, \.name, "emblem")
+        worn.crest.trim = try Self.part(border, CrestTrim.all, \.name, "border")
+        worn.crest.finish = try Self.part(finish, CrestFinish.all, \.name, "finish")
+        if let chargeLayout {
+            worn.crest.chargeLayout = try Self.part(chargeLayout, CrestChargeLayout.all, \.name, "charge layout")
+        }
+        if let charge {
+            var symbol: CrestSymbol?
+            if let word = charge.symbol { symbol = try Self.part(word, CrestSymbol.all, \.name, "charge symbol") }
+            var style: CrestMonogramStyle?
+            if let word = charge.style { style = try Self.part(word, CrestMonogramStyle.all, \.name, "monogram style") }
+            worn.crest.charge = CrestCharge(
+                kind: try Self.part(charge.kind, CrestChargeKind.all, \.name, "charge"), symbol: symbol,
+                text: charge.text, style: style)
+        } else {
+            worn.crest.charge = nil
+        }
+        if let chargeWeight {
+            worn.crest.chargeWeight = try Self.part(chargeWeight, CrestChargeWeight.all, \.name, "charge weight")
+        }
+        if let plateScale { worn.crest.plateScale = plateScale }
+        if let edgeWidth { worn.crest.edgeWidth = edgeWidth }
+        if let divisionCount { worn.crest.divisionCount = divisionCount }
+        if let ordinaryWidth { worn.crest.ordinaryWidth = ordinaryWidth }
+        if let trimWeight { worn.crest.trimWeight = trimWeight }
+        if let trimDetail { worn.crest.trimDetail = trimDetail }
+        if let chargeScale { worn.crest.chargeScale = chargeScale }
+        if let chargeOffset { worn.crest.chargeOffset = chargeOffset }
+        if let sheenAngle { worn.crest.sheenAngle = sheenAngle }
+        if let sealTeeth { worn.crest.sealTeeth = sealTeeth }
+        if let showsOutline { worn.crest.showsOutline = showsOutline }
+        worn.crest.startingPresetID = startedFrom
+        for (word, layer) in zip(Self.layerWords, BrowserCrestForgeLayer.all) {
+            guard let text = colors[word], let color = try CrestTheme.color(text) else { continue }
+            worn.setForgeColor(color, of: layer)
+        }
+        return worn.normalized().crest
+    }
+
+    /// The one of `all` named `word`, in any case, or a problem naming `part`.
+    private static func part<Value>(
+        _ word: String, _ all: [Value], _ name: KeyPath<Value, String>, _ part: String
+    ) throws(CrestThemeProblem) -> Value {
+        if let value = all.first(where: { $0[keyPath: name].caseInsensitiveCompare(word) == .orderedSame }) {
+            return value
+        }
+        throw .unknownCrestPart(part, word, all.map { $0[keyPath: name] })
+    }
+}

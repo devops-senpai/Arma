@@ -93,6 +93,9 @@ struct BrowserCrestForge: View {
     /// Whether the page shows More Customization in place of the Appearance
     /// page, as a page a person goes into and back out of.
     @State private var showsMore = false
+    /// Whether a theme's presets are unfolded: one tap on a preset replaces
+    /// the theme's colors, so they start folded.
+    @State private var showsPresets = false
     @Environment(\.browserSpaceThemeFiles) var themeFiles
     /// The theme the Forge edits in place of a Space, when it edits one.
     @Environment(\.browserThemeForgeSubject) var themeSubject
@@ -209,7 +212,12 @@ struct BrowserCrestForge: View {
         } else {
             Section {
                 BrowserSpaceColorWells(branding: $branding)
-                BrowserSpacePalettePicker(branding: $branding)
+                DisclosureGroup(isExpanded: $showsPresets) {
+                    BrowserSpacePalettePicker(branding: $branding, showsHeading: false)
+                } label: {
+                    Text("Presets")
+                }
+                .accessibilityIdentifier("theme-presets")
             } header: {
                 VStack(alignment: .leading, spacing: BrowserCrestForgeMetrics.stageHeadingSpacing) {
                     stageHeader

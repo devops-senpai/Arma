@@ -66,4 +66,28 @@ final class CrestThemeFileTests: XCTestCase {
         XCTAssertEqual(dressed.crest, start.crest)
         XCTAssertEqual(dressed.hasCustomAppearance, true)
     }
+
+    // MARK: - Actions - Kept crests
+
+    /// A theme keeps a crest under a name with every part and color of its
+    /// own, through its file and back onto any look as the same crest.
+    func testAThemeKeepsANamedCrestThroughItsFile() throws {
+        var look = SpaceHouse.lion.look
+        look.iconStyle = .layeredCrest
+        look.setForgeColor(try XCTUnwrap(BrandColor(hex: "#ff0000")), of: .band)
+        var theme = CrestTheme(name: "Pride")
+        theme.crests = [CrestTheme.Crest(name: "Lion", crest: look.crest, in: look)]
+
+        let read = try CrestTheme(json: try theme.json())
+        let kept = try XCTUnwrap(read.crests?.first)
+        let worn = SpaceBranding.neutral.wearing(try kept.crest(on: SpaceBranding.neutral))
+
+        XCTAssertEqual(kept.name, "Lion")
+        XCTAssertEqual(worn.crest.backplate, look.crest.backplate)
+        XCTAssertEqual(worn.crest.symbol, look.crest.symbol)
+        XCTAssertEqual(worn.crest.trim, look.crest.trim)
+        XCTAssertEqual(worn.forgeFill(of: .band).colors[0].hexText, "#ff0000")
+        XCTAssertEqual(worn.forgeFill(of: .field).colors[0].hexText, look.forgeFill(of: .field).colors[0].hexText)
+        XCTAssertEqual(worn.colors, SpaceBranding.neutral.colors)
+    }
 }

@@ -233,6 +233,10 @@ struct BrowserThemesSettingsPane: View {
                     .toggleStyle(.switch)
                     .fixedSize()
                     .help("Give this theme a look of its own while windows are dark")
+                Button("Restore Original", systemImage: "arrow.counterclockwise") { restoreOriginal(entry.id) }
+                    .disabled(library.isOriginal(entry.id))
+                    .help("Put this theme back as it was installed or imported")
+                    .accessibilityIdentifier("theme-restore-original")
                 Spacer(minLength: 0)
                 Picker("Appearance preview", selection: $previewScheme) {
                     Text("Light").tag(ColorScheme.light)

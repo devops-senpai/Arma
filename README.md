@@ -51,7 +51,10 @@ puts a theme back as it was installed or imported, and ⌘Z takes even that back
 A Space picks its theme in the Theme row at the top of its Appearance page;
 its crest stays its own. The rest of the page is the Crest Studio, which
 shapes the crest alone, starting from Arma's own **Guidon**, its bird and the
-Crane, and changes no theme.
+Crane, and changes no theme. A theme can keep crests by name: **Add Current
+Crest** saves the Space's crest, colors and all, under the Theme heading of
+its icons, where every Space wearing the theme can pick it, rename it or drop
+it, and theme files carry them.
 
 ![A Space's Appearance settings: its theme, its crest large with its colors, and the Crest Studio's shapes](Brand/Readme/crest-studio.jpg)
 

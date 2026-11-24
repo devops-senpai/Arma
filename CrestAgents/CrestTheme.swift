@@ -155,6 +155,49 @@ struct CrestTheme: Equatable, Sendable {
 
     // MARK: - Static Variables
 
+    /// A crest the theme keeps under a name of its own: every part and color
+    /// `arma crest` names, and the finer measures the Crest Studio sets. Its
+    /// colors are its own, so the theme's colors never redraw it. A Space
+    /// wearing the theme picks it from the Theme row of its icons.
+    struct Crest: Codable, Equatable, Sendable {
+        /// A monogram or figure laid on the crest, by its kind and what it shows.
+        struct Charge: Codable, Equatable, Sendable {
+            var kind: String
+            var symbol: String?
+            var text: String?
+            var style: String?
+        }
+
+        /// The words the crest's colors go by, in the order its layers draw.
+        static let layerWords = ["field", "second-field", "band", "emblem", "border", "edge"]
+
+        var name: String
+        var shape: String
+        var field: String
+        var band: String
+        var emblem: String
+        var border: String
+        var finish: String
+        /// The crest's colors by `layerWords`, each the crest's own.
+        var colors: [String: String]
+        var chargeLayout: String?
+        var charge: Charge?
+        var chargeWeight: String?
+        var plateScale: Double?
+        var edgeWidth: Double?
+        var divisionCount: Int?
+        var ordinaryWidth: Double?
+        var trimWeight: Double?
+        var trimDetail: Int?
+        var chargeScale: Double?
+        var chargeOffset: Double?
+        var sheenAngle: Double?
+        var sealTeeth: Int?
+        var showsOutline: Bool?
+        /// The house the crest started from, by its name, or nil.
+        var startedFrom: String?
+    }
+
     /// The word a color field holds to let a chosen color go.
     static let defaultColorWord = "default"
 
@@ -174,6 +217,8 @@ struct CrestTheme: Equatable, Sendable {
     var darkLook: Bool?
     /// The Space's picture, or nil for none.
     var backgroundImage: BackgroundImage?
+    /// The crests the theme keeps, each under a name of its own, or nil for none.
+    var crests: [Crest]?
 
     /// Whether the theme wears `dark` in dark windows.
     var hasDarkLook: Bool { dark != nil && darkLook ?? true }
@@ -184,6 +229,7 @@ struct CrestTheme: Equatable, Sendable {
     /// Whether the theme names anything at all.
     var isEmpty: Bool {
         look.isEmpty && (dark?.isEmpty ?? true) && darkLook == nil && backgroundImage == nil
+            && (crests?.isEmpty ?? true)
     }
 
     // MARK: - Initializers
@@ -220,7 +266,7 @@ struct CrestTheme: Equatable, Sendable {
 
 extension CrestTheme: Codable {
     private enum CodingKeys: String, CodingKey {
-        case version, name, dark, darkLook, backgroundImage
+        case version, name, dark, darkLook, backgroundImage, crests
     }
 
     /// The top level holds the look's members beside the theme's own.
@@ -231,6 +277,7 @@ extension CrestTheme: Codable {
         dark = try values.decodeIfPresent(Look.self, forKey: .dark)
         darkLook = try values.decodeIfPresent(Bool.self, forKey: .darkLook)
         backgroundImage = try values.decodeIfPresent(BackgroundImage.self, forKey: .backgroundImage)
+        crests = try values.decodeIfPresent([Crest].self, forKey: .crests)
     }
 
     func encode(to encoder: any Encoder) throws {
@@ -241,6 +288,7 @@ extension CrestTheme: Codable {
         try values.encodeIfPresent(dark, forKey: .dark)
         try values.encodeIfPresent(darkLook, forKey: .darkLook)
         try values.encodeIfPresent(backgroundImage, forKey: .backgroundImage)
+        try values.encodeIfPresent(crests, forKey: .crests)
     }
 }
 

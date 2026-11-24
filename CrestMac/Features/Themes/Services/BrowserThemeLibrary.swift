@@ -660,6 +660,47 @@ final class BrowserThemeLibrary {
 
     /// Writes `entry` as a version 2 theme file, saving a bundled theme as
     /// a file of its own the first time it changes.
+    // MARK: - Mutators - Crests
+
+    /// Keeps the crest Space `space` wears in theme `id` under `name`, made
+    /// unique among the theme's crests, answering the name it took. The
+    /// crest's colors go with it, so no theme redraws it.
+    @discardableResult
+    func keepCrest(of space: SpaceModel, named name: String, in id: UUID, browser: BrowserStore) -> String {
+        guard let entry = entry(id) else { return name }
+        let taken = Set((entry.theme.crests ?? []).map(\.name))
+        var unique = name
+        var count = 2
+        while taken.contains(unique) {
+            unique = "\(name) \(count)"
+            count += 1
+        }
+        let look = space.settings.look
+        let kept = CrestTheme.Crest(name: unique, crest: look.crest, in: look)
+        edit(id, in: browser) { theme in theme.crests = (theme.crests ?? []) + [kept] }
+        return unique
+    }
+
+    /// Renames the crest `name` theme `id` keeps to `newName`, unless the
+    /// theme already keeps one by that name.
+    func renameCrest(_ name: String, to newName: String, in id: UUID, browser: BrowserStore) {
+        edit(id, in: browser) { theme in
+            guard var crests = theme.crests, let index = crests.firstIndex(where: { $0.name == name }),
+                !crests.contains(where: { $0.name == newName })
+            else { return }
+            crests[index].name = newName
+            theme.crests = crests
+        }
+    }
+
+    /// Drops the crest `name` from theme `id`.
+    func removeCrest(named name: String, from id: UUID, browser: BrowserStore) {
+        edit(id, in: browser) { theme in
+            theme.crests?.removeAll { $0.name == name }
+            if theme.crests?.isEmpty == true { theme.crests = nil }
+        }
+    }
+
     private func write(_ entry: Entry) {
         if let index = entries.firstIndex(where: { $0.id == entry.id }) { entries[index].isBundled = false }
         if entry.id == defaultThemeID { publishDefaultLook() }

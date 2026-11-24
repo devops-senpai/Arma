@@ -5,7 +5,8 @@ import SwiftUI
 /// The theme a Space wears, offered first on its Appearance page: the themes
 /// to choose from, No Theme among them, the one worn now, and a line under
 /// the row for the other Spaces wearing it or what went wrong. A Space takes
-/// its sidebar from its theme and shapes only its crest below.
+/// its sidebar from its theme and shapes only its crest below, where the
+/// theme's kept crests are offered by name beside the houses'.
 struct BrowserSpaceThemeChoice {
     struct Option: Identifiable {
         /// The theme, or nil for No Theme.
@@ -14,11 +15,26 @@ struct BrowserSpaceThemeChoice {
         let symbol: String
     }
 
+    /// A crest the worn theme keeps, as the Space would wear it.
+    struct Crest: Identifiable {
+        var id: String { name }
+        let name: String
+        let crest: SpaceCrest
+    }
+
     let options: [Option]
     let chosenID: UUID?
     let note: String?
     /// Dresses the Space in the theme, or in none for nil.
     let choose: (UUID?) -> Void
+    /// The worn theme's kept crests, in the order kept.
+    let crests: [Crest]
+    /// Keeps the crest the Space wears in its theme under the name.
+    let keepCrest: (String) -> Void
+    /// Renames a kept crest, from the first name to the second.
+    let renameCrest: (String, String) -> Void
+    /// Drops a kept crest by name.
+    let removeCrest: (String) -> Void
 }
 
 extension EnvironmentValues {

@@ -29,9 +29,14 @@ extension SpaceBranding {
     func wearingCrest(of house: SpaceHouse) -> SpaceBranding {
         var started = house.applying(to: self)
         started.keepIdentityColors()
+        return wearing(started.crest)
+    }
+
+    /// This look wearing `crest` as its icon, with the sidebar left as it is.
+    func wearing(_ crest: SpaceCrest) -> SpaceBranding {
         var updated = self
         updated.iconStyle = .layeredCrest
-        updated.crest = started.crest
+        updated.crest = crest
         updated.hasCustomAppearance = true
         return updated.normalized()
     }

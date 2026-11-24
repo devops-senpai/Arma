@@ -123,6 +123,21 @@ arma theme reset folders Dusk                    # also background, icon, comman
 arma theme reset command-palette --space Work --dark
 ```
 
+## Crests a theme keeps
+
+A theme can keep crests by name, each with its own colors, for its Spaces to pick.
+On a Space's Appearance page they sit under **Theme** beside the houses' crests,
+with **Add Current Crest** to save the Space's crest; a kept crest's menu renames or
+removes it. Theme files carry them under `crests`.
+
+```sh
+arma theme crests Macchiato                         # what it keeps
+arma theme crest add Macchiato "Night Owl" --space Work   # keep Work's crest under a name
+arma crest use "Night Owl" --space Personal         # wear a kept crest
+arma theme crest rename Macchiato "Night Owl" Owl
+arma theme crest remove Macchiato Owl
+```
+
 ## The crest
 
 ```sh
