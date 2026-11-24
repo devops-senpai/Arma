@@ -62,6 +62,15 @@ struct BrowserSpaceCrestPlateShape: Shape {
             path.closeSubpath()
         case .softShield, .softHexagon, .ribbon:
             path.addPath(Self.kitPath(backplate.kind, in: rect))
+        case .flag:
+            // Arma's logo: a banner hung from its top edge, its foot cut
+            // into two tails, 314 wide and 400 tall, notched 95 deep.
+            path.move(to: point(0.11, 0.02))
+            path.addLine(to: point(0.89, 0.02))
+            path.addLine(to: point(0.89, 0.98))
+            path.addLine(to: point(0.5, 0.755))
+            path.addLine(to: point(0.11, 0.98))
+            path.closeSubpath()
         case .badge:
             let center = point(0.5, 0.44)
             let radius = w * 0.44

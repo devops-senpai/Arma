@@ -527,7 +527,7 @@ struct BrowserPasswordSettingsPane: View {
             let selectedSpaceID
         else {
             if case .failure = result {
-                credentials.errorMessage = "Crest couldn’t open that password file."
+                credentials.errorMessage = "Arma couldn’t open that password file."
             }
             return
         }

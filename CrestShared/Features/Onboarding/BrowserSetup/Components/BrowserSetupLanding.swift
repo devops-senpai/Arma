@@ -1,9 +1,9 @@
 import SwiftUI
 
-/// The welcome, filling setup's window as Crest's website opens: Crest's
-/// mark, the steps ahead as colored chips, a greeting, a line on what setup
-/// does, and the way in. Nothing else shows while it does, so the way in is
-/// the one thing to do.
+/// The welcome, filling setup's window on Crest's paper: Arma's banner,
+/// large, its name lettered under it, a line on who it is for, and the way
+/// in. Nothing else shows while it does, so the way in is the one thing to
+/// do.
 struct BrowserSetupLanding<Leading: View, Forward: View>: View {
     // MARK: - Variables
 
@@ -35,25 +35,30 @@ struct BrowserSetupLanding<Leading: View, Forward: View>: View {
 
     var body: some View {
         VStack(spacing: BrowserSetupLandingMetrics.spacing) {
-            CrestStartPageMark()
-                .frame(width: BrowserSetupLandingMetrics.markSize, height: BrowserSetupLandingMetrics.markSize)
+            Image("ArmaMark")
+                .resizable()
+                .scaledToFit()
+                .frame(height: BrowserSetupLandingMetrics.markHeight)
+                .shadow(
+                    color: CrestBrandPalette.ink.opacity(BrowserSetupLandingMetrics.markShadow),
+                    radius: BrowserSetupLandingMetrics.markShadowRadius, y: BrowserSetupLandingMetrics.markShadowOffset
+                )
                 .accessibilityHidden(true)
-            BrowserSetupStepChips(steps: steps, current: nil, size: .welcome, open: open)
-            Text("Welcome to Crest")
-                .font(CrestTypography.display(BrowserSetupLandingMetrics.titleSize))
-                .tracking(BrowserSetupLandingMetrics.titleTracking)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
+            Text(verbatim: "Arma")
+                .font(CrestTypography.lettering(BrowserSetupLandingMetrics.titleSize))
                 .accessibilityAddTraits(.isHeader)
-            Text(
-                welcome.opensCrest
-                    ? "Your Spaces came in from iCloud, ready to use."
-                    : "Bring your tabs over, then set up your Spaces."
-            )
-            .font(CrestTypography.lead)
-            .foregroundStyle(.secondary)
-            .multilineTextAlignment(.center)
-            .frame(maxWidth: BrowserSetupLandingMetrics.bodyWidth)
+            Text("A browser for cool people.")
+                .font(CrestTypography.serif(BrowserSetupLandingMetrics.bodySize))
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: BrowserSetupLandingMetrics.bodyWidth)
+            if welcome.opensCrest {
+                Text("Your Spaces came in from iCloud, ready to use.")
+                    .font(CrestTypography.sans(BrowserSetupLandingMetrics.noteSize, weight: .medium))
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: BrowserSetupLandingMetrics.bodyWidth)
+            }
             HStack(spacing: CrestSpacing.medium) {
                 leading
                 forward
@@ -67,11 +72,15 @@ struct BrowserSetupLanding<Leading: View, Forward: View>: View {
 }
 
 enum BrowserSetupLandingMetrics {
-    static let spacing: CGFloat = 26
-    static let markSize: CGFloat = 76
-    static let titleSize: CGFloat = 84
-    /// Display type set tight, as Crest's headlines are.
-    static let titleTracking: CGFloat = -1
+    static let spacing: CGFloat = 18
+    /// The banner stands nearly half as tall as the window at its smallest.
+    static let markHeight: CGFloat = 340
+    static let markShadow = 0.3
+    static let markShadowRadius: CGFloat = 20
+    static let markShadowOffset: CGFloat = 12
+    static let titleSize: CGFloat = 112
+    static let bodySize: CGFloat = 28
+    static let noteSize: CGFloat = 16
     static let bodyWidth: CGFloat = 560
     static let inset: CGFloat = 48
 }
