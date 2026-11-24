@@ -58,14 +58,17 @@ struct BrowserCrestForgeHistory {
 }
 
 /// A Space's appearance, in the order a person shapes it: its crest or icon
-/// on the Space's own sidebar field, then its icon on its own, a crest in the
-/// house's own colors or a plain symbol or emoji, which never changes the
-/// Space's colors: those come from its theme, picked in the Theme row over
-/// this page. More Customization is a page of its own that holds the rest,
-/// under the stage again with a color for each part of the crest: the
-/// sidebar's pattern and finish, and the parts of the crest. A theme, which
-/// has no icon, shows its colors, presets or any color by hex code, under its
-/// stage and all it carries at once.
+/// on the Space's own sidebar field beside a color for each part of the
+/// crest, then its icon on its own, a crest in the house's own colors or a
+/// plain symbol or emoji, which never changes the Space's colors: those come
+/// from its theme, picked in the Theme row over this page and edited under
+/// Settings › Themes. More Customization is a page of its own for the parts
+/// of the crest, and goes away while the icon is a symbol or emoji, which has
+/// no parts. A theme, which has no icon, shows its colors, presets or any
+/// color by hex code, under its stage and all it carries at once: the
+/// sidebar's pattern and finish, its text and folders, the command palette
+/// and the popovers. On iPhone and iPad, which have no themes yet, a Space's
+/// More Customization keeps the whole look.
 struct BrowserCrestForge: View {
     @Binding var branding: SpaceBranding
     @Binding var symbol: String
@@ -107,6 +110,18 @@ struct BrowserCrestForge: View {
     }
 
     private var isCrest: Bool { branding.iconStyle == .layeredCrest }
+
+    /// Whether this page shapes the crest alone: on the Mac a Space's theme
+    /// carries its sidebar, so the Space's own page offers only its crest,
+    /// while a theme's page and the iPhone's and iPad's Space page, which have
+    /// no themes, offer the whole look.
+    private var editsCrestOnly: Bool {
+        #if os(macOS)
+            offersIcon
+        #else
+            false
+        #endif
+    }
 
     var body: some View {
         BrowserSettingsPane(.spaces) {
@@ -170,21 +185,24 @@ struct BrowserCrestForge: View {
                 }
                 .textCase(nil)
             }
-            Section {
-                Button {
-                    withAnimation(CrestMotion.surface.unlessReducingMotion(reduceMotion)) { showsMore = true }
-                } label: {
-                    HStack(spacing: CrestSpacing.small) {
-                        Text("More Customization")
-                        Spacer(minLength: CrestSpacing.small)
-                        Image(systemName: "chevron.right")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.secondary)
+            // A symbol or emoji has no parts to customize.
+            if isCrest || !editsCrestOnly {
+                Section {
+                    Button {
+                        withAnimation(CrestMotion.surface.unlessReducingMotion(reduceMotion)) { showsMore = true }
+                    } label: {
+                        HStack(spacing: CrestSpacing.small) {
+                            Text("More Customization")
+                            Spacer(minLength: CrestSpacing.small)
+                            Image(systemName: "chevron.right")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                        }
+                        .contentShape(.rect)
                     }
-                    .contentShape(.rect)
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("more-customization")
                 }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("more-customization")
             }
         } else {
             Section {
@@ -208,24 +226,29 @@ struct BrowserCrestForge: View {
     }
 
     /// More Customization: the way back to the Appearance page, the stage
-    /// again with a color for each part of the crest, then the sidebar, the
-    /// crest's parts and what the Space dresses beyond them.
+    /// again with a color for each part of the crest, then the crest's parts;
+    /// where the page edits the whole look, the sidebar comes first and what
+    /// the Space dresses beyond the crest and sidebar last.
     @ViewBuilder private var morePage: some View {
-        Section {
-            sidebarPatterns
-        } header: {
-            VStack(alignment: .leading, spacing: BrowserCrestForgeMetrics.stageHeadingSpacing) {
-                moreHeading
-                stageHeader
-                CrestSettingsSectionHeading(title: "Sidebar")
-            }
-            .textCase(nil)
-        }
-        sidebarSettings
-        if isCrest {
+        if editsCrestOnly {
             crestSections
+        } else {
+            Section {
+                sidebarPatterns
+            } header: {
+                VStack(alignment: .leading, spacing: BrowserCrestForgeMetrics.stageHeadingSpacing) {
+                    moreHeading
+                    stageHeader
+                    CrestSettingsSectionHeading(title: "Sidebar")
+                }
+                .textCase(nil)
+            }
+            sidebarSettings
+            if isCrest {
+                crestSections
+            }
+            otherSections
         }
-        otherSections
     }
 
     /// More Customization's name, after the way back to the Appearance page.
@@ -253,7 +276,8 @@ struct BrowserCrestForge: View {
     /// so the crest sits on the Space's field alone.
     var stageHeader: some View {
         BrowserCrestForgeStage(
-            branding: $branding, symbol: symbol, showsCrestColors: offersIcon && (showsMore || !showsStepBar),
+            branding: $branding, symbol: symbol,
+            showsCrestColors: offersIcon && (editsCrestOnly || showsMore || !showsStepBar),
             name: name, canUndo: history.wrappedValue.canUndo, shuffle: shuffle, undo: undo,
             openStep: { opened in
                 step = opened
@@ -382,12 +406,20 @@ struct BrowserCrestForge: View {
         }
     }
 
+    /// The crest's heading and step bar; on a crest-only More Customization
+    /// page, under the way back and the stage.
     private var stepHeader: some View {
         Group {
             if showsStepBar {
-                VStack(alignment: .leading, spacing: 10) {
-                    CrestSettingsSectionHeading(title: "Crest")
-                    BrowserPlatformCrestForgeStepBar(step: $step, disabledSteps: [])
+                VStack(alignment: .leading, spacing: BrowserCrestForgeMetrics.stageHeadingSpacing) {
+                    if showsMore, editsCrestOnly {
+                        moreHeading
+                        stageHeader
+                    }
+                    VStack(alignment: .leading, spacing: 10) {
+                        CrestSettingsSectionHeading(title: "Crest")
+                        BrowserPlatformCrestForgeStepBar(step: $step, disabledSteps: [])
+                    }
                 }
             } else {
                 stageHeader

@@ -1,9 +1,10 @@
 import SwiftUI
 
 /// The Space's folder colors: the color a folder without its own wears, the
-/// color of its back face, the line drawn around it, and the color and
-/// opacity of the tint its rows take while it is open, hovered or chosen.
-/// Its Reset puts them back to the starting look's.
+/// color of its back face, the line drawn around it, and the color of the
+/// tint its rows take while it is open, hovered or chosen. How strong that
+/// tint is stays with the Folder colors slider, Crest's own, so the theme has
+/// one control for it. Its Reset puts them back to the starting look's.
 struct BrowserCrestStudioFolders: View {
     let context: BrowserCrestStudioContext
 
@@ -16,22 +17,10 @@ struct BrowserCrestStudioFolders: View {
     private var highlightColor: CrestSettingValue<BrandColor?> {
         context.setting(\.folderHighlightColor, default: nil)
     }
-    /// No opacity of its own leaves the tint to the Space's folder color
-    /// intensity, which the slider shows until one is chosen.
-    private var highlightOpacity: CrestSettingValue<Double?> { context.setting(\.folderHighlightOpacity, default: nil) }
-
-    private var highlightOpacitySlider: CrestSettingValue<Double> {
-        CrestSettingValue(
-            Binding(
-                get: { highlightOpacity.wrappedValue ?? context.value.folderColorIntensity },
-                set: { highlightOpacity.binding.wrappedValue = $0 }), default: context.value.folderColorIntensity)
-    }
-
     private var resets: [CrestResettableSetting] {
         [
             color.resettable("Folder color"), backColor.resettable("Back color"),
             outlineColor.resettable("Outline color"), highlightColor.resettable("Highlight color"),
-            highlightOpacity.resettable("Highlight opacity"),
         ]
     }
 
@@ -56,6 +45,5 @@ struct BrowserCrestStudioFolders: View {
             title: "Outline color", value: outlineColor, fallback: context.value.resolvedFolderColor.folderBackShade)
         BrowserCrestStudioColorPickerRow(
             title: "Highlight color", value: highlightColor, fallback: context.value.resolvedFolderColor)
-        BrowserCrestStudioSlider(title: "Highlight opacity", value: highlightOpacitySlider)
     }
 }
