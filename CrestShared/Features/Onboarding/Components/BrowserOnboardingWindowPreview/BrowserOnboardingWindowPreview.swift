@@ -12,6 +12,10 @@ struct BrowserOnboardingWindowPreview<Page: View>: View {
     let name: String
     var editableName: Binding<String>? = nil
     var showsNameHint = false
+    /// A picture behind the field, as its store keeps it for the owner it names.
+    var backdrop: (ownerID: UUID, store: BrowserSpaceBackdropStore)? = nil
+    /// Whether the page card is dark in a dark appearance, rather than paper in both.
+    var pageFollowsAppearance = false
     /// How the switcher shows the Spaces, or nil to show this Space alone.
     var spaceIcons: BrowserSpaceIconDisplay? = nil
     /// The look the other Spaces in the switcher wear, or nil for their own.
@@ -38,7 +42,7 @@ struct BrowserOnboardingWindowPreview<Page: View>: View {
 
     var body: some View {
         ZStack {
-            BrowserSpaceBannerBackground(branding: branding)
+            BrowserSpaceBackdropLayer(spaceID: backdrop?.ownerID, branding: branding, store: backdrop?.store ?? .shared)
             if let space {
                 HStack(spacing: 0) {
                     sidebar(space)
@@ -69,11 +73,11 @@ struct BrowserOnboardingWindowPreview<Page: View>: View {
                 cardBar
             }
             ZStack {
-                Rectangle().fill(CrestBrandPalette.paper)
+                pageFill(Rectangle(), over: colorScheme)
                 page
             }
             .clipShape(shape)
-            .background { shape.fill(CrestBrandPalette.paper).crestElevation(.page) }
+            .background { pageFill(shape, over: colorScheme).crestElevation(.page) }
         }
         .padding(.vertical, BrowserChromeLayout.pageFrameInset)
         .padding(.trailing, BrowserChromeLayout.pageFrameInset)

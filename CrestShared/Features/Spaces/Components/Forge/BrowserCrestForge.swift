@@ -57,11 +57,15 @@ struct BrowserCrestForgeHistory {
     }
 }
 
-/// A Space's appearance: its crest or icon on the Space's own sidebar field,
-/// beside the Space's Background and Accent, then palettes to take in one
-/// tap, then its icon, a crest started from a house or a plain symbol or
-/// emoji. More Customization holds the
-/// rest: the sidebar's pattern and finish, and the parts of the crest.
+/// A Space's appearance, in the order a person shapes it: its crest or icon
+/// on the Space's own sidebar field, then its icon on its own, a crest in the
+/// house's own colors or a plain symbol or emoji, which never changes the
+/// Space's colors: those come from its theme, picked in the Theme row over
+/// this page. More Customization is a page of its own that holds the rest,
+/// under the stage again with a color for each part of the crest: the
+/// sidebar's pattern and finish, and the parts of the crest. A theme, which
+/// has no icon, shows its colors, presets or any color by hex code, under its
+/// stage and all it carries at once.
 struct BrowserCrestForge: View {
     @Binding var branding: SpaceBranding
     @Binding var symbol: String
@@ -79,8 +83,11 @@ struct BrowserCrestForge: View {
     /// itself keeps its own.
     var sharedHistory: Binding<BrowserCrestForgeHistory>? = nil
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var initialAppearance: SpaceBranding?
     @State private var ownHistory = BrowserCrestForgeHistory()
+    /// Whether the page shows More Customization in place of the Appearance
+    /// page, as a page a person goes into and back out of.
     @State private var showsMore = false
     @Environment(\.browserSpaceThemeFiles) var themeFiles
     /// The theme the Forge edits in place of a Space, when it edits one.
@@ -92,7 +99,7 @@ struct BrowserCrestForge: View {
 
     private var editingStart: SpaceBranding? { history.wrappedValue.editingStart }
 
-    private var context: BrowserCrestStudioContext {
+    var context: BrowserCrestStudioContext {
         BrowserCrestStudioContext(
             branding: $branding,
             defaults: branding.startingLook ?? initialAppearance ?? branding,
@@ -103,12 +110,16 @@ struct BrowserCrestForge: View {
 
     var body: some View {
         BrowserSettingsPane(.spaces) {
-            if showsStepBar {
-                page
-            } else {
+            if !showsStepBar {
                 stepSections
+            } else if showsMore {
+                morePage
+            } else {
+                page
             }
         }
+        // Going into More Customization or back out starts at its top.
+        .id(showsMore)
         #if os(iOS)
             .modifier(
                 BrowserCrestForgeStepPages(isEnabled: listsSteps) { step in
@@ -143,29 +154,98 @@ struct BrowserCrestForge: View {
 
     // MARK: - Page
 
-    /// The page: a Space's palettes under its stage, its icon, and More
-    /// Customization; a theme, which has no icon, shows what it carries at
-    /// once.
+    /// The page: a Space's icon under its stage, and More Customization; a
+    /// theme, which has no icon, shows its colors under its stage and what
+    /// it carries at once. A Space takes its colors from its theme, so the
+    /// colors and presets are themes in the Theme row, not rows of their own
+    /// here.
     @ViewBuilder private var page: some View {
-        Section {
-            BrowserSpacePalettePicker(branding: $branding)
-        } header: {
-            stageHeader
-        }
         if offersIcon {
             Section {
                 BrowserSpaceIconPicker(branding: $branding, symbol: $symbol)
             } header: {
-                CrestSettingsSectionHeading(title: "Icon")
+                VStack(alignment: .leading, spacing: BrowserCrestForgeMetrics.stageHeadingSpacing) {
+                    stageHeader
+                    CrestSettingsSectionHeading(title: "Icon")
+                }
+                .textCase(nil)
             }
-            BrowserMoreCustomizationHeader(isExpanded: $showsMore)
-        }
-        if showsMore || !offersIcon {
-            sidebarSections
-            if isCrest && offersIcon {
-                crestSections
+            Section {
+                Button {
+                    withAnimation(CrestMotion.surface.unlessReducingMotion(reduceMotion)) { showsMore = true }
+                } label: {
+                    HStack(spacing: CrestSpacing.small) {
+                        Text("More Customization")
+                        Spacer(minLength: CrestSpacing.small)
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("more-customization")
             }
+        } else {
+            Section {
+                BrowserSpaceColorWells(branding: $branding)
+                BrowserSpacePalettePicker(branding: $branding)
+            } header: {
+                VStack(alignment: .leading, spacing: BrowserCrestForgeMetrics.stageHeadingSpacing) {
+                    stageHeader
+                    CrestSettingsSectionHeading(title: "Colors")
+                }
+                .textCase(nil)
+            }
+            Section {
+                sidebarPatterns
+            } header: {
+                CrestSettingsSectionHeading(title: "Sidebar")
+            }
+            sidebarSettings
             otherSections
+        }
+    }
+
+    /// More Customization: the way back to the Appearance page, the stage
+    /// again with a color for each part of the crest, then the sidebar, the
+    /// crest's parts and what the Space dresses beyond them.
+    @ViewBuilder private var morePage: some View {
+        Section {
+            sidebarPatterns
+        } header: {
+            VStack(alignment: .leading, spacing: BrowserCrestForgeMetrics.stageHeadingSpacing) {
+                moreHeading
+                stageHeader
+                CrestSettingsSectionHeading(title: "Sidebar")
+            }
+            .textCase(nil)
+        }
+        sidebarSettings
+        if isCrest {
+            crestSections
+        }
+        otherSections
+    }
+
+    /// More Customization's name, after the way back to the Appearance page.
+    private var moreHeading: some View {
+        HStack(spacing: 6) {
+            Button {
+                withAnimation(CrestMotion.surface.unlessReducingMotion(reduceMotion)) { showsMore = false }
+            } label: {
+                Label("Appearance", systemImage: "chevron.left")
+                    .font(.body.weight(.semibold))
+            }
+            .buttonStyle(CrestChromeButtonStyle())
+            .labelStyle(.iconOnly)
+            .help(Text("Appearance"))
+            .accessibilityLabel(Text("Back to Appearance"))
+            .accessibilityIdentifier("more-customization-back")
+            Text("More Customization")
+                .font(CrestTypography.display(20))
+                .foregroundStyle(.primary)
+                .accessibilityAddTraits(.isHeader)
         }
     }
 
@@ -186,30 +266,20 @@ struct BrowserCrestForge: View {
 
     // MARK: - Sidebar
 
-    @ViewBuilder private var sidebarSections: some View {
-        Section {
-            LazyVGrid(
-                columns: [GridItem(.adaptive(minimum: 80), spacing: CrestSpacing.small)], spacing: CrestSpacing.small
-            ) {
-                ForEach(SpaceBannerPattern.all, id: \.self) { pattern in
-                    patternChoice(pattern)
-                }
+    private var sidebarPatterns: some View {
+        LazyVGrid(
+            columns: [GridItem(.adaptive(minimum: 80), spacing: CrestSpacing.small)], spacing: CrestSpacing.small
+        ) {
+            ForEach(SpaceBannerPattern.all, id: \.self) { pattern in
+                patternChoice(pattern)
             }
-            .padding(.vertical, CrestSpacing.extraSmall)
-            .accessibilityIdentifier("space-sidebar-patterns")
-        } header: {
-            CrestSettingsSectionHeading(title: "Sidebar")
         }
+        .padding(.vertical, CrestSpacing.extraSmall)
+        .accessibilityIdentifier("space-sidebar-patterns")
+    }
+
+    @ViewBuilder private var sidebarSettings: some View {
         Section {
-            if branding.showsPattern {
-                LabeledContent("Pattern color") {
-                    CrestColorWell(
-                        title: "Pattern color",
-                        fill: Binding(
-                            get: { branding.patternFill },
-                            set: { fill in context.branding.editorUpdate { $0.patternFill = fill } }))
-                }
-            }
             BrowserCrestStudioSlider(title: "Intensity", value: context.setting(\.bannerStrength))
             BrowserCrestStudioSlider(title: "Readability fade", value: context.setting(\.readabilityFade))
             BrowserCrestStudioSlider(title: "Folder colors", value: context.setting(\.folderColorIntensity))
@@ -383,7 +453,7 @@ struct BrowserCrestForge: View {
     }
 
     private func shuffle() {
-        branding = Self.shuffled(branding)
+        branding = shuffledInOffer()
     }
 
     // MARK: - Looks

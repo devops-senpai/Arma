@@ -44,15 +44,16 @@ struct BrowserSpaceIconKind: Hashable, Identifiable, Sendable {
 }
 
 /// A Space's icon: one of the houses' crests or a plain symbol or emoji.
-/// Choosing an icon never changes the Space's colors: each crest shows in
-/// them, and wearing one gives the Space only the crest. Setup's Space page
-/// and a Space's appearance in Settings both show it, after the templates
-/// and the colors.
+/// Choosing an icon never changes the Space's colors: each crest comes in
+/// the house's own colors while the Space's theme keeps the sidebar, unless
+/// Modify Theme Too starts the whole look over from the house. Setup's Space
+/// page and a Space's appearance in Settings both show it.
 struct BrowserSpaceIconPicker: View {
     // MARK: - Variables
 
     @Binding var branding: SpaceBranding
     @Binding var symbol: String
+    @Environment(\.browserHouseStartsLook) private var houseStartsLook
 
     /// The kind picked, which may run ahead of the Space while a person
     /// chooses their first emoji.
@@ -115,12 +116,12 @@ struct BrowserSpaceIconPicker: View {
     }
 
     private func crest(of house: SpaceHouse) -> some View {
-        let worn = house.wearingCrest(on: branding)
+        let worn = houseStartsLook ? branding.startingOver(from: house) : branding.wearingCrest(of: house)
         return BrowserCrestStudioChoice(
             title: house.title,
-            selected: branding.iconStyle == .layeredCrest && Self.sameArms(branding.crest, worn.crest)
+            selected: houseStartsLook ? branding.startedOver(from: house) : branding.wearsCrest(of: house)
         ) {
-            branding = house.wearingCrest(on: branding)
+            branding = worn
         } artwork: {
             BrowserSpaceCrestIcon(
                 branding: worn, size: BrowserCrestForgeMetrics.tileCrestSize, rasterizesLayers: false
@@ -128,15 +129,6 @@ struct BrowserSpaceIconPicker: View {
             .equatable()
         }
         .accessibilityIdentifier("space-icon-crest-\(house.name)")
-    }
-
-    /// Whether two crests draw the same arms, wherever each started.
-    private static func sameArms(_ crest: SpaceCrest, _ other: SpaceCrest) -> Bool {
-        var crest = crest
-        var other = other
-        crest.startingPresetID = nil
-        other.startingPresetID = nil
-        return crest == other
     }
 
     private var emojiButton: some View {
