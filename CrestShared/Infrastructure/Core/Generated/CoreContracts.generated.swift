@@ -30087,7 +30087,7 @@ struct SpaceScheme: Hashable, Sendable {
                 paletteGradients: nil
             ),
             renderingVersion: 4,
-            folderColorIntensity: 0,
+            folderColorIntensity: 0.25,
             textColorMode: SpaceTextColorMode.light,
             hasCustomAppearance: false,
             gradientKind: nil,
@@ -30100,8 +30100,8 @@ struct SpaceScheme: Hashable, Sendable {
                 ),
                 folders: FolderDress(
                     color: BrandColor(red: 0.718, green: 0.741, blue: 0.973, alpha: 1),
-                    backColor: BrandColor(red: 0.357, green: 0.376, blue: 0.471, alpha: 1),
-                    outlineColor: BrandColor(red: 0.431, green: 0.451, blue: 0.553, alpha: 1),
+                    backColor: BrandColor(red: 0.486, green: 0.502, blue: 0.663, alpha: 1),
+                    outlineColor: BrandColor(red: 0, green: 0, blue: 0, alpha: 1),
                     highlightColor: BrandColor(red: 0.718, green: 0.741, blue: 0.973, alpha: 1),
                     highlightOpacity: 0.34,
                     overrides: nil

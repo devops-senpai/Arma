@@ -176,13 +176,14 @@ public sealed partial class SpaceScheme {
             strength: 1, SpaceTextColorMode.Light, textureStrength: 0,
             symbol: new(0.776, 0.627, 0.965), new(
                 Text: new(new(0.792, 0.827, 0.961), new(0.647, 0.678, 0.796)),
-                Folders: new(new(0.718, 0.741, 0.973), new(0.357, 0.376, 0.471), new(0.431, 0.451, 0.553),
+                Folders: new(new(0.718, 0.741, 0.973), new(0.486, 0.502, 0.663), new(0, 0, 0),
                     new(0.718, 0.741, 0.973), 0.34, Overrides: null),
                 CommandPalette: new(new(new(0.141, 0.153, 0.227), 0.92, new(0.792, 0.827, 0.961)),
                     new(new(0.141, 0.153, 0.227), 0.92, new(0.792, 0.827, 0.961))),
                 Popovers: new(new(0.141, 0.153, 0.227), new(0.792, 0.827, 0.961), new(0.647, 0.678, 0.796),
                     new(0.718, 0.741, 0.973), 1, new(0.212, 0.227, 0.31), new(0.431, 0.451, 0.553)),
-                Controls: new(new(0.212, 0.227, 0.31), 0.9, new(0.792, 0.827, 0.961), new(0.647, 0.678, 0.796)))));
+                Controls: new(new(0.212, 0.227, 0.31), 0.9, new(0.792, 0.827, 0.961), new(0.647, 0.678, 0.796))),
+            folderColors: 0.25));
 
     public static readonly SpaceScheme Mocha = new("catppuccinMocha", "Catppuccin Mocha", ThemeLook(
             [new(0.118, 0.118, 0.18), new(0.796, 0.651, 0.969), new(0.271, 0.278, 0.353)],
@@ -223,12 +224,13 @@ public sealed partial class SpaceScheme {
 
     /// A theme's look: its colors as a solid banner at `strength` with no
     /// readability fade, its text in `text`, and the Space's icon in place of a
-    /// crest, drawn in `symbol`, dressed in `dress`.
+    /// crest, drawn in `symbol`, dressed in `dress`, with its folders colored
+    /// at `folderColors`, none unless the theme says.
     private static SpaceBranding ThemeLook(BrandColor[] colors, double strength, SpaceTextColorMode text, double textureStrength,
-        BrandColor symbol, SpaceDress dress) =>
+        BrandColor symbol, SpaceDress dress, double folderColors = 0) =>
         new(new(colors), SpaceBannerPattern.Solid, strength, ReadabilityFade: 0, KeepsControlsReadable: false, SpaceThemeMode.Banner,
             GradientAngle: 45, textureStrength, SpaceIconStyle.SimpleSymbol, symbol, SpaceBranding.Neutral.Crest,
-            CrestVocabulary.Customization.Version, FolderColorIntensity: 0, text, HasCustomAppearance: false, Dress: dress);
+            CrestVocabulary.Customization.Version, FolderColorIntensity: folderColors, text, HasCustomAppearance: false, Dress: dress);
 
 
     /// A theme's look that draws its colors as one gradient, `colors` running
