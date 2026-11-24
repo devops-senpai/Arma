@@ -6,6 +6,23 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.11.82</title>
+            <pubDate>Tue, 24 Nov 2026 03:49:38 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>1100082</sparkle:version>
+            <sparkle:shortVersionString>0.11.82</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Settings keeps its light or dark look while a color popover is open.
+
+### Fixed
+- Opening a color popover in Settings, such as a crest part's, no longer switches the Settings page between light and dark while it is open.
+
+### Internal
+- The screen eyedropper keeps its sampler alive for the button's lifetime instead of making one per click.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.11.82/Arma-0.11.82.dmg" length="333855800" type="application/octet-stream" sparkle:edSignature="JsOlCDLkCPiLp4W4n9ZZnussT5zKyKvcKttxy7wQsafNfuExlj+jg6dT0HQTIwA7kprFK3hfdPevyNyrQ7cPAw=="/>
+        </item>
+        <item>
             <title>0.11.80</title>
             <pubDate>Tue, 24 Nov 2026 03:16:49 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1218,6 +1235,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: LQVhDMxDcgEqsR9AwIuHNE5r2xpN/FMLvlo75E3h+Zpn9GU4iSb76550fgzpJ7h4m45IxmjkTOrWUclN7lo2AA==
-length: 96752
+edSignature: RgidY/oGK6MkDEYYDgy/7v0tt+YcXa+RkVeNe35B0Z6P55ZaiDrOvnvXPL+3qcJi3m4RhQk1Ga0Aclh96PtkDQ==
+length: 97863
 -->
