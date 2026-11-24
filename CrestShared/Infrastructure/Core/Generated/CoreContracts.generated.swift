@@ -3407,6 +3407,17 @@ struct CredentialAccessAnswer: Equatable, Sendable {
     let vaults: [UUID]
 }
 
+struct CredentialAuthenticationCheck: Query, Equatable, Sendable {
+    typealias Answer = CredentialAuthenticationDecision
+
+    let authentication: CredentialAuthentication
+    let secondsSinceLastAuthenticated: Double?
+}
+
+struct CredentialAuthenticationDecision: Equatable, Sendable {
+    let asks: Bool
+}
+
 struct CredentialCapture: Query, Equatable, Sendable {
     typealias Answer = CredentialCaptureDecision
 
@@ -3527,6 +3538,7 @@ struct CredentialPreferences: Equatable, Sendable {
     var syncsCrestPasswordsWithICloud: Bool
     var alsoOffersSaveToSystemPasswords: Bool
     var neverSavedSites: [NeverSavedSite]
+    var authentication: CredentialAuthentication
     var savePromptSeconds: Int
 }
 
@@ -11951,6 +11963,96 @@ struct ContentBlockingPolicy: Hashable, Sendable {
             self.name = name
             self.title = title
             self.blocksContent = blocksContent
+        }
+    }
+}
+
+/// The members of the core's `CredentialAuthentication`. A member's wire tag is its index in `all`.
+struct CredentialAuthentication: Hashable, Sendable {
+    let tag: Int
+    var name: String { facts.name }
+    var title: LocalizedStringResource { facts.title }
+    var asksAtAll: Bool { facts.asksAtAll }
+    var asksAgainAfterSeconds: Double { facts.asksAgainAfterSeconds }
+    var confirmsChoosing: Bool { facts.confirmsChoosing }
+    private let facts: Facts
+
+    private init(
+        tag: Int,
+        name: String,
+        title: LocalizedStringResource,
+        asksAtAll: Bool,
+        asksAgainAfterSeconds: Double,
+        confirmsChoosing: Bool
+    ) {
+        self.tag = tag
+        facts = Facts(
+            name: name,
+            title: title,
+            asksAtAll: asksAtAll,
+            asksAgainAfterSeconds: asksAgainAfterSeconds,
+            confirmsChoosing: confirmsChoosing
+        )
+    }
+
+    static let eachTime = CredentialAuthentication(
+        tag: 0,
+        name: "eachTime",
+        title: LocalizedStringResource("Ask Each Time"),
+        asksAtAll: true,
+        asksAgainAfterSeconds: 0,
+        confirmsChoosing: false
+    )
+    static let every15Minutes = CredentialAuthentication(
+        tag: 1,
+        name: "every15Minutes",
+        title: LocalizedStringResource("Ask Every 15 Minutes"),
+        asksAtAll: true,
+        asksAgainAfterSeconds: 900,
+        confirmsChoosing: false
+    )
+    static let never = CredentialAuthentication(
+        tag: 2,
+        name: "never",
+        title: LocalizedStringResource("Don’t Ask"),
+        asksAtAll: false,
+        asksAgainAfterSeconds: 0,
+        confirmsChoosing: true
+    )
+
+    static let all: [CredentialAuthentication] = [eachTime, every15Minutes, never]
+
+    static func named(_ name: String?) -> CredentialAuthentication? {
+        all.first { $0.name == name }
+    }
+
+    static func == (lhs: CredentialAuthentication, rhs: CredentialAuthentication) -> Bool {
+        lhs.tag == rhs.tag
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(tag)
+    }
+
+    private final class Facts: Sendable {
+        let name: String
+        let title: LocalizedStringResource
+        let asksAtAll: Bool
+        let asksAgainAfterSeconds: Double
+        let confirmsChoosing: Bool
+
+        init(
+            name: String,
+            title: LocalizedStringResource,
+            asksAtAll: Bool,
+            asksAgainAfterSeconds: Double,
+            confirmsChoosing: Bool
+        ) {
+            self.name = name
+            self.title = title
+            self.asksAtAll = asksAtAll
+            self.asksAgainAfterSeconds = asksAgainAfterSeconds
+            self.confirmsChoosing = confirmsChoosing
         }
     }
 }
