@@ -22,22 +22,30 @@ struct BrowserOnboardingWindowPreview<Page: View>: View {
     @ViewBuilder let page: Page
 
     @State private var favicons = FaviconAssets()
+    /// The draft as the core resolves it, asked again only when the draft
+    /// changes: the core's answer is too slow to repeat on every body pass.
+    @State private var space: SpaceModel?
 
-    /// The showcase's first Space dressed in the look, as the core resolves it.
-    private var space: SpaceModel {
-        SpaceModel.detached(
-            SessionState.Seed.showcase.spaces[0].wearing(
-                branding, symbol: symbol, name: name.isEmpty ? String(localized: "Your Space") : name))
+    /// The name the preview shows: the Space's, or a placeholder until it has one.
+    private var shownName: String {
+        name.isEmpty ? String(localized: "Your Space") : name
+    }
+
+    /// The showcase's first Space dressed in the look, before the core resolves it.
+    private var draft: SpaceState.Seed {
+        SessionState.Seed.showcase.spaces[0].wearing(branding, symbol: symbol, name: shownName)
     }
 
     var body: some View {
-        let space = space
         ZStack {
             BrowserSpaceBannerBackground(branding: branding)
-            HStack(spacing: 0) {
-                sidebar(space)
-                    .frame(width: BrowserChromeLayout.sidebarIdealWidth)
-                pageCard
+            if let space {
+                HStack(spacing: 0) {
+                    sidebar(space)
+                        .frame(width: BrowserChromeLayout.sidebarIdealWidth)
+                    pageCard
+                }
+                .environment(\.sidebarSpacePresentation, SidebarSpacePresentation(space: space, isUnlocked: true))
             }
         }
         .clipShape(.rect(cornerRadius: BrowserOnboardingWindowPreviewMetrics.cornerRadius, style: .continuous))
@@ -47,9 +55,9 @@ struct BrowserOnboardingWindowPreview<Page: View>: View {
         }
         .crestElevation(.window)
         .environment(\.colorScheme, branding.colorScheme(over: colorScheme))
-        .environment(\.sidebarSpacePresentation, SidebarSpacePresentation(space: space, isUnlocked: true))
         .accessibilityElement(children: editableName == nil ? .ignore : .contain)
-        .accessibilityLabel("Preview of \(space.settings.name) in a Crest window")
+        .accessibilityLabel("Preview of \(shownName) in a Crest window")
+        .onChange(of: draft, initial: true) { _, draft in space = SpaceModel.detached(draft) }
     }
 
     /// The page beside the sidebar, inset as the window insets it, moved down
