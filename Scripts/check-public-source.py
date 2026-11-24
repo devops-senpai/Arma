@@ -16,13 +16,19 @@ REPOSITORY_ROOT = Path(
     )
 )
 
-# The public contribution instructions are the only tracked assistant files:
-# the root AGENTS.md, the crest-contribution skill, and its Claude Code link.
+# The public instructions are the only tracked assistant files: the root
+# AGENTS.md, the crest-contribution skill, Arma's skills for using the
+# browser, their index, and the links that give them to Claude Code.
 PUBLIC_INSTRUCTION_PATHS = {
     "AGENTS.md",
+    ".agents/skills/README.md",
     ".claude/skills/crest-contribution",
 }
-PUBLIC_INSTRUCTION_PREFIXES = (".agents/skills/crest-contribution/",)
+PUBLIC_INSTRUCTION_PREFIXES = (
+    ".agents/skills/crest-contribution/",
+    ".agents/skills/arma-",
+    ".claude/skills/arma-",
+)
 
 FORBIDDEN_NAMES = {
     ".cursorrules",

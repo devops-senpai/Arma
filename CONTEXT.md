@@ -32,6 +32,7 @@ whose engines are interchangeable behind one adapter boundary.
 | `Scripts/` | Bootstrap, checks, validation, versioning, release and control-plane tooling ([CONTEXT](Scripts/CONTEXT.md)) |
 | `Documentation/` | Architecture and contributor references ([CONTEXT](Documentation/CONTEXT.md), [index](Documentation/README.md)) |
 | `HelpCenter/` | Crest Help, the Docusaurus user guides ([CONTEXT](HelpCenter/CONTEXT.md)) |
+| `.agents/skills/` | Agent skills: the contribution skill for changing Arma, and six for using it (setup, basics, the `arma` command, themes, acting inside pages, power-user recipes; [index](.agents/skills/README.md)); `.claude/skills/` and `.kiro/skills/` link to them for agents that read only their own folder |
 | `ThirdParty/` | Retained license notices for redistributed dependencies ([CONTEXT](ThirdParty/CONTEXT.md)) |
 | `ci_scripts/` | Xcode Cloud archive guard hooks ([CONTEXT](ci_scripts/CONTEXT.md)) |
 
