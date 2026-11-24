@@ -48,10 +48,10 @@ window and its command palette.
 ⌘Z and ⇧⌘Z on the Themes page undo and redo your edits. **Restore Original**
 puts a theme back as it was installed or imported, and ⌘Z takes even that back.
 
-A Space picks its theme; its crest stays its own. The Crest Studio shapes it,
-starting from Arma's own **Guidon**, its bird and the Crane. Editing a Space
-changes no theme unless **Modify Theme Too** is on: then its edits save over a
-theme named for the Space, and a house starts the whole look over.
+A Space picks its theme in the Theme row at the top of its Appearance page;
+its crest stays its own. The rest of the page is the Crest Studio, which
+shapes the crest alone, starting from Arma's own **Guidon**, its bird and the
+Crane, and changes no theme.
 
 ![A Space's Appearance settings: its theme, its crest large with its colors, and the Crest Studio's shapes](Brand/Readme/crest-studio.jpg)
 

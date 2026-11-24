@@ -57,9 +57,10 @@ struct BrowserCrestForgeHistory {
     }
 }
 
-/// A Space's appearance, in the order a person shapes it: its crest or icon
-/// on the Space's own sidebar field beside a color for each part of the
-/// crest, then its icon on its own, a crest in the house's own colors or a
+/// A Space's appearance, in the order a person shapes it: the theme it
+/// wears, where the app offers themes, then its crest or icon on the Space's
+/// own sidebar field beside a color for each part of the crest, then its
+/// icon on its own, a crest in the house's own colors or a
 /// plain symbol or emoji, which never changes the Space's colors: those come
 /// from its theme, picked in the Theme row over this page and edited under
 /// Settings › Themes. More Customization is a page of its own for the parts
@@ -176,6 +177,7 @@ struct BrowserCrestForge: View {
     /// here.
     @ViewBuilder private var page: some View {
         if offersIcon {
+            BrowserCrestForgeThemeSection()
             Section {
                 BrowserSpaceIconPicker(branding: $branding, symbol: $symbol)
             } header: {

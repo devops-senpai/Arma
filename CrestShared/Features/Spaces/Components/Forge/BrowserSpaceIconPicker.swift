@@ -45,15 +45,13 @@ struct BrowserSpaceIconKind: Hashable, Identifiable, Sendable {
 
 /// A Space's icon: one of the houses' crests or a plain symbol or emoji.
 /// Choosing an icon never changes the Space's colors: each crest comes in
-/// the house's own colors while the Space's theme keeps the sidebar, unless
-/// Modify Theme Too starts the whole look over from the house. Setup's Space
-/// page and a Space's appearance in Settings both show it.
+/// the house's own colors while the Space's theme keeps the sidebar. Setup's
+/// Space page and a Space's appearance in Settings both show it.
 struct BrowserSpaceIconPicker: View {
     // MARK: - Variables
 
     @Binding var branding: SpaceBranding
     @Binding var symbol: String
-    @Environment(\.browserHouseStartsLook) private var houseStartsLook
 
     /// The kind picked, which may run ahead of the Space while a person
     /// chooses their first emoji.
@@ -116,11 +114,8 @@ struct BrowserSpaceIconPicker: View {
     }
 
     private func crest(of house: SpaceHouse) -> some View {
-        let worn = houseStartsLook ? branding.startingOver(from: house) : branding.wearingCrest(of: house)
-        return BrowserCrestStudioChoice(
-            title: house.title,
-            selected: houseStartsLook ? branding.startedOver(from: house) : branding.wearsCrest(of: house)
-        ) {
+        let worn = branding.wearingCrest(of: house)
+        return BrowserCrestStudioChoice(title: house.title, selected: branding.wearsCrest(of: house)) {
             branding = worn
         } artwork: {
             BrowserSpaceCrestIcon(

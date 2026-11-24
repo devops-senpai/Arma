@@ -71,7 +71,6 @@ final class BrowserThemeLibrary {
     let previewBackdrops = BrowserSpaceBackdropStore(
         directory: FileManager.default.temporaryDirectory
             .appendingPathComponent("ArmaThemePreviews-\(UUID().uuidString)", isDirectory: true))
-    @ObservationIgnored private var pendingSpaceEdits: [UUID: Task<Void, Never>] = [:]
     @ObservationIgnored private var pendingThemeEdits: [UUID: Task<Void, Never>] = [:]
     @ObservationIgnored private var picturesToCapture: Set<UUID> = []
     /// The edits made on the Themes page, each a theme's run of changes
@@ -200,24 +199,6 @@ final class BrowserThemeLibrary {
         return theme
     }
 
-    /// Whether Space `space` already wears everything `theme` names: its
-    /// looks, whether it has a dark one, and its picture as it sits.
-    private static func wears(_ theme: CrestTheme, _ space: SpaceModel) -> Bool {
-        let theme = withoutIdentity(theme)
-        let current = space.settings.look
-        let currentDark = space.settings.darkBranding
-        guard theme.hasDarkLook == (currentDark != nil),
-            let (look, dark) = try? current.dressed(in: theme, dark: currentDark),
-            look.normalized() == current.normalized(), dark?.normalized() == currentDark?.normalized()
-        else { return false }
-        let store = BrowserSpaceBackdropStore.shared
-        guard let image = theme.backgroundImage else { return store.backdrop(for: space.id) == nil }
-        guard let backdrop = store.backdrop(for: space.id), let data = Data(base64Encoded: image.data),
-            store.imageData(for: space.id)?.data == data
-        else { return false }
-        return backdrop == backdrop.placed(like: placement(of: image))
-    }
-
     // MARK: - Actions - Applying
 
     /// Dresses the Space `spaceID` in the saved theme `id`, answering what
@@ -259,7 +240,6 @@ final class BrowserThemeLibrary {
     /// Dresses Space `spaceID` in the saved theme `id` and has it wear that
     /// theme from now on, answering what went wrong, or nil.
     func choose(_ id: UUID, for spaceID: UUID, in browser: BrowserStore) -> String? {
-        pendingSpaceEdits.removeValue(forKey: spaceID)?.cancel()
         if let problem = apply(id, to: spaceID, in: browser) { return problem }
         links.spaces[spaceID] = id
         saveLinks()
@@ -276,26 +256,8 @@ final class BrowserThemeLibrary {
         return id
     }
 
-    /// Has Space `space` wear the theme named for it, keeping the look it
-    /// has: the saved theme of that name, its looks replaced by the Space's,
-    /// or a new one made from the Space. Edits then save over that theme and
-    /// no other.
-    func wearOwnTheme(of space: SpaceModel) {
-        let name = space.settings.name
-        if let id = themeID(of: space.id), entry(id)?.name == name { return }
-        guard let own = entries.first(where: { !$0.isBundled && $0.name == name }) else {
-            saveAsTheme(space)
-            return
-        }
-        pendingSpaceEdits.removeValue(forKey: space.id)?.cancel()
-        replaceLooks(of: own.id, with: Self.theme(of: space, named: name))
-        links.spaces[space.id] = own.id
-        saveLinks()
-    }
-
     /// Has Space `spaceID` wear no theme, keeping the look it has.
     func unlink(_ spaceID: UUID) {
-        pendingSpaceEdits.removeValue(forKey: spaceID)?.cancel()
         guard links.spaces.removeValue(forKey: spaceID) != nil else { return }
         saveLinks()
     }
@@ -310,29 +272,6 @@ final class BrowserThemeLibrary {
         dark.iconStyle = look.iconStyle
         dark.symbolColor = look.symbolColor
         browser.updateSpaceDarkBranding(dark.normalized(), in: space.id)
-    }
-
-    /// Notes that Space `spaceID`'s look was edited from the Space. Once the
-    /// edits rest, they are saved over the theme it wears, and every other
-    /// Space wearing it is dressed in it again.
-    func spaceEdited(_ spaceID: UUID, in browser: BrowserStore) {
-        guard links.spaces[spaceID] != nil else { return }
-        pendingSpaceEdits[spaceID]?.cancel()
-        pendingSpaceEdits[spaceID] = Task { [weak self, weak browser] in
-            try? await Task.sleep(for: Self.settleDelay)
-            guard !Task.isCancelled, let self, let browser else { return }
-            self.pendingSpaceEdits[spaceID] = nil
-            self.settleSpaceEdit(spaceID, in: browser)
-        }
-    }
-
-    private func settleSpaceEdit(_ spaceID: UUID, in browser: BrowserStore) {
-        guard let id = themeID(of: spaceID), let entry = entry(id), let space = browser.spaceModel(spaceID),
-            !Self.wears(entry.theme, space)
-        else { return }
-        replaceLooks(of: id, with: Self.theme(of: space, named: entry.name))
-        pass(id, on: browser, except: spaceID)
-        DiagnosticLog.themes.notice("Theme \(id) changed from Space \(spaceID)")
     }
 
     /// Dresses every Space wearing theme `id`, but `exception`, in it again.
