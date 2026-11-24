@@ -6,6 +6,32 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.11.80</title>
+            <pubDate>Tue, 24 Nov 2026 03:16:32 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>1100080</sparkle:version>
+            <sparkle:shortVersionString>0.11.80</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Opens the 0.11 line with Crest 0.11.0 (#1331 to #1343) and Chromium 158, keeps the crest and the theme apart on a Space's page, and lets a theme keep crests by name.
+
+### New
+- A theme can keep crests by name. On a Space's Appearance page the Theme heading of its icons shows the crests its theme keeps, Add Current Crest saves the Space's crest there with its colors, and a kept crest's menu renames or removes it. Theme files carry them.
+- arma theme crests, arma theme crest add, rename and remove, and arma crest use manage and wear the crests a theme keeps from the terminal.
+- Every color popover, for a crest's parts and a theme's colors alike, has an eyedropper that picks a color from anywhere on screen and applies it at once.
+- From Crest: Site Controls replace the site menus on Mac, iPhone and iPad; a Space's icon is chosen apart from its colors; color popovers take a hex code and offer the system picker; menu items carry icons.
+
+### Improved
+- A Space's Appearance page now shapes only its crest. The Theme row heads the page as its first setting, the stage shows a color for each part of the crest, and More Customization holds the crest's parts alone, stepping aside for a symbol or emoji icon. Modify Theme Too is gone: themes change only under Settings › Themes.
+- Under Settings › Themes the presets start folded, so a stray click no longer replaces a theme's colors, and Restore Original sits beside the theme's name. A theme's folder tint has one strength control, Folder colors.
+- Catppuccin Macchiato's folders wear a lighter lavender back with a black outline, colored at a quarter strength.
+- Chromium 158 opens every Space with its tabs again, and Arma's automation follows Chromium 158's DevTools.
+
+### Internal
+- Arma's Chromium engine is Chromium 158.0.8127.37, universal.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.11.80/Arma-0.11.80.dmg" length="333877912" type="application/octet-stream" sparkle:edSignature="I3+WxaO7xV0OQ2BtivpvXECycjhHqSKOH3OBRg6gG6H7yGOglZaNJAyWEnWnr+OeVlCZsjgeaGQn8g18cp2YBw=="/>
+        </item>
+        <item>
             <title>0.10.234</title>
             <pubDate>Mon, 23 Nov 2026 11:44:43 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1192,6 +1218,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: FeoFGW3zwMOmtN9HsOy6L/V1ZGeTOnanF0VZKixPYeXIzcYG7clS1jO9WSoOSl31hUlCO9Az7yv20e8aeUNIDA==
-length: 94174
+edSignature: OP0P/itEj32c5dzg+6SxogdI+KS4hgMloDRTn7RtearUoIzsLQRPMqyavIR7Wz/5egcYWsRARcrVForBP53ZDA==
+length: 96752
 -->
