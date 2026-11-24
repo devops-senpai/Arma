@@ -296,6 +296,7 @@ final class BrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
         spaceName: String,
         allowsCredentialAccess: Bool = true,
         isCredentialAccessEnabled: Bool = true,
+        neverSavedSites: @escaping @MainActor () -> [NeverSavedSite] = { [] },
         defaultPageZoom: CGFloat = BrowserDefaultPageZoomStore.defaultLevel,
         loadHTTPAuthenticationCredential:
             @escaping BrowserHTTPAuthenticationSession.LoadCredential = { _ in nil },
@@ -357,7 +358,8 @@ final class BrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
             core: downloadCenter.core,
             supportsAccess: allowsCredentialAccess,
             isEnabled: isCredentialAccessEnabled,
-            httpAuthentication: httpAuthenticationSession
+            httpAuthentication: httpAuthenticationSession,
+            neverSavedSites: neverSavedSites
         )
         navigationDecider = BrowserNavigationDecider()
         // A popup whose destination belongs to another application is routed

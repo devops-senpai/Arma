@@ -253,6 +253,9 @@ struct BrowserPasswordSettingsPane: View {
                     }
                 }
 
+                BrowserNeverSavedSitesSection(browser: browser, space: space)
+                    .disabled(!space.settings.credentialPreferences.isEnabled)
+
                 if let errorMessage = credentials.errorMessage {
                     Section {
                         Label(errorMessage, systemImage: "exclamationmark.triangle.fill")
