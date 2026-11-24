@@ -119,3 +119,23 @@ has the details.
 - During cleanup, consolidate overlapping fixtures and cases rather than
   adding a new test framework. Run the affected retained tests and report what
   was removed, what protection remains, and any remaining validation gaps.
+
+## Arma fork
+
+Arma is a fork of pauljoda/Crest. Where this section and the sections above
+or the contribution skill differ, this section wins; everything above is
+upstream's text, kept verbatim so syncs merge cleanly.
+
+- A change never edits `Config/Version.xcconfig`; it changes only as upstream
+  wrote it. Each build's patch version is derived from history:
+  `Scripts/derive-version.py version` prints what a commit builds as. Ignore
+  the `Scripts/set-version.sh --patch` step above.
+- A change never edits a version file, `Documentation/ReleaseNotes/<major>.<minor>/<version>.json`;
+  those change only as upstream wrote them. It adds its own entry file,
+  `Documentation/ReleaseNotes/<id>.json`, in the same commit:
+  `{"category": "...", "message": "...", "platforms": ["mac"]}` (platforms
+  optional), with a unique lowercase kebab-case ID as the file name. The entry
+  belongs to the version its commit builds as. Never reuse, rename, edit or
+  delete an existing entry or entry file.
+- Stage the task-owned files with the entry file and run
+  `Scripts/check-version.sh --fix-commit` before committing.
