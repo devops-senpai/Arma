@@ -201,6 +201,8 @@ struct BrowserPasswordSettingsPane: View {
                             credentialPreferences(in: space)
                         }
 
+                        BrowserSavePromptSecondsRow(browser: browser, space: space)
+
                         if layout.showsManageAction {
                             Button("Manage Saved Passwords…") {
                                 manage?()

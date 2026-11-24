@@ -14,7 +14,7 @@ namespace CrestCore.Native;
 public static class ContractCodec {
     /// <summary>SHA-256 of the canonical contract schema.</summary>
     public static ReadOnlySpan<byte> Fingerprint => [
-        0xc8, 0x65, 0x5a, 0xac, 0x74, 0x22, 0x7a, 0xe5, 0x3e, 0xc5, 0x37, 0xb7, 0xe5, 0x93, 0x41, 0xef, 0x6b, 0x7d, 0x6f, 0x0c, 0xd2, 0x66, 0x8c, 0x3e, 0x26, 0x2f, 0x3f, 0xa4, 0x3e, 0xf1, 0x9e, 0x1e
+        0xa2, 0x13, 0x80, 0x48, 0x7a, 0x6a, 0xea, 0xcb, 0xcf, 0xb8, 0x6b, 0xfc, 0x25, 0x48, 0xbe, 0xdd, 0x0c, 0x90, 0x6e, 0xd6, 0xd7, 0x52, 0xd4, 0x69, 0x5a, 0xb5, 0x7b, 0x23, 0x0b, 0x85, 0x84, 0x0a
     ];
 
     /// <summary>SHA-256 of the engine contract alone, which an engine binding registers with.</summary>
@@ -7840,7 +7840,8 @@ public static class ContractCodec {
         return new CredentialPreferences(
             reader.ReadBool(),
             reader.ReadBool(),
-            reader.ReadBool());
+            reader.ReadBool(),
+            reader.ReadInt32());
     }
 
     public static void WriteCredentialPreferences(WireWriter writer, CredentialPreferences value) {
@@ -7849,6 +7850,7 @@ public static class ContractCodec {
         writer.WriteBool(value.IsEnabled);
         writer.WriteBool(value.SyncsCrestPasswordsWithICloud);
         writer.WriteBool(value.AlsoOffersSaveToSystemPasswords);
+        writer.WriteInt32(value.SavePromptSeconds);
     }
 
     public static CredentialRecord ReadCredentialRecord(WireReader reader) {

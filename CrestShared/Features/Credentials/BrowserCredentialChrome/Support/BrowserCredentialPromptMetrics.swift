@@ -210,6 +210,7 @@ struct BrowserCredentialPromptMetrics: Equatable, Sendable {
         actionMaximumWidth: .infinity,
         savePromptWidth: .flexible,
         saveActionPlacement: .belowContent,
+        saveOffersNotNow: true,
         saveBusyIndicatorSize: CrestLayout.touchHitTarget,
         destinationPresentation: .combinedStatus,
         saveCrossOriginSubject: .currentCredential
