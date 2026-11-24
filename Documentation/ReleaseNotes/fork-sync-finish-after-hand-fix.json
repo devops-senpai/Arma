@@ -1,0 +1,1 @@
+{"category": "internal", "message": "The fork's sync can finish after its replay is fixed by hand, and says how a file edited in the merge joins the commit it belongs to."}
