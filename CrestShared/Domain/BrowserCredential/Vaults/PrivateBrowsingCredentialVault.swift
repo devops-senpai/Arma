@@ -47,4 +47,5 @@ actor PrivateBrowsingCredentialVault: CredentialVault {
     func deleteAll(in spaceID: UUID) async throws {}
 
     func deleteUnreadableCredentials(in spaceID: UUID) async throws {}
+
 }

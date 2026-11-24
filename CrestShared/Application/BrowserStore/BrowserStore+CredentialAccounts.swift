@@ -31,3 +31,43 @@ extension BrowserStore {
             ForgetNeverSavedSite(workspaceID: profileSettingsBrowser.family.workspaceID, spaceID: spaceID, site: site))
     }
 }
+
+// MARK: - Accounts
+
+extension BrowserStore {
+    /// The longest category name a saved password keeps.
+    static let credentialCategoryLength = 64
+
+    /// `name` as a saved password keeps it for its category: trimmed and no
+    /// longer than `credentialCategoryLength`, or nil when nothing is left.
+    static func credentialCategory(_ name: String) -> String? {
+        String(name.trimmingCharacters(in: .whitespacesAndNewlines).prefix(credentialCategoryLength)).nilIfEmpty
+    }
+
+    /// The categories `descriptors` are filed under, each once whatever its
+    /// case, in alphabetical order.
+    static func credentialCategories(in descriptors: [CredentialDescriptor]) -> [String] {
+        var names: [String] = []
+        for name in descriptors.compactMap(\.category)
+        where !names.contains(where: { $0.caseInsensitiveCompare(name) == .orderedSame }) {
+            names.append(name)
+        }
+        return names.sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending }
+    }
+
+    /// The notes kept with the saved password `descriptor` names, as secret as
+    /// the password.
+    func credentialNotes(for descriptor: CredentialDescriptor) async throws -> String? {
+        try await credentialVault.notes(for: descriptor.id, in: descriptor.spaceID)
+    }
+
+    /// Keeps `notes` with the saved password `descriptor` names, synced with
+    /// iCloud as the password is. Nil or empty notes remove them; notes over
+    /// `credentialNotesByteLimit` bytes are refused.
+    func setCredentialNotes(_ notes: String?, for descriptor: CredentialDescriptor) async throws {
+        guard !isPrivateBrowsing else { throw CredentialVaultError.unavailableInPrivateBrowsing }
+        try await credentialVault.setNotes(
+            notes?.nilIfEmpty, for: descriptor.id, isSynchronizable: descriptor.isSynchronizable,
+            in: descriptor.spaceID)
+    }
+}
