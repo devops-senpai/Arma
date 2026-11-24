@@ -58,7 +58,12 @@ extension BrowserStore {
             throw CredentialVaultError.missingSpace
         }
         let origin = CredentialOrigin(url: url)
-        guard try credentialAccess(.fill, in: spaceID, origin: origin).refusal == nil else { return [] }
+        // A private window's vault holds only what other Spaces chose to
+        // suggest there, so its own Space's switch, which is off, is not asked.
+        let serves =
+            try isPrivateBrowsing
+            ? origin?.isSecure == true : credentialAccess(.fill, in: spaceID, origin: origin).refusal == nil
+        guard serves else { return [] }
         guard let origin else {
             throw CredentialVaultError.invalidOrigin
         }

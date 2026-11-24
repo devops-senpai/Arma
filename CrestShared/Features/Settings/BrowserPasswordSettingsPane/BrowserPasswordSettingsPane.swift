@@ -226,6 +226,11 @@ struct BrowserPasswordSettingsPane: View {
 
                         BrowserCredentialAuthenticationRow(browser: browser, space: space)
                         BrowserSavePromptSecondsRow(browser: browser, space: space)
+                        Toggle(
+                            "Suggest passwords in private windows",
+                            isOn: browser.credentialPreferenceBinding(\.suggestsInPrivateWindows, in: space)
+                        )
+                        .accessibilityIdentifier("space-credential-private-windows")
 
                         if layout.showsManageAction {
                             Button("Manage Saved Passwords…") {
