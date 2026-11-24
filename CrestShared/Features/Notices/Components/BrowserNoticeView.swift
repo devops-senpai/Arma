@@ -11,6 +11,12 @@ struct BrowserNoticeView: View {
     var topInset = BrowserRootMetrics.noticeInset
     /// How far the capsule keeps from each side of that area.
     var sideInset = BrowserRootMetrics.noticeInset
+    /// What pressing the notice's action does; nil takes the action alone.
+    /// A layer passes one that also puts the notice away.
+    var performAction: (@MainActor () -> Void)? = nil
+    /// Hears where the capsule stands in the `BrowserNoticeLayer.space`
+    /// coordinate space, so a platform can take presses on it itself.
+    var capsuleFrameChanged: ((CGRect) -> Void)? = nil
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -20,7 +26,7 @@ struct BrowserNoticeView: View {
                 .lineLimit(2)
                 .accessibilityLabel(notice.accessibilityLabel ?? notice.message)
             if let action = notice.action {
-                Button(action.title, action: action.perform)
+                Button(action.title) { (performAction ?? action.perform)() }
                     .buttonStyle(.borderless)
                     .accessibilityIdentifier("notice-action")
             }
@@ -36,6 +42,12 @@ struct BrowserNoticeView: View {
         .fixedSize(horizontal: false, vertical: true)
         .crestFloatingFlyoutStyle(in: .rect(cornerRadius: BrowserRootMetrics.noticeHeight / 2))
         .crestElevation(.panel)
+        // Measured before the width cap below, which fills up to its width.
+        .onGeometryChange(for: CGRect.self) { proxy in
+            proxy.frame(in: .named(BrowserNoticeLayer.space))
+        } action: { frame in
+            capsuleFrameChanged?(frame)
+        }
         // The capsule fits its words, which wrap once it is this wide.
         .frame(maxWidth: BrowserRootMetrics.noticeMaximumWidth, alignment: alignment)
         .padding(.horizontal, sideInset)
