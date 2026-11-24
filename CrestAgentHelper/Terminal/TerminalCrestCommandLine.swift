@@ -12,6 +12,7 @@ enum TerminalCrestCommandLine: TerminalSection {
           set [--space <space>] [options]
                                         change a Space's crest or icon
           shuffle [--space <space>]     new parts and colors for a Space's crest
+          use <name> [--space <space>]  wear a crest the Space's theme keeps, by name
 
         Without --space, the Space the front window shows.
 
@@ -47,6 +48,8 @@ enum TerminalCrestCommandLine: TerminalSection {
             return .crest(.show(space: space ?? arguments.takeIfPresent()))
         case "shuffle":
             return .crest(.shuffle(space: space ?? arguments.takeIfPresent()))
+        case "use", "wear":
+            return .crest(.use(space: space, crest: try arguments.take("the kept crest's name")))
         case "set", "edit":
             var changes = TerminalCrestChanges()
             changes.style = arguments.option("style")

@@ -100,7 +100,49 @@ extension TerminalThemeCommand {
             let space = try terminal.unlocked(try terminal.space(spaceName))
             if let problem = library.choose(entry.id, for: space.id, in: browser) { throw .init(problem) }
             return TerminalOutput(text: "\(space.settings.name) uses \(entry.name).")
+        case .crests(let name):
+            return Self.crests(of: try Self.entry(name, in: library))
+        case .keepCrest(let name, let crestName, let spaceName):
+            let entry = try Self.entry(name, in: library)
+            let space = try terminal.space(spaceName)
+            guard space.settings.look.iconStyle == .layeredCrest else {
+                throw .init(
+                    "\(space.settings.name) wears a symbol or emoji, not a crest. Give it one first: "
+                        + "arma crest set --style crest.")
+            }
+            let kept = library.keepCrest(of: space, named: crestName, in: entry.id, browser: browser)
+            return TerminalOutput(text: "\(entry.name) keeps \(space.settings.name)'s crest as \(kept).")
+        case .renameCrest(let name, let crestName, let newName):
+            let entry = try Self.entry(name, in: library)
+            let kept = try Self.crest(crestName, in: entry)
+            guard !(entry.theme.crests ?? []).contains(where: { $0.name == newName }) else {
+                throw .init("\(entry.name) already keeps a crest named \(newName).")
+            }
+            library.renameCrest(kept.name, to: newName, in: entry.id, browser: browser)
+            return TerminalOutput(text: "Renamed \(kept.name) to \(newName) in \(entry.name).")
+        case .removeCrest(let name, let crestName):
+            let entry = try Self.entry(name, in: library)
+            let kept = try Self.crest(crestName, in: entry)
+            library.removeCrest(named: kept.name, from: entry.id, browser: browser)
+            return TerminalOutput(text: "\(entry.name) no longer keeps \(kept.name).")
         }
+    }
+
+    /// The crests `entry` keeps, each by name with its parts and colors.
+    @MainActor
+    private static func crests(of entry: BrowserThemeLibrary.Entry) -> TerminalOutput {
+        let kept = entry.theme.crests ?? []
+        guard !kept.isEmpty else {
+            return TerminalOutput(
+                text: "\(entry.name) keeps no crests. Keep a Space's with arma theme crest add \(entry.name) <name>.",
+                value: kept)
+        }
+        let rows = kept.map { crest in
+            [crest.name, crest.shape, crest.field, crest.band, crest.emblem, crest.border, crest.finish]
+        }
+        return TerminalOutput(
+            text: BrowserMacTerminal.table(["CREST", "SHAPE", "FIELD", "BAND", "EMBLEM", "BORDER", "FINISH"], rows),
+            value: kept)
     }
 
     @MainActor
@@ -136,6 +178,17 @@ extension TerminalThemeCommand {
         if byID.count == 1 { return byID[0] }
         let names = library.entries.map(\.name).formatted(.list(type: .and))
         throw .init("There is no theme named '\(name)'. The themes are \(names).")
+    }
+
+    /// The crest `entry` keeps as `name`, in any case.
+    static func crest(_ name: String, in entry: BrowserThemeLibrary.Entry) throws(BrowserMacTerminal.Refusal)
+        -> CrestTheme.Crest
+    {
+        let kept = entry.theme.crests ?? []
+        if let crest = kept.first(where: { $0.name.caseInsensitiveCompare(name) == .orderedSame }) { return crest }
+        guard !kept.isEmpty else { throw .init("\(entry.name) keeps no crests.") }
+        throw .init(
+            "\(entry.name) keeps no crest named '\(name)'. It keeps \(kept.map(\.name).formatted(.list(type: .and))).")
     }
 
     /// The saved theme `name` names, or the one the Space `spaceName` names,

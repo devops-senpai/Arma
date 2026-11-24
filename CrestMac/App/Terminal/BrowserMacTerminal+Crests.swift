@@ -76,11 +76,28 @@ extension TerminalCrestCommand {
             look.colors = current.colors
             Self.save(look, of: space, in: browser)
             return Self.show(try terminal.space(space.id.uuidString))
+        case .use(let name, let crestName):
+            let space = try terminal.unlocked(try terminal.space(name))
+            let library = BrowserThemeLibrary.shared
+            guard let id = library.themeID(of: space.id), let entry = library.entry(id) else {
+                throw .init(
+                    "\(space.settings.name) uses no theme, so there is no kept crest to wear. Pick one first: "
+                        + "arma theme use <theme> --space \"\(space.settings.name)\".")
+            }
+            let kept = try TerminalThemeCommand.crest(crestName, in: entry)
+            let crest: SpaceCrest
+            do {
+                crest = try kept.crest(on: space.settings.look)
+            } catch {
+                throw .init(error.message)
+            }
+            Self.save(space.settings.look.wearing(crest), of: space, in: browser)
+            return Self.show(try terminal.space(space.id.uuidString))
         }
     }
 
     /// The layers a color option names, in `BrowserCrestForgeLayer.all`'s order.
-    static let layerWords = ["field", "second-field", "band", "emblem", "border", "edge"]
+    static let layerWords = CrestTheme.Crest.layerWords
 
     // MARK: - Actions - Showing
 

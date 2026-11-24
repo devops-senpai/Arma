@@ -264,6 +264,12 @@ usage: arma theme <action> [options]
                                 put background, icon, folders, command-palette,
                                 popovers, controls or all back to the plain look
   use <theme> [--space <space>] have a Space, or the shown one, use a theme
+  crests <theme>                the crests a theme keeps, by name
+  crest add <theme> <name> [--space <space>]
+                                keep a Space's crest, or the shown one's, in a theme
+                                under a name; a Space wears it with arma crest use
+  crest rename <theme> <name> <new-name>
+  crest remove <theme> <name>
 
 Look options:
   --background <hex>[,<hex>[,<hex>]]   background, accent and pattern colors
@@ -302,7 +308,8 @@ Look options:
                                 their quieter text, such as the page's path
 
 A theme is named by its name (any case). Colors are #RRGGBB or #RRGGBBAA. A Space's
-crest and icon are not part of its theme: shape and color them with arma crest.
+crest and icon are not part of its theme: shape and color them with arma crest. A
+theme can keep crests by name, each with its own colors, for its Spaces to pick.
 ```
 
 ## arma crest
@@ -314,6 +321,7 @@ usage: arma crest <action> [options]
   set [--space <space>] [options]
                                 change a Space's crest or icon
   shuffle [--space <space>]     new parts and colors for a Space's crest
+  use <name> [--space <space>]  wear a crest the Space's theme keeps, by name
 
 Without --space, the Space the front window shows.
 

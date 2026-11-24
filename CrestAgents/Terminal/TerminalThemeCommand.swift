@@ -25,4 +25,12 @@ enum TerminalThemeCommand: Codable, Sendable {
     case reset(sections: [CrestThemeSection], theme: String?, space: String?, dark: Bool)
     /// Has a Space, or the shown one, wear a theme.
     case use(theme: String, space: String?)
+    /// The crests a theme keeps, by name.
+    case crests(theme: String)
+    /// Keeps a Space's crest, or the shown Space's, in a theme under a name.
+    case keepCrest(theme: String, name: String, space: String?)
+    /// Renames a crest a theme keeps.
+    case renameCrest(theme: String, name: String, newName: String)
+    /// Drops a crest a theme keeps.
+    case removeCrest(theme: String, name: String)
 }

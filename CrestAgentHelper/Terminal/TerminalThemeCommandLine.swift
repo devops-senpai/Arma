@@ -25,6 +25,12 @@ enum TerminalThemeCommandLine: TerminalSection {
                                         put background, icon, folders, command-palette,
                                         popovers, controls or all back to the plain look
           use <theme> [--space <space>] have a Space, or the shown one, use a theme
+          crests <theme>                the crests a theme keeps, by name
+          crest add <theme> <name> [--space <space>]
+                                        keep a Space's crest, or the shown one's, in a theme
+                                        under a name; a Space wears it with arma crest use
+          crest rename <theme> <name> <new-name>
+          crest remove <theme> <name>
 
         Look options:
           --background <hex>[,<hex>[,<hex>]]   background, accent and pattern colors
@@ -64,7 +70,8 @@ enum TerminalThemeCommandLine: TerminalSection {
                                         their quieter text, such as the page's path
 
         A theme is named by its name (any case). Colors are #RRGGBB or #RRGGBBAA. A Space's
-        crest and icon are not part of its theme: shape and color them with arma crest.
+        crest and icon are not part of its theme: shape and color them with arma crest. A
+        theme can keep crests by name, each with its own colors, for its Spaces to pick.
 
         """
 
@@ -134,6 +141,24 @@ enum TerminalThemeCommandLine: TerminalSection {
                 .reset(sections: sections, theme: theme, space: arguments.option("space"), dark: arguments.has("dark")))
         case "use", "pick":
             return .theme(.use(theme: try arguments.take("the theme"), space: arguments.option("space")))
+        case "crests":
+            return .theme(.crests(theme: try arguments.take("the theme")))
+        case "crest":
+            let verb = try arguments.take("add, rename or remove")
+            let theme = try arguments.take("the theme")
+            switch verb {
+            case "add", "keep":
+                return .theme(
+                    .keepCrest(
+                        theme: theme, name: try arguments.take("the crest's name"), space: arguments.option("space")))
+            case "rename":
+                let name = try arguments.take("the crest")
+                return .theme(.renameCrest(theme: theme, name: name, newName: try arguments.take("the new name")))
+            case "remove", "delete":
+                return .theme(.removeCrest(theme: theme, name: try arguments.take("the crest")))
+            default:
+                throw TerminalArguments.Problem(message: "arma theme crest takes add, rename or remove, not '\(verb)'.")
+            }
         default:
             throw TerminalArguments.Problem(message: "arma theme has no action '\(action)'.")
         }

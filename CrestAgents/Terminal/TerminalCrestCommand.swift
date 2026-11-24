@@ -9,6 +9,8 @@ enum TerminalCrestCommand: Codable, Sendable {
     case set(space: String?, changes: TerminalCrestChanges)
     /// Gives a Space's crest, or the shown Space's, new parts and colors.
     case shuffle(space: String?)
+    /// Has a Space, or the shown Space, wear a crest its theme keeps, by name.
+    case use(space: String?, crest: String)
 }
 
 /// The parts and colors `arma crest set` names, each by its word; nil leaves
