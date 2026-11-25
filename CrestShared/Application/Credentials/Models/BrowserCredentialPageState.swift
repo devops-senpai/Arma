@@ -75,6 +75,17 @@ final class BrowserCredentialPageState<FillTarget> {
 
     /// The latest key the page held back for the fill popup on show.
     private(set) var keyPress: BrowserCredentialKeyPress?
+    /// Whether the person paused Arma's password prompts on this page, so
+    /// another password manager can have it. A new tab is not paused.
+    var isPaused = false
+    /// When a timed pause ends on its own, or nil for one until resumed.
+    var pausedUntil: Date?
+    @ObservationIgnored var pauseExpiry: Task<Void, Never>?
+    /// The offer to pause the prompts on this page, made when the person
+    /// closes one, until they answer it or it goes.
+    var pauseOffer: UUID?
+    /// Until when the prompts stay away after the person closed one.
+    @ObservationIgnored var snoozedUntil: Date?
 
     @ObservationIgnored private var fillTargets: [UUID: FillTarget] = [:]
 
@@ -427,7 +438,9 @@ extension BrowserCredentialPageState: CredentialCapturePerformer {
         let message = observation.message
         let decision = observation.decision
         let form = decision.form
-        // An extension that handles passwords keeps them and codes to itself.
+        // An extension that handles passwords keeps them and codes to itself,
+        // and a page the person paused or just closed a prompt on offers none.
+        guard offersPrompts(at: observation.now) else { return }
         guard
             (decision.passwordKind != nil || decision.codeFields != nil) && !passwordsHandledElsewhere
                 || decision.autofill != nil,
@@ -484,7 +497,7 @@ extension BrowserCredentialPageState: CredentialCapturePerformer {
     /// Keeps the password the form sent as a candidate, once every new
     /// password field agrees with it.
     func captureCandidate(_ observation: BrowserCredentialObservation<FillTarget>) {
-        guard !passwordsHandledElsewhere else { return }
+        guard !passwordsHandledElsewhere, !isPaused else { return }
         let message = observation.message
         let decision = observation.decision
         let form = decision.form
@@ -526,7 +539,7 @@ extension BrowserCredentialPageState: CredentialCapturePerformer {
     }
 
     func offerSave(_ observation: BrowserCredentialObservation<FillTarget>) {
-        guard let candidate = pendingSaveCandidate else { return }
+        guard let candidate = pendingSaveCandidate, offersPrompts(at: observation.now) else { return }
         pendingSaveCandidate = nil
         saveCandidate = candidate
     }

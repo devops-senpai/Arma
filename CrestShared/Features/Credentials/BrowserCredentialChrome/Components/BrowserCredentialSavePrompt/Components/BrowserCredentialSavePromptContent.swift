@@ -13,6 +13,8 @@ struct BrowserCredentialSavePromptContent: View {
     let metrics: BrowserCredentialPromptMetrics
     let dismiss: () -> Void
     let neverSave: () -> Void
+    /// Pauses Arma's password prompts on the page, where the shell can.
+    var pause: ((BrowserCredentialPauseLength) -> Void)? = nil
     let perform: (BrowserCredentialPromptPrimaryAction) -> Void
 
     @ViewBuilder
@@ -107,9 +109,22 @@ struct BrowserCredentialSavePromptContent: View {
     private var moreMenu: some View {
         if route.dismissAction.holdsCandidate {
             Menu {
-                Button("Never for This Site", systemImage: "hand.raised", action: neverSave)
-                    .accessibilityIdentifier("crest-password-save-never")
-                    .crestMenuActionLabelStyle()
+                Group {
+                    Button("Never for This Site", systemImage: "hand.raised", action: neverSave)
+                        .accessibilityIdentifier("crest-password-save-never")
+                    if let pause {
+                        Menu("Pause Passwords on This Tab", systemImage: "pause.circle") {
+                            Group {
+                                ForEach(BrowserCredentialPauseLength.all) { length in
+                                    Button(length.title, systemImage: length.systemImage) { pause(length) }
+                                }
+                            }
+                            .crestMenuActionLabelStyle()
+                        }
+                        .accessibilityIdentifier("crest-password-save-pause")
+                    }
+                }
+                .crestMenuActionLabelStyle()
             } label: {
                 Image(systemName: "ellipsis")
                     .frame(

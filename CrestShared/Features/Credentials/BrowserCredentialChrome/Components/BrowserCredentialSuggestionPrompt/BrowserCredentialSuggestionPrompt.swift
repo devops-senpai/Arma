@@ -30,7 +30,7 @@ struct BrowserCredentialSuggestionPrompt: View {
                 model: model,
                 fillErrorMessage: fillErrorMessage,
                 metrics: metrics,
-                dismiss: port.dismiss,
+                dismiss: port.closePrompt,
                 openPasswords: port.openPasswords,
                 fill: fill
             )
@@ -57,7 +57,7 @@ struct BrowserCredentialSuggestionPrompt: View {
     /// Return fills it, Escape closes the popup.
     private func answer(_ key: BrowserCredentialPopupKey) {
         if key.dismissesPopup {
-            port.dismiss()
+            port.closePrompt()
         } else if key.choosesSelection {
             if let selected = model.selectedSuggestion { fill(selected) } else { port.dismiss() }
         } else {
