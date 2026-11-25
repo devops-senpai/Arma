@@ -23,7 +23,7 @@ public sealed partial class BrowserContractsTests {
         device.Send(new JoinSpace(device.Workspace, member, primary));
         device.Send(new SetCredentialPreferences(device.Workspace, alone,
             new CredentialPreferences(IsEnabled: false, SyncsCrestPasswordsWithICloud: false, AlsoOffersSaveToSystemPasswords: false,
-                NeverSavedSites: [])));
+                NeverSavedSites: [], Authentication: CredentialAuthentication.EachTime)));
         var secure = new CredentialOrigin("https", "accounts.example.com", 443);
         var plain = new CredentialOrigin("http", "accounts.example.com", 80);
         CredentialAccessAnswer Access(Guid space, CredentialUse use, CredentialOrigin? origin = null, Guid? workspace = null) =>
@@ -53,7 +53,8 @@ public sealed partial class BrowserContractsTests {
         var other = new CredentialOrigin("https", "shop.example.com", 443);
         device.Send(new SetCredentialPreferences(device.Workspace, space,
             new CredentialPreferences(IsEnabled: true, SyncsCrestPasswordsWithICloud: true, AlsoOffersSaveToSystemPasswords: false,
-                NeverSavedSites: [never, never, new CredentialOrigin("https", "", 443)])));
+                NeverSavedSites: [never, never, new CredentialOrigin("https", "", 443)],
+                Authentication: CredentialAuthentication.EachTime)));
         CredentialRefusal? Refusal(CredentialUse use, CredentialOrigin origin) =>
             device.Query(new CredentialAccess(device.Workspace, space, use, origin)).Refusal;
 

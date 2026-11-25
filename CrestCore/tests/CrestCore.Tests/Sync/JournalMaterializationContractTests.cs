@@ -215,7 +215,7 @@ public sealed partial class BrowserContractsTests {
         Assert.Equal(Fixed(20_001), StoredSessionCodec.Identity(result["defaultSpaceID"]));
         var chosen = StoredSessionCodec.DecodeSpace(SpaceIn(result, Fixed(20_004))).Settings;
         Assert.Equal(new CredentialPreferences(IsEnabled: false, SyncsCrestPasswordsWithICloud: false, AlsoOffersSaveToSystemPasswords: true,
-            NeverSavedSites: []),
+            NeverSavedSites: [], Authentication: CredentialAuthentication.EachTime),
             chosen.CredentialPreferences);
         Assert.Equal(StoredSessionCodec.Date(800_000_100.0), chosen.CredentialsEnabledModifiedAt);
         // A Space nobody chose for keeps this device's own choice.
