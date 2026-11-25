@@ -92,6 +92,7 @@ struct BrowserCrestForgeStage: View {
     private func mark(size: CGFloat) -> some View {
         BrowserCrestStudioMark(branding: branding, symbol: symbol, size: size)
             .accessibilityLabel("Crest preview")
+            .replacedInThemeForge { themeStage($0) }
     }
 
     /// The Space's name under its crest, where the page doesn't already
@@ -100,6 +101,7 @@ struct BrowserCrestForgeStage: View {
         if let name {
             BrowserInlineSpaceName(name: name, size: 20, titleFont: .title3.weight(.semibold))
                 .frame(maxWidth: BrowserCrestForgeMetrics.nameWidth)
+                .replacedInThemeForge { _ in EmptyView() }
         }
     }
 
@@ -124,6 +126,7 @@ struct BrowserCrestForgeStage: View {
                 ],
                 startPoint: start, endPoint: end)
         }
+        .replacedInThemeForge { _ in Color.black.opacity(0.82) }
     }
 
     private var tools: some View {

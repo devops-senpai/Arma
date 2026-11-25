@@ -38,7 +38,8 @@ internal static partial class StoredSessionCodec {
             Flag(value[Key.HasCustomAppearance]),
             SpaceGradientKind.Named(Text(value[Key.GradientKind])),
             value[Key.SymbolGradient] is JsonObject symbolGradient ? DecodeGradient(symbolGradient) : null,
-            value[Key.ColorGradients] is JsonArray colorGradients ? DecodeGradients(colorGradients) : null);
+            value[Key.ColorGradients] is JsonArray colorGradients ? DecodeGradients(colorGradients) : null,
+            DecodeDress(value));
     }
 
     /// The texture strength a branding stored by any build lies under. A build
@@ -79,6 +80,7 @@ internal static partial class StoredSessionCodec {
         if (branding.GradientKind is { } kind && kind != SpaceGradientKind.Linear) value[Key.GradientKind] = kind.Name;
         if (branding.SymbolGradient is { } symbolGradient) value[Key.SymbolGradient] = Encode(symbolGradient);
         if (branding.ColorGradients is { } colorGradients) value[Key.ColorGradients] = Encode(colorGradients);
+        if (branding.Dress is { } dress) value[DressKey.Dress] = Encode(dress);
         return value;
     }
 

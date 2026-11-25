@@ -11,13 +11,17 @@ struct BrowserSpacePalettePicker: View {
     let isWorn: (BrowserSpacePalette) -> Bool
     /// Gives the Space, or every Space the picker colors, a palette.
     let choose: (BrowserSpacePalette) -> Void
+    /// Whether the presets head themselves; a page that folds them under a
+    /// heading of its own shows the grid alone.
+    var showsHeading = true
 
     // MARK: - Initializers
 
-    /// A picker for one Space's look.
-    init(branding: Binding<SpaceBranding>) {
+    /// A picker for one Space's look, heading itself unless told otherwise.
+    init(branding: Binding<SpaceBranding>, showsHeading: Bool = true) {
         isWorn = { $0.isWorn(by: branding.wrappedValue) }
         choose = { branding.wrappedValue = $0.applying(to: branding.wrappedValue) }
+        self.showsHeading = showsHeading
     }
 
     /// A picker that colors as `choose` does, such as every Space setup makes.
@@ -30,9 +34,11 @@ struct BrowserSpacePalettePicker: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: CrestSpacing.small) {
-            Text("Presets")
-                .crestCapsLabel()
-                .accessibilityAddTraits(.isHeader)
+            if showsHeading {
+                Text("Presets")
+                    .crestCapsLabel()
+                    .accessibilityAddTraits(.isHeader)
+            }
             grid
         }
         .padding(.vertical, CrestSpacing.extraExtraSmall)

@@ -6,8 +6,8 @@ enum BrowserPlatformSettingsDestinationCatalog {
     /// its own Space picker, and each Space's page opens it on that Space.
     static let groups: [[BrowserSettingsDestination]] = [
         [
-            .general, .tabs, .search, .lookAndFeel, .links, .engines, .shortcuts, .sync, .privacy, .adBlocking,
-            .passwords,
+            .general, .tabs, .search, .lookAndFeel, .themes, .links, .engines, .shortcuts, .sync, .privacy,
+            .adBlocking, .passwords,
         ],
         [.agents, .advanced, .about],
     ]
