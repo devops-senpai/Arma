@@ -27,7 +27,9 @@ extension BrowserCredentialSavePrompt {
     @ViewBuilder
     var closeButton: some View {
         if metrics.surfaceStyle == .panel {
-            Button(action: answerDismiss) {
+            // Closing holds the password for the address field's key, as Not
+            // Now does, and offers to pause the prompts where the shell can.
+            Button(action: port.close ?? answerDismiss) {
                 Image(systemName: "xmark")
                     .font(.system(size: BrowserCredentialPromptMetrics.closeGlyphSize, weight: .bold))
             }

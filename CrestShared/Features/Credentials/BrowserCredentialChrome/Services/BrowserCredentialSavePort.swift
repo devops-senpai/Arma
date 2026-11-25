@@ -44,6 +44,16 @@ struct BrowserCredentialSavePort {
     /// the prompt names it by. `nil` where the shell cannot make that offer.
     let offerToSystemPasswords: SystemPasswordsOffer?
 
+    /// What the person closing the prompt does, as the fill port's: nil
+    /// where the shell can't pause.
+    var close: (() -> Void)? = nil
+
+    /// Pauses Arma's password prompts on the page, where the shell can.
+    var pause: ((BrowserCredentialPauseLength) -> Void)? = nil
+
+    /// Answers the offer to pause the prompts: nil once answered or gone.
+    var dismissPauseOffer: () -> Void = {}
+
     typealias SystemPasswordsOffer =
         (BrowserCredentialSaveCandidate, String) async throws -> Void
 }
@@ -60,6 +70,9 @@ extension BrowserCredentialSavePort {
             dismiss: page.dismissCredentialSaveCandidate,
             decline: page.declineCredentialSaveCandidate,
             dismissAutofill: page.dismissAutofillSaveCandidate,
-            offerToSystemPasswords: offerToSystemPasswords)
+            offerToSystemPasswords: offerToSystemPasswords,
+            close: page.closeCredentialPrompt,
+            pause: page.pauseCredentialPrompts(for:),
+            dismissPauseOffer: page.dismissCredentialPauseOffer)
     }
 }
