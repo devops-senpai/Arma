@@ -8,5 +8,5 @@ extension CredentialPreferences {
     static let seeded = CredentialPreferences(
         isEnabled: true, syncsCrestPasswordsWithICloud: true, alsoOffersSaveToSystemPasswords: false,
         neverSavedSites: [], authentication: .eachTime, savePromptSeconds: defaultSavePromptSeconds,
-        suggestsInPrivateWindows: false)
+        suggestsInPrivateWindows: false, allowsCommandLine: false)
 }

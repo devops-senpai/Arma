@@ -275,6 +275,7 @@ struct BrowserPasswordSettingsPane<Header: View>: View {
                                 isOn: browser.credentialPreferenceBinding(\.suggestsInPrivateWindows, in: space)
                             )
                             .accessibilityIdentifier("space-credential-private-windows")
+                            BrowserPasswordCommandLineRows(browser: browser, space: space)
                         #endif
 
                         if layout.showsManageAction {

@@ -67,6 +67,7 @@ final class BrowserMacTerminal {
         case .site(let site): try await site.run(in: self)
         case .theme(let theme): try theme.run(in: self)
         case .crest(let crest): try crest.run(in: self)
+        case .passwords(let passwords): try await passwords.run(in: self)
         }
     }
 
