@@ -6,6 +6,20 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.11.118</title>
+            <pubDate>Wed, 25 Nov 2026 14:37:37 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>1100118</sparkle:version>
+            <sparkle:shortVersionString>0.11.118</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Crest's smoother sidebar scrolling with many tabs.
+
+### Improved
+- The sidebar scrolls smoothly even with hundreds of tabs open.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.11.118/Arma-0.11.118.dmg" length="335448513" type="application/octet-stream" sparkle:edSignature="QtPvdhiJbrTm7pDNE65F+lZX1tW0PnTkejR8ZZlGALZXmRe3u9L1/wsejP1iOQWcjqW0Ql3g6+mctl0ehgMFBQ=="/>
+        </item>
+        <item>
             <title>0.11.117</title>
             <pubDate>Wed, 25 Nov 2026 11:41:55 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1264,6 +1278,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: FxIZh/wZJPxOz2LMK9KIhs7hTrwoemgZWBJNXU8l3JSN4N7uMyrnE69sKTCu2aPryKbJ5T+afhp6NlJALqgKBQ==
-length: 99801
+edSignature: lxSjH6fFIGsFi/TaaOJR/kuDoM68FJlJWbYZ/5gZ9wj6rxk5m1cVvycql7ayXbkFJvdCAMQXbhoXT3zTsbHYAA==
+length: 100703
 -->
