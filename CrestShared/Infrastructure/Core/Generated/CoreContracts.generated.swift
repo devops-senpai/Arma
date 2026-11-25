@@ -3149,6 +3149,12 @@ struct CleanUpCurrentTabs: Intent, SessionIntent, Equatable, Sendable {
     let spaceID: UUID?
 }
 
+struct ClearArchive: Intent, SessionIntent, Equatable, Sendable {
+    let workspaceID: UUID
+    let spaceID: UUID?
+    let range: BrowsingDataRange
+}
+
 struct ClearCurrentTabs: Intent, SessionIntent, Equatable, Sendable {
     let workspaceID: UUID
     let windowID: UUID
@@ -7342,6 +7348,12 @@ struct RememberWindowsForLaunch: Intent, WindowIntent, Equatable, Sendable {
 struct RememberedSite: Equatable, Sendable {
     let site: String
     let spaceID: UUID
+}
+
+struct RemoveArchivedTab: Intent, SessionIntent, Equatable, Sendable {
+    let workspaceID: UUID
+    let spaceID: UUID
+    let tabID: UUID
 }
 
 struct RemoveCustomFilterList: Intent, Equatable, Sendable, Identifiable {
