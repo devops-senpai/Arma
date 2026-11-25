@@ -188,10 +188,11 @@ extension BrowserStore {
     /// `requirements`, the limits of the field it is for. The password itself
     /// is drawn natively, so it never enters the core.
     func strongPasswordRecipe(
-        for requirements: PasswordRequirements = .none, style: PasswordStyle = .grouped
+        for requirements: PasswordRequirements = .none, style: PasswordStyle = .grouped,
+        generation: PasswordGeneration? = nil
     ) throws -> StrongPasswordRecipe {
         do {
-            return try core.query(StrongPassword(requirements: requirements, style: style))
+            return try core.query(StrongPassword(requirements: requirements, style: style, generation: generation))
         } catch {
             throw BrowserStrongPasswordGenerationError.unavailable
         }
