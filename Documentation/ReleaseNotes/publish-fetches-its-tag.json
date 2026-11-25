@@ -1,0 +1,1 @@
+{"category": "internal", "message": "Publishing a release fetches its tag into the local checkout, so the release packaging check never makes the checkout shallow."}
