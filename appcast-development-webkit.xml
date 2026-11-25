@@ -6,6 +6,36 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.11.117</title>
+            <pubDate>Wed, 25 Nov 2026 11:42:16 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>1100117</sparkle:version>
+            <sparkle:shortVersionString>0.11.117</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Built on Crest's rebuilt passwords and autofill, with Arma's password features carried over, and Chromium 158.0.8127.89.
+
+### New
+- Crest's rebuilt passwords and autofill, with Settings › Autofill and new save and fill prompts.
+- The Save password? prompt closes on its own after a time you choose, or from its corner.
+- Pause Arma's password prompts on a tab, from the save prompt or with @passwords.
+- Choose how long a generated password is and which characters it uses.
+- Choose how often showing a saved password asks you to authenticate.
+- A Space can let private windows suggest its saved passwords on secure sites. Private windows still save nothing.
+- A saved password can fill its websites' subdomains: turn on Include Subdomains when editing it.
+- Type @passwords in the command palette to copy, fill or open a saved login.
+- `arma passwords` reaches a Space's saved passwords from the terminal once you unlock it with Touch ID.
+
+### Fixed
+- A saved password now fills on every website added to it, not only the one it was saved for.
+- Two-step sign-ins that move between a site's subdomains now save correctly.
+
+### Improved
+- Chromium 158.0.8127.89.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.11.117/Arma-0.11.117.dmg" length="335597421" type="application/octet-stream" sparkle:edSignature="8DCD/27wcVdslFq9Z9+aw2ms8A9/VgdHHxaXNhtae7f+aBwSRU68J1HUhx8VPjFi+itbPrrD+EQhFx2yeuwWDA=="/>
+        </item>
+        <item>
             <title>0.11.82</title>
             <pubDate>Tue, 24 Nov 2026 03:49:42 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1295,6 +1325,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: xMRy33Zo7ic+UYrr877WSpQf5NINGfiw87E+18HlnVKPf9HUNGKJvXc2XE9rt7K4TDVQrUOcJnDmWVXbWMdQDQ==
-length: 101403
+edSignature: jJCL5BdwbQZp0+YeV4D53LAXlPr+kXUIxCSnM0DhcBHbuGumezvPf22IAXFN70KZ95aESLxeoFVS2U6VtfuLAA==
+length: 103400
 -->
