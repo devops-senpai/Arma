@@ -10,7 +10,7 @@ enum BrowserImportFilePicker {
         let dataDirectory = application.defaultDataDirectory
         panel.title = String(localized: "Allow Crest to Read \(application.title)")
         panel.message =
-            "Crest has located \(application.title)'s data folder. Click Allow Access to build your review—there is nothing to find or choose."
+            "Arma has located \(application.title)'s data folder. Click Allow Access to build your review—there is nothing to find or choose."
         panel.prompt = String(localized: "Allow Access")
         panel.directoryURL = dataDirectory
         panel.allowsMultipleSelection = false
