@@ -539,7 +539,8 @@ final class BrowserCommandPaletteModel {
 
     /// Asks the core for the current query's answer off the main thread, then
     /// for the search suggestions the answer allows, and shows each only while
-    /// no later keystroke has asked again.
+    /// no later keystroke has asked again. An answer the core refuses leaves
+    /// the rows as they are and lets the keys act on them, as a long wait does.
     private func requestAnswer() {
         sequence &+= 1
         let asked = sequence
@@ -547,9 +548,13 @@ final class BrowserCommandPaletteModel {
         let core = browser.core
         answerTask?.cancel()
         answerTask = Task { [weak self] in
-            guard let answer = await Self.answer(question, from: core), !Task.isCancelled, let self,
-                asked == sequence
-            else { return }
+            let answer = await Self.answer(question, from: core)
+            guard !Task.isCancelled, let self, asked == sequence else { return }
+            guard let answer else {
+                shownSequence = asked
+                runWaitingKey()
+                return
+            }
             show(answer, for: asked)
             guard let address = answer.suggestionAddress.flatMap(URL.init(string:)) else { return }
             do {
