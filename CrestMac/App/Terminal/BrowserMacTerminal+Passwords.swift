@@ -389,12 +389,16 @@ extension TerminalPasswordsCommand {
         guard generation.lowercase || generation.uppercase || generation.numbers || generation.symbols else {
             throw Refusal("Keep at least one kind of character.")
         }
+        // The core holds a length to these bounds; the terminal says so rather than bend it.
+        guard (PasswordGeneration.minimumLength...PasswordGeneration.maximumLength).contains(generation.length) else {
+            throw Refusal(
+                "A password is \(PasswordGeneration.minimumLength) to \(PasswordGeneration.maximumLength) characters.")
+        }
         do {
             return try BrowserStrongPasswordGenerator.generate(
                 from: terminal.browser.strongPasswordRecipe(generation: generation))
         } catch {
-            throw Refusal(
-                "A password is \(PasswordGeneration.minimumLength) to \(PasswordGeneration.maximumLength) characters.")
+            throw Refusal("Arma couldn't make a password.")
         }
     }
 
