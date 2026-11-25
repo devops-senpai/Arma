@@ -20,16 +20,17 @@ rule written once.
 | `Architecture/` | Core architecture, the control plane, engine abstraction, content blocking, desktop Picture in Picture |
 | `RepositoryGuardrails.md` | What the checks enforce: formatting, versions, release notes, architecture, feature organization, isolated sessions |
 | `Distribution.md` | Release channels, signing, notarization, appcasts, release verification |
+| `ForkRunbook.md` | Arma's own flow: history shape, syncing with upstream, the Chromium engine, building, notarizing and publishing a release |
 | `Renaming.md` | Where Arma's name, identifier, icon, helper and repository live, how the build names the app in Crest's strings, and the heraldic phrases that keep "Crest" |
 | `LinkOpeningPolicy.md`, `NativeTabs.md` | Where links and opened windows go; tabs with native content |
-| `ReleaseNotes.json` | The release-note catalog, bundled into the apps and read by the release tools |
+| `ReleaseNotes/` | The release notes the release tools read: upstream's version files under `<major>.<minor>/`, and Arma's one entry file per change beside them |
 | `ROADMAP.md` | Public release outcomes; its managed section is rendered by `Scripts/render-roadmap.py` |
 | `EngineLogos.md`, `GettingStartedLogos.md`, `SearchProviderLogos.md` | Sources of the third-party marks the app shows |
 
 ## Depends on
 
-Nothing. Read by contributors and agents; `ReleaseNotes.json` is consumed by
-`project.yml`, `Scripts/release_note_catalog.py` and the release workflows.
+Nothing. Read by contributors and agents; `ReleaseNotes/` is consumed by
+`Scripts/release_note_catalog.py` and the release workflows.
 
 ## Rules
 
