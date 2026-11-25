@@ -12,6 +12,7 @@ struct BrowserOnboardingSetupFinishing: BrowserSetupFinishReceiver {
     // MARK: - Actions - Finishing
 
     func setupCompleted(guide _: BrowserTabRuntimeAssignment?) {
+        flow.dressSpacesInChosenTheme()
         progress.setupFinished()
         onCompleted()
     }
