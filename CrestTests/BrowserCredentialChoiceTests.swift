@@ -3,8 +3,8 @@ import XCTest
 
 @testable import Crest
 
-/// The password choices a Space makes that guard its passwords, starting with
-/// who may change how often showing one asks.
+/// The password choices a Space makes that guard its passwords: who may change
+/// how often showing one asks, and what a private window may suggest and save.
 @MainActor
 final class BrowserCredentialChoiceTests: XCTestCase {
     /// Changing how often a Space asks to authenticate asks first, even when
@@ -28,6 +28,39 @@ final class BrowserCredentialChoiceTests: XCTestCase {
         let granted = BrowserCredentialSensitiveAccess(
             browser: browser, authenticator: CredentialChoiceAuthenticatorStub(result: true))
         try await granted.authorizeAuthenticationChange(in: space.id)
+    }
+
+    /// A private window suggests the passwords of a Space that chose to be
+    /// suggested there, and of no other, and never saves one: its vault
+    /// refuses the write and the Space's own vault is left as it was.
+    func testAPrivateWindowSuggestsOnlyChosenSpacesPasswordsAndSavesNone() async throws {
+        let vault = InMemoryCredentialVault()
+        let browser = BrowserStore(seed: .preview, credentialVault: vault)
+        let space = try XCTUnwrap(browser.spaceModels.first)
+        let url = try XCTUnwrap(URL(string: "https://accounts.example.com/sign-in"))
+        _ = try await browser.saveCredential(username: "person", password: "secret", for: url, in: space.id)
+        let privateBrowser = BrowserStore.privateBrowsing(core: browser.core, passwordsFrom: browser)
+        let privateSpaceID = privateBrowser.selectedSpaceID
+
+        let unchosen = try await privateBrowser.credentialSuggestions(for: url, in: privateSpaceID)
+        XCTAssertTrue(unchosen.isEmpty)
+
+        var preferences = space.settings.credentialPreferences
+        preferences.suggestsInPrivateWindows = true
+        browser.updateCredentialPreferences(preferences, in: space.id)
+        let suggested = try await privateBrowser.credentialSuggestions(for: url, in: privateSpaceID)
+        XCTAssertEqual(suggested.map(\.username), ["person"])
+        XCTAssertEqual(suggested.map(\.spaceID), [privateSpaceID])
+
+        do {
+            _ = try await privateBrowser.saveCredential(
+                username: "new", password: "other", for: url, in: privateSpaceID)
+            XCTFail("A private window must not save a password")
+        } catch {
+            XCTAssertEqual(error as? CredentialVaultError, .unavailableInPrivateBrowsing)
+        }
+        let kept = try await vault.descriptors(in: space.id)
+        XCTAssertEqual(kept.map(\.username), ["person"])
     }
 }
 

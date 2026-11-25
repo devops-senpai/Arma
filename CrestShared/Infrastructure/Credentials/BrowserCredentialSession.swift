@@ -15,6 +15,9 @@ final class BrowserCredentialSession {
     let state: BrowserCredentialPageState<FillTarget>
     private(set) var isEnabled: Bool
     @ObservationIgnored private let supportsAccess: Bool
+    /// Whether the Space's "save passwords" preference turns the session on
+    /// and off. A private window's follows the Spaces it suggests from instead.
+    @ObservationIgnored private let followsSpacePreference: Bool
     @ObservationIgnored private let httpAuthentication: BrowserHTTPAuthenticationSession
     /// The request whose popup holds its field's keys, and where that field
     /// is, kept until the popup gives them back: a closing popup's request
@@ -29,16 +32,19 @@ final class BrowserCredentialSession {
         core: CrestCore,
         supportsAccess: Bool,
         isEnabled: Bool,
-        httpAuthentication: BrowserHTTPAuthenticationSession
+        httpAuthentication: BrowserHTTPAuthenticationSession,
+        allowsSaving: Bool = true,
+        followsSpacePreference: Bool = true
     ) {
-        state = BrowserCredentialPageState(spaceID: spaceID, core: core)
+        state = BrowserCredentialPageState(spaceID: spaceID, core: core, allowsSaving: allowsSaving)
         self.supportsAccess = supportsAccess
-        self.isEnabled = supportsAccess && isEnabled
+        self.followsSpacePreference = followsSpacePreference
+        self.isEnabled = supportsAccess && (isEnabled || !followsSpacePreference)
         self.httpAuthentication = httpAuthentication
     }
 
     func setEnabled(_ isEnabled: Bool) {
-        let resolvedValue = supportsAccess && isEnabled
+        let resolvedValue = supportsAccess && (isEnabled || !followsSpacePreference)
         guard self.isEnabled != resolvedValue else { return }
         self.isEnabled = resolvedValue
         httpAuthentication.setCredentialStorageEnabled(resolvedValue)
