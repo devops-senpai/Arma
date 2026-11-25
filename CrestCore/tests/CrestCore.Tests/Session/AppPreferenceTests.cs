@@ -26,7 +26,7 @@ public sealed partial class BrowserContractsTests {
         using (var device = new TestDevice(session)) {
             var authority = device.Authority;
             device.Send(new AdoptSetupCompletion(Completed: true));
-            Assert.Equal(StartupBehavior.ShowStartPage, device.Query(LaunchPlan(device.Workspace)).Startup);
+            Assert.Equal(StartupBehavior.LastActiveTab, device.Query(LaunchPlan(device.Workspace)).Startup);
             device.Send(new ImportAppPreferences(device.Workspace, LegacyPreferences()));
             saved = authority.Checkpoint().Read("core");
         }
