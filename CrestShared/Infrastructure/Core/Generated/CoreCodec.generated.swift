@@ -7,7 +7,7 @@ import Foundation
 enum CoreCodec {
     /// SHA-256 of the canonical contract schema. The core refuses any other.
     static let fingerprint: [UInt8] = [
-        0x1c, 0xae, 0x90, 0xbb, 0xf2, 0x70, 0x36, 0x84, 0xc6, 0x90, 0x6b, 0x11, 0x29, 0x30, 0x85, 0x3e, 0xeb, 0x7c, 0x43, 0x9e, 0xf2, 0x8a, 0xa6, 0x41, 0x0e, 0xda, 0x44, 0xf4, 0xaa, 0xe2, 0xeb, 0x51
+        0x60, 0x40, 0x52, 0x95, 0x72, 0xa3, 0xbc, 0xf3, 0x64, 0x1c, 0xae, 0xad, 0xc3, 0x01, 0x1c, 0xe5, 0x7c, 0xf4, 0x30, 0x8c, 0xbf, 0x00, 0x81, 0xaa, 0xcb, 0x9c, 0x85, 0x55, 0x84, 0x32, 0xf6, 0xc0
     ]
     /// SHA-256 of the engine contract alone, which an engine binding registers with.
     static let engineFingerprint: [UInt8] = [
@@ -7633,7 +7633,8 @@ extension CredentialPreferences {
             let neverSavedSitesElement = try CredentialOrigin(from: &reader)
             neverSavedSites.append(neverSavedSitesElement)
         }
-        self.init(isEnabled: isEnabled, syncsCrestPasswordsWithICloud: syncsCrestPasswordsWithICloud, alsoOffersSaveToSystemPasswords: alsoOffersSaveToSystemPasswords, neverSavedSites: neverSavedSites)
+        let savePromptSeconds = try reader.readInt()
+        self.init(isEnabled: isEnabled, syncsCrestPasswordsWithICloud: syncsCrestPasswordsWithICloud, alsoOffersSaveToSystemPasswords: alsoOffersSaveToSystemPasswords, neverSavedSites: neverSavedSites, savePromptSeconds: savePromptSeconds)
     }
 
     func encode(into writer: inout WireWriter) {
@@ -7644,6 +7645,7 @@ extension CredentialPreferences {
         for element0 in neverSavedSites {
             element0.encode(into: &writer)
         }
+        writer.writeInt(savePromptSeconds)
     }
 }
 

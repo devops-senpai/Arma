@@ -14,7 +14,7 @@ public sealed record SetCredentialPreferences(Guid WorkspaceId, Guid SpaceId, Cr
     internal override SessionEdit? Edit(NativeSessionAuthority workspace, SessionTurn turn) {
         workspace.RequireOwnedSpaces();
         var space = workspace.Editable(turn.Basis, SpaceId);
-        var preferences = Preferences with {
+        var preferences = Preferences.Kept() with {
             NeverSavedSites = [.. Preferences.NeverSavedSites.Where(site => site.IsValid).Distinct()
                 .Take(CredentialPreferences.MaximumNeverSavedSites)]
         };
