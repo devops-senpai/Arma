@@ -58,13 +58,20 @@ public sealed record TabIconAccent(double Red, double Green, double Blue);
 
 /// <summary>Whether a Space offers to save and fill passwords, where it keeps them, and
 /// the sites the person asked it never to offer to save for. Only whether it offers
-/// them reaches the person's other devices.</summary>
+/// them reaches the person's other devices. The offer to save closes after
+/// <see cref="SavePromptSeconds"/>; older records leave it out and take the default.</summary>
 public sealed record CredentialPreferences(bool IsEnabled, bool SyncsCrestPasswordsWithICloud, bool AlsoOffersSaveToSystemPasswords,
-    IReadOnlyList<CredentialOrigin> NeverSavedSites) {
+    IReadOnlyList<CredentialOrigin> NeverSavedSites, int SavePromptSeconds = CredentialPreferences.DefaultSavePromptSeconds) {
     #region Static Variables
 
     /// The most sites a Space keeps in its never-save list.
     public const int MaximumNeverSavedSites = 1000;
+
+    /// How long the offer to save stays up unless a person chooses, and the
+    /// range they choose from.
+    public const int DefaultSavePromptSeconds = 10;
+    public const int MinimumSavePromptSeconds = 3;
+    public const int MaximumSavePromptSeconds = 60;
 
     #endregion
 
@@ -83,6 +90,11 @@ public sealed record CredentialPreferences(bool IsEnabled, bool SyncsCrestPasswo
     /// Whether the person asked the Space never to offer to save for `site`.
     internal bool NeverSaves(CredentialOrigin site) => NeverSavedSites.Contains(site);
 
+    /// These preferences with each number held to its range.
+    internal CredentialPreferences Kept() => this with {
+        SavePromptSeconds = Math.Clamp(SavePromptSeconds, MinimumSavePromptSeconds, MaximumSavePromptSeconds)
+    };
+
     #endregion
 
     #region Actions - Equality
@@ -91,10 +103,12 @@ public sealed record CredentialPreferences(bool IsEnabled, bool SyncsCrestPasswo
         && IsEnabled == other.IsEnabled
         && SyncsCrestPasswordsWithICloud == other.SyncsCrestPasswordsWithICloud
         && AlsoOffersSaveToSystemPasswords == other.AlsoOffersSaveToSystemPasswords
-        && NeverSavedSites.SequenceEqual(other.NeverSavedSites);
+        && NeverSavedSites.SequenceEqual(other.NeverSavedSites)
+        && SavePromptSeconds == other.SavePromptSeconds;
 
     public override int GetHashCode() =>
-        HashCode.Combine(IsEnabled, SyncsCrestPasswordsWithICloud, AlsoOffersSaveToSystemPasswords, NeverSavedSites.Count);
+        HashCode.Combine(IsEnabled, SyncsCrestPasswordsWithICloud, AlsoOffersSaveToSystemPasswords, NeverSavedSites.Count,
+            SavePromptSeconds);
 
     #endregion
 }

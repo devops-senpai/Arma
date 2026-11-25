@@ -14,7 +14,7 @@ namespace CrestCore.Native;
 public static class ContractCodec {
     /// <summary>SHA-256 of the canonical contract schema.</summary>
     public static ReadOnlySpan<byte> Fingerprint => [
-        0x1c, 0xae, 0x90, 0xbb, 0xf2, 0x70, 0x36, 0x84, 0xc6, 0x90, 0x6b, 0x11, 0x29, 0x30, 0x85, 0x3e, 0xeb, 0x7c, 0x43, 0x9e, 0xf2, 0x8a, 0xa6, 0x41, 0x0e, 0xda, 0x44, 0xf4, 0xaa, 0xe2, 0xeb, 0x51
+        0x60, 0x40, 0x52, 0x95, 0x72, 0xa3, 0xbc, 0xf3, 0x64, 0x1c, 0xae, 0xad, 0xc3, 0x01, 0x1c, 0xe5, 0x7c, 0xf4, 0x30, 0x8c, 0xbf, 0x00, 0x81, 0xaa, 0xcb, 0x9c, 0x85, 0x55, 0x84, 0x32, 0xf6, 0xc0
     ];
 
     /// <summary>SHA-256 of the engine contract alone, which an engine binding registers with.</summary>
@@ -8350,7 +8350,8 @@ public static class ContractCodec {
             reader.ReadBool(),
             reader.ReadBool(),
             reader.ReadBool(),
-            reader.ReadList(() => ReadCredentialOrigin(reader)));
+            reader.ReadList(() => ReadCredentialOrigin(reader)),
+            reader.ReadInt32());
     }
 
     public static void WriteCredentialPreferences(WireWriter writer, CredentialPreferences value) {
@@ -8363,6 +8364,7 @@ public static class ContractCodec {
         foreach (var itemNeverSavedSites in value.NeverSavedSites) {
             WriteCredentialOrigin(writer, itemNeverSavedSites);
         }
+        writer.WriteInt32(value.SavePromptSeconds);
     }
 
     public static CredentialRecord ReadCredentialRecord(WireReader reader) {
