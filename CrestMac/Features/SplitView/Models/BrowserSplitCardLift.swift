@@ -41,6 +41,16 @@ struct BrowserSplitCardLift: Equatable {
     var pointer: CGPoint
     /// The slot the gap is standing in, and the member index a release commits.
     var gapIndex: Int
+    /// In a split in a shape, the shape the cards tile in with the gap where
+    /// it stands, when that differs from the split's own; see `+Shape`.
+    var gapShape: SplitShape?
+    /// The card the carried one swaps with when it is put down, while the
+    /// pointer is over that card's middle; see `+Shape`.
+    var swapsWith: UUID?
+    /// The cards' frames as they stood when the carry first aimed in a shape,
+    /// which it keeps aiming at: cards stepping aside for the gap would aim
+    /// it at another tile every frame.
+    var aimFrames: [UUID: CGRect]?
     /// The page as WebKit had it rendered at pickup.
     ///
     /// `nil` until it arrives, which is a frame or two after the card is already
@@ -49,6 +59,9 @@ struct BrowserSplitCardLift: Equatable {
     /// True from the release until the preview has finished settling, during
     /// which the card is back in the row and the preview is only fading off it.
     var isSettling = false
+    /// The carry was placed by a menu rather than picked up by a press: the
+    /// card follows the pointer with no button held, and a click puts it down.
+    var isPlaced = false
 
     /// Top-left of the preview, in the window-global space the preview window is
     /// pinned to.

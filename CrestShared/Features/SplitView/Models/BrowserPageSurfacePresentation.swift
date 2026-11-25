@@ -20,8 +20,11 @@ enum BrowserPageSurfacePresentation {
     case single(space: SpaceModel, cardTabID: UUID?)
 
     /// A row of cards. `placeholderIndex` is the slot a drag in flight would
-    /// drop into, or `nil` when no drop is resolved against this row.
-    case columns(space: SpaceModel, members: [TabStateModel], placeholderIndex: Int?)
+    /// drop into, or `nil` when no drop is resolved against this row, and
+    /// `placeholderShape` the shape the cards and that slot tile in, or `nil`
+    /// for a row of columns.
+    case columns(
+        space: SpaceModel, members: [TabStateModel], placeholderIndex: Int?, placeholderShape: SplitShape? = nil)
 
     // MARK: - Static Variables
 
@@ -74,8 +77,9 @@ enum BrowserPageSurfacePresentation {
             return
         }
         self = .columns(
-            space: space, members: cards,
-            placeholderIndex: Self.placeholderIndex(resolvedTarget: resolvedTarget, spaceID: space.id))
+            space: space, members: Self.swapping(cards, resolvedTarget: resolvedTarget, spaceID: space.id),
+            placeholderIndex: Self.placeholderIndex(resolvedTarget: resolvedTarget, spaceID: space.id),
+            placeholderShape: Self.placeholderShape(resolvedTarget: resolvedTarget, spaceID: space.id))
     }
 
     // MARK: - Variables
@@ -86,7 +90,7 @@ enum BrowserPageSurfacePresentation {
         switch self {
         case .unavailable: nil
         case .single(let space, _): space
-        case .columns(let space, _, _): space
+        case .columns(let space, _, _, _): space
         }
     }
 
@@ -143,8 +147,15 @@ enum BrowserPageSurfacePresentation {
 
     /// The slot a drag in flight would drop a card into, for this Space.
     private static func placeholderIndex(resolvedTarget: BrowserSidebarReorderTarget?, spaceID: UUID) -> Int? {
-        guard case .splitInsert(let assignment, let index) = resolvedTarget?.kind, assignment.spaceID == spaceID
+        guard case .splitInsert(let assignment, let index, _, nil) = resolvedTarget?.kind, assignment.spaceID == spaceID
         else { return nil }
         return index
+    }
+
+    /// The shape the cards and that slot tile in, for this Space.
+    private static func placeholderShape(resolvedTarget: BrowserSidebarReorderTarget?, spaceID: UUID) -> SplitShape? {
+        guard case .splitInsert(let assignment, _, let shape, nil) = resolvedTarget?.kind, assignment.spaceID == spaceID
+        else { return nil }
+        return shape
     }
 }
