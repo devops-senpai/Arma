@@ -38,6 +38,8 @@ struct BrowserCredentialDraft: Equatable {
     var username: String
     var password: String
     var sites: [String]
+    /// Whether the login also fills the hosts under its sites.
+    var includesSubdomains = false
     var notes: String
     /// The `otpauth` link of the login's code, or nil for none.
     var codeLink: String?
@@ -256,7 +258,8 @@ final class BrowserCredentialDetailModel {
                 revealedExtras = extras ?? .empty
                 draft = BrowserCredentialDraft(
                     title: descriptor.displayName ?? "", username: descriptor.username, password: credential.password,
-                    sites: descriptor.sites.map(\.description), notes: extras?.notes ?? "", codeLink: extras?.codeLink)
+                    sites: descriptor.sites.map(\.description), includesSubdomains: descriptor.includesSubdomains,
+                    notes: extras?.notes ?? "", codeLink: extras?.codeLink)
             } catch {
                 guard !Task.isCancelled, activeOperationToken == token, isCurrent(token) else { return }
                 handleAccessError(error)
@@ -298,7 +301,8 @@ final class BrowserCredentialDetailModel {
             descriptor = try await saveEdit(
                 descriptor.id, spaceAssignment,
                 BrowserCredentialEdit(
-                    title: draft.title, username: draft.username, sites: sites, password: draft.password,
+                    title: draft.title, username: draft.username, sites: sites,
+                    includesSubdomains: draft.includesSubdomains, password: draft.password,
                     extras: extras == revealedExtras ? nil : extras))
             revealedExtras = extras
             if let extras {
@@ -307,6 +311,11 @@ final class BrowserCredentialDetailModel {
             }
             self.draft = nil
             return true
+        } catch let rejection as Rejection {
+            errorMessage =
+                rejection.message.map { String(localized: $0) }
+                ?? String(localized: "Crest couldn’t save those changes.")
+            return false
         } catch {
             errorMessage = String(localized: "Crest couldn’t save those changes.")
             return false

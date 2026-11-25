@@ -9,6 +9,7 @@ Crest ships these third-party runtime components:
 | [adblock-rust](https://github.com/brave/adblock-rust), Brave's ad-block engine | 0.13.5 | Crest's content filter, compiled into the core on every platform | MPL-2.0, built from MIT, Apache-2.0, Unicode-3.0 and Unlicense Rust crates |
 | [Chromium](https://www.chromium.org/), with Crest's patches, some adapted from [ungoogled-chromium](https://github.com/ungoogled-software/ungoogled-chromium) | 156.0.8078.80 | The Chromium engine in Crest's Chromium build for macOS | BSD-3-Clause, with bundled third-party licenses |
 | [Allo](https://allo.joshpuckett.me) by Josh Puckett, built from [Inter](https://github.com/rsms/inter) | 1.0.3 | Crest's display type for headings, buttons and labels, in the app and on its website | SIL Open Font License 1.1 |
+| [Public Suffix List](https://publicsuffix.org/) | Fetched 2026-11-04 | Which sites a saved password may reach, built into the core as `CrestCore/src/CrestCore/Domain/Links/public_suffix_list.dat` | MPL-2.0 |
 
 The complete notices are preserved in
 [`ThirdParty/Sparkle-LICENSE.txt`](ThirdParty/Sparkle-LICENSE.txt),
