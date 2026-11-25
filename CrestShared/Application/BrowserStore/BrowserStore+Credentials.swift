@@ -17,6 +17,20 @@ extension BrowserStore {
 // MARK: - Lookup
 
 extension BrowserStore {
+    /// The vaults whose passwords a private window suggests: those of every
+    /// Space that keeps passwords and chose to be suggested in private
+    /// windows, with the rest of its group.
+    func spacesSuggestingPasswordsInPrivateWindows() -> [UUID] {
+        guard !isPrivateBrowsing else { return [] }
+        var vaults: [UUID] = []
+        for space in spaceModels {
+            let preferences = space.settings.credentialPreferences
+            guard preferences.isEnabled, preferences.suggestsInPrivateWindows else { continue }
+            for vault in credentialSpaceIDs(of: space.id) where !vaults.contains(vault) { vaults.append(vault) }
+        }
+        return vaults
+    }
+
     func credentialSuggestions(for url: URL) async throws -> [CredentialDescriptor] {
         guard let spaceID = shownSpace?.id else {
             throw CredentialVaultError.missingSpace
@@ -72,7 +86,13 @@ extension BrowserStore {
             throw CredentialVaultError.missingSpace
         }
         let origin = CredentialOrigin(url: url)
-        guard try credentialAccess(.fill, in: spaceID, origin: origin).refusal == nil else { return [] }
+        // A private window's vault holds only what other Spaces chose to
+        // suggest there, on secure sites, so its own Space's switch, which is
+        // off, is not asked.
+        let serves =
+            try isPrivateBrowsing
+            ? origin?.isSecure == true : credentialAccess(.fill, in: spaceID, origin: origin).refusal == nil
+        guard serves else { return [] }
         guard let origin else {
             throw CredentialVaultError.invalidOrigin
         }

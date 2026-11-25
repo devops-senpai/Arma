@@ -321,6 +321,7 @@ final class BrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
         profileID: UUID,
         spaceName: String,
         allowsCredentialAccess: Bool = true,
+        allowsCredentialSaving: Bool = true,
         isCredentialAccessEnabled: Bool = true,
         defaultPageZoom: CGFloat = BrowserDefaultPageZoomStore.defaultLevel,
         loadHTTPAuthenticationCredential:
@@ -372,7 +373,7 @@ final class BrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
         self.linkDestinationHost = linkDestinationHost
         let httpAuthenticationSession = BrowserHTTPAuthenticationSession(
             spaceID: spaceID,
-            allowsCredentialSaving: allowsCredentialAccess
+            allowsCredentialSaving: allowsCredentialAccess && allowsCredentialSaving
                 && isCredentialAccessEnabled,
             loadCredential: loadHTTPAuthenticationCredential,
             saveCredential: saveHTTPAuthenticationCredential
@@ -383,7 +384,9 @@ final class BrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
             core: downloadCenter.core,
             supportsAccess: allowsCredentialAccess,
             isEnabled: isCredentialAccessEnabled,
-            httpAuthentication: httpAuthenticationSession
+            httpAuthentication: httpAuthenticationSession,
+            allowsSaving: allowsCredentialSaving,
+            followsSpacePreference: allowsCredentialSaving
         )
         navigationDecider = BrowserNavigationDecider()
         // A popup whose destination belongs to another application is routed

@@ -104,7 +104,8 @@ internal static partial class StoredSessionCodec {
             Flag(value[Key.AlsoOffersSaveToSystemPasswords]) ?? DefaultCredentialPreferences.AlsoOffersSaveToSystemPasswords,
             NeverSavedSites(value[Key.NeverSavedSites]),
             CredentialAuthentication.Named(TolerantText(value[Key.Authentication])) ?? DefaultCredentialPreferences.Authentication,
-            Integer(value[Key.SavePromptSeconds]) ?? DefaultCredentialPreferences.SavePromptSeconds).Kept();
+            Integer(value[Key.SavePromptSeconds]) ?? DefaultCredentialPreferences.SavePromptSeconds,
+            Flag(value[Key.SuggestsInPrivateWindows]) ?? DefaultCredentialPreferences.SuggestsInPrivateWindows).Kept();
     }
 
     internal static JsonObject Encode(CredentialPreferences preferences) {
@@ -117,6 +118,8 @@ internal static partial class StoredSessionCodec {
         // the default is stored exactly as before.
         if (preferences.Authentication != DefaultCredentialPreferences.Authentication)
             encoded[Key.Authentication] = preferences.Authentication.Name;
+        if (preferences.SuggestsInPrivateWindows)
+            encoded[Key.SuggestsInPrivateWindows] = true;
         if (preferences.SavePromptSeconds != DefaultCredentialPreferences.SavePromptSeconds)
             encoded[Key.SavePromptSeconds] = preferences.SavePromptSeconds;
         if (preferences.NeverSavedSites.Count > 0)
