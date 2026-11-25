@@ -19,7 +19,7 @@ through intents and appearance preferences locally.
 | `BrowserSpaceAccessView.swift`, `BrowserSyncSettingsView.swift` | The locked-Space access screen and the sync view |
 | `BrowserAdvancedSettingsPane/` | Advanced settings and setup actions; hosts `DataPortability/` |
 | `BrowserLinkSettingsPane/` | Link routing, external-link destination, Peek and Quick Window preferences |
-| `BrowserPasswordSettingsPane/` | Crest Passwords list, detail and passkey access |
+| `BrowserPasswordSettingsPane/` | Crest Passwords list, detail and passkey access; how often showing a password asks to authenticate (`BrowserCredentialAuthenticationRow`), how long the offer to save stays (`BrowserSavePromptSecondsRow`), and, on the Mac, private-window suggestions and terminal access (`BrowserPasswordCommandLineRows`) |
 | `BrowserPrivacySettingsPane/` | Privacy sections: content blocking, data retention, website data, saved site permissions, clearing data |
 | `BrowserSearchSettingsPane/` | Search providers and rules |
 | `BrowserPlatformLinkRouteEditor/` | A link route editor whose content each platform supplies |

@@ -30,6 +30,30 @@ final class BrowserCredentialChoiceTests: XCTestCase {
         try await granted.authorizeAuthenticationChange(in: space.id)
     }
 
+    /// A terminal session key opens only the Space it was opened on, never
+    /// past its time, and nothing once ended; Arma keeps no key, so another
+    /// key, however close, opens nothing.
+    func testATerminalPasswordSessionOpensOnlyItsSpaceForItsTime() {
+        let sessions = BrowserCredentialTerminalSessions()
+        let space = UUID()
+        let start = Date(timeIntervalSince1970: 1_000_000)
+        let key = sessions.open(on: space, minutes: 90, now: start)
+
+        XCTAssertEqual(sessions.session(for: key, now: start)?.spaceID, space)
+        XCTAssertNil(sessions.session(for: key + "x", now: start))
+        XCTAssertNil(sessions.session(for: nil, now: start))
+        // An hour at most, whatever was asked for.
+        XCTAssertNotNil(sessions.session(for: key, now: start.addingTimeInterval(59 * 60)))
+        XCTAssertNil(sessions.session(for: key, now: start.addingTimeInterval(60 * 60)))
+
+        let other = sessions.open(on: UUID(), minutes: 5, now: start)
+        sessions.endAll(on: space)
+        XCTAssertNil(sessions.session(for: key, now: start))
+        XCTAssertNotNil(sessions.session(for: other, now: start))
+        sessions.endAll()
+        XCTAssertNil(sessions.session(for: other, now: start))
+    }
+
     /// A private window suggests the passwords of a Space that chose to be
     /// suggested there, and of no other, and never saves one: its vault
     /// refuses the write and the Space's own vault is left as it was.
