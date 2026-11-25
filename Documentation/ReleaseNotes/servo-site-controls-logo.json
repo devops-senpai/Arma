@@ -1,0 +1,7 @@
+{
+  "category": "internal",
+  "message": "Site Controls and the site engine picker leave an empty slot for Servo, which has a symbol rather than a logo.",
+  "platforms": [
+    "mac"
+  ]
+}
