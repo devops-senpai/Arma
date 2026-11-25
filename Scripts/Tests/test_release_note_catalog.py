@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""Contract coverage for Crest's per-version release notes."""
+"""Contract coverage for Crest's per-version release notes and Arma's entry files."""
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -110,16 +112,26 @@ class ReleaseNoteCatalogTests(unittest.TestCase):
                 result = self.run_catalog_check()
                 self.assertNotEqual(result.returncode, 0, name)
 
-    def test_staged_contract_puts_new_entries_in_the_staged_versions_file(self) -> None:
-        self.write_marketing_version("0.1.2")
-        self.git("add", "Config")
+    def write_entry(self, identifier: str, category: str, message: str, **fields: object) -> str:
+        path = self.repository / "Documentation" / "ReleaseNotes" / f"{identifier}.json"
+        path.write_text(json.dumps({"category": category, "message": message, **fields}) + "\n")
+        return str(path.relative_to(self.repository))
 
+    def commit(self, *paths: str, message: str = "change") -> None:
+        self.git("add", *paths)
+        self.git("commit", "-m", message)
+
+    def read_catalog(self):
+        specification = importlib.util.spec_from_file_location("release_note_catalog", CATALOG_SCRIPT)
+        module = importlib.util.module_from_spec(specification)
+        sys.modules[specification.name] = module
+        specification.loader.exec_module(module)
+        return module.validate_working_catalog(self.repository)
+
+    def test_a_change_adds_an_entry_file_and_leaves_the_version_files_alone(self) -> None:
         missing = self.run_catalog_check("--require-staged-entry")
         self.assertNotEqual(missing.returncode, 0)
-        self.assertIn(
-            "add at least one new release-note entry to Documentation/ReleaseNotes/0.1/0.1.2.json",
-            missing.stderr,
-        )
+        self.assertIn("stage at least one new release-note entry as Documentation/ReleaseNotes/<id>.json", missing.stderr)
 
         self.write_version_notes(
             "0.1.1",
@@ -129,44 +141,67 @@ class ReleaseNoteCatalogTests(unittest.TestCase):
             ],
         )
         self.git("add", "Documentation")
-        misplaced = self.run_catalog_check("--require-staged-entry")
-        self.assertNotEqual(misplaced.returncode, 0)
-        self.assertIn("belong in Documentation/ReleaseNotes/0.1/0.1.2.json", misplaced.stderr)
+        in_version_file = self.run_catalog_check("--require-staged-entry")
+        self.assertNotEqual(in_version_file.returncode, 0)
+        self.assertIn("changes only as upstream wrote it", in_version_file.stderr)
+        self.git("reset", "-q", "--hard")
 
-        self.write_version_notes(
-            "0.1.1", [self.entry("existing-change", "fixed", "Keep existing behavior reliable")]
-        )
-        self.write_version_notes("0.1.2", [self.entry("new-change", "new", "Add a new workflow")])
-        self.git("add", "Documentation")
+        added_path = self.write_entry("new-change", "new", "Add a new workflow", platforms=["mac"])
+        self.git("add", added_path)
         added = self.run_catalog_check("--require-staged-entry")
         self.assertEqual(added.returncode, 0, added.stderr)
         self.assertIn("new-change", added.stdout)
+        self.git("commit", "-m", "entry")
 
-    def test_staged_contract_keeps_existing_entries_but_lets_write_ups_change(self) -> None:
-        self.write_marketing_version("0.1.2")
-        self.write_version_notes("0.1.2", [self.entry("new-change", "new", "Add a new workflow")])
-        self.write_version_notes(
-            "0.1.1",
-            [self.entry("existing-change", "fixed", "Keep existing behavior reliable")],
-            release={"summary": "Crest 0.1.1 keeps things reliable.", "fixed": ["Existing behavior is reliable."]},
-        )
-        self.git("add", ".")
-        with_write_up = self.run_catalog_check("--require-staged-entry")
-        self.assertEqual(with_write_up.returncode, 0, with_write_up.stderr)
+        reused = self.write_entry("existing-change", "new", "Reuse an id the catalog holds")
+        self.git("add", reused)
+        duplicate = self.run_catalog_check("--require-staged-entry")
+        self.assertNotEqual(duplicate.returncode, 0)
+        self.assertIn("is in both", duplicate.stderr)
+        self.git("reset", "-q", "--hard")
 
-        self.write_version_notes(
-            "0.1.1", [self.entry("existing-change", "improved", "Rewrite existing release copy")]
-        )
-        self.git("add", ".")
+        self.write_entry("new-change", "improved", "Rewrite release copy")
+        self.write_entry("another-change", "fixed", "Fix another workflow")
+        self.git("add", "Documentation")
         rewritten = self.run_catalog_check("--require-staged-entry")
         self.assertNotEqual(rewritten.returncode, 0)
-        self.assertIn("must not change or move release-note entries", rewritten.stderr)
+        self.assertIn("must not change or delete release-note entries", rewritten.stderr)
+        self.git("reset", "-q", "--hard")
 
-        (self.repository / "Documentation" / "ReleaseNotes" / "0.1" / "0.1.1.json").unlink()
-        self.git("add", ".")
+        (self.repository / "Documentation" / "ReleaseNotes" / "new-change.json").unlink()
+        self.write_entry("another-change", "fixed", "Fix another workflow")
+        self.git("add", "-A", "Documentation")
         deleted = self.run_catalog_check("--require-staged-entry")
         self.assertNotEqual(deleted.returncode, 0)
-        self.assertIn("must not delete release-note entries", deleted.stderr)
+        self.assertIn("must not change or delete release-note entries", deleted.stderr)
+
+    def test_entry_files_belong_to_the_versions_their_commits_build_as(self) -> None:
+        # Added later but named first: the commit, not the name, places it.
+        self.commit(self.write_entry("zeta-change", "new", "Add the first workflow"))
+        self.git("switch", "-q", "-c", "topic")
+        self.commit(self.write_entry("from-topic", "improved", "Arrive through a merge"))
+        self.git("switch", "-q", "main")
+        self.git("merge", "-q", "--no-ff", "-m", "merge topic", "topic")
+        self.commit(self.write_entry("alpha-change", "fixed", "Fix the second workflow"))
+        # Not committed yet: the version the next commit builds as.
+        self.write_entry("beta-change", "improved", "Improve a pending workflow")
+
+        catalog = self.read_catalog()
+
+        self.assertEqual(
+            [(entry.identifier, str(entry.version)) for entry in catalog.entries.values()],
+            [
+                ("existing-change", "0.1.1"),
+                ("zeta-change", "0.1.2"),
+                ("from-topic", "0.1.3"),
+                ("alpha-change", "0.1.4"),
+                ("beta-change", "0.1.5"),
+            ],
+        )
+        self.assertEqual(str(catalog.newest_written.version), "0.1.1")
+        checked = self.run_catalog_check()
+        self.assertEqual(checked.returncode, 0, checked.stderr)
+        self.assertIn("Validated 5 release-note entries in 5 versions.", checked.stdout)
 
 
 if __name__ == "__main__":
