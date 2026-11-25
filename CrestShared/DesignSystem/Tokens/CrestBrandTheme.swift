@@ -71,10 +71,11 @@ enum CrestBrandTheme {
         light: accentTextLightComponents,
         dark: accentTextDarkComponents
     )
-    /// The page the content sits on: cream in the light, and in the dark the
-    /// warm near-black under charcoal panels, never Crest's blues.
-    static let canvas = dynamic(light: canvasLightComponents, dark: canvasDarkComponents)
-    /// A raised card or panel on the canvas: paper, or charcoal in the dark.
+    /// The page the content sits on: the window's own background, as every
+    /// page drew before Crest's chrome went on paper, so Arma's Settings,
+    /// setup and guide match the Mac around them.
+    static let canvas = CrestColor.windowBackground
+    /// A raised card or panel on the canvas.
     static let surface = dynamic(light: surfaceLightComponents, dark: surfaceDarkComponents)
     /// A flyout floating over a page or the window: paper in the light,
     /// charcoal in the dark, opaque so nothing behind it shows through.

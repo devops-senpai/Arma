@@ -13581,6 +13581,7 @@ struct CrestBackplate: Hashable, Sendable {
         case softShield
         case softHexagon
         case ribbon
+        case flag
     }
 
     let tag: Int
@@ -13723,6 +13724,14 @@ struct CrestBackplate: Hashable, Sendable {
         drawnSince: CrestVocabulary.simple,
         hasTeeth: false
     )
+    static let flag = CrestBackplate(
+        tag: 15,
+        kind: .flag,
+        name: "flag",
+        title: LocalizedStringResource("Guidon"),
+        drawnSince: CrestVocabulary.studio,
+        hasTeeth: false
+    )
 
     static let all: [CrestBackplate] = [
         none,
@@ -13739,7 +13748,8 @@ struct CrestBackplate: Hashable, Sendable {
         badge,
         softShield,
         softHexagon,
-        ribbon
+        ribbon,
+        flag
     ]
 
     static func named(_ name: String?) -> CrestBackplate? {
@@ -15377,6 +15387,24 @@ struct CrestSymbol: Hashable, Sendable {
         assetName: "CrestCharge-sprout",
         isOffered: true
     )
+    static let sparrow = CrestSymbol(
+        tag: 70,
+        name: "sparrow",
+        title: LocalizedStringResource("Sparrow"),
+        drawnSince: CrestVocabulary.studio,
+        systemImage: "bird.fill",
+        assetName: "CrestCharge-sparrow",
+        isOffered: true
+    )
+    static let crane = CrestSymbol(
+        tag: 71,
+        name: "crane",
+        title: LocalizedStringResource("Crane"),
+        drawnSince: CrestVocabulary.studio,
+        systemImage: "bird.fill",
+        assetName: "CrestCharge-crane",
+        isOffered: true
+    )
 
     static let all: [CrestSymbol] = [
         dragon,
@@ -15448,7 +15476,9 @@ struct CrestSymbol: Hashable, Sendable {
         chevrons,
         lens,
         spark,
-        sprout
+        sprout,
+        sparrow,
+        crane
     ]
 
     static func named(_ name: String?) -> CrestSymbol? {
@@ -16851,7 +16881,7 @@ struct ExportFormat: Hashable, Sendable {
     static let browserData = ExportFormat(
         tag: 0,
         name: "browserData",
-        fileName: "Crest Browser Data.json",
+        fileName: "Arma Browser Data.json",
         contentType: "public.json",
         preparingMessage: LocalizedStringResource("Preparing browser data…"),
         savedMessage: LocalizedStringResource("Browser data exported.")
@@ -16859,7 +16889,7 @@ struct ExportFormat: Hashable, Sendable {
     static let bookmarks = ExportFormat(
         tag: 1,
         name: "bookmarks",
-        fileName: "Crest Bookmarks.html",
+        fileName: "Arma Bookmarks.html",
         contentType: "public.html",
         preparingMessage: LocalizedStringResource("Preparing bookmarks…"),
         savedMessage: LocalizedStringResource("Bookmarks exported.")
@@ -28876,6 +28906,71 @@ struct SpaceHouse: Hashable, Sendable {
         ),
         appIconName: "CrestVigil"
     )
+    static let arma = SpaceHouse(
+        tag: 15,
+        name: "arma",
+        title: LocalizedStringResource("Arma"),
+        style: SpaceHouseStyle.heraldic,
+        look: SpaceBranding(
+            colors: ColorPalette(
+                colors: [
+                    BrandColor(red: 0.192, green: 0.196, blue: 0.267, alpha: 1),
+                    BrandColor(red: 0.725, green: 0.608, blue: 0.376, alpha: 1),
+                    BrandColor(red: 0.843, green: 0.216, blue: 0.263, alpha: 1)
+                ]
+            ),
+            bannerPattern: SpaceBannerPattern.solid,
+            bannerStrength: 1,
+            readabilityFade: 0.45,
+            keepsControlsReadable: true,
+            themeMode: SpaceThemeMode.banner,
+            gradientAngle: 0,
+            textureStrength: 0,
+            iconStyle: SpaceIconStyle.layeredCrest,
+            symbolColor: nil,
+            crest: SpaceCrest(
+                backplate: CrestBackplate.flag,
+                fieldDivision: CrestFieldDivision.plain,
+                ordinary: CrestOrdinary.pale,
+                trim: CrestTrim.laurel,
+                symbol: CrestSymbol.sparrow,
+                chargeLayout: CrestChargeLayout.single,
+                backplateColorIndex: 0,
+                secondaryFieldColorIndex: 0,
+                ordinaryColorIndex: 1,
+                trimColorIndex: 1,
+                symbolColorIndex: 2,
+                startingPresetID: nil,
+                edgeColorIndex: 0,
+                palette: nil,
+                charge: nil,
+                plateScale: 1,
+                edgeWidth: 0.2,
+                divisionCount: 4,
+                finish: CrestFinish.flat,
+                ordinaryWidth: 1,
+                trimWeight: 0.75,
+                trimDetail: 12,
+                chargeScale: 1.15,
+                chargeOffset: 0,
+                chargeWeight: CrestChargeWeight.bold,
+                sheenAngle: 45,
+                sealTeeth: 12,
+                showsOutline: false,
+                depth: CrestDepth.soft,
+                paletteGradients: nil
+            ),
+            renderingVersion: 5,
+            folderColorIntensity: 0,
+            textColorMode: SpaceTextColorMode.automatic,
+            hasCustomAppearance: false,
+            gradientKind: nil,
+            symbolGradient: nil,
+            colorGradients: nil,
+            dress: nil
+        ),
+        appIconName: nil
+    )
 
     static let all: [SpaceHouse] = [
         crest,
@@ -28892,7 +28987,8 @@ struct SpaceHouse: Hashable, Sendable {
         iron,
         river,
         sun,
-        vigil
+        vigil,
+        arma
     ]
 
     static func named(_ name: String?) -> SpaceHouse? {
@@ -33011,6 +33107,60 @@ struct Tincture: Hashable, Sendable {
         title: LocalizedStringResource("Grove Moss"),
         color: BrandColor(red: 0.243, green: 0.361, blue: 0.263, alpha: 1)
     )
+    static let armaNavy = Tincture(
+        tag: 77,
+        name: "armaNavy",
+        title: LocalizedStringResource("Arma Navy"),
+        color: BrandColor(red: 0.192, green: 0.196, blue: 0.267, alpha: 1)
+    )
+    static let armaRed = Tincture(
+        tag: 78,
+        name: "armaRed",
+        title: LocalizedStringResource("Arma Red"),
+        color: BrandColor(red: 0.843, green: 0.216, blue: 0.263, alpha: 1)
+    )
+    static let armaGold = Tincture(
+        tag: 79,
+        name: "armaGold",
+        title: LocalizedStringResource("Arma Gold"),
+        color: BrandColor(red: 0.725, green: 0.608, blue: 0.376, alpha: 1)
+    )
+    static let armaWhite = Tincture(
+        tag: 80,
+        name: "armaWhite",
+        title: LocalizedStringResource("Arma White"),
+        color: BrandColor(red: 0.97, green: 0.97, blue: 0.96, alpha: 1)
+    )
+    static let armaGrey = Tincture(
+        tag: 81,
+        name: "armaGrey",
+        title: LocalizedStringResource("Arma Grey"),
+        color: BrandColor(red: 0.286, green: 0.302, blue: 0.392, alpha: 1)
+    )
+    static let macchiatoBase = Tincture(
+        tag: 82,
+        name: "macchiatoBase",
+        title: LocalizedStringResource("Macchiato Base"),
+        color: BrandColor(red: 0.141, green: 0.153, blue: 0.227, alpha: 1)
+    )
+    static let macchiatoMauve = Tincture(
+        tag: 83,
+        name: "macchiatoMauve",
+        title: LocalizedStringResource("Macchiato Mauve"),
+        color: BrandColor(red: 0.776, green: 0.627, blue: 0.965, alpha: 1)
+    )
+    static let macchiatoLavender = Tincture(
+        tag: 84,
+        name: "macchiatoLavender",
+        title: LocalizedStringResource("Macchiato Lavender"),
+        color: BrandColor(red: 0.718, green: 0.741, blue: 0.973, alpha: 1)
+    )
+    static let macchiatoText = Tincture(
+        tag: 85,
+        name: "macchiatoText",
+        title: LocalizedStringResource("Macchiato Text"),
+        color: BrandColor(red: 0.792, green: 0.827, blue: 0.961, alpha: 1)
+    )
 
     static let all: [Tincture] = [
         ink,
@@ -33089,7 +33239,16 @@ struct Tincture: Hashable, Sendable {
         sparkTwilight,
         sparkMulberry,
         groveDeep,
-        groveMoss
+        groveMoss,
+        armaNavy,
+        armaRed,
+        armaGold,
+        armaWhite,
+        armaGrey,
+        macchiatoBase,
+        macchiatoMauve,
+        macchiatoLavender,
+        macchiatoText
     ]
 
     static func named(_ name: String?) -> Tincture? {

@@ -35,10 +35,10 @@ require_setting() {
 }
 
 require '^name: Crest$' "the Crest project name"
-require_setting Crest CREST_MAC_BUNDLE_IDENTIFIER com.pauldavis.crest
+require_setting Crest CREST_MAC_BUNDLE_IDENTIFIER com.senpaimedia.arma
 require_setting Crest PRODUCT_BUNDLE_IDENTIFIER '$(CREST_MAC_BUNDLE_IDENTIFIER)'
 require_setting Crest PRODUCT_MODULE_NAME Crest
-require_setting CrestMobile CREST_MOBILE_BUNDLE_IDENTIFIER com.pauldavis.crest
+require_setting CrestMobile CREST_MOBILE_BUNDLE_IDENTIFIER com.senpaimedia.arma
 require_setting CrestMobile PRODUCT_BUNDLE_IDENTIFIER '$(CREST_MOBILE_BUNDLE_IDENTIFIER)'
 require_setting CrestMobile PRODUCT_MODULE_NAME CrestMobile
 
