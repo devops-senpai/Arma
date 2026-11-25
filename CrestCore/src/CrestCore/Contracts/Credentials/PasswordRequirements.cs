@@ -69,10 +69,12 @@ public sealed record PasswordRequirements(int? MinLength, int? MaxLength, string
         if (longest < StrongPasswordRecipe.ShortestLength || shortest > longest) throw new Rejected(Unmakeable);
         int maxConsecutive = rules.MaxConsecutive ?? 0;
         // The person's choice of length and characters, kept to what the site
-        // allows: its length within the site's, and each chosen group cut to
-        // the characters the site names, every one required once.
+        // allows: its length within the choice's own bounds and then the
+        // site's, and each chosen group cut to the characters the site names,
+        // every one required once.
         if (generation is { } chosen) {
-            int chosenLength = Math.Clamp(chosen.Length, Math.Max(shortest, StrongPasswordRecipe.ShortestLength), longest);
+            int wanted = Math.Clamp(chosen.Length, PasswordGeneration.MinimumLength, PasswordGeneration.MaximumLength);
+            int chosenLength = Math.Clamp(wanted, Math.Max(shortest, StrongPasswordRecipe.ShortestLength), longest);
             IReadOnlyList<string> chosenGroups = chosen.Including(StrongPasswordRecipe.CharacterGroups);
             if (rules.Allowed is { } allowedCharacters)
                 chosenGroups = [.. chosenGroups.Select(group => new string([.. group.Where(allowedCharacters.Contains)]))

@@ -25,6 +25,11 @@ public sealed class PasswordGenerationTests {
         var shorter = new PasswordRequirements(null, 12, null).Recipe(PasswordStyle.Grouped,
             new PasswordGeneration(40, true, true, true, true));
         Assert.Equal(12, shorter.Length);
+        // A length outside the choice's own bounds is held to them.
+        Assert.Equal(PasswordGeneration.MinimumLength, PasswordRequirements.None.Recipe(PasswordStyle.Grouped,
+            new PasswordGeneration(5, true, true, true, true)).Length);
+        Assert.Equal(PasswordGeneration.MaximumLength, PasswordRequirements.None.Recipe(PasswordStyle.Grouped,
+            new PasswordGeneration(500, true, true, true, true)).Length);
 
         var digitsOnly = new PasswordRequirements(null, null, "allowed: digit;").Recipe(PasswordStyle.Grouped,
             new PasswordGeneration(20, true, true, false, false));
