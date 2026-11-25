@@ -480,7 +480,8 @@ extension BrowserStore {
         let vaultID = try credentialVaultID(of: spaceID, keeping: existing)
         let descriptor: CredentialDescriptor
         if var existing {
-            guard existing.origins.contains(origin) else {
+            // A login saved on the site above, reaching this page, is updated where it is.
+            guard existing.origins.contains(origin) || existing.includesSubdomains && reaches(existing, origin) else {
                 throw CredentialVaultError.invalidOrigin
             }
             existing.username = username
@@ -634,6 +635,7 @@ extension BrowserStore {
             sites.append(site)
         }
         descriptor.sites = Array(sites.prefix(CredentialDescriptor.maximumSites))
+        descriptor.includesSubdomains = try subdomainReach(edit.includesSubdomains, for: descriptor)
         let password = edit.password ?? saved.password
         if password != saved.password { descriptor.passwordChangedAt = now }
         descriptor.updatedAt = now
@@ -758,5 +760,28 @@ extension BrowserStore {
         case .stale: throw CredentialVaultError.staleSaveCandidate
         case nil: throw CredentialVaultError.saveDecisionUnavailable
         }
+    }
+}
+
+// MARK: - Subdomains
+
+extension BrowserStore {
+    /// Whether the login `descriptor`, reaching the hosts under its sites,
+    /// fills a page at `page`, as the core answers.
+    func reaches(_ descriptor: CredentialDescriptor, _ page: CredentialOrigin) -> Bool {
+        let origins = descriptor.origins
+        return (try? core.fills(page, from: origins, reaching: Array(origins.indices)))?.contains(true) ?? false
+    }
+
+    /// `includes`, once the core agrees every site of `descriptor` may reach
+    /// the hosts under it. Throws the core's refusal, `SubdomainsOfPublicSuffix`
+    /// for a site such as `github.io` whose subdomains belong to different
+    /// people.
+    func subdomainReach(_ includes: Bool, for descriptor: CredentialDescriptor) throws -> Bool {
+        guard includes else { return false }
+        for origin in descriptor.origins {
+            guard try core.query(CredentialSubdomainReach(origin: origin)).isAllowed else { return false }
+        }
+        return true
     }
 }

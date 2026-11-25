@@ -308,6 +308,44 @@ final class BrowserCredentialTests: XCTestCase {
         XCTAssertNil(personalSecretFromWork)
     }
 
+    /// A login that includes subdomains is suggested on a host under its site
+    /// and never on the site above or a sibling under a public suffix, and a
+    /// login that doesn't is stored without the key older builds never wrote.
+    func testKeychainVaultSuggestsALoginOnItsSubdomainsOnlyWhenItIncludesThem() async throws {
+        let core = CrestCore()
+        let space = UUID()
+        let vault = KeychainCredentialVault(
+            store: RecordingCredentialKeychainStore(), servicePrefix: "test.crest",
+            fills: { page, saved, reaching in try core.fills(page, from: saved, reaching: reaching) })
+        func origin(_ text: String) throws -> CredentialOrigin {
+            try XCTUnwrap(CredentialOrigin(url: try XCTUnwrap(URL(string: text))))
+        }
+        var site = makeCredential(
+            spaceID: space, origin: try origin("https://example.com"), username: "person", password: "secret",
+            isSynchronizable: false)
+        try await vault.save(site, in: space)
+        let mail = try origin("https://mail.example.com")
+        let plain = try await vault.descriptors(matching: mail, in: space)
+        XCTAssertTrue(plain.isEmpty)
+        let stored = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(site.descriptor)) as? [String: Any]
+        XCTAssertNil(stored?["includesSubdomains"])
+
+        site.descriptor.includesSubdomains = true
+        try await vault.save(site, in: space)
+        let reached = try await vault.descriptors(matching: mail, in: space)
+        XCTAssertEqual(reached.map(\.username), ["person"])
+
+        var page = makeCredential(
+            spaceID: space, origin: try origin("https://alice.github.io"), username: "alice", password: "secret",
+            isSynchronizable: false)
+        page.descriptor.includesSubdomains = true
+        try await vault.save(page, in: space)
+        let sibling = try await vault.descriptors(matching: try origin("https://bob.github.io"), in: space)
+        XCTAssertTrue(sibling.isEmpty)
+        let above = try await vault.descriptors(matching: try origin("https://github.io"), in: space)
+        XCTAssertTrue(above.isEmpty)
+    }
+
     func testBrowserStoreDoesNotSuggestOrSavePasswordsOnHTTP() async throws {
         let store = BrowserStore(
             seed: .preview,

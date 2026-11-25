@@ -740,6 +740,7 @@ enum Rejection: Equatable, Error, Sendable {
     case storageRestoreInterrupted(StorageRestoreInterrupted)
     case storageUnreadable(StorageUnreadable)
     case storedSessionClosed(StoredSessionClosed)
+    case subdomainsOfPublicSuffix(SubdomainsOfPublicSuffix)
     case syncStagingRefused(SyncStagingRefused)
     case tabAlreadyExists(TabAlreadyExists)
     case tabAlreadyHasPage(TabAlreadyHasPage)
@@ -1547,6 +1548,11 @@ enum Rejection: Equatable, Error, Sendable {
         if case .storedSessionClosed(let value) = self { value } else { nil }
     }
 
+    /// The `SubdomainsOfPublicSuffix` this rejection carries, or nil for another member.
+    var subdomainsOfPublicSuffix: SubdomainsOfPublicSuffix? {
+        if case .subdomainsOfPublicSuffix(let value) = self { value } else { nil }
+    }
+
     /// The `SyncStagingRefused` this rejection carries, or nil for another member.
     var syncStagingRefused: SyncStagingRefused? {
         if case .syncStagingRefused(let value) = self { value } else { nil }
@@ -1767,6 +1773,7 @@ enum Rejection: Equatable, Error, Sendable {
         case .spaceProfileChanged(let value): value.message
         case .splitLimitReached(let value): value.message
         case .splitNeedsTwoTabs(let value): value.message
+        case .subdomainsOfPublicSuffix(let value): value.message
         case .unknownAgentSession(let value): value.message
         case .unknownCloudMerge(let value): value.message
         case .unknownExtension(let value): value.message
@@ -3760,6 +3767,12 @@ struct CredentialStoredComparison: Equatable, Sendable, Identifiable {
     var passwordMatches: Bool
 }
 
+struct CredentialSubdomainReach: Query, Equatable, Sendable {
+    typealias Answer = CredentialFillDecision
+
+    let origin: CredentialOrigin
+}
+
 struct CredentialUsernameHint: Equatable, Sendable {
     var origin: CredentialOrigin
     var topLevelOrigin: CredentialOrigin
@@ -3771,6 +3784,7 @@ struct CredentialsFillingPage: Query, Equatable, Sendable {
 
     let page: CredentialOrigin
     let saved: [CredentialOrigin]
+    let reachingSubdomains: [Int]?
 }
 
 struct CredentialsToRespell: Query, Equatable, Sendable {
@@ -9222,6 +9236,14 @@ struct StrongPasswordRecipe: Equatable, Sendable {
     let siteMaxLength: Int?
     let siteSymbols: String?
     let hasRandomAlternative: Bool
+}
+
+struct SubdomainsOfPublicSuffix: Equatable, Sendable {
+    let host: String
+
+    var message: LocalizedStringResource {
+        LocalizedStringResource("This website's subdomains belong to different owners, so they can't be included.")
+    }
 }
 
 struct SwapSplitMembers: Intent, SessionIntent, Equatable, Sendable {
