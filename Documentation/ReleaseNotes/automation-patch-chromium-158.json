@@ -1,0 +1,7 @@
+{
+  "category": "internal",
+  "message": "The automation patch to the Chromium engine follows Chromium 158's DevTools changes, so the 158 engine builds with remote debugging limited to the chosen profile.",
+  "platforms": [
+    "mac"
+  ]
+}
