@@ -23,9 +23,13 @@ public sealed class PaletteActivation {
     public static readonly PaletteActivation EntersScope = new(name: "entersScope", closesPalette: false, opensWhereKeysChoose: false);
     public static readonly PaletteActivation AppliesTheme = new(name: "appliesTheme", closesPalette: true, opensWhereKeysChoose: false);
     public static readonly PaletteActivation RunsChoice = new(name: "runsChoice", closesPalette: true, opensWhereKeysChoose: false);
+    /// Runs a tool scope's choice that leads to more choices, such as a saved
+    /// login's username and password, and keeps the palette open on them.
+    public static readonly PaletteActivation StepsIntoChoice = new(name: "stepsIntoChoice", closesPalette: false,
+        opensWhereKeysChoose: false);
 
     public static IReadOnlyList<PaletteActivation> All { get; } = [SwitchesToTab, OpensAddress, Searches, RunsCommand, OpensSettingsPage,
-        ShowsSpace, ReopensArchivedTab, CopiesAnswer, EntersScope, AppliesTheme, RunsChoice];
+        ShowsSpace, ReopensArchivedTab, CopiesAnswer, EntersScope, AppliesTheme, RunsChoice, StepsIntoChoice];
 
     #endregion
 
