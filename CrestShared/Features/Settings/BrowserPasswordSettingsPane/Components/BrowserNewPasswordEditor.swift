@@ -15,7 +15,9 @@ struct BrowserNewPassword: Sendable {
 /// password, and a title if the person wants one. `save` answers what went
 /// wrong, or nil once the password is saved.
 struct BrowserNewPasswordEditor: View {
-    let makeStrongPassword: () -> String?
+    /// A strong password, made to the person's length and characters when
+    /// they chose them in Options.
+    let makeStrongPassword: (PasswordGeneration?) -> String?
     let save: (BrowserNewPassword) async -> String?
     let cancel: () -> Void
 
@@ -25,6 +27,11 @@ struct BrowserNewPasswordEditor: View {
     @State private var password = ""
     @State private var errorMessage: String?
     @State private var isSaving = false
+    @State private var showsGenerationOptions = false
+    @State private var generation = PasswordGeneration.seeded
+    /// The length and characters the person chose in Options, or nil for the
+    /// default.
+    @State private var chosenGeneration: PasswordGeneration?
 
     var body: some View {
         NavigationStack {
@@ -43,11 +50,33 @@ struct BrowserNewPasswordEditor: View {
                             .font(.body.monospaced())
                             .accessibilityIdentifier("new-password-password")
                         Button("Use Strong Password", systemImage: "key.horizontal.fill") {
-                            if let strong = makeStrongPassword() { password = strong }
+                            if let strong = makeStrongPassword(chosenGeneration) { password = strong }
                         }
                         .labelStyle(.iconOnly)
                         .buttonStyle(CrestChromeButtonStyle())
                         .help(Text("Use Strong Password"))
+                        Button("Password Options", systemImage: "slider.horizontal.3") {
+                            showsGenerationOptions = true
+                        }
+                        .labelStyle(.iconOnly)
+                        .buttonStyle(CrestChromeButtonStyle())
+                        .help(Text("Password Options"))
+                        .crestPopover(isPresented: $showsGenerationOptions, arrowEdge: .bottom) {
+                            VStack(alignment: .leading, spacing: CrestSpacing.medium) {
+                                BrowserPasswordGenerationControls(
+                                    generation: Binding(
+                                        get: { generation },
+                                        set: {
+                                            generation = $0
+                                            chosenGeneration = $0
+                                        }))
+                                Button("Use Strong Password") {
+                                    if let strong = makeStrongPassword(chosenGeneration) { password = strong }
+                                }
+                            }
+                            .padding(CrestSpacing.large)
+                            .frame(width: 280)
+                        }
                     }
                 }
                 if let errorMessage {
@@ -98,6 +127,6 @@ struct BrowserNewPasswordEditor: View {
 
 #if DEBUG
     #Preview("Component") {
-        BrowserNewPasswordEditor(makeStrongPassword: { "kvqhet-Mzawp7-rbnoxc" }, save: { _ in nil }, cancel: {})
+        BrowserNewPasswordEditor(makeStrongPassword: { _ in "kvqhet-Mzawp7-rbnoxc" }, save: { _ in nil }, cancel: {})
     }
 #endif
