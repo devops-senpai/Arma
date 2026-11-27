@@ -99,9 +99,14 @@ final class BrowserCredentialPageState<FillTarget> {
     @ObservationIgnored private var pendingSaveCandidate: BrowserCredentialSaveCandidate?
     @ObservationIgnored private var candidateExpirationTask: Task<Void, Never>?
 
-    init(spaceID: UUID, core: CrestCore) {
+    /// Whether the page may capture a submitted password or address to save;
+    /// a private window's never does.
+    @ObservationIgnored private let allowsSaving: Bool
+
+    init(spaceID: UUID, core: CrestCore, allowsSaving: Bool = true) {
         self.spaceID = spaceID
         self.core = core
+        self.allowsSaving = allowsSaving
     }
 
     /// Applies one validated form message. The portable core decides what
@@ -152,6 +157,7 @@ final class BrowserCredentialPageState<FillTarget> {
     private func captureAutofill(
         _ message: BrowserCredentialFormMessage, frameOrigin: CredentialOrigin, topLevelOrigin: CredentialOrigin
     ) {
+        guard allowsSaving else { return }
         guard message.submission != nil, !message.values.isEmpty, frameOrigin.isSecure, topLevelOrigin.isSecure else {
             return
         }
@@ -497,7 +503,7 @@ extension BrowserCredentialPageState: CredentialCapturePerformer {
     /// Keeps the password the form sent as a candidate, once every new
     /// password field agrees with it.
     func captureCandidate(_ observation: BrowserCredentialObservation<FillTarget>) {
-        guard !passwordsHandledElsewhere, !isPaused else { return }
+        guard allowsSaving, !passwordsHandledElsewhere, !isPaused else { return }
         let message = observation.message
         let decision = observation.decision
         let form = decision.form

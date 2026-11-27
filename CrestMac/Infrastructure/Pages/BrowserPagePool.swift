@@ -967,7 +967,10 @@ final class BrowserPagePool:
             spaceID: space.id,
             profileID: space.profileID,
             spaceName: space.settings.name,
-            allowsCredentialAccess: !workspaceKind.isPrivate,
+            // A private window suggests only what other Spaces chose to, and
+            // saves nothing.
+            allowsCredentialAccess: !workspaceKind.isPrivate || !browser.privateWindowPasswordSources().isEmpty,
+            allowsCredentialSaving: !workspaceKind.isPrivate,
             isCredentialAccessEnabled:
                 space.settings.credentialPreferences.isEnabled,
             defaultPageZoom: pageZoomPreferences.defaultZoom,

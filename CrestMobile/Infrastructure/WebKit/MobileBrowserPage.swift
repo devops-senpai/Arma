@@ -205,6 +205,7 @@ final class MobileBrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
         mediaSessionStore: BrowserMediaSessionStore? = nil,
         contentRuleList: WKContentRuleList? = nil,
         allowsCredentialAccess: Bool = true,
+        allowsCredentialSaving: Bool = true,
         isCredentialAccessEnabled: Bool = true,
         defaultPageZoom: CGFloat = BrowserDefaultPageZoomStore.defaultLevel,
         loadsInitialURL: Bool = true,
@@ -279,7 +280,7 @@ final class MobileBrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
             page: corePage, profileID: space.profileID, defaultZoom: defaultPageZoom, url: tab.url)
         let httpAuthenticationSession = BrowserHTTPAuthenticationSession(
             spaceID: space.id,
-            allowsCredentialSaving: allowsCredentialAccess
+            allowsCredentialSaving: allowsCredentialAccess && allowsCredentialSaving
                 && isCredentialAccessEnabled,
             loadCredential: loadHTTPAuthenticationCredential,
             saveCredential: saveHTTPAuthenticationCredential
@@ -290,7 +291,9 @@ final class MobileBrowserPage: NSObject, BrowserMediaSessionCommandEndpoint {
             core: downloadCenter.core,
             supportsAccess: allowsCredentialAccess,
             isEnabled: isCredentialAccessEnabled,
-            httpAuthentication: httpAuthenticationSession
+            httpAuthentication: httpAuthenticationSession,
+            allowsSaving: allowsCredentialSaving,
+            followsSpacePreference: allowsCredentialSaving
         )
 
         // A popup's configuration is the one WebKit derived from its opener's,

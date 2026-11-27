@@ -58,6 +58,7 @@ internal static partial class StoredSessionCodec {
         public const string NeverSavedSites = "neverSavedSites";
         public const string SavePromptSeconds = "savePromptSeconds";
         public const string Authentication = "authentication";
+        public const string SuggestsInPrivateWindows = "suggestsInPrivateWindows";
         public const string Scheme = "scheme";
         public const string Host = "host";
         public const string Port = "port";
