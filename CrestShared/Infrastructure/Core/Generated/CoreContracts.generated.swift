@@ -3742,6 +3742,7 @@ struct CredentialPreferences: Equatable, Sendable {
     var neverSavedSites: [CredentialOrigin]
     var authentication: CredentialAuthentication
     var savePromptSeconds: Int
+    var suggestsInPrivateWindows: Bool
 }
 
 struct CredentialRecord: Equatable, Sendable, Identifiable {
