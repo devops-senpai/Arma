@@ -7033,6 +7033,18 @@ struct PasskeyAccessVerdict: Equatable, Sendable {
     let status: PasskeyAccessStatus
 }
 
+struct PasswordGeneration: Equatable, Sendable {
+    static let defaultLength: Int = 20
+    static let minimumLength: Int = 8
+    static let maximumLength: Int = 64
+
+    var length: Int
+    var lowercase: Bool
+    var uppercase: Bool
+    var numbers: Bool
+    var symbols: Bool
+}
+
 struct PasswordHealth: Query, Equatable, Sendable {
     typealias Answer = PasswordHealthReport
 
@@ -9312,6 +9324,7 @@ struct StrongPassword: Query, Equatable, Sendable {
 
     let requirements: PasswordRequirements
     let style: PasswordStyle
+    let generation: PasswordGeneration?
 }
 
 struct StrongPasswordRecipe: Equatable, Sendable {

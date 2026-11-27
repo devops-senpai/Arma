@@ -7,7 +7,7 @@ import Foundation
 enum CoreCodec {
     /// SHA-256 of the canonical contract schema. The core refuses any other.
     static let fingerprint: [UInt8] = [
-        0x3f, 0x9b, 0xeb, 0x6c, 0xe5, 0x2d, 0x0d, 0x8f, 0xec, 0xc0, 0x91, 0x05, 0x54, 0x88, 0x0a, 0x0f, 0xd2, 0x4b, 0x70, 0x69, 0x42, 0x2f, 0xe3, 0x47, 0x72, 0x09, 0x53, 0x79, 0x89, 0x86, 0x4c, 0x3a
+        0x31, 0x8d, 0xc3, 0x8e, 0xb0, 0x21, 0xdb, 0xc9, 0x81, 0x46, 0xf0, 0xb9, 0x90, 0xe2, 0xfa, 0xdb, 0xeb, 0x34, 0xc5, 0x89, 0x48, 0xa3, 0xbd, 0xc5, 0xe2, 0xf8, 0x19, 0x42, 0x18, 0x59, 0x89, 0x07
     ]
     /// SHA-256 of the engine contract alone, which an engine binding registers with.
     static let engineFingerprint: [UInt8] = [
@@ -20037,6 +20037,25 @@ extension PasskeyAccessVerdict {
     }
 }
 
+extension PasswordGeneration {
+    init(from reader: inout WireReader) throws(WireError) {
+        let length = try reader.readInt()
+        let lowercase = try reader.readBool()
+        let uppercase = try reader.readBool()
+        let numbers = try reader.readBool()
+        let symbols = try reader.readBool()
+        self.init(length: length, lowercase: lowercase, uppercase: uppercase, numbers: numbers, symbols: symbols)
+    }
+
+    func encode(into writer: inout WireWriter) {
+        writer.writeInt(length)
+        writer.writeBool(lowercase)
+        writer.writeBool(uppercase)
+        writer.writeBool(numbers)
+        writer.writeBool(symbols)
+    }
+}
+
 extension PasswordHealth {
     init(from reader: inout WireReader) throws(WireError) {
         let credentialsCount = try reader.readCount()
@@ -28620,12 +28639,25 @@ extension StrongPassword {
     init(from reader: inout WireReader) throws(WireError) {
         let requirements = try PasswordRequirements(from: &reader)
         let style = try PasswordStyle(from: &reader)
-        self.init(requirements: requirements, style: style)
+        let generation: PasswordGeneration?
+        if try reader.readPresence() {
+            let generationValue = try PasswordGeneration(from: &reader)
+            generation = generationValue
+        } else {
+            generation = nil
+        }
+        self.init(requirements: requirements, style: style, generation: generation)
     }
 
     func encode(into writer: inout WireWriter) {
         requirements.encode(into: &writer)
         style.encode(into: &writer)
+        if let present0 = generation {
+            writer.writePresence(true)
+            present0.encode(into: &writer)
+        } else {
+            writer.writePresence(false)
+        }
     }
 
     func encodeQuery(into writer: inout WireWriter) {
