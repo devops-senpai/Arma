@@ -1,13 +1,12 @@
 import SwiftUI
 
 /// One Space of the browser setup builds, in the order a person shapes it:
-/// its name, then the templates, each a full set of icon and colors, then
-/// the colors that refine it, its Background and Accent wells and presets,
-/// then its icon on its own, a crest in the Space's colors or a plain symbol
-/// or emoji, which never changes the colors. The preview shows every change
-/// as it is made. Your Space, the person's first Space, is this page under
-/// the step's name.
-struct BrowserSetupSpacePage: View {
+/// its name, then the themes the app offers it, each a whole look for its
+/// colors, then its icon on its own, a crest in the house's own colors or a
+/// plain symbol or emoji, which never changes the colors. The preview shows
+/// every change as it is made. Your Space, the person's first Space, is this
+/// page under the step's name.
+struct BrowserSetupSpacePage<Themes: View>: View {
     // MARK: - Variables
 
     /// Where the page's edits go, or nil when setup holds no such Space.
@@ -21,6 +20,9 @@ struct BrowserSetupSpacePage: View {
     /// Shows the Space as Crest will, beside its icon, for a page with no
     /// preview beside it.
     var preview: (() -> Void)?
+    /// The themes the Space may wear whole, over its colors, where the app
+    /// offers them.
+    @ViewBuilder let themes: () -> Themes
 
     // MARK: - Actions - Drawing
 
@@ -34,21 +36,8 @@ struct BrowserSetupSpacePage: View {
                     heading(editor)
                 }
                 .browserSetupRaisedRows()
-                Section {
-                    BrowserSpaceTemplatePicker(branding: editor.branding)
-                } header: {
-                    CrestSettingsSectionHeading(title: "Templates")
-                } footer: {
-                    Text("A template sets the icon and colors together.")
-                }
-                .browserSetupRaisedRows()
-                Section {
-                    BrowserSpaceColorWells(branding: editor.branding)
-                    BrowserSpacePalettePicker(branding: editor.branding)
-                } header: {
-                    CrestSettingsSectionHeading(title: "Colors")
-                }
-                .browserSetupRaisedRows()
+                themes()
+                    .browserSetupRaisedRows()
                 Section {
                     BrowserSpaceIconPicker(branding: editor.branding, symbol: editor.symbol)
                 } header: {
@@ -93,6 +82,16 @@ struct BrowserSetupSpacePage: View {
                 verbatim: editor.name.wrappedValue.isEmpty
                     ? String(localized: "Untitled Space") : editor.name.wrappedValue)
         }
+    }
+}
+
+extension BrowserSetupSpacePage where Themes == EmptyView {
+    /// A page of the Space's colors and icon alone.
+    init(
+        editor: BrowserSetupSpaceEditor?, spaceID: UUID, title: LocalizedStringResource? = nil,
+        icon: BrowserSpaceIdentity? = nil, preview: (() -> Void)? = nil
+    ) {
+        self.init(editor: editor, spaceID: spaceID, title: title, icon: icon, preview: preview) { EmptyView() }
     }
 }
 

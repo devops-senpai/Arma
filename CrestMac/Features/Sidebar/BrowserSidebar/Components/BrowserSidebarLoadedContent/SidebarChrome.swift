@@ -46,7 +46,7 @@ struct SidebarChrome: View {
                 }
             }
             .animation(CrestMotion.chrome.unlessReducingMotion(reduceMotion), value: showsBarInPageCards)
-            .modifier(SpaceColorScheme(branding: space.settings.look))
+            .modifier(SpaceColorScheme(branding: space.settings.shownLook))
             .modifier(SpaceForegroundBlend(spaces: context.availableSpaces, selectedSpaceID: space.id))
             .blur(radius: isLocked ? BrowserSidebarMetrics.lockedSpaceBlurRadius : 0)
             .redacted(reason: isLocked ? .placeholder : [])

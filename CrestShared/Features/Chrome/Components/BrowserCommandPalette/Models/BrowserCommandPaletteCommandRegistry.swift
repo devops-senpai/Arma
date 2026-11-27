@@ -8,12 +8,15 @@ struct BrowserCommandPaletteCommandRegistry {
     let commands: [ShortcutCommand]
     /// The settings pages the palette may open, by their settings name.
     let settingsPages: [PaletteSettingsPage]
+    /// The saved themes the palette may put on the Space, read when asked.
+    let themes: () -> [PaletteTheme]
     private let shortcutProvider: (ShortcutCommand) -> BrowserShortcut?
     private let performer: (ShortcutCommand) -> Void
     private let settingsOpener: (BrowserSettingsDestination) -> Void
     private let spaceSwitcher: (UUID) -> Void
     private let archiveReopener: (UUID) -> Void
     private let copier: (String) -> Void
+    let themeApplier: (UUID) -> Void
 
     init(
         commands: [ShortcutCommand],
@@ -23,7 +26,9 @@ struct BrowserCommandPaletteCommandRegistry {
         openSettings: @escaping (BrowserSettingsDestination) -> Void = { _ in },
         switchSpace: @escaping (UUID) -> Void = { _ in },
         reopenArchivedTab: @escaping (UUID) -> Void = { _ in },
-        copy: @escaping (String) -> Void = { _ in }
+        copy: @escaping (String) -> Void = { _ in },
+        themes: @escaping () -> [PaletteTheme] = { [] },
+        applyTheme: @escaping (UUID) -> Void = { _ in }
     ) {
         self.commands = commands
         self.settingsPages = settingsPages
@@ -33,6 +38,8 @@ struct BrowserCommandPaletteCommandRegistry {
         spaceSwitcher = switchSpace
         archiveReopener = reopenArchivedTab
         copier = copy
+        self.themes = themes
+        themeApplier = applyTheme
     }
 
     /// The commands as the palette ranks them, with the titles this device

@@ -43,11 +43,12 @@ struct BrowserSpaceIconKind: Hashable, Identifiable, Sendable {
     }
 }
 
-/// A Space's icon: one of the houses' crests or a plain symbol or emoji.
-/// Choosing an icon never changes the Space's colors: each crest shows in
-/// them, and wearing one gives the Space only the crest. Setup's Space page
-/// and a Space's appearance in Settings both show it, after the templates
-/// and the colors.
+/// A Space's icon: one of the houses' crests, one its theme keeps, or a
+/// plain symbol or emoji. Choosing an icon never changes the Space's colors:
+/// each crest comes in colors of its own while the Space's theme keeps the
+/// sidebar. Setup's Space page and a Space's appearance in Settings both
+/// show it; where the Space wears a theme, the theme's crests follow the
+/// houses', with a tile that keeps the Space's own crest in the theme.
 struct BrowserSpaceIconPicker: View {
     // MARK: - Variables
 
@@ -58,6 +59,10 @@ struct BrowserSpaceIconPicker: View {
     /// chooses their first emoji.
     @State private var kind: BrowserSpaceIconKind?
     @State private var choosesEmoji = false
+    @Environment(\.browserSpaceThemeChoice) private var themeChoice
+    /// The name the theme group asks for, while it asks.
+    @State private var naming: BrowserThemeCrestNaming?
+    @State private var crestName = ""
 
     private var shownKind: BrowserSpaceIconKind {
         kind ?? BrowserSpaceIconKind.worn(by: branding, symbol: symbol)
@@ -109,18 +114,127 @@ struct BrowserSpaceIconPicker: View {
                     }
                 }
             }
+            themeCrests
         }
         .padding(.vertical, CrestSpacing.extraSmall)
         .accessibilityIdentifier("space-starter-crests")
     }
 
-    private func crest(of house: SpaceHouse) -> some View {
-        let worn = house.wearingCrest(on: branding)
+    /// The crests the Space's theme keeps, each under its name with the one
+    /// worn marked, and a tile that keeps the Space's own crest in the
+    /// theme. A crest's menu renames it or drops it from the theme; the
+    /// name is asked for in place.
+    @ViewBuilder private var themeCrests: some View {
+        if let themeChoice, themeChoice.chosenID != nil {
+            VStack(alignment: .leading, spacing: CrestSpacing.small) {
+                Text("Theme")
+                    .crestCapsLabel()
+                    .accessibilityAddTraits(.isHeader)
+                LazyVGrid(
+                    columns: [GridItem(.adaptive(minimum: 80), spacing: CrestSpacing.small)],
+                    spacing: CrestSpacing.small
+                ) {
+                    ForEach(themeChoice.crests) { kept in
+                        themeCrest(kept, in: themeChoice)
+                    }
+                    if branding.iconStyle == .layeredCrest {
+                        keepCrestTile(in: themeChoice)
+                    }
+                }
+            }
+            .accessibilityIdentifier("space-theme-crests")
+            .crestPopover(item: $naming, arrowEdge: .bottom) { naming in
+                namePrompt(naming, in: themeChoice)
+            }
+        }
+    }
+
+    /// Asks for the crest's name on the flyout surface: a field, Cancel and
+    /// the one action, which Return also takes.
+    private func namePrompt(_ naming: BrowserThemeCrestNaming, in choice: BrowserSpaceThemeChoice) -> some View {
+        VStack(alignment: .leading, spacing: CrestSpacing.medium) {
+            Text(naming.title)
+                .font(.headline)
+            TextField("Name", text: $crestName)
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 220)
+                .onSubmit { commit(naming, in: choice) }
+                .accessibilityIdentifier("space-theme-crest-name")
+            HStack {
+                Spacer(minLength: 0)
+                Button("Cancel", role: .cancel) { self.naming = nil }
+                Button(naming.action) { commit(naming, in: choice) }
+                    .keyboardShortcut(.defaultAction)
+                    .disabled(crestName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+        }
+        .padding(CrestSpacing.large)
+    }
+
+    private func themeCrest(_ kept: BrowserSpaceThemeChoice.Crest, in choice: BrowserSpaceThemeChoice) -> some View {
+        let worn = branding.wearing(kept.crest)
         return BrowserCrestStudioChoice(
-            title: house.title,
-            selected: branding.iconStyle == .layeredCrest && Self.sameArms(branding.crest, worn.crest)
+            title: "\(kept.name)", selected: branding.iconStyle == .layeredCrest && branding.crest == kept.crest
         ) {
-            branding = house.wearingCrest(on: branding)
+            branding = worn
+        } artwork: {
+            BrowserSpaceCrestIcon(
+                branding: worn, size: BrowserCrestForgeMetrics.tileCrestSize, rasterizesLayers: false
+            )
+            .equatable()
+        }
+        .contextMenu {
+            Group {
+                Button("Rename…", systemImage: "pencil") {
+                    crestName = kept.name
+                    naming = .rename(kept.name)
+                }
+                Button("Remove from Theme", systemImage: "trash", role: .destructive) { choice.removeCrest(kept.name) }
+            }
+            .crestMenuActionLabelStyle()
+        }
+        .accessibilityIdentifier("space-theme-crest-\(kept.name)")
+    }
+
+    /// Saves the crest the Space wears into its theme, under a name asked for
+    /// in place, started from the house it came from, so every Space wearing
+    /// the theme can pick it.
+    private func keepCrestTile(in choice: BrowserSpaceThemeChoice) -> some View {
+        BrowserCrestStudioChoice(title: "Add Current Crest…", selected: false) {
+            crestName =
+                SpaceHouse.startingPoint(of: branding).map { String(localized: $0.title) } ?? String(localized: "Crest")
+            naming = .keep
+        } artwork: {
+            BrowserSpaceCrestIcon(
+                branding: branding, size: BrowserCrestForgeMetrics.tileCrestSize, rasterizesLayers: false
+            )
+            .equatable()
+            .overlay(alignment: .bottomTrailing) {
+                Image(systemName: "plus.circle.fill")
+                    .symbolRenderingMode(.hierarchical)
+                    .font(.title3)
+            }
+        }
+        .help(Text("Add the crest this Space wears now to its theme, under a name, for every Space wearing the theme"))
+        .accessibilityIdentifier("space-theme-crest-keep")
+    }
+
+    /// Keeps or renames a crest under the name typed, once there is one, and
+    /// closes the prompt.
+    private func commit(_ naming: BrowserThemeCrestNaming, in choice: BrowserSpaceThemeChoice) {
+        let name = crestName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.isEmpty else { return }
+        switch naming {
+        case .keep: choice.keepCrest(name)
+        case .rename(let old): choice.renameCrest(old, name)
+        }
+        self.naming = nil
+    }
+
+    private func crest(of house: SpaceHouse) -> some View {
+        let worn = branding.wearingCrest(of: house)
+        return BrowserCrestStudioChoice(title: house.title, selected: branding.wearsCrest(of: house)) {
+            branding = worn
         } artwork: {
             BrowserSpaceCrestIcon(
                 branding: worn, size: BrowserCrestForgeMetrics.tileCrestSize, rasterizesLayers: false
@@ -128,15 +242,6 @@ struct BrowserSpaceIconPicker: View {
             .equatable()
         }
         .accessibilityIdentifier("space-icon-crest-\(house.name)")
-    }
-
-    /// Whether two crests draw the same arms, wherever each started.
-    private static func sameArms(_ crest: SpaceCrest, _ other: SpaceCrest) -> Bool {
-        var crest = crest
-        var other = other
-        crest.startingPresetID = nil
-        other.startingPresetID = nil
-        return crest == other
     }
 
     private var emojiButton: some View {
@@ -187,6 +292,34 @@ struct BrowserSpaceIconPicker: View {
         $branding.editorUpdate {
             $0.iconStyle = .simpleSymbol
             $0.hasCustomAppearance = true
+        }
+    }
+}
+
+/// What the theme group asks a name for: the Space's crest to keep, or a
+/// kept crest to rename.
+private enum BrowserThemeCrestNaming: Identifiable {
+    case keep
+    case rename(String)
+
+    var id: String {
+        switch self {
+        case .keep: "keep"
+        case .rename(let name): "rename-\(name)"
+        }
+    }
+
+    var title: LocalizedStringResource {
+        switch self {
+        case .keep: "Add Current Crest to Theme"
+        case .rename: "Rename Crest"
+        }
+    }
+
+    var action: LocalizedStringResource {
+        switch self {
+        case .keep: "Add"
+        case .rename: "Rename"
         }
     }
 }

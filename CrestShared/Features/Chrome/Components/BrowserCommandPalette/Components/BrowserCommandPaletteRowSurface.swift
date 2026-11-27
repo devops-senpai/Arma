@@ -2,7 +2,9 @@ import SwiftUI
 
 /// A palette row's surface: a faint plate at rest, and the selected row a
 /// sheet of Crest's paper, as the sidebar's selected tab is, tinted in the
-/// Space's accent where the person chose it.
+/// Space's accent where the person chose it. The selected row's text reads
+/// in the color the Space's palette look gives it, else in the paper's own
+/// ink, whatever color the card's other rows read in.
 struct BrowserCommandPaletteRowSurface: ViewModifier {
     // MARK: - Variables
 
@@ -13,12 +15,14 @@ struct BrowserCommandPaletteRowSurface: ViewModifier {
 
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @Environment(\.colorSchemeContrast) private var contrast
+    @Environment(\.browserCommandPaletteSurface) private var surface
 
     // MARK: - Actions - Drawing
 
     func body(content: Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: CrestRadius.control)
         content
+            .foregroundStyle(isSelected ? selectedText : AnyShapeStyle(.foreground))
             .background {
                 if !isSelected {
                     shape.fill(Color.primary.opacity(BrowserCommandPaletteMetrics.restingRowOpacity))
@@ -34,6 +38,14 @@ struct BrowserCommandPaletteRowSurface: ViewModifier {
     }
 
     // MARK: - Actions - Reading
+
+    /// The selected row's text: the palette look's color for it, else the
+    /// label color, which the paper's light scheme makes ink. It is the
+    /// color, not the hierarchical primary style, which would stay relative
+    /// to the text color the card's other rows read in.
+    private var selectedText: AnyShapeStyle {
+        surface?.selectedTextColor.map { AnyShapeStyle($0.color) } ?? AnyShapeStyle(Color.primary)
+    }
 
     /// The accent over the paper, where the row wears it.
     private var selectedFill: Color? {

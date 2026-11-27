@@ -23,7 +23,8 @@ public sealed class ShortcutCatalogTests {
         "toggleTranslationToolbar", "openFile", "findNext", "findPrevious", "capturePage",
         "mostRecentTabBackward", "clearSiteCookies", "clearSiteCache", "toggleSelectedTabSaved", "openNextExtension",
         "clearAllTabs", "collapseAllFolders", "copyPageTitle", "showPageQRCode", "openPageInPrivateWindow",
-        "returnToSavedAddress"
+        "returnToSavedAddress",
+        "saveSpaceTheme", "importTheme", "exportTheme"
     ];
 
     private static readonly IReadOnlyList<ShortcutCommand> Offered = ShortcutCommand.All;
