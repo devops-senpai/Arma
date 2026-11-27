@@ -29,7 +29,7 @@ public sealed record AppPreferences(StartupBehavior Startup, bool OffersTranslat
     /// shows and applies until its session holds the record.
     public static AppPreferences Default { get; } = new(StartupBehavior.LastActiveTab, OffersTranslation: true,
         AutomaticallyTranslates: false, TranslationRules: [], ChecksSpelling: false, AutomaticallyEntersPictureInPicture: true,
-        PinnedTabClose: SavedTabClosePolicy.ResumeLastLocation, SavedTabClose: SavedTabClosePolicy.ResumeLastLocation,
+        PinnedTabClose: SavedTabClosePolicy.ReturnToSavedUrl, SavedTabClose: SavedTabClosePolicy.ReturnToSavedUrl,
         SavedTabFaviconReturnsToSavedUrl: false, UnloadedSavedTabsStay: true,
         SplitFocusFollowsMouse: false,
         AutomaticallyShowsDeveloperToolbar: true, ShowsRecentTabs: true, NewTabPosition.Top, NewTabsJoinFolder: false,
