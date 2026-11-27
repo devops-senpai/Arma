@@ -92,6 +92,18 @@ public sealed record InvalidCredentialDate() : Rejection;
 /// A credential origin is not a canonical HTTP(S) origin.
 public sealed record InvalidCredentialOrigin() : Rejection;
 
+/// A saved password would reach every subdomain of `Host`, a public suffix
+/// such as `co.uk` or `github.io` whose subdomains belong to different people.
+public sealed record SubdomainsOfPublicSuffix(string Host) : Rejection {
+    #region Variables
+
+    /// What the save prompt or the editor tells the person.
+    [Localized]
+    public string Message => "This website's subdomains belong to different owners, so they can't be included.";
+
+    #endregion
+}
+
 /// A record an account match needs has no username.
 public sealed record InvalidCredentialRecord() : Rejection;
 

@@ -3,8 +3,9 @@ import Foundation
 /// What a saved login says about itself, without its password: where it signs
 /// in, as whom, and when it was saved, changed and used. `sites` are the other
 /// sites the person added to the login, beside the one it was saved for, and
-/// `passwordChangedAt` is when its password last changed. Both are keys older
-/// builds ignore.
+/// `passwordChangedAt` is when its password last changed. `includesSubdomains`
+/// says it also fills the hosts under its sites. All are keys older builds
+/// ignore.
 struct CredentialDescriptor: Codable, Equatable, Identifiable, Sendable {
     // MARK: - Static Variables
 
@@ -25,6 +26,7 @@ struct CredentialDescriptor: Codable, Equatable, Identifiable, Sendable {
     var isSynchronizable: Bool
     var sites: [CredentialOrigin]
     var passwordChangedAt: Date?
+    var includesSubdomains: Bool
 
     /// Every site the login signs in to: the one it was saved for, then the
     /// ones the person added.
@@ -44,7 +46,8 @@ struct CredentialDescriptor: Codable, Equatable, Identifiable, Sendable {
         lastUsedAt: Date? = nil,
         isSynchronizable: Bool = false,
         sites: [CredentialOrigin] = [],
-        passwordChangedAt: Date? = nil
+        passwordChangedAt: Date? = nil,
+        includesSubdomains: Bool = false
     ) {
         self.id = id
         self.spaceID = spaceID
@@ -58,6 +61,7 @@ struct CredentialDescriptor: Codable, Equatable, Identifiable, Sendable {
         self.isSynchronizable = isSynchronizable
         self.sites = sites
         self.passwordChangedAt = passwordChangedAt
+        self.includesSubdomains = includesSubdomains
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -73,6 +77,7 @@ struct CredentialDescriptor: Codable, Equatable, Identifiable, Sendable {
         case isSynchronizable
         case sites
         case passwordChangedAt
+        case includesSubdomains
     }
 
     init(from decoder: Decoder) throws {
@@ -94,6 +99,7 @@ struct CredentialDescriptor: Codable, Equatable, Identifiable, Sendable {
             ((try? container.decodeIfPresent([FailableCredentialOrigin].self, forKey: .sites)) ?? [])
             .compactMap(\.origin).prefix(Self.maximumSites).map(\.self)
         passwordChangedAt = try container.decodeIfPresent(Date.self, forKey: .passwordChangedAt)
+        includesSubdomains = try container.decodeIfPresent(Bool.self, forKey: .includesSubdomains) ?? false
     }
 
     func encode(to encoder: Encoder) throws {
@@ -113,6 +119,8 @@ struct CredentialDescriptor: Codable, Equatable, Identifiable, Sendable {
         try container.encode(isSynchronizable, forKey: .isSynchronizable)
         if !sites.isEmpty { try container.encode(sites, forKey: .sites) }
         try container.encodeIfPresent(passwordChangedAt, forKey: .passwordChangedAt)
+        // A login that reaches no subdomains is stored exactly as before.
+        if includesSubdomains { try container.encode(includesSubdomains, forKey: .includesSubdomains) }
     }
 }
 

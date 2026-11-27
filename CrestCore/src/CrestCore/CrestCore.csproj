@@ -9,6 +9,10 @@
     <InternalsVisibleTo Include="CrestCore.Tests" />
   </ItemGroup>
   <ItemGroup>
+    <!-- The Public Suffix List (MPL 2.0), read by Domain/Links/SiteDomain.PublicSuffixList.cs. -->
+    <EmbeddedResource Include="Domain/Links/public_suffix_list.dat" LogicalName="CrestCore.Domain.Links.public_suffix_list.dat" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Resources\ContentBridges\*.js" LogicalName="CrestCore.Resources.ContentBridges.%(Filename)%(Extension)" />
   </ItemGroup>
 </Project>

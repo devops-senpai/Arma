@@ -17,7 +17,7 @@ actor KeychainCredentialVault: CredentialVault {
     private let codec = CredentialKeychainCodec()
     /// Whether passwords saved for each origin fill a page at the first, in
     /// order, which the core answers in production.
-    private let fills: @Sendable (CredentialOrigin, [CredentialOrigin]) throws -> [Bool]
+    private let fills: @Sendable (CredentialOrigin, [CredentialOrigin], [Int]) throws -> [Bool]
     /// Whether a write holds the vault, and the writes waiting their turn.
     private var isWriting = false
     private var waitingWrites: [CheckedContinuation<Void, Never>] = []
@@ -27,7 +27,7 @@ actor KeychainCredentialVault: CredentialVault {
     init(
         store: any CredentialKeychainStoring,
         servicePrefix: String = CredentialKeychainNamespace.productionPrefix,
-        fills: @escaping @Sendable (CredentialOrigin, [CredentialOrigin]) throws -> [Bool] = { page, saved in
+        fills: @escaping @Sendable (CredentialOrigin, [CredentialOrigin], [Int]) throws -> [Bool] = { page, saved, _ in
             saved.map { $0 == page }
         }
     ) {
@@ -387,11 +387,13 @@ actor KeychainCredentialVault: CredentialVault {
     ) throws -> [CredentialDescriptor] {
         // Each site a login names is asked about, the one it was saved for and
         // the ones the person added.
+        // Those that reach the hosts under their sites fill one of them too.
         let others = descriptors.filter { !$0.origins.contains(origin) }
-            .flatMap { descriptor in descriptor.origins.map { (descriptor.id, $0) } }
+            .flatMap { descriptor in descriptor.origins.map { (descriptor.id, $0, descriptor.includesSubdomains) } }
+        let reaching = others.indices.filter { others[$0].2 }
         let othersFill: [Bool]
         do {
-            othersFill = try fills(origin, others.map(\.1))
+            othersFill = try fills(origin, others.map(\.1), reaching)
         } catch Rejection.invalidCredentialOrigin {
             // No page has such an origin, but if one did, its own passwords still fill it.
             othersFill = []
