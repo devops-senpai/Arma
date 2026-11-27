@@ -105,6 +105,44 @@ final class BrowserCredentialMessageRoutingTests: XCTestCase {
         XCTAssertEqual(password, "generated-secret")
     }
 
+    /// The vault suggests a login on every site the person added to it, so
+    /// the page fills it there too, while a login that names neither the page
+    /// nor a site the core reads as it is still refused.
+    func testPageFillsALoginOnASiteAddedToIt() async throws {
+        let page = try makePage()
+        page.webView.loadSimulatedRequest(
+            URLRequest(url: try XCTUnwrap(URL(string: "https://login.crest.test/oauth"))),
+            responseHTML: Self.loginDocument
+        )
+        try await waitUntil { page.completedNavigationCount == 1 }
+        let request = try await focusPassword(in: page)
+        let elsewhere = try XCTUnwrap(CredentialOrigin(url: try XCTUnwrap(URL(string: "https://accounts.crest.test"))))
+        let unrelated = BrowserCredential(
+            descriptor: CredentialDescriptor(
+                spaceID: page.spaceID, origin: elsewhere, username: "other@example.com", createdAt: .now),
+            password: "other-secret"
+        )
+        do {
+            try await page.fillCredential(unrelated, for: request.id)
+            XCTFail("A login saved for another site must not fill the page")
+        } catch {
+            XCTAssertEqual(error as? BrowserCredentialFillError, .staleOrMismatchedRequest)
+        }
+
+        let added = BrowserCredential(
+            descriptor: CredentialDescriptor(
+                spaceID: page.spaceID, origin: elsewhere, username: "saved@example.com", createdAt: .now,
+                sites: [request.origin]),
+            password: "saved-secret"
+        )
+        try await page.fillCredential(added, for: request.id)
+        let password =
+            try await page.webView.evaluateJavaScript(
+                "document.querySelector('input[type=password]').value"
+            ) as? String
+        XCTAssertEqual(password, "saved-secret")
+    }
+
     private func focusPassword(in page: BrowserPage) async throws -> BrowserCredentialFillRequest {
         let previousRequestID = page.credentialFillRequest?.id
         let focused = try await page.webView.callAsyncJavaScript(

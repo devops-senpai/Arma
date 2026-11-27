@@ -41,7 +41,7 @@ struct BrowserCredentialObservation<FillTarget> {
 @MainActor
 final class BrowserCredentialPageState<FillTarget> {
     let spaceID: UUID
-    @ObservationIgnored private let core: CrestCore
+    @ObservationIgnored let core: CrestCore
 
     private(set) var fillRequest: BrowserCredentialFillRequest?
     private(set) var saveCandidate: BrowserCredentialSaveCandidate?
@@ -229,7 +229,7 @@ final class BrowserCredentialPageState<FillTarget> {
             request.id == requestID,
             fillAllowed(from: .saved, into: request.passwordKind),
             credential.descriptor.spaceID == spaceID,
-            credential.descriptor.origin == request.origin,
+            fills(request.origin, with: credential.descriptor),
             let target = fillTargets[requestID]
         else {
             throw BrowserCredentialFillError.staleOrMismatchedRequest
