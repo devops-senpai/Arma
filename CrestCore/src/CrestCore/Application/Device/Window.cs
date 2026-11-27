@@ -380,14 +380,17 @@ internal sealed class Window {
 
     private static bool Contains(SpaceState space, Guid? tabId) => tabId is { } id && space.Tabs.Any(tab => tab.Id == id);
 
-    /// How many columns a split group renders with in `space`: the length of
-    /// its first contiguous run of tabs, when that run can render.
+    /// How many columns a split group, or a branch of its shape, renders with
+    /// in `space`: the length of its first contiguous run of tabs, when that
+    /// run can render, or as its shape lays that run out.
     private static int RenderedColumns(SpaceState space, Guid groupId) {
+        var shaped = space.SplitGroups.FirstOrDefault(group => group.Id == groupId || group.Shape?.ChildCount(group.Id, groupId) is not null);
+        var owner = shaped?.Id ?? groupId;
         int start = 0;
-        while (start < space.Tabs.Count && space.Tabs[start].SplitGroupId != groupId) start++;
+        while (start < space.Tabs.Count && space.Tabs[start].SplitGroupId != owner) start++;
         if (start == space.Tabs.Count) return 0;
-        int length = space.Tabs.Skip(start).TakeWhile(tab => tab.SplitGroupId == groupId).Count();
-        return length >= SplitGroupState.MinimumMembers ? length : 0;
+        int length = space.Tabs.Skip(start).TakeWhile(tab => tab.SplitGroupId == owner).Count();
+        return length < SplitGroupState.MinimumMembers ? 0 : shaped?.RenderedChildren(groupId, length) ?? length;
     }
 
     #endregion
