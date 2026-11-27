@@ -99,10 +99,11 @@ internal static partial class StoredSessionCodec {
 
     internal static CredentialPreferences DecodeCredentialPreferences(JsonNode? node) {
         var value = Object(node);
-        return new(Flag(value[Key.IsEnabled]) ?? DefaultCredentialPreferences.IsEnabled,
+        return new CredentialPreferences(Flag(value[Key.IsEnabled]) ?? DefaultCredentialPreferences.IsEnabled,
             Flag(value[Key.SyncsCrestPasswordsWithICloud]) ?? DefaultCredentialPreferences.SyncsCrestPasswordsWithICloud,
             Flag(value[Key.AlsoOffersSaveToSystemPasswords]) ?? DefaultCredentialPreferences.AlsoOffersSaveToSystemPasswords,
-            NeverSavedSites(value[Key.NeverSavedSites]));
+            NeverSavedSites(value[Key.NeverSavedSites]),
+            Integer(value[Key.SavePromptSeconds]) ?? DefaultCredentialPreferences.SavePromptSeconds).Kept();
     }
 
     internal static JsonObject Encode(CredentialPreferences preferences) {
@@ -111,6 +112,10 @@ internal static partial class StoredSessionCodec {
             [Key.SyncsCrestPasswordsWithICloud] = preferences.SyncsCrestPasswordsWithICloud,
             [Key.AlsoOffersSaveToSystemPasswords] = preferences.AlsoOffersSaveToSystemPasswords
         };
+        // Written only once it differs from its default, so a Space that keeps
+        // the default is stored exactly as before.
+        if (preferences.SavePromptSeconds != DefaultCredentialPreferences.SavePromptSeconds)
+            encoded[Key.SavePromptSeconds] = preferences.SavePromptSeconds;
         if (preferences.NeverSavedSites.Count > 0)
             encoded[Key.NeverSavedSites] = new JsonArray([.. preferences.NeverSavedSites.Select(site => (JsonNode?)new JsonObject {
                 [Key.Scheme] = site.Scheme, [Key.Host] = site.Host, [Key.Port] = site.Port
