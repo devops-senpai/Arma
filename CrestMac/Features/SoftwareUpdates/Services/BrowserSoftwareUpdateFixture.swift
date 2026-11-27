@@ -13,7 +13,7 @@ struct BrowserSoftwareUpdateFixture: Sendable {
     }
     static let automaticDownloading = Self(name: "automatic-downloading") { model, version, build in
         model.presentAutomaticDownload(
-            title: "Crest \(version)",
+            title: "Arma \(version)",
             version: version,
             build: build,
             informationURL: nil,
@@ -27,7 +27,7 @@ struct BrowserSoftwareUpdateFixture: Sendable {
     }
     static let automaticReady = Self(name: "automatic-ready") { model, version, build in
         model.presentAutomaticUpdateReady(
-            title: "Crest \(version)",
+            title: "Arma \(version)",
             version: version,
             build: build,
             informationURL: nil,

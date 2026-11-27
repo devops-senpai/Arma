@@ -525,7 +525,7 @@ final class BrowserOnboardingFlow {
     /// exception and methods it names, which hold nothing the browser's data
     /// holds.
     private static func logRefusal(_ error: any Error, of step: String, _ review: SetupImportReview) {
-        var message = "Crest couldn’t \(step) the \(review.title) import: \(DiagnosticLog.describe(error))"
+        var message = "Arma couldn’t \(step) the \(review.title) import: \(DiagnosticLog.describe(error))"
         if let refusal = (error as? Rejection)?.unpreparedImport { message += " (\(refusal.cause))" }
         DiagnosticLog.imports.error(message)
     }

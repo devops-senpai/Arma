@@ -21,7 +21,7 @@ user guides live in this repository under `HelpCenter/docs/`.
 
 ### Themes
 
-Arma ships with themes for every kind of person: **Crest Default**, Crest's own look of
+Arma ships with themes for every kind of person: **Classic**, the look of
 ink washing down into sky, **Arc Sky** and **Arc Blush** for anyone
 coming from Arc, and **Catppuccin** Latte, Latte / Mocha, Macchiato, Mocha
 and Frappé for coders. Arma starts in Catppuccin Latte. Any theme can also put a picture of your own behind the
@@ -60,7 +60,7 @@ it, and theme files carry them.
 
 Setup opens on Arma's banner, large, with its name lettered in blackletter,
 then walks through its steps beside a live preview of the window it builds.
-Each Space's page offers every theme Arma ships over Crest's own colors and
+Each Space's page offers every theme Arma ships over the classic colors and
 icons; choosing one dresses every Space setup makes, and new Spaces after it.
 
 ![Setup's Your Space page: every theme Arma ships over the Space's colors and icon, beside a live preview of the window](Brand/Readme/setup-your-space.jpg)
@@ -162,8 +162,8 @@ arma passwords lock
 ### Command palette `@` actions
 
 Type an `@` scope in the command palette and press **Space** or **Tab** to
-search or act within it. Arma adds seven scopes to the five Crest has, and
-keeps all of Crest's:
+search or act within it. Arma adds seven scopes to the five upstream has, and
+keeps all of upstream's:
 
 | Type | What it offers | In |
 |---|---|---|
@@ -174,11 +174,11 @@ keeps all of Crest's:
 | `@developer` | The page's Web Inspector and developer toolbar. | Arma only |
 | `@cli` | Install the `arma` command in `~/.local/bin` or `~/bin`, or copy the line to run yourself. | Arma only |
 | `@update` | Check for a new version of Arma; the answer shows in the sidebar. | Arma only |
-| `@tabs` | The Space's open tabs. | Arma and Crest |
-| `@saved` | Pinned and saved tabs. | Arma and Crest |
-| `@history` | Pages you visited in the Space. | Arma and Crest |
-| `@actions` | Browser commands, such as New Tab, Split View or Settings. | Arma and Crest |
-| `@spaces` | Your Spaces, to switch to one. | Arma and Crest |
+| `@tabs` | The Space's open tabs. | Arma and upstream |
+| `@saved` | Pinned and saved tabs. | Arma and upstream |
+| `@history` | Pages you visited in the Space. | Arma and upstream |
+| `@actions` | Browser commands, such as New Tab, Split View or Settings. | Arma and upstream |
+| `@spaces` | Your Spaces, to switch to one. | Arma and upstream |
 
 ![The command palette in the @themes scope, listing every saved theme to put on the Space](Brand/Readme/palette-themes.jpg)
 
@@ -262,7 +262,7 @@ driver.get("https://example.com")
 
 ## What Arma adds
 
-Everything below is in Arma and not in upstream Crest.
+Everything below is in Arma and not upstream.
 
 ### Features
 
@@ -450,16 +450,16 @@ Scripts/validate-cache-hygiene.sh
 
 Run the relevant behavioral tests and repository checks. Review visual, layout, and static-copy changes in the real app, Simulator, or browser.
 
-## Relationship to Crest
+## Relationship to upstream
 
-Arma tracks Crest's `main` and merges it in regularly; its own
+Arma tracks upstream's `main` and merges it in regularly; its own
 changes stay here. Use
 [GitHub Issues](https://github.com/devops-senpai/Arma/issues) for bugs.
 
 ### Repository and tooling
 
 - The patch version is derived from history and each release note is its own file, so branches stop conflicting on every merge.
-- `Scripts/sync-upstream.sh` merges upstream Crest in one step and leaves only real code conflicts to a person.
+- `Scripts/sync-upstream.sh` merges upstream in one step and leaves only real code conflicts to a person.
 - `Taskfile.yml` and `Documentation/ForkRunbook.md`: `task sync` keeps history as upstream plus one commit per change, `task release` and `task notarize` build, sign and notarize a release, and `task publish` puts it on GitHub and in the signed update feeds with secrets from sops.
 - `task engine:build` builds Arma's Chromium engine on a Mac, and `task engine:publish` publishes it for releases.
 - `ROUTING.md` and a `CONTEXT.md` in every folder that groups work tell a contributor or an agent what to read for each kind of change.

@@ -32,12 +32,11 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 CATALOG = ROOT / "CrestShared/Resources/Localizable.xcstrings"
 NAME = "Arma"
 
-# Where "Crest" names the Space's emblem, not the app, and where setup's
-# Crest Themes and the Crest Default theme name the looks Crest itself ships
-# beside Arma's themes.
+# Where "Crest" names the Space's emblem, not the app. Everything else that
+# says Crest names the product, which ships as Arma.
 HERALDRY = re.compile(
     r"^Crest$|Crest Studio|Layered Crest|Edit Crest|Crest colors|Crest preview|Crest branding"
-    r"|Make Crest your own|Choose Crest under Emblem|Crest Themes|Crest Default"
+    r"|Choose Crest under Emblem|Add Current Crest|Rename Crest"
 )
 WORD = re.compile(r"\bCrest\b")
 

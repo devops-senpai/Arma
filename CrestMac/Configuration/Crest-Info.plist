@@ -89,7 +89,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>CFBundleURLName</key>
-			<string>Crest Web URLs</string>
+			<string>Arma Web URLs</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>http</string>
@@ -113,11 +113,11 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Websites can request camera access for calls and other browser features.</string>
 	<key>NSDownloadsFolderUsageDescription</key>
-	<string>Crest accesses Downloads when you select files to upload or save downloads there.</string>
+	<string>Arma accesses Downloads when you select files to upload or save downloads there.</string>
 	<key>NSDocumentsFolderUsageDescription</key>
-	<string>Crest accesses Documents when you select files to upload or save downloads there.</string>
+	<string>Arma accesses Documents when you select files to upload or save downloads there.</string>
 	<key>NSDesktopFolderUsageDescription</key>
-	<string>Crest accesses Desktop when you select files to upload or save downloads there.</string>
+	<string>Arma accesses Desktop when you select files to upload or save downloads there.</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
