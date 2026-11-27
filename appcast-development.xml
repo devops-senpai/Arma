@@ -6,6 +6,24 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.11.135</title>
+            <pubDate>Thu, 26 Nov 2026 23:38:45 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>1100135</sparkle:version>
+            <sparkle:shortVersionString>0.11.135</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Middle-click unloads folder tabs again, and agents hear when Arma is busy.
+
+### Fixed
+- Middle-clicking a tab in a folder, or a preview card, unloads it as it does elsewhere in the sidebar.
+
+### Improved
+- An agent that can't connect is told whether Arma isn't running, is at its agent limit, or was updated since it connected.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.11.135/Arma-0.11.135.dmg" length="327784027" type="application/octet-stream" sparkle:edSignature="uQ+8Qc907byM3uEzoWtW8x7/Kx8+FTRI/3rFTw3RDMLJdqJxMw6OqaIWF0YKTgPWEOhVAOLiLi234aelWdiMDg=="/>
+        </item>
+        <item>
             <title>0.11.134</title>
             <pubDate>Thu, 26 Nov 2026 22:43:22 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1378,6 +1396,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: UbDMIg/hGIXqsT1c+18Fgyx1KVMGsbc93u78oIZUrWWc25w5n4J+LLZ4KJ4erJIf7KL5xyFVcDhYfwo8zr+9BQ==
-length: 106973
+edSignature: X/8UQoxk8g9lqdqdE6prcXZVg3aqTZ58zl7mj24YBceXiSr6iMbEhYa07U3o/wTWeWGZghEjXg2IPMAgE5H+Aw==
+length: 108133
 -->
