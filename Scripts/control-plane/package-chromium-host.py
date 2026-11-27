@@ -263,7 +263,7 @@ def rename_product_binaries(framework, executable, core):
     top = framework / executable
     if top.is_symlink():
         top.unlink()
-        top.symlink_to(f"Versions/Current/{name}")
+        (framework / name).symlink_to(f"Versions/Current/{name}")
     for leftover in ("Headers", "Modules"):
         shutil.rmtree(version / leftover, ignore_errors=True)
         (framework / leftover).unlink(missing_ok=True)
