@@ -192,6 +192,20 @@ change to it folded in. `Documentation/ForkRunbook.md` has the steps and
   on the build Mac and publish with `publish-chromium-engine.py` to this
   repository. Resolve conflicts in those inputs by keeping upstream's change
   and re-applying Arma's on top.
+- Arma builds its own content filter too: the crate is `arma-content-filter`,
+  its library `libarma_content_filter.a` and its header
+  `include/arma_content_filter.h`. A sync that changes the crate or its
+  recipe needs `Scripts/control-plane/content_filter.py build` (the pinned
+  Rust toolchain) and `publish-content-filter.py` to this repository; never
+  mirror upstream's archive.
+- Everything Arma ships or publishes says Arma, never Crest: release titles,
+  notes, asset and zip names, the files inside them and the app bundle's own
+  files (`ArmaChromiumUI.framework`, `ArmaCore.dylib`,
+  `ArmaDockTilePlugin.docktileplugin`, `Arma.icns`, the `Arma-*` markers).
+  Strings that name the app say Arma through `Scripts/fork/brand-strings.py`;
+  literals outside the catalog say Arma in source. Only the README's
+  attribution, non-affiliation and licence notes name Crest. Source paths and
+  identifiers stay as upstream wrote them.
 
 ### Fix it the way upstream would
 
