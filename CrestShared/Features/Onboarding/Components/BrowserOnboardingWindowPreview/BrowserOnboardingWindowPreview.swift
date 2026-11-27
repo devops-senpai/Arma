@@ -33,7 +33,7 @@ struct BrowserOnboardingWindowPreview<Page: View>: View {
     var body: some View {
         let space = space
         ZStack {
-            BrowserSpaceBannerBackground(branding: branding)
+            BrowserSpaceBackdropLayer(spaceID: backdrop?.ownerID, branding: branding, store: backdrop?.store ?? .shared)
             HStack(spacing: 0) {
                 sidebar(space)
                     .frame(width: BrowserChromeLayout.sidebarIdealWidth)
