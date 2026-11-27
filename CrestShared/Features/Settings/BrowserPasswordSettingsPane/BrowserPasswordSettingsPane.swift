@@ -267,6 +267,8 @@ struct BrowserPasswordSettingsPane<Header: View>: View {
 
                         BrowserSavePromptSecondsRow(browser: browser, space: space)
 
+                        BrowserCredentialAuthenticationRow(browser: browser, space: space)
+
                         if layout.showsManageAction {
                             Button("Manage Saved Passwords…") {
                                 manage?()

@@ -2,8 +2,8 @@ import Foundation
 
 @MainActor
 final class BrowserCredentialSensitiveAccess {
-    private let browser: BrowserStore
-    private let authenticator: any BrowserDeviceAuthenticating
+    let browser: BrowserStore
+    let authenticator: any BrowserDeviceAuthenticating
 
     init(
         browser: BrowserStore,
@@ -19,9 +19,7 @@ final class BrowserCredentialSensitiveAccess {
         in spaceID: UUID,
         reason: String = String(localized: "Authenticate to view this Crest password.")
     ) async throws -> BrowserCredential {
-        guard try await authenticator.authenticate(reason: reason) else {
-            throw BrowserCredentialSensitiveAccessError.authenticationDenied
-        }
+        try await authenticate(for: spaceID, reason: reason)
         guard let credential = try await browser.credential(id: id, in: spaceID),
             credential.descriptor.id == id,
             credential.descriptor.spaceID == spaceID
@@ -39,9 +37,7 @@ final class BrowserCredentialSensitiveAccess {
         guard browser.spaceModel(matching: assignment) != nil else {
             throw BrowserCredentialSensitiveAccessError.missingCredential
         }
-        guard try await authenticator.authenticate(reason: reason) else {
-            throw BrowserCredentialSensitiveAccessError.authenticationDenied
-        }
+        try await authenticate(for: assignment.spaceID, reason: reason)
         guard browser.spaceModel(matching: assignment) != nil else {
             throw BrowserCredentialSensitiveAccessError.missingCredential
         }
