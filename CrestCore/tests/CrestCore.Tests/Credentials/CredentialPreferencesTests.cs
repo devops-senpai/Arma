@@ -51,4 +51,14 @@ public sealed class CredentialPreferencesTests {
         Assert.True(CredentialAuthentication.Every15Minutes.Asks(-1));
         Assert.False(CredentialAuthentication.Never.Asks(null));
     }
+
+    [Fact]
+    public void SuggestingInPrivateWindowsIsStoredOnlyWhenChosen() {
+        var chosen = new CredentialPreferences(true, true, false, [], CredentialAuthentication.EachTime,
+            SuggestsInPrivateWindows: true);
+        Assert.Equal(true, StoredSessionCodec.Encode(chosen)["suggestsInPrivateWindows"]?.GetValue<bool>());
+        Assert.Equal(chosen, StoredSessionCodec.DecodeCredentialPreferences(StoredSessionCodec.Encode(chosen)));
+        Assert.False(StoredSessionCodec.Encode(chosen with { SuggestsInPrivateWindows = false })
+            .ContainsKey("suggestsInPrivateWindows"));
+    }
 }
