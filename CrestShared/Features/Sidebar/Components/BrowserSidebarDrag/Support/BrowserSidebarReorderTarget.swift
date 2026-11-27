@@ -25,10 +25,15 @@ struct BrowserSidebarReorderTarget: Equatable, Sendable {
         let index: Int
     }
 
-    /// An insertion into the split-view cards shown for a Space.
+    /// An insertion into the split-view cards shown for a Space. `shape` is
+    /// the shape the cards tile in once it has landed, or nil for a row of
+    /// columns. `swapping` names a split member lifted alone and the card it
+    /// is over the middle of, which trade places instead.
     struct SplitInsertion: Equatable, Sendable {
         let assignment: BrowserSpaceRuntimeAssignment
         let index: Int
+        var shape: SplitShape? = nil
+        var swapping: BrowserSplitCardSwap? = nil
     }
 
     /// Self-describing landing kind for a resolved drop target. Each kind
@@ -179,14 +184,20 @@ struct BrowserSidebarReorderTarget: Equatable, Sendable {
         /// `index` among them. The index counts presented cards only — the drop
         /// placeholder is not one of them — so it stays put as the row of cards
         /// shifts to make room.
-        static func splitInsert(assignment: BrowserSpaceRuntimeAssignment, index: Int) -> Self {
-            let split = SplitInsertion(assignment: assignment, index: index)
+        static func splitInsert(
+            assignment: BrowserSpaceRuntimeAssignment, index: Int, shape: SplitShape? = nil,
+            swapping: BrowserSplitCardSwap? = nil
+        ) -> Self {
+            let split = SplitInsertion(assignment: assignment, index: index, shape: shape, swapping: swapping)
             return Self(
                 identity: .splitInsert(split),
                 insertion: nil,
                 splitInsertion: split,
                 resolveVerdict: { _, targets in
-                    BrowserSidebarDropVerdict(targets.split.map { $0.refusal })
+                    // The core lists a join, which a member of the split is not; a
+                    // swap trades two cards on show, and the core checks it as it commits.
+                    if swapping != nil { return .allowed }
+                    return BrowserSidebarDropVerdict(targets.split.map { $0.refusal })
                 },
                 resolveDrop: { selection, space, browser in
                     // The cards on show are the shown tab's split, so the shown tab is
@@ -194,10 +205,16 @@ struct BrowserSidebarReorderTarget: Equatable, Sendable {
                     guard assignment.spaceID == space.id, let shown = browser.selectedTabID(in: space.id) else {
                         return nil
                     }
+                    if let swapping {
+                        return BrowserSidebarDrop(
+                            intent: DropOntoSplitCard(
+                                workspaceID: browser.family.workspaceID, windowID: browser.windowID,
+                                spaceID: space.id, selection: selection, tabID: swapping.other))
+                    }
                     return BrowserSidebarDrop(
                         intent: DropIntoSplit(
                             workspaceID: browser.family.workspaceID, windowID: browser.windowID, spaceID: space.id,
-                            selection: selection, targetTabID: shown, index: index)
+                            selection: selection, targetTabID: shown, index: index, shape: shape)
                     )
                 },
                 resolvePreviewShape: { _ in .webpageCard },

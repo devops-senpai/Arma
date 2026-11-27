@@ -118,6 +118,9 @@ final class BrowserSidebarReorderState {
     private(set) var isSuppressingActivation = false
     // Latch the content host for the drag so its WebView does not change parents repeatedly.
     private(set) var hasEnteredSplitContent = false
+    /// The cards a drag over the content area aims at: as they stood when it
+    /// reached them, for as long as it stays over them.
+    @ObservationIgnored private var splitAimCards: [BrowserSidebarReorderGeometry.SplitCard] = []
     var suppressesActivation: Bool {
         isDragging || isSuppressingActivation
     }
@@ -868,10 +871,14 @@ final class BrowserSidebarReorderState {
             resolvedTarget = nil
             return
         }
+        // Cards stepping aside for the placeholder would aim the drag at a
+        // different tile every frame, so it keeps the cards it reached.
+        let wasOverCards = previousTarget?.kind.splitInsertion != nil
+        if !wasOverCards { splitAimCards = Array(geometry.splitCards.values) }
         resolvedTarget = BrowserSidebarReorderAim(
             lift: lift, pointer: pointer, insertionPoint: insertionProbe(for: lift), layout: layout,
             pinned: pinnedGeometry, zones: visibleZones, rows: geometry.rows(in: lift.item.spaceAssignment),
-            splitCards: Array(geometry.splitCards.values)
+            splitCards: splitAimCards
         ).target(previousTarget: previousTarget)
         if resolvedTarget?.kind.splitInsertion != nil { hasEnteredSplitContent = true }
     }
