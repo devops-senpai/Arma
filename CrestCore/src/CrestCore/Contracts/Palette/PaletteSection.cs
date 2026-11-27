@@ -26,9 +26,21 @@ public sealed class PaletteSection {
     public static readonly PaletteSection Results = new(name: "results", title: null, limit: 12, restingLimit: 0, scopedLimit: 0);
     public static readonly PaletteSection Themes = new(name: "themes", title: "Themes", limit: 3, restingLimit: 0, scopedLimit: 30);
 
+    /// The rows of the tool scopes, which show only inside their scope.
+    public static readonly PaletteSection Extensions = new(name: "extensions", title: "Extensions", limit: 0, restingLimit: 0,
+        scopedLimit: 30);
+    public static readonly PaletteSection Engine = new(name: "engine", title: "Engine", limit: 0, restingLimit: 0, scopedLimit: 30);
+    public static readonly PaletteSection Developer = new(name: "developer", title: "Developer", limit: 0, restingLimit: 0,
+        scopedLimit: 30);
+    public static readonly PaletteSection CommandLine = new(name: "commandLine", title: "Command Line", limit: 0, restingLimit: 0,
+        scopedLimit: 30);
+    public static readonly PaletteSection Update = new(name: "update", title: "Software Update", limit: 0, restingLimit: 0,
+        scopedLimit: 30);
+
     /// Every section, in the order sections were added.
     public static IReadOnlyList<PaletteSection> All { get; } =
-        [Intent, SearchSuggestions, RecentTabs, Tabs, Actions, Saved, History, TopHit, Spaces, Archived, Results, Themes];
+        [Intent, SearchSuggestions, RecentTabs, Tabs, Actions, Saved, History, TopHit, Spaces, Archived, Results, Themes,
+            Extensions, Engine, Developer, CommandLine, Update];
 
     #endregion
 
