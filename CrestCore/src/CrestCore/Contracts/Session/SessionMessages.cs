@@ -61,11 +61,14 @@ public sealed record TabIconAccent(double Red, double Green, double Blue);
 /// them reaches the person's other devices. <see cref="Authentication"/> is how often
 /// showing or copying a saved password asks to authenticate. The offer to save closes
 /// after <see cref="SavePromptSeconds"/>. <see cref="SuggestsInPrivateWindows"/> lets a
-/// private window suggest, never save, the Space's passwords. Older records leave these
+/// private window suggest, never save, the Space's passwords. The
+/// `arma passwords` command reaches them only with <see cref="AllowsCommandLine"/>,
+/// and only through a session the person unlocked. Older records leave these
 /// out and take the defaults.</summary>
 public sealed record CredentialPreferences(bool IsEnabled, bool SyncsCrestPasswordsWithICloud, bool AlsoOffersSaveToSystemPasswords,
     IReadOnlyList<CredentialOrigin> NeverSavedSites, CredentialAuthentication Authentication,
-    int SavePromptSeconds = CredentialPreferences.DefaultSavePromptSeconds, bool SuggestsInPrivateWindows = false) {
+    int SavePromptSeconds = CredentialPreferences.DefaultSavePromptSeconds, bool SuggestsInPrivateWindows = false,
+    bool AllowsCommandLine = false) {
     #region Static Variables
 
     /// The most sites a Space keeps in its never-save list.
@@ -110,11 +113,12 @@ public sealed record CredentialPreferences(bool IsEnabled, bool SyncsCrestPasswo
         && NeverSavedSites.SequenceEqual(other.NeverSavedSites)
         && Authentication == other.Authentication
         && SavePromptSeconds == other.SavePromptSeconds
-        && SuggestsInPrivateWindows == other.SuggestsInPrivateWindows;
+        && SuggestsInPrivateWindows == other.SuggestsInPrivateWindows
+        && AllowsCommandLine == other.AllowsCommandLine;
 
     public override int GetHashCode() =>
         HashCode.Combine(IsEnabled, SyncsCrestPasswordsWithICloud, AlsoOffersSaveToSystemPasswords, NeverSavedSites.Count,
-            Authentication.Name, SavePromptSeconds, SuggestsInPrivateWindows);
+            Authentication.Name, SavePromptSeconds, SuggestsInPrivateWindows, AllowsCommandLine);
 
     #endregion
 }
