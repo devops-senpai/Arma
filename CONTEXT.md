@@ -23,6 +23,7 @@ whose engines are interchangeable behind one adapter boundary.
 | `CrestAgents/` | The agent link protocol and tool definitions shared by the Mac app and its helper ([CONTEXT](CrestAgents/CONTEXT.md)) |
 | `CrestAgentHelper/` | `crest-browser`, the MCP helper agents run to reach Crest ([CONTEXT](CrestAgentHelper/CONTEXT.md)) |
 | `CrestShareExtension/` | The iPhone and iPad share-sheet entry that hands links to Crest ([CONTEXT](CrestShareExtension/CONTEXT.md)) |
+| `Brand/` | Arma's source artwork: the logo (`Arma.svg`, `Arma.png`), the app icon banner SVGs in `AppIcons/` that `Scripts/fork/generate-arma-icons.py` reads, the JellyFish theme's drawing (`JellyFish.svg`), the README's screenshots and collage in `Readme/`, and the installer window's background and its generator in `Installer/` |
 | `CrestDockTilePlugin/` | The macOS Dock tile plug-in that draws the chosen icon palette ([CONTEXT](CrestDockTilePlugin/CONTEXT.md)) |
 | `CrestTests/` | macOS Swift tests for durable contracts, with support harnesses and fixtures ([CONTEXT](CrestTests/CONTEXT.md)) |
 | `CrestMobileTests/` | iOS Swift tests for mobile-only adapter behavior ([CONTEXT](CrestMobileTests/CONTEXT.md)) |

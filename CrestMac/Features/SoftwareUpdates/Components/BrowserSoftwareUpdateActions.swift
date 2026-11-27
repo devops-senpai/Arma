@@ -55,7 +55,7 @@ struct BrowserSoftwareUpdateActions: View {
             .padding().frame(width: 500)
             .task {
                 model.presentUpdate(
-                    title: "Crest Update", version: "1.0",
+                    title: "Arma Update", version: "1.0",
                     isInformationOnly: false, install: {}, skip: {})
             }
     }

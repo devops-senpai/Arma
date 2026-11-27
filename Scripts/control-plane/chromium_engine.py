@@ -43,7 +43,7 @@ INPUTS = (
     "CrestContracts/include/crest_app.h",
     "CrestContracts/include/crest_engine.h",
     "CrestContracts/include/crest_engine_contract.h",
-    "CrestCore/native/ContentFilter/include/crest_content_filter.h",
+    "CrestCore/native/ContentFilter/include/arma_content_filter.h",
     "Scripts/control-plane/prepare-chromium.py",
     "Scripts/control-plane/apply-chromium-host.py",
     "Scripts/control-plane/configure-chromium.py",
@@ -122,7 +122,8 @@ def candidate_tag(key: str) -> str:
 
 
 def asset_name(key: str) -> str:
-    return f"Crest-Chromium-Engine-{key[:16]}-universal.zip"
+    # Arma publishes its own engine under its own name.
+    return f"Arma-Chromium-Engine-{key[:16]}-universal.zip"
 
 
 def main():

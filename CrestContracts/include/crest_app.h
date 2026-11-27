@@ -87,7 +87,7 @@ CREST_API crest_status_t CREST_CALL crest_app_set_wake(uint64_t app, crest_wake_
 CREST_API crest_status_t CREST_CALL crest_app_drain(uint64_t app, crest_buffer_t* out);
 /* OK: out_slot = the address of the app's content filter slot, for an engine
  * binding that checks each network request itself by passing it to
- * crest_content_filter_slot_check (crest_content_filter.h), which the core's
+ * crest_content_filter_slot_check (arma_content_filter.h), which the core's
  * library exports beside this. The first call compiles the filter on a worker;
  * until it is in force the slot allows every request. The slot lives as long
  * as the app. */
