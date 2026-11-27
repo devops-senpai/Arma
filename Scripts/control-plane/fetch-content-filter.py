@@ -75,8 +75,10 @@ def download(url: str) -> bytes:
 
 def unpack(lock: dict, cache: Path, repository: str):
     """Downloads the locked archive and keeps each member whose digest the lock records."""
-    url = DOWNLOADS.format(repository=repository, tag=content_filter.release_tag(lock["key"]), asset=lock["archive"])
-    print(f"Downloading the content filter {lock['archive']}", file=sys.stderr)
+    # Arma mirrors the locked archive under its own name.
+    asset = lock["archive"].replace("Crest-", "Arma-", 1)
+    url = DOWNLOADS.format(repository=repository, tag=content_filter.release_tag(lock["key"]), asset=asset)
+    print(f"Downloading the content filter {asset}", file=sys.stderr)
     data = download(url)
     if hashlib.sha256(data).hexdigest() != lock["sha256"]:
         raise SystemExit(f"{lock['archive']} does not match the digest in {content_filter.LOCK}")

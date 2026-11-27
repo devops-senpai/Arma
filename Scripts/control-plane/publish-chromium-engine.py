@@ -133,12 +133,12 @@ def publish(args):
             "sourceCommit": run("git", "-C", repo, "rev-parse", "HEAD", capture_output=True).stdout.strip()}, indent=2) + "\n")
         purpose = ("an unpublished candidate for review. Release packaging never reads it; a maintainer publishes "
                    f"the engine as `{chromium_engine.release_tag(key)}`" if args.candidate else "for release packaging")
-        notes = (f"Chromium {lock['chromium']['version']} with Crest's native host, {purpose}.\n\n"
+        notes = (f"Chromium {lock['chromium']['version']} with Arma's native host, {purpose}.\n\n"
                  f"Engine key `{key}`, computed by `Scripts/control-plane/chromium_engine.py` over the "
                  f"engine inputs of commit `{run('git', '-C', repo, 'rev-parse', 'HEAD', capture_output=True).stdout.strip()}`.\n"
-                 "This is not an installable browser; releases package it with Crest's UI and sign it.")
+                 "This is not an installable browser; releases package it with Arma's UI and sign it.")
         if existing.returncode != 0:
-            title = f"Crest Chromium engine {'candidate ' if args.candidate else ''}{key[:16]}"
+            title = f"Arma Chromium engine {'candidate ' if args.candidate else ''}{key[:16]}"
             run("gh", "release", "create", tag, "--repo", args.repository, "--draft", "--prerelease", "--latest=false",
                 "--title", title, "--notes", notes)
         # Only an unpublished draft can be resumed or replaced. The release becomes

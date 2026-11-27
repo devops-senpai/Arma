@@ -858,7 +858,7 @@ def published_engine(key, directory, repository):
         raise ValueError(f"{tag}, the engine to check profile upgrades from, is not published")
     # Engines published before universal builds name their architecture.
     names = {item["name"] for item in release.get("assets", []) if item.get("state") == "uploaded"}
-    archives = sorted(name for name in names if name.startswith(f"Crest-Chromium-Engine-{key[:16]}-")
+    archives = sorted(name for name in names if name.startswith(f"Arma-Chromium-Engine-{key[:16]}-")
                       and name.endswith(".zip") and f"{name}.sha256" in names)
     if not archives:
         raise ValueError(f"{tag} has no zipped engine with a checksum")

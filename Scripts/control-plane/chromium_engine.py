@@ -124,7 +124,8 @@ def candidate_tag(key: str) -> str:
 
 
 def asset_name(key: str) -> str:
-    return f"Crest-Chromium-Engine-{key[:16]}-universal.zip"
+    # Arma publishes its own engine under its own name.
+    return f"Arma-Chromium-Engine-{key[:16]}-universal.zip"
 
 
 def main():
