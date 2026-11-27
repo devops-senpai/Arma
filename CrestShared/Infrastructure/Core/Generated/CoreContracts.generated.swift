@@ -29422,7 +29422,7 @@ struct SpaceScheme: Hashable, Sendable {
     static let crestDefault = SpaceScheme(
         tag: 1,
         name: "crestDefault",
-        title: LocalizedStringResource("Crest Default"),
+        title: LocalizedStringResource("Classic"),
         look: SpaceBranding(
             colors: ColorPalette(
                 colors: [

@@ -13,7 +13,7 @@ struct BrowserBundledTheme: Identifiable, Sendable {
 
     static let crestDefault = BrowserBundledTheme(
         id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E0A", scheme: .crestDefault,
-        pitch: "Crest's own look: ink washing down into sky")
+        pitch: "The classic look: ink washing down into sky")
     // Crest's palettes as themes, in the order Crest offers them.
     static let blossom = BrowserBundledTheme(
         id: "A2C0B1E5-5A11-4C3B-9F1E-0A7C5B1D2E10", scheme: .blossom,

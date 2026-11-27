@@ -14,10 +14,10 @@ public sealed partial class SpaceScheme {
     private static readonly BrandColor PaperMuted = new(0.780, 0.792, 0.812);
     private static readonly BrandColor Parchment = new(0.965, 0.933, 0.859);
 
-    /// Crest's own look as a theme: ink washing down through dusk into sky,
+    /// The classic look as a theme: ink washing down through dusk into sky,
     /// the colors of Crest's mark, with the Space's icon in butter, its text in
     /// paper and its palette, popovers and controls on ink.
-    public static readonly SpaceScheme CrestDefault = new("crestDefault", "Crest Default", WashLook(
+    public static readonly SpaceScheme CrestDefault = new("crestDefault", "Classic", WashLook(
         [Tincture.CrestInk, Tincture.CrestDusk, Tincture.CrestSky], angle: 75, symbol: Tincture.CrestButter, new(
             Text: new(new(1, 0.992, 0.969), new(0.636, 0.648, 0.669)),
             Folders: null,
