@@ -174,10 +174,10 @@ struct MobileSelectedPageActionPort {
     /// Shares the active page's link from the share sheet, which points at
     /// `source`, a frame in the window, where it shows as a popover.
     func sharePage(from source: CGRect?) {
-        guard let link = activePage?.linkToCopy else { return }
+        guard let page = activePage, let link = page.linkToCopy else { return }
         MobileBrowserDialogPresenter.present(
-            UIActivityViewController(activityItems: [link.url], applicationActivities: nil), from: source,
-            fallback: {})
+            UIActivityViewController(activityItems: [link.url], applicationActivities: nil), in: page.webView.window,
+            from: source, fallback: {})
     }
 
     func printPage() {

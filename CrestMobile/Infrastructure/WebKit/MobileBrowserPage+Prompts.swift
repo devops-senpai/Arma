@@ -21,7 +21,7 @@ extension MobileBrowserPage: BrowserPromptPresenting {
         dismissal: BrowserPromptDismissal
     ) async -> BrowserHTTPAuthenticationPromptResponse? {
         await MobileBrowserDialogPresenter.presentHTTPAuthentication(
-            prompt: prompt, spaceName: spaceName, dismissal: dismissal)
+            prompt: prompt, spaceName: spaceName, in: webView.window, dismissal: dismissal)
     }
 }
 
@@ -31,7 +31,9 @@ extension MobileBrowserPage: BrowserScriptDialogPresenting {
     func presentAlert(
         _ question: ScriptDialogQuestion, request: URLRequest, dismissal: BrowserPromptDismissal, reply: @escaping Reply
     ) {
-        MobileBrowserDialogPresenter.presentAlert(message: question.message, request: request, dismissal: dismissal) {
+        MobileBrowserDialogPresenter.presentAlert(
+            message: question.message, request: request, in: webView.window, dismissal: dismissal
+        ) {
             reply(true, nil)
         }
     }
@@ -40,7 +42,7 @@ extension MobileBrowserPage: BrowserScriptDialogPresenting {
         _ question: ScriptDialogQuestion, request: URLRequest, dismissal: BrowserPromptDismissal, reply: @escaping Reply
     ) {
         MobileBrowserDialogPresenter.presentConfirmation(
-            message: question.message, request: request, dismissal: dismissal
+            message: question.message, request: request, in: webView.window, dismissal: dismissal
         ) {
             reply($0, nil)
         }
@@ -50,7 +52,8 @@ extension MobileBrowserPage: BrowserScriptDialogPresenting {
         _ question: ScriptDialogQuestion, request: URLRequest, dismissal: BrowserPromptDismissal, reply: @escaping Reply
     ) {
         MobileBrowserDialogPresenter.presentPrompt(
-            message: question.message, defaultText: question.defaultText, request: request, dismissal: dismissal
+            message: question.message, defaultText: question.defaultText, request: request, in: webView.window,
+            dismissal: dismissal
         ) { answer in
             reply(answer != nil, answer)
         }
