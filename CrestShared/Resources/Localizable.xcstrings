@@ -4305,12 +4305,6 @@
     "Command-click" : {
 
     },
-    "Command-click opens a new tab, or Option-click when Command opens Peek." : {
-
-    },
-    "Command-click opens a new tab, or Option-click when Command opens Peek. Hold Option to drag the link itself." : {
-
-    },
     "Comments" : {
 
     },
@@ -5849,9 +5843,6 @@
     "Division" : {
 
     },
-    "Do you want to try to reopen them?" : {
-
-    },
     "Dock Sidebar" : {
 
     },
@@ -5862,9 +5853,6 @@
 
     },
     "Don’t ask again until it disconnects" : {
-
-    },
-    "Don’t Reopen" : {
 
     },
     "Don't Share" : {
@@ -13071,12 +13059,6 @@
         }
       }
     },
-    "Shift (⇧)" : {
-
-    },
-    "Shift-click" : {
-
-    },
     "shift" : {
       "localizations" : {
         "ar" : {
@@ -14731,6 +14713,12 @@
           }
         }
       }
+    },
+    "The other key opens a new tab. Hold Option to drag the link itself." : {
+
+    },
+    "The other key opens the link in a new tab." : {
+
     },
     "The page could not be exported." : {
 
