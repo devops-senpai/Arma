@@ -10,6 +10,8 @@ namespace CrestCore.Contracts;
 /// <see cref="SymbolGradient"/> is the gradient the icon's <see cref="SymbolColor"/> runs on
 /// into, and <see cref="ColorGradients"/> the ones each of <see cref="Colors"/> runs on into,
 /// by index. Without them each color is plain, which is how every build before them draws it.
+/// <see cref="Dress"/> is what the look sets beyond these, such as its folders' and sidebar
+/// text's colors, or null for none.
 /// </summary>
 public sealed partial record SpaceBranding(
     ColorPalette Colors,
@@ -29,7 +31,8 @@ public sealed partial record SpaceBranding(
     bool? HasCustomAppearance,
     SpaceGradientKind? GradientKind = null,
     BrandGradient? SymbolGradient = null,
-    PaletteGradients? ColorGradients = null) {
+    PaletteGradients? ColorGradients = null,
+    SpaceDress? Dress = null) {
     #region Static Variables
 
     /// The rendering vocabulary every shipped build draws. A banner strength stored
