@@ -50,6 +50,8 @@ struct BrowserCredentialEdit: Sendable, CustomStringConvertible {
     var title: String
     var username: String
     var sites: [CredentialOrigin]
+    /// Whether the login also fills the hosts under its sites.
+    var includesSubdomains = false
     var password: String?
     var extras: BrowserCredentialExtras?
 

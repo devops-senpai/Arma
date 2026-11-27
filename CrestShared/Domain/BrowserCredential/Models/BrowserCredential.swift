@@ -23,7 +23,7 @@ struct BrowserCredential: Equatable, Sendable, CustomStringConvertible, CustomDe
                 username: descriptor.username, displayName: descriptor.displayName, createdAt: descriptor.createdAt,
                 updatedAt: descriptor.updatedAt, lastUsedAt: descriptor.lastUsedAt,
                 isSynchronizable: descriptor.isSynchronizable, sites: descriptor.sites,
-                passwordChangedAt: descriptor.passwordChangedAt),
+                passwordChangedAt: descriptor.passwordChangedAt, includesSubdomains: descriptor.includesSubdomains),
             password: password)
     }
 }
