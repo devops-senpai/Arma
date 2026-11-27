@@ -203,7 +203,7 @@ targets:
     sources:
       # Names this framework's composition, and becomes the packaged bundle's
       # marker for a host that starts without launch switches.
-      - path: CrestEngines/Chromium/Composition/Crest-Native-Host
+      - path: CrestEngines/Chromium/Composition/Arma-Native-Host
         buildPhase: resources
     scheme: {}
   CrestNativeCore:

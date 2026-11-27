@@ -96,8 +96,8 @@ codesign --verify --deep --strict "$app"
 # The Mac app is universal: every slice a release ships holds both architectures.
 for arch in arm64 x86_64; do
     lipo "$app/Contents/MacOS/$(defaults read "$app/Contents/Info" CFBundleExecutable)" -verify_arch "$arch"
-    lipo "$app/Contents/Frameworks/CrestCore.Native.dylib" -verify_arch "$arch"
-    lipo "$app/Contents/Frameworks/CrestChromiumUIProduct.framework/CrestChromiumUIProduct" -verify_arch "$arch"
+    lipo "$app/Contents/Frameworks/ArmaCore.dylib" -verify_arch "$arch"
+    lipo "$app/Contents/Frameworks/ArmaChromiumUI.framework/ArmaChromiumUI" -verify_arch "$arch"
 done
 print -r -- "$version" > "$build/last-version"
 step "built and signed $app ($(defaults read "$app/Contents/Info" CFBundleShortVersionString))"

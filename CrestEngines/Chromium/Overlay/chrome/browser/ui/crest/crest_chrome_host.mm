@@ -1221,7 +1221,7 @@ bool HasBundleMarker(NSString* name) {
 // ones Crest cannot add switches to: Finder, login items, the default-browser
 // role and Dock reopen. Experiment bundles keep requiring the explicit switch.
 bool IsProductBundle() {
-  static const bool product = HasBundleMarker(@"Crest-Native-Host");
+  static const bool product = HasBundleMarker(@"Arma-Native-Host");
   return product;
 }
 }  // namespace
@@ -1240,7 +1240,7 @@ void EnsureCrestUIStarted(Browser* browser) {
   // The review and product compositions keep separate framework names so a
   // package can only ever contain the one it was assembled from.
   NSBundle* bundle = nil;
-  for (NSString* name in @[ @"CrestChromiumUI.framework", @"CrestChromiumUIProduct.framework" ]) {
+  for (NSString* name in @[ @"CrestChromiumUI.framework", @"ArmaChromiumUI.framework" ]) {
     NSString* path = [NSBundle.mainBundle.privateFrameworksPath stringByAppendingPathComponent:name];
     if (![NSFileManager.defaultManager fileExistsAtPath:path]) continue;
     bundle = [NSBundle bundleWithPath:path];

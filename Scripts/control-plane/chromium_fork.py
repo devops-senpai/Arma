@@ -52,9 +52,9 @@ MACH_O_MAGIC = (bytes.fromhex("cafebabe"), bytes.fromhex("cffaedfe"), bytes.from
 LAUNCH_SENTINEL = b"crest-browser-launch"
 # The resources Crest's entry point reads to decide how a launch starts: a
 # product names its own profile folder, an experiment requires one.
-PRODUCT_HOST = "Crest-Native-Host"
+PRODUCT_HOST = "Arma-Native-Host"
 EXPERIMENT_HOST = "Crest-Isolated-Experiment"
-HOST_MARKERS = ("Crest-App-Owned-Host", PRODUCT_HOST, EXPERIMENT_HOST)
+HOST_MARKERS = ("Arma-App-Owned-Host", PRODUCT_HOST, EXPERIMENT_HOST)
 # The status Crest's entry point exits with when an experiment names no profile folder.
 EXPERIMENT_REFUSED = 64
 # Under a home folder: where a product keeps its engine profiles, and Chromium's

@@ -121,7 +121,7 @@ __attribute__((visibility("default"))) int main(int argc, char* argv[]) {
   // framework is loaded and therefore before any profile is read.
   std::string product_user_data_switch;
   std::vector<char*> product_argv;
-  const auto product_marker = directory + "/../Resources/Crest-Native-Host";
+  const auto product_marker = directory + "/../Resources/Arma-Native-Host";
   const char* home = getenv("HOME");
   if (!named_profile_root && home && *home &&
       access(product_marker.c_str(), F_OK) == 0) {
@@ -141,10 +141,11 @@ __attribute__((visibility("default"))) int main(int argc, char* argv[]) {
   // WebKit-only browsing never loads the Chromium framework below.
   std::vector<char*> native_argv;
   std::string native_switch = "--crest-app-owned-host";
-  if (access((directory + "/../Resources/Crest-App-Owned-Host").c_str(),
+  if (access((directory + "/../Resources/Arma-App-Owned-Host").c_str(),
              F_OK) == 0) {
     void* ui = nullptr;
-    for (const char* name : {"CrestChromiumUI", "CrestChromiumUIProduct"}) {
+    // Arma's product ships its UI framework under Arma's name.
+    for (const char* name : {"CrestChromiumUI", "ArmaChromiumUI"}) {
       const std::string path =
           directory + "/../Frameworks/" + name + ".framework/" + name;
       if (access(path.c_str(), F_OK) != 0) {

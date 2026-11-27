@@ -13316,7 +13316,6 @@
 		E93A9B3EB036584AFB32C737 /* BrowserSidebarReorderGap.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4D77C0AF1A7DE92480CE09 /* BrowserSidebarReorderGap.swift */; };
 		E9443C7C302ED5E1B874E671 /* SpacePageStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2042A35AD7F9F59670873724 /* SpacePageStrip.swift */; };
 		E94BC96B99C3145A02861B1A /* FindExecuting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81AB8843029042B8CC4A261 /* FindExecuting.swift */; };
-		E94E7B9FDBDA7FA3B5C06A0E /* Crest-Native-Host in Resources */ = {isa = PBXBuildFile; fileRef = D7CE34E718E488B9DFEDA688 /* Crest-Native-Host */; };
 		E94FF17711B79EFD445D341B /* BrowserTransientBrowsingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18963BB4C816EAF41002C057 /* BrowserTransientBrowsingCoordinator.swift */; };
 		E951B4765F5E531709403CE1 /* BrowserTranslationToolbarControlStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9942A34616DAFA80C345EAC /* BrowserTranslationToolbarControlStyle.swift */; };
 		E95299C8E8ACD3B13CBBF45D /* BrowserLookAndFeelPagePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A18C0F4CD5BA82CC29522A9 /* BrowserLookAndFeelPagePreview.swift */; };
@@ -13565,6 +13564,7 @@
 		ED449182666738CDCEED5F74 /* BrowserWindowTitleBarSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5254B98B9C00246F90A2DB6 /* BrowserWindowTitleBarSurface.swift */; };
 		ED4667CFF8356CC1284B9AA7 /* BrowserSetupCompleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B409B7CB7717B8F426907D /* BrowserSetupCompleted.swift */; };
 		ED4736D6568FAA73E06903E6 /* BrowserPaletteResultsSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0897173082E0D740C64DE5F6 /* BrowserPaletteResultsSettingsSection.swift */; };
+		ED5002A3B902FAE59D460D59 /* Arma-Native-Host in Resources */ = {isa = PBXBuildFile; fileRef = 5657E9817AB7772F0D5AE2C5 /* Arma-Native-Host */; };
 		ED5587974E6BA8F677603C69 /* BrowserTabDragPreviewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093DF2C9720898A9A8325EBB /* BrowserTabDragPreviewLayout.swift */; };
 		ED57ACD7230FD98AC11A6373 /* BrowserSpaceBrowsingPreferencePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 413826DC11A6ACF69BFF0821 /* BrowserSpaceBrowsingPreferencePicker.swift */; };
 		ED5B58E6294D06F2B542ED7F /* SiteZoomChanged+CoreState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9B5284B0BA47F74F539D3A /* SiteZoomChanged+CoreState.swift */; };
@@ -15806,6 +15806,7 @@
 		56386BAE3E352FA00DC07E3C /* CrestDisclosureIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrestDisclosureIcon.swift; sourceTree = "<group>"; };
 		564A7D64EB03A8B7122AD0C7 /* BrowserPeekDestinationPrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserPeekDestinationPrimaryButton.swift; sourceTree = "<group>"; };
 		56556313C7ADD63AE5A95B56 /* BrowserPlatformSidebarReorderLiftGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserPlatformSidebarReorderLiftGesture.swift; sourceTree = "<group>"; };
+		5657E9817AB7772F0D5AE2C5 /* Arma-Native-Host */ = {isa = PBXFileReference; path = "Arma-Native-Host"; sourceTree = "<group>"; };
 		5664C74673519E91312C1F12 /* BrowserCommandPaletteOverlayTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserCommandPaletteOverlayTransition.swift; sourceTree = "<group>"; };
 		566A961AE522EB3B0B9EF682 /* BrowserFolderHighlightSurface+Dress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserFolderHighlightSurface+Dress.swift"; sourceTree = "<group>"; };
 		56750FA1F1E3BF6F21DF4D52 /* BrowserPageDeveloperPanelClosed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserPageDeveloperPanelClosed.swift; sourceTree = "<group>"; };
@@ -17338,7 +17339,6 @@
 		D7892B382A9CB1BAEC9DEF88 /* BrowserFolderKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserFolderKind.swift; sourceTree = "<group>"; };
 		D78BBFD26C9DAFEAC8FFA720 /* BrowserPagePoolRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserPagePoolRegistry.swift; sourceTree = "<group>"; };
 		D7B0510D0787F6C7A101B5F3 /* BrowserPageTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserPageTab.swift; sourceTree = "<group>"; };
-		D7CE34E718E488B9DFEDA688 /* Crest-Native-Host */ = {isa = PBXFileReference; path = "Crest-Native-Host"; sourceTree = "<group>"; };
 		D7E439EA27A9F919ED8C046B /* BrowserCredentialSavePromptContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserCredentialSavePromptContent.swift; sourceTree = "<group>"; };
 		D7E501B5C4F7341EA52F148B /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		D7E680268AAC110D79543E37 /* MobileBrowserTransientUnlockedContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileBrowserTransientUnlockedContent.swift; sourceTree = "<group>"; };
@@ -23073,7 +23073,7 @@
 		7C8E882DEDD8624FBDEDCDA2 /* Composition */ = {
 			isa = PBXGroup;
 			children = (
-				D7CE34E718E488B9DFEDA688 /* Crest-Native-Host */,
+				5657E9817AB7772F0D5AE2C5 /* Arma-Native-Host */,
 			);
 			name = Composition;
 			path = CrestEngines/Chromium/Composition;
@@ -28849,8 +28849,8 @@
 				47DEFE18AF1764BC43DA5B29 /* AlloVariable-OFL.txt in Resources */,
 				136466597664A9B303023D9A /* AlloVariable.ttf in Resources */,
 				214FF7C0E7D8298F082F4E16 /* AppIconPreviews.xcassets in Resources */,
+				ED5002A3B902FAE59D460D59 /* Arma-Native-Host in Resources */,
 				0B3C65673B5E6E4B7D3DAB40 /* Crest-Info.plist in Resources */,
-				E94E7B9FDBDA7FA3B5C06A0E /* Crest-Native-Host in Resources */,
 				8AE0F9FE7E93BFBE961E3747 /* Crest.icon in Resources */,
 				7A57276002706F8D7CCF7594 /* CrestDragon.icon in Resources */,
 				796C66719CE0FB29EF7BFD4E /* CrestHeraldry.xcassets in Resources */,
