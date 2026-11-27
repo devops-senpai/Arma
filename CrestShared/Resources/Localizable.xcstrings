@@ -3411,6 +3411,9 @@
     "Browsing and startup" : {
 
     },
+    "Built on ungoogled-chromium, with Google integrations removed. Smooth browsing and extensions." : {
+
+    },
     "Cache" : {
 
     },
@@ -3836,9 +3839,6 @@
       "comment" : "The name of a browser engine. Keep the product name as it is."
     },
     "Chromium WebKit hybrid default browser engine websites rules protected video DRM compatibility" : {
-
-    },
-    "Chromium without Google’s data collection. Smooth browsing and extensions." : {
 
     },
     "Cinder" : {
@@ -10893,9 +10893,6 @@
     "Profiles, bookmarks, open tabs, and passwords" : {
       "comment" : "What importing from another browser brings. Keep product names as they are."
     },
-    "Protected video, with WebKit fallback" : {
-
-    },
     "Pull and Merge" : {
 
     },
@@ -16485,6 +16482,9 @@
       }
     },
     "WebKit Chromium experimental preview testable developer stable runtime flags features" : {
+
+    },
+    "WebKit fallback for protected video" : {
 
     },
     "Webpages" : {
