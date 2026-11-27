@@ -19,14 +19,6 @@ Someone who isn't a vetted contributor can have only one pull request open
 at a time (see "Who can contribute code" in `CONTRIBUTING.md`). Keep their
 work in that one pull request.
 
-## Find the code before reading it
-
-Start each task at `ROUTING.md`: find the row for the kind of change, then
-read the root `CONTEXT.md` and the `CONTEXT.md` of each folder you touch. They
-name the files and documents to load and the ones to skip. When a change adds,
-moves or removes something a folder's `CONTEXT.md` lists, update that file in
-the same commit.
-
 ## Addresses leaving Crest
 
 Every address Crest hands to another app (copying, sharing, Markdown,
@@ -133,9 +125,11 @@ has the details.
 
 ## Arma fork
 
-Arma is a fork of pauljoda/Crest. Where this section and the sections above
+Arma is a fork of crest-browser/Crest. Where this section and the sections above
 or the contribution skill differ, this section wins; everything above is
 upstream's text, kept verbatim so syncs merge cleanly.
+
+### Versioning and release notes
 
 - A change never edits `Config/Version.xcconfig`; it changes only as upstream
   wrote it. Each build's patch version is derived from history:
@@ -150,3 +144,92 @@ upstream's text, kept verbatim so syncs merge cleanly.
   delete an existing entry or entry file.
 - Stage the task-owned files with the entry file and run
   `Scripts/check-version.sh --fix-commit` before committing.
+
+### Find the code before reading it
+
+Start each task at `ROUTING.md`: find the row for the kind of change, then
+read the root `CONTEXT.md` and the `CONTEXT.md` of each folder you touch. They
+name the files and documents to load and the ones to skip. When a change adds,
+moves or removes something a folder's `CONTEXT.md` lists, update that file in
+the same commit.
+
+### Keeping up with upstream
+
+Arma is a fork of crest-browser/Crest. Its `main` is upstream's `main` plus one
+commit per fork change, with no merge commits: each fix to Crest's code is
+its own commit, and each feature Arma adds is one commit with every later
+change to it folded in. `Documentation/ForkRunbook.md` has the steps and
+`Taskfile.yml` the commands (`task --list`).
+
+- Sync with `task sync` (`Scripts/fork/sync.sh`). It merges upstream on a
+  temporary branch with
+  `Scripts/sync-upstream.sh` (which takes upstream's copies of
+  `Config/Version.xcconfig` and the release-note version files, regenerates
+  generated files and runs the lint, script tests and version check),
+  replays each fork commit onto upstream's `main` with its
+  `fixup!` commits folded in, and checks the result matches the merge. Anything that conflicts in the merge
+  it leaves for a person.
+- A change to an existing fork feature is committed with
+  `task fixup -- '<that commit's subject>'`, so it folds into the feature.
+- Fork work never edits `Config/Version.xcconfig` or a release-note version
+  file under `Documentation/ReleaseNotes/<major>.<minor>/`. Those change only
+  as upstream wrote them, through a merge; a fork change adds its note as
+  `Documentation/ReleaseNotes/<id>.json`. This keeps them out of every merge
+  conflict.
+- A change that adds something over upstream adds one line to the README's
+  "What Arma adds" list in the same commit, under its kind.
+- Resolve a code conflict by reading both sides' commits. When upstream fixed
+  what a fork commit fixed, keep upstream's version and drop the fork's.
+- Arma builds its own Chromium engine. Its engine inputs differ from
+  upstream's: the patches, overlay, host header, source lock, host inputs
+  and control-plane build scripts under `CrestEngines/Chromium` and
+  `Scripts/control-plane`, and `CrestContracts/include/crest_engine_contract.h`
+  (which carries Arma's third engine kind, Servo). Upstream's prebuilt engine
+  therefore no longer matches; `Scripts/sync-upstream-engine.sh` is retired
+  for this fork. After any change to those inputs, or a sync that changes
+  `Scripts/control-plane/chromium_engine.py tag`, build with
+  `Scripts/control-plane/chromium-fork.py --workspace ~/Dev/CrestChromium build`
+  on the build Mac and publish with `publish-chromium-engine.py` to this
+  repository. Resolve conflicts in those inputs by keeping upstream's change
+  and re-applying Arma's on top.
+- Arma builds its own content filter too: the crate is `arma-content-filter`,
+  its library `libarma_content_filter.a` and its header
+  `include/arma_content_filter.h`. A sync that changes the crate or its
+  recipe needs `Scripts/control-plane/content_filter.py build` (the pinned
+  Rust toolchain) and `publish-content-filter.py` to this repository; never
+  mirror upstream's archive.
+- Everything Arma ships or publishes says Arma, never Crest: release titles,
+  notes, asset and zip names, the files inside them and the app bundle's own
+  files (`ArmaChromiumUI.framework`, `ArmaCore.dylib`,
+  `ArmaDockTilePlugin.docktileplugin`, `Arma.icns`, the `Arma-*` markers).
+  Strings that name the app say Arma through `Scripts/fork/brand-strings.py`;
+  literals outside the catalog say Arma in source. Only the README's
+  attribution, non-affiliation and licence notes name Crest. Source paths and
+  identifiers stay as upstream wrote them.
+
+### Fix it the way upstream would
+
+Arma's code should read like Paul Davis's, so it merges cleanly and stays
+native. His fixes share a shape; follow it.
+
+- **Find the exact cause first.** Name the mechanism, not the symptom: which
+  view, which event, which framework behavior. "`.onDrag` in a `List` starts a
+  drag after one point and the drag session takes the click's mouse-up" is a
+  cause; "the row sometimes ignores clicks" is not.
+- **Then make the smallest native change at that spot.** Swap the one API
+  that misbehaves for the one the framework meant for the job before touching
+  anything around it: `.onDrag` became `.itemProvider` (#1010), a
+  `LazyVStack` became a `VStack` (#927), one `.fixedSize` held a row to its
+  height (#933). Look up the alternative modifiers in Apple's documentation
+  before deciding a container is broken.
+- **Don't rebuild a container to dodge one modifier.** Replacing a `List`,
+  hand-rolling drag or focus, or reimplementing what AppKit or SwiftUI already
+  does is a last resort, and only after the narrow change has been tried and
+  shown not to work. If two symptoms appear together, fix each at its own
+  cause; don't pick a rewrite because it covers both.
+- **Check upstream before a large fix.** Read Paul's recent commits in the
+  same area; he may have fixed it, or his fix shows the native route.
+- **Comment the why at the change.** A short comment where the code changed
+  says what the framework does and why this API avoids it, as #1010's does.
+- **Say what was and wasn't verified.** The commit body states the cause,
+  the change, and the validation that ran, and names what was not run.
