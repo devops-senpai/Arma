@@ -33,6 +33,14 @@ final class BrowserChromeState {
         set { publish(newValue, into: \.isFloatingSidebarPresentedStorage, as: \.isFloatingSidebarPresented) }
     }
     @ObservationIgnored private var isFloatingSidebarPresentedStorage = false
+    /// Whether the floating sidebar stays out until the next click outside
+    /// it, as a command that shows something in the sidebar leaves it, rather
+    /// than going when the pointer leaves it.
+    var holdsFloatingSidebar: Bool {
+        get { observed(\.holdsFloatingSidebarStorage, as: \.holdsFloatingSidebar) }
+        set { publish(newValue, into: \.holdsFloatingSidebarStorage, as: \.holdsFloatingSidebar) }
+    }
+    @ObservationIgnored private var holdsFloatingSidebarStorage = false
     /// Whether a page shows alone in full screen with the sidebar hover area
     /// still live, where a docked sidebar gives way to the edge reveal.
     var revealsSidebarOverFullscreenPage: Bool {

@@ -69,6 +69,9 @@ final class BrowserRootModel {
     /// Whether the floating sidebar came out because the pointer reached the
     /// window edge, rather than from a click, command or page request.
     private(set) var isFloatingSidebarRevealedByPointer = false
+    /// Watches for the click outside the sidebar that puts away a sidebar
+    /// the chrome holds out, while it holds one.
+    @ObservationIgnored var floatingSidebarHoldMonitor: Any?
     private var sidebarMorphRevision = 0
     /// Cancels or awaits the current sidebar transition.
     @ObservationIgnored private(set) var sidebarMorphTask: Task<Void, Never>?
@@ -519,6 +522,7 @@ extension BrowserRootModel {
     func floatingSidebarPresentationChanged() {
         guard !isFloatingSidebarPresented else { return }
         isFloatingSidebarRevealedByPointer = false
+        chrome.holdsFloatingSidebar = false
         endSpaceShortcutSidebarHold()
     }
 
@@ -550,6 +554,7 @@ extension BrowserRootModel {
         guard !isSidebarMorphing,
             spaceShortcutSidebarTask == nil,
             !isSidebarSurfaceHovered,
+            !chrome.holdsFloatingSidebar,
             !chrome.utilityPresentation.isSidebarInteractionActive,
             !sidebarInteraction.tabPreview.isPointerOnShownCard
         else { return }
