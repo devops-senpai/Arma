@@ -1,3 +1,5 @@
+import Foundation
+
 enum BrowserCredentialChromePresentation: Equatable {
     case none
     case save(BrowserCredentialSaveCandidate)
@@ -6,11 +8,15 @@ enum BrowserCredentialChromePresentation: Equatable {
     case codes(BrowserCredentialFillRequest)
     case autofill(BrowserCredentialFillRequest)
     case saveAutofill(BrowserAutofillSaveCandidate)
+    /// The offer to pause the prompts on the page, after the person closed
+    /// one, which shows only while no other prompt does.
+    case pauseOffer(UUID)
 
     static func resolve(
         saveCandidate: BrowserCredentialSaveCandidate?,
         fillRequest: BrowserCredentialFillRequest?,
-        autofillSaveCandidate: BrowserAutofillSaveCandidate? = nil
+        autofillSaveCandidate: BrowserAutofillSaveCandidate? = nil,
+        pauseOffer: UUID? = nil
     ) -> BrowserCredentialChromePresentation {
         if let saveCandidate {
             return .save(saveCandidate)
@@ -18,7 +24,7 @@ enum BrowserCredentialChromePresentation: Equatable {
         if let autofillSaveCandidate {
             return .saveAutofill(autofillSaveCandidate)
         }
-        guard let fillRequest else { return .none }
+        guard let fillRequest else { return pauseOffer.map(Self.pauseOffer) ?? .none }
         if fillRequest.codeFields != nil { return .codes(fillRequest) }
         if fillRequest.autofill != nil { return .autofill(fillRequest) }
         switch fillRequest.passwordKind {
@@ -34,7 +40,7 @@ enum BrowserCredentialChromePresentation: Equatable {
     /// to point at.
     var fillRequest: BrowserCredentialFillRequest? {
         switch self {
-        case .none, .save, .saveAutofill:
+        case .none, .save, .saveAutofill, .pauseOffer:
             nil
         case .strongPassword(let request), .suggestions(let request), .codes(let request), .autofill(let request):
             request

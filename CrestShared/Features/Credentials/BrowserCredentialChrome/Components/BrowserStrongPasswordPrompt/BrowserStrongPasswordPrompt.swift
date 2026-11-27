@@ -44,7 +44,7 @@ struct BrowserStrongPasswordPrompt: View {
                 offers: offers,
                 selectedIndex: selectedIndex,
                 metrics: metrics,
-                dismiss: port.dismiss,
+                dismiss: port.closePrompt,
                 openPasswords: port.openPasswords,
                 redraw: redraw,
                 choose: choose
@@ -93,7 +93,7 @@ struct BrowserStrongPasswordPrompt: View {
     /// offers, Return takes the selected one, Escape closes the prompt.
     private func answer(_ key: BrowserCredentialPopupKey) {
         if key.dismissesPopup {
-            port.dismiss()
+            port.closePrompt()
         } else if key.choosesSelection {
             choose(selectedIndex)
         } else if !offers.isEmpty {

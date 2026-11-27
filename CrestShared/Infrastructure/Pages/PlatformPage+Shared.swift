@@ -107,6 +107,32 @@ extension BrowserPlatformPage {
         credentialState.reofferHeldSaveCandidate()
     }
 
+    // MARK: - Actions - Pausing credentials
+
+    /// Whether Arma's password prompts are paused on this page.
+    var credentialPromptsArePaused: Bool { credentialState.isPaused }
+
+    /// The offer to pause the prompts on this page, while it stands.
+    var credentialPauseOffer: UUID? { credentialState.pauseOffer }
+
+    /// The person closed a prompt: it goes, the prompts stay away a moment,
+    /// and the page offers to pause them.
+    func closeCredentialPrompt() {
+        credentialState.snooze()
+    }
+
+    func pauseCredentialPrompts(for length: BrowserCredentialPauseLength) {
+        credentialState.pause(for: length)
+    }
+
+    func resumeCredentialPrompts() {
+        credentialState.resume()
+    }
+
+    func dismissCredentialPauseOffer() {
+        credentialState.dismissPauseOffer()
+    }
+
     func setCredentialAccessEnabled(_ isEnabled: Bool) {
         credentialSession.setEnabled(isEnabled)
     }
