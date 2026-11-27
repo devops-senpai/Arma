@@ -25,13 +25,22 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
-import sys
 
 from chromium_fork import ENGINE, REPO, read_json, run
 import chromium_engine
 
-sys.path.insert(0, str(REPO / "Scripts"))
-import release_note_catalog  # noqa: E402
+
+def release_note_file(directory, identifier, note):
+    """The path and text of the update's release-note entry file.
+
+    Each entry is its own file, so the update never edits a file another
+    change also edits. An id the catalog already uses is refused.
+    """
+    path = directory / f"{identifier}.json"
+    if path.exists():
+        raise ValueError("This upstream update already has a release note")
+    return path, json.dumps(note, indent=2, ensure_ascii=False) + "\n"
+
 
 UPDATE_BRANCH = "codex/chromium-upstream-"
 PREFLIGHT_BRANCH = "codex/chromium-preflight-"
@@ -134,15 +143,20 @@ def main():
     run("git", "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
     staged = sorted(changed)
     if args.receipt:
-        # A built update reaches people, so it moves Crest's version and says what changed.
-        run(REPO / "Scripts/set-version.sh", "--patch")
-        crest_version = release_note_catalog.Version.from_version_file(
-            (REPO / "Config/Version.xcconfig").read_text(), "Config/Version.xcconfig")
-        note = {"id": f"chromium-upstream-{version.replace('.', '-')}-{args.base_sha[:12]}", "category": "fixed",
+        # A built update reaches people, so it says what changed. The version
+        # is derived from history, so the update adds only its release-note
+        # entry file.
+        entry = f"chromium-upstream-{version.replace('.', '-')}-{args.base_sha[:12]}"
+        note = {"category": "fixed",
                 "message": f"Chromium is updated to {version} with upstream security and compatibility fixes.",
                 "platforms": ["mac"]}
-        notes_path = release_note_catalog.append_entry(REPO, crest_version, note)
-        staged += ["Config/Version.xcconfig", str(notes_path.relative_to(REPO))]
+        try:
+            note_path, note_text = release_note_file(REPO / "Documentation/ReleaseNotes", entry, note)
+        except ValueError as error:
+            parser.error(str(error))
+        note_path.parent.mkdir(parents=True, exist_ok=True)
+        note_path.write_text(note_text)
+        staged += [str(note_path.relative_to(REPO))]
     if staged:
         run("git", "add", *staged)
     if args.receipt:
