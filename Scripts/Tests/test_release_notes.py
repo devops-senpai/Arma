@@ -53,7 +53,7 @@ class ReleaseNotesTests(unittest.TestCase):
     def generate_notes(
         self,
         current_commit: str,
-        previous_entry: str,
+        previous_entry: str | None,
         previous_commit: str | None = None,
         channel: str = "nightly",
         release_tag: str | None = None,
@@ -69,11 +69,11 @@ class ReleaseNotesTests(unittest.TestCase):
             channel,
             "--current-ref",
             current_commit,
-            "--previous-entry",
-            previous_entry,
             "--asset-name",
             "Installer-Crest-nightly-test-arm64.dmg",
         ]
+        if previous_entry is not None:
+            arguments.extend(["--previous-entry", previous_entry])
         if previous_commit is not None:
             arguments.extend(["--previous-ref", previous_commit])
         if release_tag is not None:
@@ -166,6 +166,38 @@ class ReleaseNotesTests(unittest.TestCase):
         self.assertEqual(nightly.returncode, 0, nightly.stderr)
         self.assertNotIn("brings browsing profiles", nightly.stdout)
         self.assertIn("- Create separate browsing profiles", nightly.stdout)
+
+
+    def commit_entry(self, identifier: str, category: str, message: str) -> str:
+        path = self.repository / "Documentation" / "ReleaseNotes" / f"{identifier}.json"
+        path.write_text(json.dumps({"category": category, "message": message}) + "\n")
+        self.git("add", ".")
+        self.git("commit", "-m", f"fix: private subject for {identifier}")
+        return self.git("rev-parse", "HEAD")
+
+    def test_entry_files_reach_both_the_ref_and_cursor_modes(self) -> None:
+        previous_commit = self.commit_version(
+            "0.5.25", [{"id": "existing-change", "category": "fixed", "message": "Keep existing behavior reliable"}])
+        # One entry arrives through a merge commit, one through a direct
+        # commit, and an internal one stays private.
+        self.git("switch", "-q", "-c", "topic")
+        self.commit_entry("profiles", "new", "Create separate browsing profiles")
+        self.git("switch", "-q", "main")
+        self.git("merge", "-q", "--no-ff", "-m", "Merge profiles", "topic")
+        self.commit_entry("plumbing", "internal", "Move release notes into files")
+        current_commit = self.commit_entry("navigation", "fixed", "Keep navigation controls in sync")
+
+        by_ref = self.generate_notes(current_commit, None, previous_commit)
+        self.assertEqual(by_ref.returncode, 0, by_ref.stderr)
+        self.assertIn("- Create separate browsing profiles", by_ref.stdout)
+        self.assertIn("- Keep navigation controls in sync", by_ref.stdout)
+        self.assertNotIn("Keep existing behavior reliable", by_ref.stdout)
+        self.assertNotIn("Move release notes into files", by_ref.stdout)
+
+        by_cursor = self.generate_notes(current_commit, "profiles")
+        self.assertEqual(by_cursor.returncode, 0, by_cursor.stderr)
+        self.assertNotIn("Create separate browsing profiles", by_cursor.stdout)
+        self.assertIn("- Keep navigation controls in sync", by_cursor.stdout)
 
 
 if __name__ == "__main__":
