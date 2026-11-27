@@ -73,11 +73,12 @@ def publish(args):
         if path.is_file() and (source / path.relative_to(overlay)).read_bytes() != path.read_bytes():
             raise SystemExit(f"The checkout's overlay differs from the branch: {path.relative_to(overlay)}")
     headers = [repo / "CrestEngines/Chromium/Apple/CrestChromiumHost.h",
-               repo / "CrestCore/native/ContentFilter/include/crest_content_filter.h"]
+               repo / "CrestCore/native/ContentFilter/include/arma_content_filter.h"]
     headers += [repo / "CrestContracts/include" / name for name in
                 ("crest_core.h", "crest_app.h", "crest_engine.h", "crest_engine_contract.h")]
     for header in headers:
-        if (source / "chrome/browser/ui/crest" / header.name).read_bytes() != header.read_bytes():
+        installed = {"arma_content_filter.h": "crest_content_filter.h"}.get(header.name, header.name)
+        if (source / "chrome/browser/ui/crest" / installed).read_bytes() != header.read_bytes():
             raise SystemExit(f"The checkout's contract header differs from the branch: {header.name}")
 
     # And every architecture's build must have nothing left to do.
