@@ -11,6 +11,7 @@ final class BrowserCredentialSession {
     /// that the core chose them from, and the frame.
     typealias FillTarget = (formID: String, readingID: Int, frame: BrowserContentFrame)
     typealias Evaluate = @MainActor (String, [String: Any], BrowserContentFrame) async throws -> Any?
+    typealias MainFrameEvaluate = @MainActor (String, [String: Any]) async throws -> Any?
 
     let state: BrowserCredentialPageState<FillTarget>
     private(set) var isEnabled: Bool

@@ -442,6 +442,28 @@
       }
       return true;
     },
+    // A saved login a person chose outside the page, such as from the
+    // command palette: the document's first visible field for a
+    // current password, and the visible text field before it in its
+    // form for the username.
+    fillFirstLogin(username, password) {
+      const shown = Array.from(document.querySelectorAll("input[type=password]")).filter((input) =>
+        !input.disabled && !input.readOnly && isVisible(input));
+      const passwordInput = shown.find((input) =>
+        !/new-password/i.test(input.getAttribute("autocomplete") || "")) || (shown.length === 1 ? shown[0] : null);
+      if (!passwordInput) return false;
+      const root = rootFor(passwordInput) || document;
+      const textTypes = ["text", "email", "tel", ""];
+      const usernameInput = Array.from(root.querySelectorAll("input")).filter((input) =>
+        textTypes.includes((input.getAttribute("type") || "").toLowerCase()) && !input.disabled && !input.readOnly
+          && isVisible(input)
+          && (input.compareDocumentPosition(passwordInput) & Node.DOCUMENT_POSITION_FOLLOWING)).pop();
+      if (usernameInput) setInputValue(usernameInput, username);
+      setInputValue(passwordInput, password);
+      fillingFocus = true;
+      try { passwordInput.focus(); } finally { fillingFocus = false; }
+      return true;
+    },
     // Moves focus to the form control before, -1, or after, 1, the
     // focused one, as the phone's previous and next buttons do.
     focusAdjacent(step) {
