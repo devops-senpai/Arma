@@ -43,9 +43,9 @@ public sealed record PasswordRequirements(int? MinLength, int? MaxLength, string
     /// asks for it and the site allows it, and otherwise random characters
     /// from what the site allows, of the default length or the nearest the
     /// site permits.
-    internal StrongPasswordRecipe Recipe(PasswordStyle style) {
+    internal StrongPasswordRecipe Recipe(PasswordStyle style, PasswordGeneration? generation = null) {
         var rules = Read(Rules);
-        var recipe = Composed(rules, style);
+        var recipe = Composed(rules, style, generation);
         string? symbols = rules.Allowed is { } allowed ? new string([.. allowed.Where(character => !char.IsAsciiLetterOrDigit(character))
             .Order()]) : null;
         return recipe with {
@@ -60,7 +60,7 @@ public sealed record PasswordRequirements(int? MinLength, int? MaxLength, string
 
     private static int? Smaller(int? first, int? second) => first is null ? second : second is null ? first : Math.Min(first.Value, second.Value);
 
-    private StrongPasswordRecipe Composed(ReadRules rules, PasswordStyle style) {
+    private StrongPasswordRecipe Composed(ReadRules rules, PasswordStyle style, PasswordGeneration? generation) {
         int shortest = Math.Max(MinLength ?? 0, rules.MinLength ?? 0);
         int longest = Math.Min(StrongPasswordRecipe.MaximumLength,
             Math.Min(MaxLength ?? StrongPasswordRecipe.MaximumLength, rules.MaxLength ?? StrongPasswordRecipe.MaximumLength));
@@ -68,6 +68,21 @@ public sealed record PasswordRequirements(int? MinLength, int? MaxLength, string
         // rather than bent below the site's own minimum.
         if (longest < StrongPasswordRecipe.ShortestLength || shortest > longest) throw new Rejected(Unmakeable);
         int maxConsecutive = rules.MaxConsecutive ?? 0;
+        // The person's choice of length and characters, kept to what the site
+        // allows: its length within the choice's own bounds and then the
+        // site's, and each chosen group cut to the characters the site names,
+        // every one required once.
+        if (generation is { } chosen) {
+            int wanted = Math.Clamp(chosen.Length, PasswordGeneration.MinimumLength, PasswordGeneration.MaximumLength);
+            int chosenLength = Math.Clamp(wanted, Math.Max(shortest, StrongPasswordRecipe.ShortestLength), longest);
+            IReadOnlyList<string> chosenGroups = chosen.Including(StrongPasswordRecipe.CharacterGroups);
+            if (rules.Allowed is { } allowedCharacters)
+                chosenGroups = [.. chosenGroups.Select(group => new string([.. group.Where(allowedCharacters.Contains)]))
+                    .Where(group => group.Length > 0)];
+            if (chosenGroups.Count == 0) chosenGroups = Drawable(rules.Allowed ?? []);
+            if (chosenGroups.Count > 0 && chosenGroups.Count <= chosenLength)
+                return StrongPasswordRecipe.Random(chosenLength, chosenGroups, chosenGroups, maxConsecutive);
+        }
         if (style.PrefersGroups && AllowsGrouped(rules)
             && StrongPasswordRecipe.GroupedLength >= shortest && StrongPasswordRecipe.GroupedLength <= longest)
             return StrongPasswordRecipe.Grouped(maxConsecutive);

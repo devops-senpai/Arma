@@ -195,8 +195,8 @@ struct BrowserPasswordSettingsPane<Header: View>: View {
         }
         .sheet(item: $newPasswordPresentation) { presentation in
             BrowserNewPasswordEditor(
-                makeStrongPassword: {
-                    (try? browser.strongPasswordRecipe()).flatMap {
+                makeStrongPassword: { generation in
+                    (try? browser.strongPasswordRecipe(generation: generation)).flatMap {
                         try? BrowserStrongPasswordGenerator.generate(from: $0)
                     }
                 },

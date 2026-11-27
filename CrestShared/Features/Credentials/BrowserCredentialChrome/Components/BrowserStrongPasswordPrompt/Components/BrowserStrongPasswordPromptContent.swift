@@ -15,6 +15,11 @@ struct BrowserStrongPasswordPromptContent: View {
     let openPasswords: (() -> Void)?
     let redraw: (Int) -> Void
     let choose: (Int) -> Void
+    /// The person's length and characters for the password, folded away
+    /// under Options until asked for.
+    var generation: Binding<PasswordGeneration>? = nil
+
+    @State private var showsOptions = false
 
     var body: some View {
         VStack(
@@ -50,6 +55,14 @@ struct BrowserStrongPasswordPromptContent: View {
                 }
             }
             .padding(.horizontal, -metrics.suggestionRowHighlightBleed)
+            if let generation {
+                DisclosureGroup("Options", isExpanded: $showsOptions) {
+                    BrowserPasswordGenerationControls(generation: generation)
+                        .padding(.top, CrestSpacing.extraSmall)
+                }
+                .font(.caption)
+                .accessibilityIdentifier("crest-strong-password-options")
+            }
             if offers.isEmpty {
                 BrowserCredentialPromptError(
                     "This site’s rules leave no password Crest can make."
