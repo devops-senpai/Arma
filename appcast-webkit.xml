@@ -6,6 +6,26 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.11.126</title>
+            <pubDate>Thu, 26 Nov 2026 21:20:41 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>1100126</sparkle:version>
+            <sparkle:shortVersionString>0.11.126</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Tidy, per-site zoom, smoother scrolling and a shared Picture in Picture player across engines.
+
+### New
+- Tidy groups your open tabs by topic.
+- Page zoom is remembered per site in each browsing profile.
+
+### Improved
+- Picture in Picture uses one player across Chromium and WebKit, with smoother resizing.
+- The sidebar holds 120 fps across large tab lists, and Settings and window transitions scroll and animate more smoothly.
+- Arma's engine and content filter downloads are published under Arma's name.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.11.126/Arma-0.11.126.dmg" length="336819879" type="application/octet-stream" sparkle:edSignature="EUKiwphm9YgsfviQRqVe8F2UDjrL8ly6ZryLzZ7Qp/of9a03b7AqldAHGNK2efyLefyJw2FuJ4ivm7H9naaFCw=="/>
+        </item>
+        <item>
             <title>0.11.118</title>
             <pubDate>Wed, 25 Nov 2026 14:37:53 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1278,6 +1298,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: njvYwG+Xsks3W7N3w0z5e2jZ81BrBTWZaeuGo7dkfRMeBtFOXw8QmKEE2Wsww3pUBAsAqWeYW9zb0Sb6FGjSDQ==
-length: 100703
+edSignature: Aaw2OzkYSsCpkzMm1VDQffFO53HF82BHgcpzHw1Qjtl5LzLezKI6M/+QEWCT3VJWJ2uWU4+6q+mZBzaFFNeVDA==
+length: 101983
 -->
