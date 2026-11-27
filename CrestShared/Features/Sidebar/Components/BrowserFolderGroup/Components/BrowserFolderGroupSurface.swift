@@ -72,7 +72,8 @@ struct BrowserFolderGroupSurface: View {
                 BrowserDeferredFolderHeaderPresentations(
                     folder: folder,
                     space: configuration.context.space,
-                    interaction: interaction
+                    interaction: interaction,
+                    configuration: configuration
                 )
             }
         }
@@ -249,6 +250,9 @@ private struct BrowserDeferredFolderHeaderPresentations: View {
     let folder: FolderStateModel
     let space: SpaceModel
     let interaction: BrowserFolderGroupInteractionContext
+    /// The folder's group, which Arma's appearance editor edits in place of
+    /// the color picker.
+    let configuration: BrowserFolderGroupConfiguration
 
     @State private var isReady = false
 
@@ -260,7 +264,7 @@ private struct BrowserDeferredFolderHeaderPresentations: View {
                 isPresented: gated(interaction.isChoosingColor),
                 arrowEdge: .trailing
             ) {
-                BrowserFolderColorPicker(color: interaction.folderColor, title: folder.kind.colorTitle)
+                BrowserFolderAppearanceEditor(configuration: configuration)
                     .presentationCompactAdaptation(.popover)
             }
             .browserIconCustomizationPopover(

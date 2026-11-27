@@ -51,8 +51,9 @@ struct BrowserCommandPaletteCard: View {
             } else {
                 -12
             }
-        contents
+        contents.modifier(BrowserCommandPaletteSpaceText(space: model.space))
             .frame(maxWidth: restingWidth ?? BrowserCommandPaletteMetrics.maximumCardWidth)
+            .background { BrowserCommandPaletteSpaceTint(shape: restingShape, space: model.space) }
             .modifier(BrowserCommandPaletteShellMaterial(shape: restingShape))
             .clipShape(restingShape)
             .modifier(BrowserCommandPaletteCardEdge(cornerRadius: presentation.cornerRadius))

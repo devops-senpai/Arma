@@ -19,6 +19,7 @@ private struct BrowserIconCustomizationPopoverModifier: ViewModifier {
     let arrowEdge: Edge?
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.colorScheme) private var colorScheme
 
     func body(content: Content) -> some View {
         content.crestPopover(isPresented: presentation.isPresented, arrowEdge: preferredArrowEdge) {
@@ -42,6 +43,7 @@ private struct BrowserIconCustomizationPopoverModifier: ViewModifier {
             setSystemSymbol: presentation.setSystemSymbol,
             reset: presentation.reset
         )
+        .browserReadableInSidebarLook(colorScheme)
         .presentationCompactAdaptation(.popover)
     }
 }

@@ -347,7 +347,7 @@ struct MobileBrowserRootContent: View, BrowserChromeAnimating {
                         isExpanded: navigation.utilityPresentation
                             .isSwitcherExpanded,
                         selectedSurface: navigation.utilityPresentation.surface,
-                        badgeColor: browser.shownSpace?.settings.look.primaryColor.color
+                        badgeColor: browser.shownSpace?.settings.shownLook.primaryColor.color
                             ?? CrestBrandTheme.accent,
                         downloads: model.selectedUtilityDownloads,
                         newDownloadCount: model.newUtilityDownloads.count,

@@ -67,7 +67,8 @@
             if spaceModels.count == 1 {
                 _ = family.send(
                     CreateSpace(
-                        workspaceID: family.workspaceID, windowID: windowID, spaceID: placeholder),
+                        workspaceID: family.workspaceID, windowID: windowID, spaceID: placeholder, look: nil,
+                        darkLook: nil),
                     from: self)
             }
             // The tabs it brings back wear the images they wore.
