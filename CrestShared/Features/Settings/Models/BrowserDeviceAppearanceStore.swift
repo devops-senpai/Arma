@@ -38,7 +38,7 @@ final class BrowserTabAppearance {
     /// washed over it, rather than staying the white a selected tab is.
     var tintsSelectedPins = true { didSet { changed() } }
     var usesWebsitePinColor = true { didSet { changed() } }
-    var dimsUnloadedTabs = true { didSet { changed() } }
+    var dimsUnloadedTabs = false { didSet { changed() } }
     var pinFill: Double = 0 { didSet { changed() } }
     var pinGlow: Double = 0 { didSet { changed() } }
     var hoverFill: Double = 0 { didSet { changed() } }
@@ -121,7 +121,7 @@ extension BrowserTabAppearance: @MainActor Codable {
             (try? values.decode(Double.self, forKey: .selectedTabOpacity)) ?? CrestOpacity.selectedTabPaper)
         tintsSelectedPins = (try? values.decode(Bool.self, forKey: .tintsSelectedPins)) ?? true
         usesWebsitePinColor = (try? values.decode(Bool.self, forKey: .usesWebsitePinColor)) ?? true
-        dimsUnloadedTabs = (try? values.decode(Bool.self, forKey: .dimsUnloadedTabs)) ?? true
+        dimsUnloadedTabs = (try? values.decode(Bool.self, forKey: .dimsUnloadedTabs)) ?? false
         pinFill = Self.intensity((try? values.decode(Double.self, forKey: .pinFill)) ?? 0)
         pinGlow = Self.intensity((try? values.decode(Double.self, forKey: .pinGlow)) ?? 0)
         hoverFill = Self.intensity((try? values.decode(Double.self, forKey: .hoverFill)) ?? 0)
