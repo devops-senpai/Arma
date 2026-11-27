@@ -79,21 +79,21 @@ struct AgentLinkRefusal: Codable, Hashable, Sendable {
     static let staleHelper = Self(
         name: "staleHelper",
         message:
-            "Crest was updated since this connection started. Ask the person to restart Crest's MCP server in your agent."
+            "Arma was updated since this connection started. Ask the person to restart Arma's MCP server in your agent."
     )
     /// The person has agents turned off, which the agent cannot tell from a
     /// Crest that is not running.
     static let agentsOff = Self(
         name: "agentsOff",
         message:
-            "Crest isn't running, or agents are turned off in Crest's Settings › Agents. Ask the person to open Crest and turn on agents."
+            "Arma isn't running, or agents are turned off in Arma's Settings › Agents. Ask the person to open Arma and turn on agents."
     )
     /// Crest is connected to as many helpers as it takes at once; the agent
     /// can try again once another one stops.
     static let full = Self(
         name: "full",
         message:
-            "Crest is connected to as many agents as it takes at once. Try again once another agent stops, or ask the person to quit an agent they no longer use."
+            "Arma is connected to as many agents as it takes at once. Try again once another agent stops, or ask the person to quit an agent they no longer use."
     )
     private static let all = [staleHelper, agentsOff, full]
 
