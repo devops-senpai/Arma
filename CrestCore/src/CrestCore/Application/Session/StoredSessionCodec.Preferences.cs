@@ -15,7 +15,7 @@ internal static partial class StoredSessionCodec {
         new(DataRetention.Forever, DataRetention.Forever, DataRetention.Forever));
 
     /// What a Space that stored no credential preferences offers.
-    internal static CredentialPreferences DefaultCredentialPreferences { get; } = new(true, true, false, []);
+    internal static CredentialPreferences DefaultCredentialPreferences { get; } = new(true, true, false, [], CredentialAuthentication.EachTime);
 
     #endregion
 
@@ -103,6 +103,7 @@ internal static partial class StoredSessionCodec {
             Flag(value[Key.SyncsCrestPasswordsWithICloud]) ?? DefaultCredentialPreferences.SyncsCrestPasswordsWithICloud,
             Flag(value[Key.AlsoOffersSaveToSystemPasswords]) ?? DefaultCredentialPreferences.AlsoOffersSaveToSystemPasswords,
             NeverSavedSites(value[Key.NeverSavedSites]),
+            CredentialAuthentication.Named(TolerantText(value[Key.Authentication])) ?? DefaultCredentialPreferences.Authentication,
             Integer(value[Key.SavePromptSeconds]) ?? DefaultCredentialPreferences.SavePromptSeconds).Kept();
     }
 
@@ -114,6 +115,8 @@ internal static partial class StoredSessionCodec {
         };
         // Written only once it differs from its default, so a Space that keeps
         // the default is stored exactly as before.
+        if (preferences.Authentication != DefaultCredentialPreferences.Authentication)
+            encoded[Key.Authentication] = preferences.Authentication.Name;
         if (preferences.SavePromptSeconds != DefaultCredentialPreferences.SavePromptSeconds)
             encoded[Key.SavePromptSeconds] = preferences.SavePromptSeconds;
         if (preferences.NeverSavedSites.Count > 0)
