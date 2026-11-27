@@ -6,6 +6,29 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.11.137</title>
+            <pubDate>Fri, 27 Nov 2026 00:01:23 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:version>1100137</sparkle:version>
+            <sparkle:shortVersionString>0.11.137</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Nine community improvements from upstream.
+
+### New
+- Return to Saved URL in the Tabs menu, the command palette and Settings › Shortcuts.
+- An option, off by default, asks before quitting.
+- An option, off by default, shows a hidden sidebar for a moment after a Space shortcut.
+
+### Improved
+- Typing "settings" in the command palette finds Settings pages.
+- The palette's keyboard selection stays put under a resting pointer.
+- A new folder made from a tab's menu opens its name for typing.
+- While a Peek is open, the address field, Copy URL and Site Controls follow the Peek's page.
+- The sidebar texture stays visible with Reduce Transparency.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.11.137/Arma-0.11.137.dmg" length="327735406" type="application/octet-stream" sparkle:edSignature="kp9cIIInvlAv4k/ZSGXCD4nB6mTtbSAdhW/mPR3JC//cjtOdgRzH2ykUQl2QInMfOQqxMFw/MTAfGB3LI/V2Ag=="/>
+        </item>
+        <item>
             <title>0.11.135</title>
             <pubDate>Thu, 26 Nov 2026 23:38:43 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1331,6 +1354,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: Wne3OGu5PEKrjgnNp3gzStKFNGsn1bkMCQj9xzVUUFHAclsctTzQfH3sIk/nzXn++8ocfDAVFBxWniz2aEubBQ==
-length: 104298
+edSignature: l0CNVKPuu2DkoYlgr0Xio6PdLt/64y1PcsSh/iKSYEUBwIca7zythvQ1Xfd4WLs5eDNZH7t1HlRQyowkyqn4Dg==
+length: 105721
 -->
