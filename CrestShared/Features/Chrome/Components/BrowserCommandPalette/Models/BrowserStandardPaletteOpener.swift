@@ -10,6 +10,9 @@ struct BrowserStandardPaletteOpener: BrowserCommandPaletteOpener {
     let browser: BrowserStore
     let mode: BrowserCommandPaletteMode
     let loadInShownPage: @MainActor (URL) -> Void
+    /// Presents a tab that just took the address, where selecting it starts
+    /// its page loading; nil loads it in the shown page instead.
+    var showOpened: (@MainActor (URL) -> Void)? = nil
     var openSplit: (@MainActor (URL, BrowserTabRuntimeAssignment) -> Bool)? = nil
     var openQuickWindow: (@MainActor (URL, BrowserTabRuntimeAssignment) -> Bool)? = nil
 
@@ -17,6 +20,14 @@ struct BrowserStandardPaletteOpener: BrowserCommandPaletteOpener {
 
     func openHere(_ url: URL, from source: BrowserTabRuntimeAssignment) -> Bool {
         if mode == .newTab { return openTab(url, from: source, selecting: true) }
+        // A Start Page or native tab has no page, so the core gives it the
+        // address and selecting it opens its page loading it; loading again
+        // would send a second LoadPage. A tab showing a page keeps the load.
+        if let showOpened, browser.shownTab?.surface.showsPage == false {
+            guard browser.navigateSelectedTab(to: url.absoluteString) else { return false }
+            showOpened(url)
+            return true
+        }
         browser.navigateSelectedTab(to: url.absoluteString)
         loadInShownPage(url)
         return true
@@ -27,7 +38,8 @@ struct BrowserStandardPaletteOpener: BrowserCommandPaletteOpener {
             return browser.openBackgroundTab(url: url, in: source.spaceID, savesInSavedFolder: true) != nil
         }
         guard browser.openAddress(url, in: source.spaceID, placesAsNewTab: true) else { return false }
-        loadInShownPage(url)
+        // Selecting the new tab starts its first navigation.
+        (showOpened ?? loadInShownPage)(url)
         return true
     }
 
