@@ -90,13 +90,18 @@ struct BrowserSidebarReorderAim {
     {
         // Departing Space cards may remain registered until their transition finishes.
         let cards = splitCards.filter { $0.space == assignment && !$0.frame.isEmpty }
-        guard !cards.isEmpty else { return nil }
+        if let swapping = swappingTarget(in: assignment, cards: cards) { return swapping }
+        // Beside a card's top or bottom edge, or along the split's outer edge,
+        // a tab tiles the cards in a shape; beside its left or right edge it
+        // is a column at `index`, as it always was.
+        guard let landed = BrowserSplitDropLanding.joining(at: pointer, cardFrames: cards.map(\.frame)) else {
+            return nil
+        }
         return BrowserSidebarReorderTarget(
             kind: .splitInsert(
                 assignment: assignment,
-                index: BrowserSplitColumnLayout.insertionIndex(
-                    at: pointer,
-                    orderedCardFrames: BrowserSplitColumnLayout.orderedCardFrames(cards.map(\.frame)))
+                index: landed.memberIndex,
+                shape: landed.shape.isColumns ? nil : landed.shape
             ))
     }
 }

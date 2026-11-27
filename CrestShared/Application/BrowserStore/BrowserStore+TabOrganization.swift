@@ -295,7 +295,7 @@ extension BrowserStore {
         return sendCopying(
             JoinSplit(
                 workspaceID: family.workspaceID, windowID: windowID, spaceID: space.id,
-                tabID: item.tabID, targetTabID: targetTabID, index: memberIndex),
+                tabID: item.tabID, targetTabID: targetTabID, index: memberIndex, shape: nil),
             in: space.id) != nil
     }
 
@@ -433,7 +433,7 @@ extension BrowserStore {
         family.canSend(
             JoinSplit(
                 workspaceID: family.workspaceID, windowID: windowID, spaceID: spaceID,
-                tabID: tabID, targetTabID: targetTabID, index: nil),
+                tabID: tabID, targetTabID: targetTabID, index: nil, shape: nil),
             from: self)
     }
 
