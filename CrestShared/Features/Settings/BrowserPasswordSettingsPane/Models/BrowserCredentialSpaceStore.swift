@@ -39,6 +39,10 @@ final class BrowserCredentialSpaceStore {
     var importReview: BrowserCredentialImportReview?
 
     @ObservationIgnored private let browser: BrowserStore
+    /// Counts the loads begun. A Keychain read doesn't stop when SwiftUI
+    /// cancels the load it belongs to, so a load that resumes after a later
+    /// one began compares against this and writes nothing.
+    @ObservationIgnored private var loadGeneration = 0
 
     /// The Spaces whose stored spellings this launch already mended.
     private static var respelledSpaces: Set<UUID> = []
@@ -67,6 +71,8 @@ final class BrowserCredentialSpaceStore {
         in spaceID: UUID?,
         accessController: BrowserSpaceAccessController
     ) async {
+        loadGeneration &+= 1
+        let generation = loadGeneration
         guard let spaceID,
             unlockedSpace(spaceID, accessController: accessController) != nil
         else {
@@ -75,13 +81,18 @@ final class BrowserCredentialSpaceStore {
         }
         isLoading = true
         errorMessage = nil
-        defer { isLoading = false }
+        defer {
+            if generation == loadGeneration { isLoading = false }
+        }
         do {
             // Old spellings of IP addresses are mended once per launch.
             if Self.respelledSpaces.insert(spaceID).inserted {
                 _ = try? await browser.respellCredentials(in: spaceID)
             }
             let inventory = try await browser.savedCredentialInventory(in: spaceID)
+            // A later load owns the store now, and clearing for a Space change
+            // or lock was that load's to do.
+            guard generation == loadGeneration else { return }
             guard !Task.isCancelled,
                 unlockedSpace(spaceID, accessController: accessController) != nil
             else {
@@ -92,8 +103,10 @@ final class BrowserCredentialSpaceStore {
             unreadableCount = inventory.unreadableCount
             extras = inventory.extras
             await readNotes(in: spaceID, accessController: accessController)
+            guard generation == loadGeneration else { return }
             await checkHealth(in: spaceID, accessController: accessController)
         } catch {
+            guard generation == loadGeneration else { return }
             guard !Task.isCancelled,
                 unlockedSpace(spaceID, accessController: accessController) != nil
             else {
