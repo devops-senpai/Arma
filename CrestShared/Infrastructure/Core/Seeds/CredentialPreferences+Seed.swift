@@ -7,5 +7,5 @@ extension CredentialPreferences {
     /// never to the system's passwords, unless told otherwise.
     static let seeded = CredentialPreferences(
         isEnabled: true, syncsCrestPasswordsWithICloud: true, alsoOffersSaveToSystemPasswords: false,
-        neverSavedSites: [], savePromptSeconds: defaultSavePromptSeconds)
+        neverSavedSites: [], authentication: .eachTime, savePromptSeconds: defaultSavePromptSeconds)
 }
