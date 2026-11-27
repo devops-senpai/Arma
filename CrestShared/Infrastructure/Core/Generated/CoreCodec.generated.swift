@@ -7,7 +7,7 @@ import Foundation
 enum CoreCodec {
     /// SHA-256 of the canonical contract schema. The core refuses any other.
     static let fingerprint: [UInt8] = [
-        0xf7, 0x54, 0x9a, 0x8b, 0x11, 0xe9, 0x86, 0x67, 0xa1, 0x44, 0xb4, 0x38, 0x26, 0x12, 0xea, 0x45, 0xa0, 0xce, 0x0d, 0x18, 0x60, 0x46, 0xb5, 0x47, 0xf7, 0x86, 0x6f, 0xdc, 0x85, 0x26, 0x14, 0xd9
+        0x34, 0x1c, 0x29, 0xb4, 0x43, 0x14, 0x1b, 0xdf, 0x21, 0x59, 0x93, 0xad, 0xd5, 0x33, 0x1b, 0xa4, 0x3f, 0x72, 0x11, 0xdc, 0x04, 0xfa, 0x35, 0xb7, 0x42, 0x94, 0x77, 0xcf, 0x52, 0x9a, 0x1b, 0xdb
     ]
     /// SHA-256 of the engine contract alone, which an engine binding registers with.
     static let engineFingerprint: [UInt8] = [
@@ -24878,8 +24878,15 @@ extension SetupDraftSpace {
         } else {
             primaryID = nil
         }
+        let folderID: UUID?
+        if try reader.readPresence() {
+            let folderIDValue = try reader.readUUID()
+            folderID = folderIDValue
+        } else {
+            folderID = nil
+        }
         let shownName = try reader.readString()
-        self.init(spaceID: spaceID, profileID: profileID, isNew: isNew, customization: customization, primaryID: primaryID, shownName: shownName)
+        self.init(spaceID: spaceID, profileID: profileID, isNew: isNew, customization: customization, primaryID: primaryID, folderID: folderID, shownName: shownName)
     }
 
     func encode(into writer: inout WireWriter) {
@@ -24888,6 +24895,12 @@ extension SetupDraftSpace {
         writer.writeBool(isNew)
         customization.encode(into: &writer)
         if let present0 = primaryID {
+            writer.writePresence(true)
+            writer.writeUUID(present0)
+        } else {
+            writer.writePresence(false)
+        }
+        if let present0 = folderID {
             writer.writePresence(true)
             writer.writeUUID(present0)
         } else {
