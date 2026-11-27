@@ -6,6 +6,23 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.11.134</title>
+            <pubDate>Thu, 26 Nov 2026 22:43:22 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>1100134</sparkle:version>
+            <sparkle:shortVersionString>0.11.134</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Arma's own name everywhere: every file, message and download is Arma's.
+
+### Improved
+- Arma names itself Arma in every message, permission prompt, menu and file it saves.
+- The classic theme is now called Classic.
+- The app's own files, its engine and its content filter downloads all carry Arma's name, and the content filter is built by Arma.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.11.134/Arma-0.11.134.dmg" length="327771254" type="application/octet-stream" sparkle:edSignature="hswvqTrW62m4NMizbp79oNahbm4srR285tCgEN0kD3+W1iSZVKFqQ+9bufJMqmsRs2MYHSWQx8Xl1CW6A7kYCQ=="/>
+        </item>
+        <item>
             <title>0.11.126</title>
             <pubDate>Thu, 26 Nov 2026 21:20:43 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1361,6 +1378,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: vaH+oAtndyIbatkp9XEmDxZtN6jaA/748r9lQlPrgwzeSrNitMoc1TVuxQfhRs59tXVTnq/cXb4tuNmr1+8NCQ==
-length: 105795
+edSignature: UbDMIg/hGIXqsT1c+18Fgyx1KVMGsbc93u78oIZUrWWc25w5n4J+LLZ4KJ4erJIf7KL5xyFVcDhYfwo8zr+9BQ==
+length: 106973
 -->
