@@ -199,6 +199,11 @@ struct BrowserCredentialChrome: View {
             }
         case .saveAutofill(let candidate):
             BrowserAutofillSavePrompt(candidate: candidate, port: savePort, browser: browser, metrics: metrics)
+        case .pauseOffer(let offerID):
+            if let pause = savePort.pause {
+                BrowserCredentialPauseOffer(
+                    offerID: offerID, pause: pause, dismiss: savePort.dismissPauseOffer, metrics: metrics)
+            }
         }
     }
 }

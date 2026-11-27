@@ -389,7 +389,8 @@ struct MobileBrowserDetailView: View {
             presentation: BrowserCredentialChromePresentation.resolve(
                 saveCandidate: page.credentialSaveCandidate,
                 fillRequest: shownFillRequest(of: page),
-                autofillSaveCandidate: page.autofillSaveCandidate
+                autofillSaveCandidate: page.autofillSaveCandidate,
+                pauseOffer: page.credentialPauseOffer
             ),
             fillPort: credentialFillPort(for: page),
             savePort: credentialSavePort(for: page),
