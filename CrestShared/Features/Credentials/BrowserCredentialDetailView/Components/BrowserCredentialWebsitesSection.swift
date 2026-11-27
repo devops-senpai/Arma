@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// Where the login signs in: the site it was saved for, then the ones the
-/// person added, which Edit lets them add to and remove. A site without
+/// person added, which Edit lets them add to and remove, and whether it fills
+/// the hosts under them too. A site without
 /// HTTPS says it isn't filled, and the site's own page for changing the
 /// password is a click away.
 struct BrowserCredentialWebsitesSection: View {
@@ -40,9 +41,15 @@ struct BrowserCredentialWebsitesSection: View {
                     }
                     .accessibilityIdentifier("add-credential-site")
                 }
+                Toggle("Include Subdomains", isOn: draft.includesSubdomains)
+                    .accessibilityIdentifier("credential-include-subdomains")
             } else {
                 ForEach(descriptor.sites, id: \.self) { site in
                     Text(site.description)
+                }
+                if descriptor.includesSubdomains {
+                    Text("Also fills their subdomains")
+                        .foregroundStyle(.secondary)
                 }
             }
             ForEach(concerns, id: \.self) { concern in
