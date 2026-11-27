@@ -34,8 +34,8 @@ INPUTS = (
     f"{CRATE}/include",
     "Scripts/control-plane/content_filter.py",
 )
-LIBRARY = "libcrest_content_filter.a"
-HEADER = "include/crest_content_filter.h"
+LIBRARY = "libarma_content_filter.a"
+HEADER = "include/arma_content_filter.h"
 # The core's runtime identifiers, each with the Rust target that builds it and
 # the variable that sets its minimum OS.
 TARGETS = {
@@ -73,7 +73,7 @@ def release_tag(key: str) -> str:
 
 
 def asset_name(key: str) -> str:
-    return f"Crest-Content-Filter-{key[:16]}.zip"
+    return f"Arma-Content-Filter-{key[:16]}.zip"
 
 
 def member(runtime: str) -> str:
@@ -113,7 +113,7 @@ def cargo_environment(repo: Path = REPOSITORY) -> dict:
     cargo_home = Path(environment.get("CARGO_HOME", Path.home() / ".cargo"))
     environment["PATH"] = f"{cargo_home / 'bin'}{os.pathsep}{environment.get('PATH', '')}"
     environment["RUSTFLAGS"] = (f"--remap-path-prefix={cargo_home}=/cargo "
-                                f"--remap-path-prefix={(repo / CRATE).resolve()}=/crest-content-filter")
+                                f"--remap-path-prefix={(repo / CRATE).resolve()}=/arma-content-filter")
     environment.update(DEPLOYMENT_TARGETS)
     environment["CARGO_TARGET_DIR"] = str(target_directory(repo))
     return environment
@@ -180,7 +180,7 @@ def crates(repo: Path = REPOSITORY) -> list:
     """Every crate Cargo.lock resolves, other than Crest's own, as (name, version)."""
     text = (repo / CRATE / "Cargo.lock").read_text()
     found = re.findall(r'^\[\[package\]\]\nname = "([^"]+)"\nversion = "([^"]+)"', text, re.MULTILINE)
-    return sorted((name, version) for name, version in found if name != "crest-content-filter")
+    return sorted((name, version) for name, version in found if name != "arma-content-filter")
 
 
 def notices(repo: Path = REPOSITORY) -> str:
@@ -277,7 +277,7 @@ def main():
     if recorded["key"] != artifact_key():
         raise SystemExit(f"{LOCK} names key {recorded['key'][:16]}, but the sources hash to "
                          f"{artifact_key()[:16]}: run `content_filter.py build` and commit the lock")
-    with tempfile.TemporaryDirectory(prefix="crest-content-filter-") as temporary:
+    with tempfile.TemporaryDirectory(prefix="arma-content-filter-") as temporary:
         rebuilt = build(REPOSITORY, Path(temporary))
     differing = sorted(name for name, digest in rebuilt["files"].items() if recorded["files"].get(name) != digest)
     if differing or set(rebuilt["files"]) != set(recorded["files"]):

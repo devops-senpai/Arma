@@ -16,7 +16,7 @@ import chromium_engine  # noqa: E402
 # compiles against. chromium_engine.py keys the published engine on them.
 ENGINE_CONTRACT = ("crest_core.h", "crest_app.h", "crest_engine.h", "crest_engine_contract.h")
 # The content filter's C interface, which the binding's request filter calls.
-CONTENT_FILTER_HEADER = "CrestCore/native/ContentFilter/include/crest_content_filter.h"
+CONTENT_FILTER_HEADER = "CrestCore/native/ContentFilter/include/arma_content_filter.h"
 
 
 def main():

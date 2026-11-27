@@ -1,5 +1,5 @@
 //! Crest's content filter: Brave's adblock engine behind the C interface that
-//! `include/crest_content_filter.h` declares and the native core links.
+//! `include/arma_content_filter.h` declares and the native core links.
 //!
 //! Every export catches panics and answers `FAILED` instead, so a list the
 //! engine cannot digest fails one call rather than ending the browser. Texts
