@@ -13,7 +13,9 @@ struct BrowserCredentialSavePrompt: View {
     let browser: BrowserStore
     let metrics: BrowserCredentialPromptMetrics
 
-    @State private var model = BrowserCredentialSavePromptModel()
+    @State var model = BrowserCredentialSavePromptModel()
+    /// Whether the pointer rests on the prompt, which holds it open.
+    @State var isPointerResting = false
 
     var body: some View {
         BrowserCredentialPromptSurface(
@@ -34,14 +36,21 @@ struct BrowserCredentialSavePrompt: View {
                 perform: perform
             )
         }
+        .overlay(alignment: .topLeading) { closeButton }
+        .onHover { hovering in
+            isPointerResting = hovering
+        }
         .task(id: candidate.id) {
             await prepare()
+        }
+        .task(id: countdown) {
+            await closeWhenTimeIsUp()
         }
     }
 
     /// Not Now keeps the candidate for the address field's key; Done after a
     /// save puts it away.
-    private func answerDismiss() {
+    func answerDismiss() {
         if route.dismissAction.holdsCandidate { port.decline() } else { port.dismiss() }
     }
 
@@ -55,7 +64,7 @@ struct BrowserCredentialSavePrompt: View {
         browser.spaceModel(port.spaceID)?.identity
     }
 
-    private var preferences: CredentialPreferences {
+    var preferences: CredentialPreferences {
         browser.spaceModel(port.spaceID)?.settings.credentialPreferences ?? .seeded
     }
 
