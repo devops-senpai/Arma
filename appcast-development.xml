@@ -34,7 +34,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:version>1100118</sparkle:version>
             <sparkle:shortVersionString>0.11.118</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Crest's smoother sidebar scrolling with many tabs.
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Upstream's smoother sidebar scrolling with many tabs.
 
 ### Improved
 - The sidebar scrolls smoothly even with hundreds of tabs open.
@@ -49,10 +49,10 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:version>1100117</sparkle:version>
             <sparkle:shortVersionString>0.11.117</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Built on Crest's rebuilt passwords and autofill, with Arma's password features carried over, and Chromium 158.0.8127.89.
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Built on upstream's rebuilt passwords and autofill, with Arma's password features carried over, and Chromium 158.0.8127.89.
 
 ### New
-- Crest's rebuilt passwords and autofill, with Settings › Autofill and new save and fill prompts.
+- Upstream's rebuilt passwords and autofill, with Settings › Autofill and new save and fill prompts.
 - The Save password? prompt closes on its own after a time you choose, or from its corner.
 - Pause Arma's password prompts on a tab, from the save prompt or with @passwords.
 - Choose how long a generated password is and which characters it uses.
@@ -97,13 +97,13 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:version>1100080</sparkle:version>
             <sparkle:shortVersionString>0.11.80</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Opens the 0.11 line with Crest 0.11.0 (#1331 to #1343) and Chromium 158, keeps the crest and the theme apart on a Space's page, and lets a theme keep crests by name.
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Opens the 0.11 line with upstream 0.11.0 (#1331 to #1343) and Chromium 158, keeps the crest and the theme apart on a Space's page, and lets a theme keep crests by name.
 
 ### New
 - A theme can keep crests by name. On a Space's Appearance page the Theme heading of its icons shows the crests its theme keeps, Add Current Crest saves the Space's crest there with its colors, and a kept crest's menu renames or removes it. Theme files carry them.
 - arma theme crests, arma theme crest add, rename and remove, and arma crest use manage and wear the crests a theme keeps from the terminal.
 - Every color popover, for a crest's parts and a theme's colors alike, has an eyedropper that picks a color from anywhere on screen and applies it at once.
-- From Crest: Site Controls replace the site menus on Mac, iPhone and iPad; a Space's icon is chosen apart from its colors; color popovers take a hex code and offer the system picker; menu items carry icons.
+- From upstream: Site Controls replace the site menus on Mac, iPhone and iPad; a Space's icon is chosen apart from its colors; color popovers take a hex code and offer the system picker; menu items carry icons.
 
 ### Improved
 - A Space's Appearance page now shapes only its crest. The Theme row heads the page as its first setting, the stage shows a color for each part of the crest, and More Customization holds the crest's parts alone, stepping aside for a symbol or emoji icon. Modify Theme Too is gone: themes change only under Settings › Themes.
@@ -124,7 +124,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:version>1000234</sparkle:version>
             <sparkle:shortVersionString>0.10.234</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Synced with Crest 8ecda9450 (#1302 to #1318), runs on macOS 15 and later, ships as one universal download for Apple silicon and Intel, and returns closed pinned and saved tabs to their saved address.
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Synced with upstream 8ecda9450 (#1302 to #1318), runs on macOS 15 and later, ships as one universal download for Apple silicon and Intel, and returns closed pinned and saved tabs to their saved address.
 
 ### New
 - Arma for Mac now runs on macOS 15 Sequoia and later. On macOS 15, controls that stand on Liquid Glass on macOS 26 stand on Arma's own material instead, and pages translate when you choose Translate rather than automatically.
@@ -149,9 +149,9 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
 ### Internal
 - The Mac app, its native core, its helpers and the Chromium engine build for Intel as well as Apple silicon; the installer is one universal download and a release checks that every slice it ships holds both architectures.
 - Every design token has one name: spacing, corners, fills, opacities, shadows, hit targets and glyph sizes across the Mac, iPhone and iPad views come from the shared tokens, with no visible change. Arma's themes, setup pages and identity views read the same tokens.
-- Crest's update feeds moved to updates.crestbrowser.com; Arma keeps checking its own feeds in the Arma repository.
+- Upstream's update feeds moved to a new address; Arma keeps checking its own feeds in the Arma repository.
 - Arma's iCloud container now carries the sync record types in Production, so iCloud Sync uploads instead of reporting "Failed to send changes".
-- This build was made from the pre-sync commit b4e262655 with the two theme fixes and the Chromium 157.0.8103.81 universal engine (chromium-engine-934827a81220c6c0). main at this tag already carries Crest's Chromium 158.0.8127.37 engine inputs (#1322, #1323) for the next engine build.
+- This build was made from the pre-sync commit b4e262655 with the two theme fixes and the Chromium 157.0.8103.81 universal engine (chromium-engine-934827a81220c6c0). main at this tag already carries upstream's Chromium 158.0.8127.37 engine inputs (#1322, #1323) for the next engine build.
 ]]></description>
             <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.234/Arma-0.10.234.dmg" length="326116695" type="application/octet-stream" sparkle:edSignature="KOBsIJjDsjjUOhg9RPdgi106Z/rUfNDzPWvbEoZhpCqr67ve12tWSs1Sgb0jBP3bePfReCe4o7idFqCMxsvdDA=="/>
         </item>
@@ -164,11 +164,11 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:shortVersionString>0.10.217</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Synced with Crest b69b647fc (#1309).
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Synced with upstream b69b647fc (#1309).
 
 ### Internal
-- Crest's product site, its page generators, the credits list and the App Store listing moved to crest-browser/crestbrowser.com; the `Website/` folder, the Pages deploy and the credits and release-page scripts are gone from the repository. The README's images now live in `Documentation/Images`. Arma's context docs drop the Website folder and point the Help Center build at `HelpCenter/build/`.
-- The new site-refresh workflow runs only in Crest's own repository, so it is inert on Arma.
+- Upstream's product site, its page generators, the credits list and the App Store listing moved to the upstream project; the `Website/` folder, the Pages deploy and the credits and release-page scripts are gone from the repository. The README's images now live in `Documentation/Images`. Arma's context docs drop the Website folder and point the Help Center build at `HelpCenter/build/`.
+- The new site-refresh workflow runs only in upstream's own repository, so it is inert on Arma.
 ]]></description>
             <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.217/Arma-0.10.217.dmg" length="196224647" type="application/octet-stream" sparkle:edSignature="MiuE3jEPamFBAwFN5xMX06eXxFc6mN+t5p/IH9016vT5HcQ4TfMQNvKs1JQJlcvirmEYkpX7obEdhzV2vE6DCA=="/>
         </item>
@@ -181,7 +181,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:shortVersionString>0.10.216</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Synced with Crest 4167974c2 (#1307).
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Synced with upstream 4167974c2 (#1307).
 
 ### Internal
 - The release-notes site now builds from one exported release history: `Scripts/export-release-history.py` reads the tags, version history and note files once and writes a JSON file, and `build-release-pages.py` only renders it. Arma's per-entry note files export through it unchanged.
@@ -197,10 +197,10 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:shortVersionString>0.10.215</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Crest's roadmap moves with it to crest-browser; Arma's own links stay.
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Upstream's roadmap moves with it to a new home; Arma's own links stay.
 
 ### Internal
-- Crest's roadmap board now lives at github.com/orgs/crest-browser/projects/1 and its Xcode Cloud builds accept only the new address. Arma's About page, README and update feeds keep pointing at Arma's own repository and issues.
+- Upstream's roadmap board now lives at the upstream project and its Xcode Cloud builds accept only the new address. Arma's About page, README and update feeds keep pointing at Arma's own repository and issues.
 - The macOS 15 glass stand-in and the crest-browser documentation fixes from 0.10.214 are folded into their commits.
 ]]></description>
             <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.215/Arma-0.10.215.dmg" length="196225183" type="application/octet-stream" sparkle:edSignature="0dD13Tzlcqr8ktJDAFgJudsSs4l0EDa3RTegvCxJer62ugMuZ0aSTc+Lt5e9g2kFnAJFXazhxL9IB6m7SEavDw=="/>
@@ -214,18 +214,18 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:shortVersionString>0.10.214</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Crest's own colours everywhere, design-system fields and buttons, and Crest's move to crest-browser.
+            <description sparkle:format="markdown"><![CDATA[Arma preview. The classic colours everywhere, design-system fields and buttons, and upstream's move to a new home.
 
 ### Improved
-- Status colours come from Crest's tokens: iCloud sync and the archive list read in Crest blue, green, amber and red; saved passwords and Space choices in Settings show each Space in its own accent colour, and the downloads badge takes it too.
+- Status colours come from the classic tokens: iCloud sync and the archive list read in accent blue, green, amber and red; saved passwords and Space choices in Settings show each Space in its own accent colour, and the downloads badge takes it too.
 - Search rows, glyph buttons, cards and form rows across Mac, iPhone and iPad stand on the design system's components, with hover, pressed and focus states; the password save prompt's fields sit on the same field surface.
 - Sidebar preview cards, the lists fan and controls that appear in place grow from 80% of their size as they fade in, instead of out of a point.
-- The command palette's pinned, saved and open tab rows wear the same filled symbols as their sidebar sections; the globe engine mark is Crest blue and the Servo mark a brand gold.
-- Extension badges are Crest's red with slightly larger text, and pinned extension buttons share the toolbar's hover highlight.
+- The command palette's pinned, saved and open tab rows wear the same filled symbols as their sidebar sections; the globe engine mark is accent blue and the Servo mark a brand gold.
+- Extension badges are red with slightly larger text, and pinned extension buttons share the toolbar's hover highlight.
 - The badge colours follow the Space's shown look, so they match a dark window's theme.
 
 ### Internal
-- Crest's project home is now github.com/crest-browser/Crest; Arma's docs and sync tooling point there. Arma's own feeds, links and repository are unchanged.
+- Upstream's project home is now the upstream project; Arma's docs and sync tooling point there. Arma's own feeds, links and repository are unchanged.
 - The macOS 15 glass stand-in now knows the identity glass that grouped glyph buttons use, so the Mac app still builds for macOS 15.2.
 ]]></description>
             <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.214/Arma-0.10.214.dmg" length="196224204" type="application/octet-stream" sparkle:edSignature="xeI3ddRZMZtu4miYWA6WD+dA/V76jwZIksSOdNV98CO0NoOzdXzmAptEvm0DAReICES2Plz0e5hYKh7UZJGvBQ=="/>
@@ -239,7 +239,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:shortVersionString>0.10.203</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Crest's selected-tab look, device-kept choices and What's New on the web.
+            <description sparkle:format="markdown"><![CDATA[Arma preview. The classic selected-tab look, device-kept choices and What's New on the web.
 
 ### New
 - Settings › Appearance › More Customization lets you choose how the selected tab looks: translucent White with an opacity slider, or the device's Material; selected pins can carry their site's color.
@@ -250,7 +250,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
 - A page in a language written in another script, such as Traditional Chinese for a reader of Simplified Chinese, is offered translation; a name ending in .test counts as local and opens over HTTP first.
 - Every long press waits the system's half second before its menu, and lists of Spaces indent a Sub-Space past its Space's icon.
 - iPhone and iPad confirm a finished download and offer Reload Peek, as the Mac does.
-- Arma's Settings keep the Mac's own window background in light and dark, while Crest's rework names every rule once underneath.
+- Arma's Settings keep the Mac's own window background in light and dark, while upstream's rework names every rule once underneath.
 ]]></description>
             <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.203/Arma-0.10.203.dmg" length="196078306" type="application/octet-stream" sparkle:edSignature="JAEMsKSdMUrGtYOQIu9E3ahWWDqYMgx6SwPzRu6mi7rh1TsaAhtdLWmxteZVoRRafqkMy3F7bJe3W6x84zN7BA=="/>
         </item>
@@ -263,10 +263,10 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:shortVersionString>0.10.175</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Crest spells each rule, limit and key once.
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Upstream spells each rule, limit and key once.
 
 ### Improved
-- Arma follows Crest's rework that names every limit, wait, key and web scheme in one place, so the same rules apply the same way everywhere, with the same features and no change to what you see.
+- Arma follows upstream's rework that names every limit, wait, key and web scheme in one place, so the same rules apply the same way everywhere, with the same features and no change to what you see.
 ]]></description>
             <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.175/Arma-0.10.175.dmg" length="196374594" type="application/octet-stream" sparkle:edSignature="C82z9VTVor9QU/Cy8FhxlcARjJWdIrDkMwTmUDrnc3aY4DKNCdBTY9+2wzGsK1LSaIxC7urTPDjqk31Bn77TDA=="/>
         </item>
@@ -279,13 +279,13 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:shortVersionString>0.10.161</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Chromium 157.0.8103.81, and Crest's clean-up of code nothing used.
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Chromium 157.0.8103.81, and upstream's clean-up of code nothing used.
 
 ### Fixed
 - Chromium is updated to 157.0.8103.81 with upstream security and compatibility fixes.
 
 ### Improved
-- Arma follows Crest's removal of code, tests and resources nothing used, with the same features in a lighter app.
+- Arma follows upstream's removal of code, tests and resources nothing used, with the same features in a lighter app.
 ]]></description>
             <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.10.161/Arma-0.10.161.dmg" length="196308566" type="application/octet-stream" sparkle:edSignature="1UXIgwiaIY1pY4RiQte9/+OlR/Qa3lBU+sHCS7zk05oaMsW+mxY5fntcL520tLAx3zfk9QhJp6luTubqiAIxCg=="/>
         </item>
@@ -298,16 +298,16 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:shortVersionString>0.10.160</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Arma's own welcome and installer, Crest's palettes as themes, a color for the palette's selected row, and the system background back under Settings.
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Arma's own welcome and installer, the classic palettes as themes, a color for the palette's selected row, and the system background back under Settings.
 
 ### New
-- Crest's twelve color palettes, Blossom, Lagoon, Lilac, Linen, Sunset, Ocean, Orchid, Citrus, Midnight, Forest, Ember and Plum, are themes beside Crest Default: a Space picks one from the Theme row in setup and on its page, where the swatch grid used to be. A theme's own page keeps the palettes for recoloring it.
+- The classic twelve color palettes, Blossom, Lagoon, Lilac, Linen, Sunset, Ocean, Orchid, Citrus, Midnight, Forest, Ember and Plum, are themes beside Classic: a Space picks one from the Theme row in setup and on its page, where the swatch grid used to be. A theme's own page keeps the palettes for recoloring it.
 - A theme sets the color of the command palette's selected row text, light and dark, in Settings › Themes and with `arma theme` (`--palette-light-selected-text`, `--palette-dark-selected-text`). Without one the row keeps its paper's ink.
 
 ### Improved
 - Setup opens on Arma's banner, large, with its name lettered in blackletter and a line on who it is for, on the room's own wash; the steps follow on paper.
 - The installer window wears Arma's ink: the banner above the app, Arma's name lettered in blackletter, and a gold arrow to Applications.
-- Settings, setup, Getting Started, the command palette and the error screens sit on the window's own background again instead of Crest's cream paper, so Arma matches the Mac around it.
+- Settings, setup, Getting Started, the command palette and the error screens sit on the window's own background again instead of the classic cream paper, so Arma matches the Mac around it.
 - The Start Page's title is set in Times New Roman, as the line under Arma's name on setup's welcome is.
 
 ### Fixed
@@ -324,14 +324,14 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:shortVersionString>0.10.154</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Crest's chrome moves onto paper with its new Allo typeface, six audit fixes, and a WebKit crash fix.
+            <description sparkle:format="markdown"><![CDATA[Arma preview. The classic chrome moves onto paper with its new Allo typeface, six audit fixes, and a WebKit crash fix.
 
 ### Improved
-- Headings, buttons and labels across setup, Settings, the Start Page and Getting Started use Allo, Crest's new rounded typeface; empty lists and pages, the page error title, a locked Space's name and the Settings sidebar heading use its rounded display type.
+- Headings, buttons and labels across setup, Settings, the Start Page and Getting Started use Allo, upstream's new rounded typeface; empty lists and pages, the page error title, a locked Space's name and the Settings sidebar heading use its rounded display type.
 - Site Controls, color pickers, permission and password prompts, hover previews and notices sit on paper in light mode instead of always being dark, and on a warm charcoal in dark mode. A Space's theme still tints them.
 - The command palette and the recent tabs panel sit on the same material as the address field and pinned tabs; the selected tab, the selected pin and the palette's selected row look like a sheet of light paper on every Space.
-- The sidebar's scroll button, widget cards, sound and sharing badges on tabs, the palette's search engine chips, the element picker, the History, Downloads and Archive buttons and the Space buttons in Settings use Crest's own surfaces and buttons instead of glass.
-- The page area, the error screen, the locked Space screen and empty Peek and Quick Window pages use Crest's warm canvas; password prompts, the error screen and the locked Space screen use Crest blue buttons on every Space.
+- The sidebar's scroll button, widget cards, sound and sharing badges on tabs, the palette's search engine chips, the element picker, the History, Downloads and Archive buttons and the Space buttons in Settings use upstream's own surfaces and buttons instead of glass.
+- The page area, the error screen, the locked Space screen and empty Peek and Quick Window pages use the classic warm canvas; password prompts, the error screen and the locked Space screen use accent blue buttons on every Space.
 - Importing another browser's passwords brings those for sites without HTTPS too, and setup says Arma won't fill them in.
 
 ### Fixed
@@ -391,10 +391,10 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:shortVersionString>0.10.128</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Setup opens on a full welcome with its steps as chips and ends with Make It Home; crests gain a Simple set; Crest's own look ships as the Crest Default theme.
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Setup opens on a full welcome with its steps as chips and ends with Make It Home; crests gain a Simple set; the classic look ships as the Classic theme.
 
 ### New
-- Crest Default, Crest's own look of ink washing down into sky, is a theme beside Arc Sky and the Catppuccin flavors in setup and Settings › Themes.
+- Classic, the classic look of ink washing down into sky, is a theme beside Arc Sky and the Catppuccin flavors in setup and Settings › Themes.
 - Crests gain a Simple set, Crest, Moon, Summit, Lens, Spark and Grove, beside the Heraldic houses: a bold rounded figure raised off a soft shape.
 
 ### Improved
@@ -469,7 +469,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <description sparkle:format="markdown"><![CDATA[Arma preview. Setup starts from Arma's themes and shows your crest as you shape it.
 
 ### Improved
-- Setup's Pick your look page now offers every theme Arma ships under Arma Themes, with Crest's Heraldic, Modern and Simple looks under Crest Themes. Every card fits on one screen.
+- Setup's Pick your look page now offers every theme Arma ships under Arma Themes, with the classic Heraldic, Modern and Simple looks under Classic Themes. Every card fits on one screen.
 - Make it yours shows a heraldic Space's crest large, on the sidebar the Space will wear, and again at the sidebar's sizes. Its sheet runs through the Crest Studio's steps: Start from, Colors, Shape, Field, Band, Emblem, Border and Finish. A chosen theme keeps the sidebar, so Start from and Shuffle change the crest alone.
 - Every new Space, and every preview in setup, starts with Arma's own crest.
 - Arma's skills for coding agents now live in .agents/skills, where Codex, GitHub Copilot, Cursor, Gemini CLI, Windsurf, OpenCode and Amp find them in a checkout, with links for Claude Code and Kiro.
@@ -485,7 +485,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:shortVersionString>0.10.98</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Brings in Crest's latest: folders, Clear, local network and HTTP fixes, and a smoother Chromium engine.
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Brings in upstream's latest: folders, Clear, local network and HTTP fixes, and a smoother Chromium engine.
 
 ### New
 - Collapse All Folders closes every open folder in a Space at once, nested folders included, without closing any tabs. Find it in the Space's menu, in the sidebar's menu and the View menu, and in the command palette.
@@ -549,11 +549,11 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:shortVersionString>0.10.83</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.2</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Brings in Crest 0.10, and every Arma feature rebuilt on top of Paul's code.
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Brings in upstream 0.10, and every Arma feature rebuilt on top of Paul's code.
 
 ### New
-- Crest 0.10: three styles set how much Arma shows, the address bar can sit above the page, and the sidebar gains spacing, tab size, hover previews and groups.
-- Settings › Appearance has a Default theme for new Spaces, or None for Crest's own look. Spaces you never gave a theme keep their look.
+- Upstream 0.10: three styles set how much Arma shows, the address bar can sit above the page, and the sidebar gains spacing, tab size, hover previews and groups.
+- Settings › Appearance has a Default theme for new Spaces, or None for the classic look. Spaces you never gave a theme keep their look.
 - Choose how long a generated password is and which kinds of character it uses, in the strong password prompt and in Settings.
 - A saved password can also fill the subdomains of its site when you choose Include subdomains while saving or editing it.
 - Pause Arma's password prompts on a tab, for a while or until you resume them, so another password manager can fill it.
@@ -591,7 +591,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <description sparkle:format="markdown"><![CDATA[Arma preview.
 
-### From Crest
+### From upstream
 - Settings › Tabs › Open new tabs at chooses whether new tabs open at the top or the bottom of your open tabs, and can file them into the folder or Group you're in.
 - Back on the first page of a tab another tab opened closes it and returns to the tab that opened it. Open Link in New Tab now leads a link's menu.
 - Moving the pointer off the window's sidebar edge opens the hidden sidebar at once.
@@ -630,7 +630,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <description sparkle:format="markdown"><![CDATA[Arma preview.
 
-### From Crest
+### From upstream
 - The address bar can sit on top of the page: Settings › Appearance › Address bar › Top. Sidebar stays the default.
 - Each page in Split View carries its own bar with back, forward, its address, Site Controls and pinned extensions, side by side or stacked.
 - Pinned extensions keep the order you drag them into, in every Space that uses the profile.
@@ -652,7 +652,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <description sparkle:format="markdown"><![CDATA[Arma preview.
 
-### From Crest
+### From upstream
 - Groups: single-level folders of open tabs at the top of a Space. Add a tab from its menu, move a selection into one, and turn a folder of open tabs into a Group or back.
 - Folder and Group headers have a "…" button for their menu, with Archive Tabs and Convert to Group.
 - A folder of open tabs, or a Group, goes away once its last tab leaves. Saved folders stay.
@@ -673,7 +673,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <description sparkle:format="markdown"><![CDATA[Arma preview.
 
-### From Crest
+### From upstream
 - A narrow sidebar keeps back, forward and reload, drawn smaller where the full strip does not fit.
 - Going back in a tab reopened after a relaunch shows the earlier page again, on sites such as Reddit.
 - Revealing the hidden sidebar no longer pops up the preview of the row under the pointer, and a preview card goes when the sidebar hides.
@@ -692,7 +692,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <description sparkle:format="markdown"><![CDATA[Arma preview.
 
-### From Crest
+### From upstream
 - Tab size is a slider with nine steps from 60% to 140%: Thin, Compact, Default, Comfortable and Large. Text and icons follow it half as far.
 - Settings › Appearance › Spacing sets the room the sidebar keeps between rows and pins and around the address field: None, Tight, Default or Relaxed.
 - The sidebar slides faster by default. A slide time you chose keeps its speed.
@@ -710,7 +710,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <description sparkle:format="markdown"><![CDATA[Arma preview.
 
-### From Crest
+### From upstream
 - A click anywhere on a Quick Window's address field opens it, lock included.
 - A Quick Window's back and forward buttons stay visible on any Space's colors.
 - Settings › Tabs › Keep saved tabs after unloading: turn it off and an unloaded saved tab shows an X that deletes it. Reopen Closed Tab brings it back.
@@ -728,7 +728,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <description sparkle:format="markdown"><![CDATA[Arma preview.
 
-### From Crest
+### From upstream
 - A click anywhere on the sidebar's address field opens it, not only on its line of text.
 - Settings › Appearance sets how long the pointer waits at the window edge before the hidden sidebar shows, from instant to 1,000 ms.
 - A second slider sets how fast the sidebar slides, from a snap to 480 ms.
@@ -746,7 +746,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <description sparkle:format="markdown"><![CDATA[Arma preview.
 
-### From Crest
+### From upstream
 - A folder's hover card keeps its text readable whatever Material color is set to.
 ]]></description>
             <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.101/Arma-0.9.101.dmg" length="195657126" type="application/octet-stream" sparkle:edSignature="dVXo0SXrE5E7LQd3gwxrT0FEmix4nqBLpQRNS1wiSSQEVYCa8495qbIjUIqt6GukRYRM6j04P7WOKdZrqkU7Ag=="/>
@@ -762,7 +762,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <description sparkle:format="markdown"><![CDATA[Arma preview.
 
-### From Crest
+### From upstream
 - Rest the pointer on a tab or pin to see a card beside the sidebar with its title, site and the last picture of its page, without loading the page.
 - Rest on a folder to see all its tabs, sub-folders included, with a search; open or unload them from the card.
 - Settings › Appearance › Preview hover turns the cards off on this device.
@@ -780,7 +780,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <description sparkle:format="markdown"><![CDATA[Arma preview.
 
-### From Crest
+### From upstream
 - A Quick Window opened from a link in another app opens once, where it stays, without flashing or jumping, and Arma's other windows stay out of the way.
 - Closing that Quick Window returns you to the app the link came from, and Quick Windows open on the display you are using.
 - Settings pages scroll with the pointer anywhere on the page.
@@ -802,7 +802,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
 ### Fixed
 - The iPhone and iPad app builds again.
 
-### From Crest
+### From upstream
 - Move a folder to another Space from its menu, with its sub-folders, tabs and Split Views. Deleting a folder asks first and sends its tabs to the Archive.
 - A closed folder keeps showing the tabs that were loaded when it closed, and clicking a folder inside it opens that folder.
 - Split Views look and work like folders: click to collapse, double-click to rename.
@@ -834,7 +834,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
 ### Improved
 - Right-clicking a link lists Open Link in New Tab and New Window first, with Arma's Space, Peek and Split View rows after them.
 
-### From Crest 0.9.8
+### From upstream 0.9.8
 - Choose how much customization to see with three styles in Settings › Appearance: Heraldic (Full) keeps every control, while Modern and Simple show fewer and keep the rest under Advanced. Setup offers Simple as a look too.
 - Space icons in the switcher can be dots.
 - Text over a Space's colors is easier to read, and the address field and pins look the same on every Space unless a theme colors them.
@@ -885,7 +885,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <description sparkle:format="markdown"><![CDATA[Arma preview.
 
-### From Crest 0.9.7
+### From upstream 0.9.7
 - An extension that opens its own popup, as a password manager does from a locked sign-in field, shows it over the page on Chromium.
 - Peek keeps working for links on pages that update their own address as you browse them.
 - A link that launches Arma opens in front of the windows it reopens.
@@ -908,7 +908,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
 ### Security
 - Chromium is updated to 157.0.8103.51, which fixes CVE-2026-125350, a security flaw being exploited in the wild, and eight other security flaws.
 
-### From Crest 0.9.1
+### From upstream 0.9.1
 - A signed Arma build now proves it can load a page before it ships: packaging refuses engine helpers of an unknown kind or with the wrong entitlements, and runs the signed package's own helpers to require a page's JavaScript to run.
 ]]></description>
             <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.68/Arma-0.9.68.dmg" length="195140762" type="application/octet-stream" sparkle:edSignature="ok3s1RSSLXC+YlVNVtpb8TW/NCyejWmsxBZ/ZLQAAv0dzJaPJVldM3/pnErUZ/S5dKHBoBPE42rSbaiAmiqLDg=="/>
@@ -925,7 +925,7 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
             <description sparkle:format="markdown"><![CDATA[Arma preview.
 
 ### Arma 0.9
-- Arma moves to the 0.9 line with Crest 0.9, which brings together Sub-Spaces, built-in ad blocking on Mac, iPhone and iPad, a Chromium engine built from Chromium itself at 157, and the Quick Window, Peek and appearance work. Arma's 0.8 releases already carried all of it; this build changes the version line and nothing else.
+- Arma moves to the 0.9 line with upstream 0.9, which brings together Sub-Spaces, built-in ad blocking on Mac, iPhone and iPad, a Chromium engine built from Chromium itself at 157, and the Quick Window, Peek and appearance work. Arma's 0.8 releases already carried all of it; this build changes the version line and nothing else.
 ]]></description>
             <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.9.66/Arma-0.9.66.dmg" length="195111342" type="application/octet-stream" sparkle:edSignature="AIyba1uD0B3gCF73gL0ILULtLrsYdoJuanM7ImI3qAiErhwnJYVG3F2tYENsKpTiB6pwO2ajk7UDwjpgaXc7Aw=="/>
         </item>
@@ -1003,7 +1003,7 @@ Nothing changes on macOS 26 and later.
             <sparkle:shortVersionString>0.8.274</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>26.1</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[Arma preview. Brings in upstream Crest's ad blocking.
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Brings in upstream's ad blocking.
 
 ### New
 - Arma blocks ads and trackers on every page, in WebKit and Chromium tabs, with EasyList, EasyPrivacy, uBlock Origin's lists and a list for your language. The lists stay up to date on their own, and blocked ads leave no empty boxes.
@@ -1055,7 +1055,7 @@ Nothing changes on macOS 26 and later.
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <description sparkle:format="markdown"><![CDATA[Arma preview.
 
-### From Crest 0.8.195
+### From upstream 0.8.195
 - Links on Facebook, and other links with brackets in their address, open in Peek instead of a blank page or an error page.
 - The sidebar's rows, Space header and Space pages slide with the card when you switch Space, and choosing a Space further than next door plays one slide instead of running past the Spaces between.
 - The sidebar floating over the page comes out once the pointer has rested on the window's edge for a moment, stays out while the pointer is past the window on its side, and has the docked sidebar's resize handle on its edge.
@@ -1073,7 +1073,7 @@ Nothing changes on macOS 26 and later.
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <description sparkle:format="markdown"><![CDATA[Arma preview.
 
-### From Crest 0.8.193
+### From upstream 0.8.193
 - New windows open at the sidebar width you last chose.
 - Clear Unpinned Tabs and Shift-Command-K clear only the shown Space's open tabs. Pinned and saved tabs stay, and so do other Spaces' tabs.
 - The inline address completion and the provider chip stop flickering while you type.
@@ -1106,10 +1106,10 @@ Nothing changes on macOS 26 and later.
 - Return to Main Window works when no main window is open: it opens one, which takes the window's tabs as soon as it appears, the way a torn-off window takes its tab.
 
 ### Settings
-- Choosing a Space in Settings is handled by Crest's own code alone; Arma's earlier workaround for Spaces imported from Arc is gone, since Crest's fix covers the cause.
+- Choosing a Space in Settings is handled by upstream's own code alone; Arma's earlier workaround for Spaces imported from Arc is gone, since upstream's fix covers the cause.
 
 ### For contributors
-- `AGENTS.md` now says how to fix things the way upstream Crest does: name the exact cause, make the smallest native change at that spot, and check Crest's recent commits before a larger change.
+- `AGENTS.md` now says how to fix things the way upstream does: name the exact cause, make the smallest native change at that spot, and check upstream's recent commits before a larger change.
 ]]></description>
             <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.255/Arma-0.8.255.dmg" length="192711301" type="application/octet-stream" sparkle:edSignature="6qqLVz6gYTb4rqD7fpV/eJ7/ZfeMcNwjIFmguaRee5g894cFmEAlYUwWyfA+t7Q+3GQJL9g0fJYIT2P1G5wgAQ=="/>
         </item>
@@ -1124,7 +1124,7 @@ Nothing changes on macOS 26 and later.
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <description sparkle:format="markdown"><![CDATA[Arma preview.
 
-### From Crest
+### From upstream
 - Offer Touch ID to Chromium sites that check for it first.
 - Install private Chrome Web Store extensions on Chromium.
 - Chromium pages keep taking clicks after a drag.
@@ -1134,7 +1134,7 @@ Nothing changes on macOS 26 and later.
 - The feature tour fits every screen.
 
 ### Settings
-- Clicking a Space in Settings now uses Crest's own fix; the Settings sidebar is Crest's again, with the Rearrange button for reordering Spaces.
+- Clicking a Space in Settings now uses upstream's own fix; the Settings sidebar is upstream's again, with the Rearrange button for reordering Spaces.
 
 ### Command line
 - The README shows `arma passwords`: unlock a Space's passwords with Touch ID, then list or copy them from the terminal.
@@ -1195,7 +1195,7 @@ Nothing changes on macOS 26 and later.
 - Drag any Space in the Settings list onto another to make it a Sub-Space, or between Spaces to reorder. The Rearrange button is gone.
 - The arrow keys move through the Settings list from Space to Space.
 
-### From Crest
+### From upstream
 - A phone or security key is offered when a Chromium passkey isn't on this Mac.
 - Chromium extension icons show their blocked-request count.
 - Edit shortcuts such as Copy and Paste work in Chromium extension popups and side panels.
@@ -1354,13 +1354,13 @@ Nothing changes on macOS 26 and later.
 - Servo is left out of this preview while it is made stable. Tabs, site rules and defaults set to Servo open in Chromium.
 - Open a Quick Window from any app with its shortcut.
 - Notices, status colours and controls are shared across Arma.
-- Brings in the latest Crest changes.
+- Brings in the latest upstream changes.
 ]]></description>
             <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.8.223/Arma-0.8.223.dmg" length="191896884" type="application/octet-stream" sparkle:edSignature="/6UIkyENCgk13O88d01eH0k6DlcCUEC5fbAIADF99uSsIuGIkjcrc7kkjMlaYvSjzWZYQWugqTLHOqW2dm2dDw=="/>
         </item>
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: KNiLoOgKTklXbkE3Mndb0fCR/Y5w56UlSpfhokYXuJS+B6fKxcLQQy7DHe1/Jr2mRbyLzaYXX02HIO0D5ZwZAA==
-length: 105700
+edSignature: vaH+oAtndyIbatkp9XEmDxZtN6jaA/748r9lQlPrgwzeSrNitMoc1TVuxQfhRs59tXVTnq/cXb4tuNmr1+8NCQ==
+length: 105795
 -->

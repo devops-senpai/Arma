@@ -1,6 +1,10 @@
-<?xml version="1.0" standalone="yes"?>
-<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+<?xml version="1.0" standalone="yes"?><!-- sparkle-sign-warning:
+IMPORTANT: This file was signed by Sparkle. Any modifications to this file requires re-signing this file with generate_appcast or sign_update! The signed signature will be embedded at the end of this file.
+--><rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
-        <title>BetterCrest</title>
+        <title>Arma</title>
     </channel>
-</rss>
+</rss><!-- sparkle-signatures:
+edSignature: zquWf52AHCuC+zZ+nmpB6wWTGGAp2Q0IV0SFBzV2HSgaeK7bCjckGVCPr0LDCWzfyzIemRROjv8fVupukZMqAw==
+length: 425
+-->
