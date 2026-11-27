@@ -26,6 +26,7 @@ internal static partial class StoredSessionCodec {
     internal static class Key {
         public const string AccessPolicy = "accessPolicy";
         public const string Accent = "accent";
+        public const string AllowsCommandLine = "allowsCommandLine";
         public const string AlsoOffersSaveToSystemPasswords = "alsoOffersSaveToSystemPasswords";
         public const string Alpha = "alpha";
         public const string Angle = "angle";

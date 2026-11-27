@@ -3751,6 +3751,7 @@ struct CredentialPreferences: Equatable, Sendable {
     var authentication: CredentialAuthentication
     var savePromptSeconds: Int
     var suggestsInPrivateWindows: Bool
+    var allowsCommandLine: Bool
 }
 
 struct CredentialRecord: Equatable, Sendable, Identifiable {
