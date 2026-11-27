@@ -3,6 +3,7 @@ import SwiftUI
 
 struct BrowserSettingsView: View {
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.colorScheme) private var colorScheme
     let browser: BrowserStore
     let pages: BrowserPagePool
     let cloudSync: BrowserCloudSyncController
@@ -63,6 +64,11 @@ struct BrowserSettingsView: View {
         .environment(\.browserSettingsIsTab, true)
         .environment(\.browserSettingsUsesLiveSidebar, usesLiveSidebar)
         .environment(\.browserSettingsOpenSpace, openSpaceAction)
+        // The scheme the window draws in, for the flyouts the pages present: a
+        // popover presented with the scheme a view forces, such as the crest
+        // stage's dark, prefers that scheme for the whole window while it is
+        // open, which the sidebar's pages avoid by naming the window's.
+        .environment(\.deviceColorScheme, colorScheme)
         // Every Mac browser window draws tab previews beside its sidebar.
         .environment(\.browserTabPreviewHosting, .hover)
         .environment(\.browserCodeScanning, codeScanning)
