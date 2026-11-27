@@ -26,16 +26,18 @@ struct BrowserAboutBuildInformation: Equatable, Sendable {
 }
 
 enum BrowserAboutLinks {
+    /// Arma has no forum: feedback goes to its GitHub Issues.
     static var feedback: URL {
-        url("https://www.reddit.com/r/CrestBrowser")
+        url("https://github.com/devops-senpai/Arma/issues")
     }
 
     static var issues: URL {
-        url("https://github.com/crest-browser/Crest/issues/new/choose")
+        url("https://github.com/devops-senpai/Arma/issues/new/choose")
     }
 
+    /// Arma has no roadmap board: its open issues stand in.
     static var roadmap: URL {
-        url("https://github.com/orgs/crest-browser/projects/1")
+        url("https://github.com/devops-senpai/Arma/issues")
     }
 
     private static func url(_ value: String) -> URL {

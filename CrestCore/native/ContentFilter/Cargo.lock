@@ -69,7 +69,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "crest-content-filter"
+name = "arma-content-filter"
 version = "1.0.0"
 dependencies = [
  "adblock",

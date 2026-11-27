@@ -7,7 +7,7 @@ public sealed class CrestBackplate {
     /// Each platform draws each shape's outline, so its renderer switches over the kind.
     public enum Kinds {
         None, Circle, Shield, FrenchShield, Diamond, Seal, Hexagon, Octagon, RoundedSquare, Oval, Banner, Badge, SoftShield,
-        SoftHexagon, Ribbon
+        SoftHexagon, Ribbon, Flag
     }
 
     #endregion
@@ -34,10 +34,13 @@ public sealed class CrestBackplate {
         CrestVocabulary.Simple);
     /// A ribbon hanging from rounded shoulders, notched at its foot.
     public static readonly CrestBackplate Ribbon = new(Kinds.Ribbon, "ribbon", "Ribbon", CrestVocabulary.Simple);
+    /// The guidon of Arma's logo: a swallowtailed banner hung from its top edge.
+    /// Its stored name stays "flag".
+    public static readonly CrestBackplate Flag = new(Kinds.Flag, "flag", "Guidon", CrestVocabulary.Studio);
 
     public static IReadOnlyList<CrestBackplate> All { get; } =
         [None, Circle, Shield, FrenchShield, Diamond, Seal, Hexagon, Octagon, RoundedSquare, Oval, Banner, Badge, SoftShield, SoftHexagon,
-            Ribbon];
+            Ribbon, Flag];
 
     #endregion
 

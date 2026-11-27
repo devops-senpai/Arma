@@ -59,16 +59,16 @@ def main():
         return
 
     commit = run("git", "-C", repo, "rev-parse", "HEAD", capture_output=True).stdout.strip()
-    with tempfile.TemporaryDirectory(prefix="crest-content-filter-") as temporary:
+    with tempfile.TemporaryDirectory(prefix="arma-content-filter-") as temporary:
         checksum = Path(temporary) / f"{asset}.sha256"
         checksum.write_text(f"{lock['sha256']}  {asset}\n")
-        notes = ("Crest's content filter, Brave's adblock engine behind Crest's C interface, compiled for "
+        notes = ("Arma's content filter, Brave's adblock engine behind Arma's C interface, compiled for "
                  "macOS, iOS and the iOS Simulator for the native core to link.\n\n"
                  f"Content filter key `{key}`, computed by `Scripts/control-plane/content_filter.py` over the "
                  f"crate and its recipe at commit `{commit}`.")
         if existing.returncode != 0:
             run("gh", "release", "create", tag, "--repo", args.repository, "--draft", "--prerelease", "--latest=false",
-                "--title", f"Crest content filter {key[:16]}", "--notes", notes)
+                "--title", f"Arma content filter {key[:16]}", "--notes", notes)
         # Only an unpublished draft can be resumed or replaced. The release
         # becomes visible to builds after every asset has uploaded.
         run("gh", "release", "upload", tag, archive, checksum, "--repo", args.repository, "--clobber")

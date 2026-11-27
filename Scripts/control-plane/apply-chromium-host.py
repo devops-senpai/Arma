@@ -16,7 +16,10 @@ import chromium_engine  # noqa: E402
 # compiles against. chromium_engine.py keys the published engine on them.
 ENGINE_CONTRACT = ("crest_core.h", "crest_app.h", "crest_engine.h", "crest_engine_contract.h")
 # The content filter's C interface, which the binding's request filter calls.
-CONTENT_FILTER_HEADER = "CrestCore/native/ContentFilter/include/crest_content_filter.h"
+CONTENT_FILTER_HEADER = "CrestCore/native/ContentFilter/include/arma_content_filter.h"
+# The engine's sources include the content filter's header under the name they
+# were written with; Arma's header takes that name inside the engine tree.
+ENGINE_TREE_NAMES = {"arma_content_filter.h": "crest_content_filter.h"}
 
 
 def main():
@@ -86,7 +89,7 @@ def main():
     headers = [host / "Apple/CrestChromiumHost.h", repo / CONTENT_FILTER_HEADER]
     headers += [repo / "CrestContracts/include" / name for name in ENGINE_CONTRACT]
     for header in headers:
-        destination = source / "chrome/browser/ui/crest" / header.name
+        destination = source / "chrome/browser/ui/crest" / ENGINE_TREE_NAMES.get(header.name, header.name)
         if not destination.is_file() or destination.read_bytes() != header.read_bytes():
             shutil.copy(header, destination)
     print("Installed host sources. Regenerate GN and build before packaging the native UI framework.")

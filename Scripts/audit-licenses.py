@@ -115,7 +115,7 @@ def audit_content_filter_crates(catalog: dict) -> int:
     allowed license and its text in the content filter's notices."""
     locked = re.findall(r'^\[\[package\]\]\nname = "([^"]+)"\nversion = "([^"]+)"',
                         CARGO_LOCK_PATH.read_text(), re.M)
-    actual = {f"{name} {version}" for name, version in locked if name != "crest-content-filter"}
+    actual = {f"{name} {version}" for name, version in locked if name != "arma-content-filter"}
     expected = catalog["contentFilterCrates"]
     if actual != set(expected):
         raise RuntimeError(
