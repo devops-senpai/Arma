@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "durable-tabs-return-to-saved-url",
+      "category": "improved",
+      "message": "Closing a pinned or saved tab returns it to its saved address, unless you choose Resume Last Location in Settings › Tabs."
+    }
+  ]
+}
