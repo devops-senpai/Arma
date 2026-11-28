@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "notifications-named-arma",
+      "category": "fixed",
+      "message": "Notifications from Arma show Arma's name and icon instead of Chromium's."
+    }
+  ]
+}

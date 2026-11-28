@@ -52,9 +52,9 @@ MACH_O_MAGIC = (bytes.fromhex("cafebabe"), bytes.fromhex("cffaedfe"), bytes.from
 LAUNCH_SENTINEL = b"crest-browser-launch"
 # The resources Crest's entry point reads to decide how a launch starts: a
 # product names its own profile folder, an experiment requires one.
-PRODUCT_HOST = "Crest-Native-Host"
+PRODUCT_HOST = "Arma-Native-Host"
 EXPERIMENT_HOST = "Crest-Isolated-Experiment"
-HOST_MARKERS = ("Crest-App-Owned-Host", PRODUCT_HOST, EXPERIMENT_HOST)
+HOST_MARKERS = ("Arma-App-Owned-Host", PRODUCT_HOST, EXPERIMENT_HOST)
 # The status Crest's entry point exits with when an experiment names no profile folder.
 EXPERIMENT_REFUSED = 64
 # Under a home folder: where a product keeps its engine profiles, and Chromium's
@@ -870,7 +870,7 @@ def published_engine(key, directory, repository):
         raise ValueError(f"{tag}, the engine to check profile upgrades from, is not published")
     # Engines published before universal builds name their architecture.
     names = {item["name"] for item in release.get("assets", []) if item.get("state") == "uploaded"}
-    archives = sorted(name for name in names if name.startswith(f"Crest-Chromium-Engine-{key[:16]}-")
+    archives = sorted(name for name in names if name.startswith(f"Arma-Chromium-Engine-{key[:16]}-")
                       and name.endswith(".zip") and f"{name}.sha256" in names)
     if not archives:
         raise ValueError(f"{tag} has no zipped engine with a checksum")

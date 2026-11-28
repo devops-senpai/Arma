@@ -30,7 +30,7 @@ final class MobileSpaceDownloadSettingsModel {
     func settings(for space: SpaceModel) -> BrowserSpaceDownloadSettings {
         BrowserSpaceDownloadSettings(
             asksWhereToSave: nil,
-            directoryName: chosenDirectoryName ?? String(localized: "Crest"),
+            directoryName: chosenDirectoryName ?? String(localized: "Arma"),
             usesCustomDirectory: chosenDirectoryName != nil,
             errorMessage: errorMessage,
             chooseDirectory: { [self] in chooseDirectory(for: space.id) },

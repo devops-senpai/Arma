@@ -1,13 +1,13 @@
 [package]
-name = "crest-content-filter"
+name = "arma-content-filter"
 version = "1.0.0"
 edition = "2024"
 license = "MPL-2.0"
-description = "Crest's content filter: Brave's adblock engine behind a C interface the core links."
+description = "Arma's content filter: Brave's adblock engine behind a C interface the core links."
 publish = false
 
 [lib]
-name = "crest_content_filter"
+name = "arma_content_filter"
 # The static library links into the native core on every Apple platform; the
 # dynamic one is what the core's tests load when they run without Native AOT.
 crate-type = ["staticlib", "cdylib"]
