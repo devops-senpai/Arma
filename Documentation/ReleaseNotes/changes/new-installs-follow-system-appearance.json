@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "new-installs-follow-system-appearance",
+      "category": "improved",
+      "message": "New installs follow the system's Light or Dark appearance again; unloaded tabs still aren't dimmed unless you turn that on."
+    }
+  ]
+}
