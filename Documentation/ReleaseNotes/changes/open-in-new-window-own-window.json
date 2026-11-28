@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "open-in-new-window-own-window",
+      "category": "improved",
+      "message": "Open in New Window moves the tab into a window of its own, as dragging it out of the window does, and Open Link in New Window opens the link in one."
+    }
+  ]
+}

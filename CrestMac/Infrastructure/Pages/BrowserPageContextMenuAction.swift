@@ -16,6 +16,7 @@ struct BrowserPageContextMenuAction {
         case split
         case space(UUID)
         case quickWindow
+        case window
         case blockElement
     }
 
@@ -88,6 +89,17 @@ struct BrowserPageContextMenuAction {
             symbolName: "macwindow.badge.plus", linkURL: linkURL, selectionText: nil
         ) { page, _, _ in
             page.openInQuickWindow(linkURL)
+        }
+    }
+
+    /// Opens `linkURL` in a window of its own over the page's Space, as a
+    /// tab dragged out of the window gets.
+    static func window(_ linkURL: URL) -> BrowserPageContextMenuAction {
+        BrowserPageContextMenuAction(
+            kind: .window, title: String(localized: "Open Link in New Window"), symbolName: "macwindow.badge.plus",
+            linkURL: linkURL, selectionText: nil
+        ) { page, _, _ in
+            page.openInNewWindow(linkURL)
         }
     }
 
@@ -194,6 +206,7 @@ struct BrowserPageContextMenu {
     /// Puts the rows ahead of what `menu` holds, with a separator between,
     /// after `newTab`, the engine's own row that opens the link in a new tab
     /// of the page's Space, which leads the menu wherever the engine put it.
+    /// The row that opens the link in a new window follows it.
     func insert(into menu: NSMenu, leading newTab: NSMenuItem? = nil) {
         var items: [NSMenuItem] = []
         if let newTab, host.opensLinksInCurrentSpace, menu.index(of: newTab) >= 0 {
@@ -277,6 +290,8 @@ extension BrowserPage {
         if let linkURL, ExternalWebLink.accepts(linkURL),
             linkDestinationHost.canOpenLink(from: source)
         {
+            // Arma's row that opens the link in a new window comes first.
+            if opensLinksInNewWindow { actions.append(.window(linkURL)) }
             actions.append(.peek(linkURL))
             if splitLinkHost.canOpenLink(context.tabID, context.assignment) {
                 actions.append(.split(linkURL))
