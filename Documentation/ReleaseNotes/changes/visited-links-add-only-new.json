@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "visited-links-add-only-new",
+      "category": "improved",
+      "message": "Following a link in a Space with a long history no longer rebuilds every visited link on the page."
+    }
+  ]
+}
