@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "palette-refused-answer-releases-keys",
+      "category": "fixed",
+      "message": "When the palette can't rank what you typed, Return, Tab and clicks act on the rows shown instead of waiting."
+    }
+  ]
+}
