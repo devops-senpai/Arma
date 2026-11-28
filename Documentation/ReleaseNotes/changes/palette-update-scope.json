@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "palette-update-scope",
+      "category": "new",
+      "message": "Type @update in the command palette to check for a new version."
+    }
+  ]
+}
