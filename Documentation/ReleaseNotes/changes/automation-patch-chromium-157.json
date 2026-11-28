@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "automation-patch-chromium-157",
+      "category": "internal",
+      "message": "The automation patch applies to Chromium 157."
+    }
+  ]
+}

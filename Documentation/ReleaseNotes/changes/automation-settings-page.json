@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "automation-settings-page",
+      "category": "new",
+      "message": "Settings › Automation lets Playwright, Puppeteer, Selenium and other testing frameworks drive Arma's Chromium tabs, in a profile you pick or an empty Ephemeral one, with setup for each tool."
+    }
+  ]
+}

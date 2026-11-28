@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "automation-engine-wiring",
+      "category": "internal",
+      "message": "With Automation on, Arma starts its Chromium engine at launch and tells it which profile hosts Ephemeral tabs."
+    }
+  ]
+}

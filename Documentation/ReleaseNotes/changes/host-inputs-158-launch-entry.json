@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "id": "host-inputs-158-launch-entry",
+      "category": "internal",
+      "message": "The engine host hashes cover Crest's new launch entry point together with Arma's automation patch, so the 158 engine builds from the synced inputs.",
+      "platforms": [
+        "mac"
+      ]
+    }
+  ]
+}
