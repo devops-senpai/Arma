@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "servo-engine-kind",
+      "category": "internal",
+      "message": "The core names Servo as a third browsing engine, ahead of a Servo binding."
+    }
+  ]
+}
