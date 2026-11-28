@@ -565,7 +565,8 @@ final class MobileBrowserPageStore:
         // folder's access is open.
         BrowserPlatformDownloadPreferences.shared.openDirectories(
             for: browser.spaceModels.lazy.filter { $0.profileID == item.profileID }.map(\.id))
-        MobileBrowserDialogPresenter.openDownloadedFile(at: destinationURL, in: destination)
+        MobileBrowserDialogPresenter.openDownloadedFile(
+            at: destinationURL, in: destination, window: activePage?.webView.window)
     }
 
     /// Opens a page for `tab` in `space` through the core and hosts what WebKit
