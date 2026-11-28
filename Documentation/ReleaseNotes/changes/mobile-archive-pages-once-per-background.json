@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "mobile-archive-pages-once-per-background",
+      "category": "internal",
+      "message": "On iPhone and iPad, each open page's session state is saved once as Crest leaves the foreground instead of twice."
+    }
+  ]
+}
