@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "stable-engine-key-own-inputs",
+      "category": "internal",
+      "message": "The engine build's profile-upgrade check reads the last release's engine key with that release's own list of engine inputs."
+    }
+  ]
+}

@@ -7,8 +7,8 @@ import fcntl
 import hashlib
 import html
 import http.server
-import io
 import importlib.util
+import io
 import json
 import os
 from pathlib import Path
@@ -838,12 +838,24 @@ def stable_engine_key(repo, repository):
                       capture_output=True).returncode:
         run("git", "-C", repo, "fetch", "--quiet", "--depth=1", "--no-tags", f"https://github.com/{repository}.git",
             f"{ref}:{ref}")
-    archive = subprocess.run(["git", "-C", repo, "archive", "--format=tar", ref, "--", *chromium_engine.INPUTS],
-                             capture_output=True, check=True).stdout
+    # The release's key is the one its own checkout computed, over the inputs
+    # its own chromium_engine.py lists: a later checkout can rename an input
+    # the release does not have.
+    module = "Scripts/control-plane/chromium_engine.py"
+    source = run("git", "-C", repo, "show", f"{ref}:{module}", capture=True)
     with tempfile.TemporaryDirectory(prefix="stable-inputs-") as temporary:
+        script = Path(temporary) / "stable_chromium_engine.py"
+        script.write_text(source)
+        specification = importlib.util.spec_from_file_location("stable_chromium_engine", script)
+        released = importlib.util.module_from_spec(specification)
+        specification.loader.exec_module(released)
+        archive = subprocess.run(["git", "-C", repo, "archive", "--format=tar", ref, "--", *released.INPUTS],
+                                 capture_output=True, check=True).stdout
+        tree = Path(temporary) / "tree"
+        tree.mkdir()
         with tarfile.open(fileobj=io.BytesIO(archive)) as inputs:
-            inputs.extractall(temporary, filter="data")
-        return chromium_engine.engine_key(Path(temporary))
+            inputs.extractall(tree, filter="data")
+        return released.engine_key(tree)
 
 
 def published_engine(key, directory, repository):
