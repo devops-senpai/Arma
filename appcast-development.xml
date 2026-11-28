@@ -6,6 +6,41 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>BetterCrest</title>
         <item>
+            <title>0.11.138</title>
+            <pubDate>Sat, 28 Nov 2026 01:13:57 -0500</pubDate>
+            <link>https://github.com/devops-senpai/Arma</link>
+            <sparkle:channel>development</sparkle:channel>
+            <sparkle:version>1100138</sparkle:version>
+            <sparkle:shortVersionString>0.11.138</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <description sparkle:format="markdown"><![CDATA[Arma preview. Chromium 158.0.8127.90 and 27 improvements from upstream.
+
+### New
+- Undo brings back the tabs Clear put away.
+- The command palette can list Sites before search, and Control-W closes the highlighted recent tab.
+- Downloads open, share and save on iPhone and iPad.
+- The sidebar's scroll bar can be dragged and follows Show scroll bars.
+
+### Improved
+- Keys typed right after opening the palette are kept, and Return acts on what was typed.
+- Closing a tab with no earlier tab to return to shows the tab beside it; after reading links opened in the background, closing moves on to the next one.
+- Pages appear as soon as they first paint, and reawakened tabs reload.
+- Pinned tab icons stay visible and dim without flicker.
+- A newly opened tab is revealed in the sidebar.
+- An open PDF prints its own pages.
+
+### Fixed
+- ⌘W with the search field open closes only the field.
+- Modified clicks on SVG links and script-opened windows open a new tab.
+- Pages stay in their window entering and leaving full screen.
+- A WebKit page's print job no longer quits the app.
+- An unloaded tab no longer loads another in its place.
+- The window buttons stay put with a right-side sidebar.
+- Chromium 158.0.8127.90 with four community engine fixes.
+]]></description>
+            <enclosure url="https://github.com/devops-senpai/Arma/releases/download/v0.11.138/Arma-0.11.138.dmg" length="328065680" type="application/octet-stream" sparkle:edSignature="NxN3Q8lkVhOJwd7941EuSAKC3hkr7uztVNffjQd64LknFFP1X0yjB1MtIBNUd0WNc4nPKwWykK7HXeDLRpzADA=="/>
+        </item>
+        <item>
             <title>0.11.137</title>
             <pubDate>Fri, 27 Nov 2026 00:01:25 -0500</pubDate>
             <link>https://github.com/devops-senpai/Arma</link>
@@ -1420,6 +1455,6 @@ Nothing changes on macOS 26 and later.
     </channel>
 </rss>
 <!-- sparkle-signatures:
-edSignature: 7gjDWp4eNbKrxT1N+FICxRijIKD5vFeEYnSFw7X6Xr6ys91ZOOW5Kwfl7nbwIt2zB9kUPXDs96yjnDvdt1xLDQ==
-length: 109615
+edSignature: XBPyK5X+RUJ5Z0uEWCVqblm2TSL6jg0s+rsVhVDT2gRyPg7PAzP2UvabWFAv7sc6Dtq+yTWPh40agp8ek2GGDg==
+length: 111685
 -->
