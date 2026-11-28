@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "sidebar-rows-find-their-page",
+      "category": "improved",
+      "message": "The sidebar stays responsive with many pages loaded: a tab's row looks up only its own page."
+    }
+  ]
+}
