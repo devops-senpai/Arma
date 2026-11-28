@@ -21,9 +21,9 @@ public sealed partial class NativeSessionAuthority {
     /// of `space`, and shows the joined tab in the issuing window. A copy
     /// starts from where its source's page is now; see `StartFromSourcePage`.
     /// A durable target's split copied into new tabs keeps its name, icon and
-    /// tint.
+    /// tint. The split then takes `shape`, when one is named.
     internal SessionEdit Joining(SessionState basis, SpaceState space, BrowserTabCollection edited, Guid windowId, Guid tabId, Guid targetId,
-        int? index, Pages? pages, DateTimeOffset now, IIdSource ids) {
+        int? index, Pages? pages, DateTimeOffset now, IIdSource ids, SplitShape? shape = null) {
         var target = edited.Tab(targetId);
         var durableGroup = target.Placement.IsDurable ? target.SplitGroupId : null;
         var joined = edited.JoinSplit(tabId, targetId, index, ids, now);
@@ -31,6 +31,7 @@ public sealed partial class NativeSessionAuthority {
         if (durableGroup is { } copied && joined.Copies.Any(pair => pair.Source == targetId)
             && edited.Tab(joined.SelectedTab).SplitGroupId is { } copy)
             edited.CopySplitMetadata(copied, copy, now);
+        if (shape is not null && edited.Tab(joined.SelectedTab).SplitGroupId is { } shaped) edited.Shape(shaped, shape, now);
         edited.PruneSplitMetadata();
         var followUp = new WindowFollowUp(IssuingWindow(windowId)).ShowTab(space.Id, joined.SelectedTab).ShowSpace(space.Id);
         return new(basis.Replacing(edited.Capture(space)), SyncStaging.Edit, followUp,

@@ -13,6 +13,12 @@ final class BrowserSidebarInteractionState: BrowserStoreInteractionObserving {
     /// The folder whose title the window's sidebar is editing, such as one it
     /// just made. The folder's row starts editing when it appears.
     var editingFolderRequest: BrowserFolderRuntimeAssignment?
+    /// The card a tab menu asked the content area to pick up; see `+CardCarry`.
+    var cardCarryRequest: BrowserSplitCardCarryRequest?
+    /// The last request a content area took up, kept by the window rather
+    /// than by a content area a Space switch rebuilds, so a new one never
+    /// takes up a request made long ago.
+    @ObservationIgnored var claimedCardCarrySequence = 0
     /// The tab the window last opened, until the list of its Space takes it;
     /// only the windowed shell asks. A newer one replaces it, so a burst of
     /// opened tabs reveals the last.

@@ -171,6 +171,14 @@ internal static partial class StoredSessionCodec {
         public const string SplitFocusFollowsMouse = "splitFocusFollowsMouse";
         public const string SplitGroupId = "splitGroupID";
         public const string SplitGroups = "splitGroups";
+        public const string SplitShape = "shape";
+        public const string SplitShapeModifiedAt = "shapeModifiedAt";
+        public const string SplitAxis = "axis";
+        public const string SplitChildren = "children";
+        /// The tree of cards and branches an earlier Arma build kept in place
+        /// of a shape, read for one release.
+        public const string LegacySplitLayout = "layout";
+        public const string LegacySplitLayoutModifiedAt = "layoutModifiedAt";
         public const string StartingPresetId = "startingPresetID";
         public const string StartupBehavior = "startupBehavior";
         public const string StoredIconMode = "storedIconMode";

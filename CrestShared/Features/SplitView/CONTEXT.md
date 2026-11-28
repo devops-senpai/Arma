@@ -3,7 +3,10 @@
 Crest's split view: an ordered row of page cards, the gaps between them and
 the dividers in those gaps, card focus, placeholders, and the drop zones that
 add a page to a split. `BrowserSplitColumnsView` owns geometry only; widths
-come from `BrowserSplitColumnLayout` and membership from the session.
+come from `BrowserSplitColumnLayout` and membership from the session. A split
+the core keeps in a `SplitShape` tiles the same slots in columns and stacked
+rows: `BrowserSplitColumnsView+Shape` swaps in `BrowserSplitShapeLayout`
+through `AnyLayout`, so cards keep their hosts.
 
 ## Goal
 
@@ -15,9 +18,9 @@ practice window.
 | Path | What it is |
 | --- | --- |
 | `Components/BrowserSplitCardResizeHandle/` | Dragging a divider between cards |
-| `Components/` (files) | Columns view, placeholder card, focus indicator, content drop zone and drop-card frame modifiers |
-| `Models/` | Page surface presentation (a row of cards or one page), column slots, panel columns, width transaction, card move direction |
-| `Support/` | Column and panel layout, layout metrics, resize space, drop-target view extension |
+| `Components/` (files) | Columns view and its shape extension, arrangement icon, placeholder card, focus indicator, content drop zone and drop-card frame modifiers |
+| `Models/` | Page surface presentation (a row of cards or one page, and a swap in flight), column slots, panel columns, width transaction, card move direction, drop landing, the `SplitShape` mirror |
+| `Support/` | Column, shape and panel layout, layout metrics, resize space, drop-target view extension |
 
 ## Depends on
 

@@ -279,6 +279,14 @@ struct BrowserTabOrganizationMenuContent: View {
         if isRenderableSplitMember {
             moveButton(.left, title: "Move Left", systemImage: "arrow.left")
             moveButton(.right, title: "Move Right", systemImage: "arrow.right")
+            #if os(macOS)
+                // The card rides the pointer until a click puts it down, as a
+                // Shift-Command drag carries it; only the Mac carries cards.
+                Button("Move Card", systemImage: "arrow.up.and.down.and.arrow.left.and.right") {
+                    performIfCurrent { sidebarInteraction?.requestCardCarry(tab.id) }
+                }
+                .disabled(!context.isCurrent(sourceAssignment) || !browser.shownCards.contains { $0.id == tab.id })
+            #endif
 
             Button("Remove from Split", systemImage: "rectangle.badge.minus") {
                 performIfCurrent {
