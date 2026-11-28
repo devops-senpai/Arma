@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "fork-sync-folds-fixups-in-replay",
+      "category": "internal",
+      "message": "The fork's sync folds fixup commits as it replays them, following renamed files, so a fixup folds even when later commits changed the same files."
+    }
+  ]
+}

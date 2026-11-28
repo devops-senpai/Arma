@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "fork-sync-always-folds-fixups",
+      "category": "internal",
+      "message": "The fork sync folds every fixup commit, including the one it makes for the Xcode project."
+    }
+  ]
+}

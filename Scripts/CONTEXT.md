@@ -17,10 +17,11 @@ CI runs.
 | `bootstrap.sh` | First-run setup: generates the project, links the Claude Code skill, runs the version and identity checks |
 | `check-architecture.py`, `check-swift-format.sh`, `check-public-source.py`, `check-contribution.py` | Layer and SwiftUI contracts, changed-file formatting, public-source contents, the pull request AI declaration and sign-offs |
 | `set-version.sh`, `check-version.sh` | Patch and release-line bumps; the staged version and release-note check |
-| `release_note_catalog.py`, `release_note_publication.py`, `generate-release-notes.py` | Validate `Documentation/ReleaseNotes.json`, advance per-channel cursors, render release copy |
+| `release_note_catalog.py`, `release_note_publication.py`, `generate-release-notes.py`, `crest_version.py` | Validate `Documentation/ReleaseNotes/` (version files and the fragments under `changes/`) and the version a commit builds as, from git |
 | `validate.sh`, `validate-identity.sh`, `validate-cache-hygiene.sh` | Script tests plus macOS and iOS unit gates; required paths and identifiers; leftover build products |
 | `sync-upstream-engine.sh` | Mirrors upstream Crest's prebuilt Chromium engine for the current engine key; retired for Arma, whose engine inputs differ, so it builds its own (`task engine:build`) |
-| `sync-upstream.sh`, `merge-release-notes.py` | Merges upstream Crest's main into this fork, taking the files upstream owns and regenerating outputs; the three-way release-note catalog merge it uses |
+| `sync-upstream.sh` | Merges upstream Crest's main into this fork, taking the files upstream owns and regenerating outputs |
+| `fork/` | The fork's own flow, run through `Taskfile.yml`: `sync.sh` and `regroup.py` rebuild `main` as upstream plus one commit per fork change; `release.sh` and `notarize.sh` build, sign, notarize and package a release with secrets read from sops ([runbook](../Documentation/ForkRunbook.md)) |
 | `package-installer-dmg.sh` | Wraps an Arma.app in the drag-to-install disk image: a sized Finder window over `Brand/Installer`'s background, Arma beside Applications, LZMA-compressed |
 | `fork/brand-strings.py`, `fork/generate-arma-icons.py` | Arma's name in the built strings (the Brand strings build phase) and Arma's art in Crest's icon files ([Renaming](../Documentation/Renaming.md)) |
 | `audit-licenses.py`, `audit-periphery.sh` | License surface against `Config/ThirdPartyDependencies.json`; the optional dead-code evidence audit |

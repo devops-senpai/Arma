@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "id": "fork-release-universal",
+      "category": "internal",
+      "message": "The Mac release builds the native core and packages the Chromium engine for Apple silicon and Intel, and checks that every slice it ships holds both architectures.",
+      "platforms": [
+        "mac"
+      ]
+    }
+  ]
+}
