@@ -60,11 +60,12 @@ public sealed record TabIconAccent(double Red, double Green, double Blue);
 /// the sites the person asked it never to offer to save for. Only whether it offers
 /// them reaches the person's other devices. <see cref="Authentication"/> is how often
 /// showing or copying a saved password asks to authenticate. The offer to save closes
-/// after <see cref="SavePromptSeconds"/>; older records leave both out and take the
-/// defaults.</summary>
+/// after <see cref="SavePromptSeconds"/>. <see cref="SuggestsInPrivateWindows"/> lets a
+/// private window suggest, never save, the Space's passwords. Older records leave these
+/// out and take the defaults.</summary>
 public sealed record CredentialPreferences(bool IsEnabled, bool SyncsCrestPasswordsWithICloud, bool AlsoOffersSaveToSystemPasswords,
     IReadOnlyList<CredentialOrigin> NeverSavedSites, CredentialAuthentication Authentication,
-    int SavePromptSeconds = CredentialPreferences.DefaultSavePromptSeconds) {
+    int SavePromptSeconds = CredentialPreferences.DefaultSavePromptSeconds, bool SuggestsInPrivateWindows = false) {
     #region Static Variables
 
     /// The most sites a Space keeps in its never-save list.
@@ -108,11 +109,12 @@ public sealed record CredentialPreferences(bool IsEnabled, bool SyncsCrestPasswo
         && AlsoOffersSaveToSystemPasswords == other.AlsoOffersSaveToSystemPasswords
         && NeverSavedSites.SequenceEqual(other.NeverSavedSites)
         && Authentication == other.Authentication
-        && SavePromptSeconds == other.SavePromptSeconds;
+        && SavePromptSeconds == other.SavePromptSeconds
+        && SuggestsInPrivateWindows == other.SuggestsInPrivateWindows;
 
     public override int GetHashCode() =>
         HashCode.Combine(IsEnabled, SyncsCrestPasswordsWithICloud, AlsoOffersSaveToSystemPasswords, NeverSavedSites.Count,
-            Authentication.Name, SavePromptSeconds);
+            Authentication.Name, SavePromptSeconds, SuggestsInPrivateWindows);
 
     #endregion
 }
