@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "ipad-location-settings-recovery-no-hang",
+      "category": "fixed",
+      "message": "On iPad, a site's location request no longer waits forever when Settings opens beside Crest instead of over it."
+    }
+  ]
+}
