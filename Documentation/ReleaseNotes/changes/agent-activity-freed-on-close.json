@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "agent-activity-freed-on-close",
+      "category": "fixed",
+      "message": "Closing a tab a coding agent was watching frees the console messages and network requests Crest kept for it."
+    }
+  ]
+}
