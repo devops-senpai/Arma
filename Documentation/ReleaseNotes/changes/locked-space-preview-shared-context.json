@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "locked-space-preview-shared-context",
+      "category": "improved",
+      "message": "The blurred page previews behind a locked Space appear sooner."
+    }
+  ]
+}
