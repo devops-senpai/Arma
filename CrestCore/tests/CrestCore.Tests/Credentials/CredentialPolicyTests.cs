@@ -176,13 +176,19 @@ public sealed class CredentialPolicyTests {
     }
 
     [Fact]
-    public void AUsernameHintAppliesOnlyToItsExactOriginsWithinItsLifetime() {
+    public void AUsernameHintAppliesToTheSameSiteWithinItsLifetime() {
         var hint = new CredentialUsernameHint(Login, Login, 1_000);
         Assert.True(hint.Applies(Login, Login, 1_001));
         Assert.True(hint.Applies(Login, Login, 1_000 + CredentialUsernameHint.Lifetime));
-        Assert.False(hint.Applies(Embedded, Login, 1_001));
-        Assert.False(hint.Applies(Login, Embedded, 1_001));
+        // A sign-in that asks for the password on another host of the same site.
+        Assert.True(hint.Applies(Embedded, Embedded, 1_001));
         Assert.False(hint.Applies(Login, Login, 1_001 + CredentialUsernameHint.Lifetime));
+        CredentialOrigin elsewhere = new("https", "example.org", 443), insecure = new("http", "accounts.example.com", 80);
+        Assert.False(hint.Applies(elsewhere, elsewhere, 1_001));
+        Assert.False(hint.Applies(insecure, Login, 1_001));
+        // Hosts under a public suffix belong to different people.
+        CredentialOrigin alice = new("https", "alice.github.io", 443), bob = new("https", "bob.github.io", 443);
+        Assert.False(new CredentialUsernameHint(alice, alice, 1_000).Applies(bob, bob, 1_001));
     }
 
     [Fact]
