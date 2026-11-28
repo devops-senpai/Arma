@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "fill-login-on-added-sites",
+      "category": "fixed",
+      "message": "A saved password now fills on every website added to it, not only the one it was saved for."
+    }
+  ]
+}
