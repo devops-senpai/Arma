@@ -380,6 +380,9 @@ struct SiteControlsValueRows: View {
             if let engines = model.platform.engineChoice {
                 SiteControlsEngineRow(choice: engines)
             }
+            if model.origin != nil {
+                SiteControlsPasswordsRow(page: model.platform.page)
+            }
             if model.host != nil {
                 SiteControlsRow("Site Data", symbol: "externaldrive", value: nil) { model.open(.siteData) }
                     .accessibilityIdentifier("site-control-site-data")

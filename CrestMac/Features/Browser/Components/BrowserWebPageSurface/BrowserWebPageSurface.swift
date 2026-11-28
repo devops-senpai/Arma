@@ -110,7 +110,8 @@ struct BrowserWebPageSurface: View {
                 presentation: BrowserCredentialChromePresentation.resolve(
                     saveCandidate: page.credentialSaveCandidate,
                     fillRequest: page.credentialFillRequest,
-                    autofillSaveCandidate: page.autofillSaveCandidate
+                    autofillSaveCandidate: page.autofillSaveCandidate,
+                    pauseOffer: page.credentialPauseOffer
                 ),
                 fillPort: credentialFillPort,
                 savePort: credentialSavePort,

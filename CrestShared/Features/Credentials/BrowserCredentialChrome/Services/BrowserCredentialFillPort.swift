@@ -65,6 +65,17 @@ struct BrowserCredentialFillPort {
 
     /// Opens Settings at the Space's passwords, where the shell can.
     var openPasswords: (() -> Void)? = nil
+
+    /// What the person closing the prompt does: it goes, the prompts stay
+    /// away a moment and the page offers to pause them. A shell that can't
+    /// pause leaves it nil, and closing dismisses.
+    var close: (() -> Void)? = nil
+
+    /// Pauses Arma's password prompts on the page, where the shell can.
+    var pause: ((BrowserCredentialPauseLength) -> Void)? = nil
+
+    /// Closes the prompt as the person asked.
+    var closePrompt: () -> Void { close ?? dismiss }
 }
 
 extension BrowserCredentialFillPort {
@@ -89,6 +100,8 @@ extension BrowserCredentialFillPort {
             holdKeys: { hold, requestID in
                 Task { @MainActor in await page.holdCredentialKeys(hold, for: requestID) }
             },
-            openPasswords: openPasswords)
+            openPasswords: openPasswords,
+            close: page.closeCredentialPrompt,
+            pause: page.pauseCredentialPrompts(for:))
     }
 }
