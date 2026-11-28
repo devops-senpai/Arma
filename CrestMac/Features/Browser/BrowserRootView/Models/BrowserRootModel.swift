@@ -695,6 +695,7 @@ extension BrowserRootModel {
             browser: browser,
             mode: mode,
             loadInShownPage: { [weak self] in self?.showLoading($0) },
+            showOpened: { [weak self] in self?.showOpened($0) },
             openSplit: { [browser] url, source in
                 let assignment = BrowserSpaceRuntimeAssignment(spaceID: source.spaceID, profileID: source.profileID)
                 return browser.openLinkInSplit(url: url, joining: source.tabID, matching: assignment) != nil
@@ -711,6 +712,13 @@ extension BrowserRootModel {
             }
         )
         return opening.open(url, from: source, with: opener)
+    }
+
+    /// Presents the tab that just took `url`, whose page opens loading it,
+    /// and shows `url` in the address field.
+    private func showOpened(_ url: URL) {
+        pages.select()
+        address = url.absoluteString
     }
 
     /// Loads `url` in the page the window shows and shows it in the address field.
