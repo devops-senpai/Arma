@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "mac-new-tab-single-load",
+      "category": "internal",
+      "message": "New tabs opened from a link, the palette, history or a local document start loading once instead of twice."
+    }
+  ]
+}
