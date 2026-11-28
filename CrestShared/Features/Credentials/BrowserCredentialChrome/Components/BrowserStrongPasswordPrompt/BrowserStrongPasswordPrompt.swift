@@ -28,6 +28,10 @@ struct BrowserStrongPasswordPrompt: View {
     @State private var model = BrowserStrongPasswordOperationModel()
     @State private var offers: [BrowserStrongPasswordOffer] = []
     @State private var selectedIndex = 0
+    /// The person's length and characters, once they open Options and change
+    /// them; until then the site and Crest's styles decide.
+    @State private var generation = PasswordGeneration.seeded
+    @State private var usesGeneration = false
 
     var body: some View {
         BrowserCredentialPromptSurface(
@@ -47,7 +51,14 @@ struct BrowserStrongPasswordPrompt: View {
                 dismiss: port.closePrompt,
                 openPasswords: port.openPasswords,
                 redraw: redraw,
-                choose: choose
+                choose: choose,
+                generation: Binding(
+                    get: { generation },
+                    set: { chosen in
+                        generation = chosen
+                        usesGeneration = true
+                        redrawToGeneration()
+                    })
             )
         }
         .task(id: request.id) {
@@ -85,8 +96,23 @@ struct BrowserStrongPasswordPrompt: View {
 
     /// Draws another password for the offer at `index`.
     private func redraw(_ index: Int) {
+        if usesGeneration {
+            redrawToGeneration()
+            return
+        }
         guard offers.indices.contains(index), let offer = draw(offers[index].style) else { return }
         offers[index] = offer
+    }
+
+    /// Offers one password made to the person's length and characters.
+    private func redrawToGeneration() {
+        guard
+            let recipe = try? browser.strongPasswordRecipe(
+                for: request.requirements, style: .random, generation: generation),
+            let password = try? BrowserStrongPasswordGenerator.generate(from: recipe)
+        else { return }
+        offers = [BrowserStrongPasswordOffer(style: .random, recipe: recipe, password: password)]
+        selectedIndex = 0
     }
 
     /// What a key the page held back does: the arrows move between the
