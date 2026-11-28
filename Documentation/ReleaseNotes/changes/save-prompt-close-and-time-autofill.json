@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "save-prompt-close-and-time-autofill",
+      "category": "improved",
+      "message": "The Save Password prompt closes on its own after a time each Space chooses in Settings › Autofill, 10 seconds unless you change it, and the Mac's prompt has a close button in its corner. Resting the pointer on it keeps it open, and the address field's key still offers the password afterwards."
+    }
+  ]
+}
