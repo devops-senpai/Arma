@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "start-page-after-saved-tab",
+      "category": "fixed",
+      "message": "Closing a saved or pinned tab that leaves a Space with nothing open shows the Start Page again."
+    }
+  ]
+}
