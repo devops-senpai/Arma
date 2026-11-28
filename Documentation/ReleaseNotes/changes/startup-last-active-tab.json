@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "startup-last-active-tab",
+      "category": "improved",
+      "message": "Arma opens the tab you were last on when it starts, unless you choose Show Start Page in Settings."
+    }
+  ]
+}
