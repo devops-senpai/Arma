@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "quick-window-address-partial-selection",
+      "category": "fixed",
+      "message": "In a Quick Window's address editor, clicking or dragging in the address places the cursor or selects part of it, so you can trim a URL, instead of the whole address staying selected."
+    }
+  ]
+}
