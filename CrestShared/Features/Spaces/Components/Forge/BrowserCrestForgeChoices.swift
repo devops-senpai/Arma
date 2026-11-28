@@ -2,11 +2,12 @@ import Foundation
 
 // The parts More Customization offers a crest: the ones that read at a
 // sidebar's size and that the starter crests wear, with no fine tuning.
-// A crest that already wears another keeps it.
+// A crest that already wears another keeps it. The guidon of Arma's logo,
+// which a new Space's crest wears, comes first among the shapes.
 
 extension CrestBackplate {
     static let offered: [CrestBackplate] = [
-        .shield, .frenchShield, .circle, .seal, .hexagon, .octagon, .diamond, .banner,
+        .flag, .shield, .frenchShield, .circle, .seal, .hexagon, .octagon, .diamond, .banner,
     ]
 }
 

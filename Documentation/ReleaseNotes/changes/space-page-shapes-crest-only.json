@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "id": "space-page-shapes-crest-only",
+      "category": "improved",
+      "message": "A Space's Appearance page now shapes only its crest: the stage shows a color for each part of the crest, More Customization holds the crest's parts alone and steps aside for a symbol or emoji icon, and the sidebar, text, folder, command palette and popover settings live with the theme under Settings › Themes. A theme's folder tint has one strength control, Folder colors.",
+      "platforms": [
+        "mac"
+      ]
+    }
+  ]
+}

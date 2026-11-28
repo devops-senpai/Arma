@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "themes-page-fits-window",
+      "category": "fixed",
+      "message": "Settings › Themes fits the window at its usual width: where the page is narrow, the theme's preview stands above its colors instead of running past the edge."
+    }
+  ]
+}

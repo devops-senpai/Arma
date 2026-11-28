@@ -7,7 +7,8 @@ namespace CrestCore.Contracts;
 /// Page tab. The core names it and gives it its symbol, accent and look; a
 /// private workspace's Space never offers to save passwords. The window that
 /// asked shows it, when that window is open over the workspace.
-public sealed record CreateSpace(Guid WorkspaceId, Guid WindowId, Guid SpaceId) : SessionIntent(WorkspaceId) {
+public sealed partial record CreateSpace(Guid WorkspaceId, Guid WindowId, Guid SpaceId, SpaceBranding? Look = null,
+    SpaceBranding? DarkLook = null) : SessionIntent(WorkspaceId) {
     #region Actions - Session
 
     internal override SessionEdit? Edit(NativeSessionAuthority workspace, SessionTurn turn) {
@@ -16,6 +17,7 @@ public sealed record CreateSpace(Guid WorkspaceId, Guid WindowId, Guid SpaceId) 
         if (turn.Basis.Spaces.Count >= SessionState.MaximumSpaces) throw new Rejected(new SpaceLimitReached(SessionState.MaximumSpaces));
         var space = SpaceTemplate.For(workspace.Kind.IsPrivate)
             .Make(SpaceId, turn.Ids.Next(), turn.Ids.Next, turn.Basis.Spaces.Count + 1, turn.Now);
+        space = Dressed(space);
         // A new Space is the one its window shows next, on its only tab.
         var followUp = new WindowFollowUp(workspace.IssuingWindow(WindowId)).ShowSpace(space.Id).ShowTab(space.Id, space.Tabs[0].Id);
         return new(turn.Basis with { Spaces = [.. turn.Basis.Spaces, space] }, SyncStaging.Creation, followUp);

@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "theme-file-keeps-dark-look",
+      "category": "improved",
+      "message": "A theme file keeps its dark look while the look is off, so an exported theme carries both looks."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "id": "space-theme-row-in-page",
+      "category": "improved",
+      "message": "The Theme row now heads a Space's Appearance page as its first setting and scrolls with it, offering the themes alone. Modify Theme Too is gone: a Space's page shapes only its crest, and themes change only under Settings › Themes.",
+      "platforms": [
+        "mac"
+      ]
+    }
+  ]
+}

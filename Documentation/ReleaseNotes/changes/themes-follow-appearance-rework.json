@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "id": "themes-follow-appearance-rework",
+      "category": "internal",
+      "message": "Arma's theme editor and Space appearance page follow Crest's reworked Appearance page: a theme's colors and presets sit under its stage, a Space's icon keeps its house colors, and the stage shows only the crest's parts.",
+      "platforms": [
+        "mac"
+      ]
+    }
+  ]
+}

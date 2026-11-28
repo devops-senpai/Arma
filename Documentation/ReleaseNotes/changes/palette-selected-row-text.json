@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "palette-selected-row-text",
+      "category": "new",
+      "message": "A theme sets the color of the command palette’s selected row text, light and dark, in Settings › Themes and with `arma theme` (--palette-light-selected-text, --palette-dark-selected-text); without one the row keeps its paper’s ink."
+    }
+  ]
+}

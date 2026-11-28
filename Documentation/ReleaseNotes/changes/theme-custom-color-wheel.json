@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "theme-custom-color-wheel",
+      "category": "fixed",
+      "message": "Custom colors in the Theme editor stick: pick them on a wheel or type a hex code, and they save as you go."
+    }
+  ]
+}

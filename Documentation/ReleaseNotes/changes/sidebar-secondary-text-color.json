@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "sidebar-secondary-text-color",
+      "category": "new",
+      "message": "Themes can set a secondary text color for the sidebar's quieter labels, such as New Tab and Clear, so they stay readable over pictures."
+    }
+  ]
+}

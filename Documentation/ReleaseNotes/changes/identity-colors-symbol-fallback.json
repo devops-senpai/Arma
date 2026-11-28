@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "identity-colors-symbol-fallback",
+      "category": "internal",
+      "message": "A Space keeping its identity colors gives its icon the primary color it was following, since Crest no longer keeps a resolved copy."
+    }
+  ]
+}

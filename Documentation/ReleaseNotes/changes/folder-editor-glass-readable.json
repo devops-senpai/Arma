@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "folder-editor-glass-readable",
+      "category": "fixed",
+      "message": "The folder Edit Appearance popover reads clearly under dark Space themes in every engine."
+    }
+  ]
+}

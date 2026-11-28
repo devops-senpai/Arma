@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "themes-space-edits-save-over",
+      "category": "improved",
+      "message": "Changing a Space's look saves over the theme it uses, so every Space with that theme follows; duplicate a theme to make a variation."
+    }
+  ]
+}

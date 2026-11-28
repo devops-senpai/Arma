@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "id": "screen-sampler-kept-alive",
+      "category": "internal",
+      "message": "The screen eyedropper keeps its sampler alive for the button's lifetime instead of making one per click.",
+      "platforms": [
+        "mac"
+      ]
+    }
+  ]
+}

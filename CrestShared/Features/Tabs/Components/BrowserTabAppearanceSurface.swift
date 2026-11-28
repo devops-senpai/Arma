@@ -74,6 +74,8 @@ struct BrowserTabAppearanceSurface: ViewModifier {
                     )
                 }
             }
+            // The Space's tab backing lies under the row's fills, which draw over it.
+            .background { BrowserSidebarTabBackingPlate(cornerRadius: radius) }
     }
 
     // MARK: - Actions - Drawing

@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "default-theme-setting",
+      "category": "new",
+      "message": "Settings › Appearance has a Default theme for new Spaces and the Spaces that follow it, or None for Crest's own look. Spaces you never gave a theme keep their look instead of being changed to Catppuccin Latte."
+    }
+  ]
+}

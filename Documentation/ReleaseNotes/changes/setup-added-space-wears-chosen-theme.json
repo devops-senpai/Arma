@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "setup-added-space-wears-chosen-theme",
+      "category": "fixed",
+      "message": "A Space added in setup after you chose a theme now wears that theme in the preview too, instead of its accent's own colors."
+    }
+  ]
+}

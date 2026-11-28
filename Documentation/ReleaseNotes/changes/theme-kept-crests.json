@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "id": "theme-kept-crests",
+      "category": "new",
+      "message": "A theme can keep crests by name. On a Space’s Appearance page the Theme heading of its icons shows the crests its theme keeps, Add Current Crest saves the Space’s crest there with its colors, and a kept crest’s menu renames or removes it. Theme files carry them.",
+      "platforms": [
+        "mac"
+      ]
+    }
+  ]
+}

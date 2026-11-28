@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "id": "space-modify-theme-too",
+      "category": "new",
+      "message": "A Space’s Appearance page has Modify Theme Too, off to begin with. On, edits there save over a theme named for the Space, and choosing a house crest starts the whole look over from the house’s own.",
+      "platforms": [
+        "mac"
+      ]
+    }
+  ]
+}

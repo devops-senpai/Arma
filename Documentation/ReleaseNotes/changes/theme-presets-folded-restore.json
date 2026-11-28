@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "id": "theme-presets-folded-restore",
+      "category": "improved",
+      "message": "Under Settings › Themes the presets start folded, so a stray click no longer replaces a theme’s colors, and Restore Original sits beside the theme’s name.",
+      "platforms": [
+        "mac"
+      ]
+    }
+  ]
+}

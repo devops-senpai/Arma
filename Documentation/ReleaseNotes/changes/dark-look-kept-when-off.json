@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "dark-look-kept-when-off",
+      "category": "improved",
+      "message": "Turning a theme's Dark look off keeps that look, so turning it back on brings your work back instead of starting over."
+    }
+  ]
+}
