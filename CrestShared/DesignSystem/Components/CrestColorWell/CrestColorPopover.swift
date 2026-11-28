@@ -197,16 +197,18 @@ struct CrestColorPopover: View {
         .accessibilityLabel(Text("Spectrum"))
     }
 
-    /// The chosen handle's hex code, which sets it exactly, and the system's
-    /// color picker, which sets it the same way. Neither moves the other
-    /// colors, linked or not, so each color of a gradient can take a code
-    /// of its own.
+    /// The chosen handle's hex code, which sets it exactly, the screen
+    /// eyedropper, which picks a color from anywhere on screen, and the
+    /// system's color picker, which sets it the same way. None moves the
+    /// other colors, linked or not, so each color of a gradient can take a
+    /// code of its own.
     private var exactColor: some View {
         HStack(spacing: CrestSpacing.small) {
             CrestColorHexField(color: draft.colors[chosenIndex], isEditing: $editsCode) { color in
                 stops.set(color, at: chosenIndex, in: &draft)
             }
             Spacer(minLength: 0)
+            BrowserPlatformScreenColorSampler { color in sample(color) }
             ColorPicker(
                 "More Colors",
                 selection: Binding(
@@ -272,6 +274,19 @@ struct CrestColorPopover: View {
             commit = nil
             if fill != draft { fill = draft }
         }
+    }
+
+    /// Gives the chosen handle `color`, picked from the screen, and hands the
+    /// copy to the well's fill at once: the click that picks it lands outside
+    /// the popover and closes it before any pace could run, and a copy a
+    /// closed popover still holds reaches nothing.
+    private func sample(_ color: BrandColor) {
+        var next = draft
+        stops.set(color, at: chosenIndex, in: &next)
+        draft = next
+        commit?.cancel()
+        commit = nil
+        if fill != next { fill = next }
     }
 
     /// Hands the copy to the well's fill now, as the popover closes.

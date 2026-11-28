@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "id": "color-popover-eyedropper",
+      "category": "new",
+      "message": "Every color popover, for a crest’s parts and a theme’s colors alike, has an eyedropper that picks a color from anywhere on screen and applies it at once.",
+      "platforms": [
+        "mac"
+      ]
+    }
+  ]
+}
