@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "agent-network-sign-in-headers-hidden",
+      "category": "fixed",
+      "message": "Coding agents reading a page's network requests no longer see sign-in headers a site spells its own way, such as X-CSRFToken, X-Auth-Token or an API key header."
+    }
+  ]
+}
