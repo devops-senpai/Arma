@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "terminal-folder-split-commands",
+      "category": "new",
+      "message": "Manage folders and Split View from the terminal with arma folder and arma split, and run any menu or palette command with arma command."
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "terminal-crest-icon-color",
+      "category": "internal",
+      "message": "`arma crest` reads the icon color as the look holds it, since Crest no longer keeps a resolved copy."
+    }
+  ]
+}

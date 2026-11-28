@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "terminal-page-commands",
+      "category": "new",
+      "message": "Read, capture, script and act inside a tab's page from your terminal with arma page, once you turn on Command-line page control in Settings › Agents."
+    }
+  ]
+}
