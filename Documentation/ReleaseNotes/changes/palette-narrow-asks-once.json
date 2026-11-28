@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "palette-narrow-asks-once",
+      "category": "internal",
+      "message": "Narrowing the palette to a scope ranks its rows once instead of twice."
+    }
+  ]
+}
