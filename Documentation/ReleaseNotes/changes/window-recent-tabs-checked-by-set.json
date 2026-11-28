@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": "window-recent-tabs-checked-by-set",
+      "category": "internal",
+      "message": "Keeping a window's recent tabs current after each change checks them against the Space's tabs once, instead of searching every tab for each one."
+    }
+  ]
+}
